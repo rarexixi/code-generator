@@ -3,7 +3,6 @@
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
-<#assign firstPrimaryKey = table.firstPrimaryKey>
 <#macro mapperEl value>${r"#{"}${value}}</#macro>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -89,7 +88,7 @@
         </set>
     </sql>
 
-    <insert id="insert" parameterMap="BaseParameterMap"<#if (table.hasSinglePrimaryKey && firstPrimaryKey.autoIncrement)> useGeneratedKeys="true" keyProperty="${firstPrimaryKey.columnFieldNameFirstLower}"</#if>>
+    <insert id="insert" parameterMap="BaseParameterMap"<#if (table.hasPrimaryKey && table.hasSinglePrimaryKey && table.firstPrimaryKey.autoIncrement)> useGeneratedKeys="true" keyProperty="${table.firstPrimaryKey.columnFieldNameFirstLower}"</#if>>
         insert into ${table.tableName}
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list table.columns as column>

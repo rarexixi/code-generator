@@ -3,7 +3,6 @@
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
-<#assign firstPrimaryKey = table.firstPrimaryKey>
 package ${basePackage}.service;
 
 import org.xi.common.model.Pagination;
