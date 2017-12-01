@@ -1,0 +1,115 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassNameFirstLower>
+<#assign primaryKeyColumn = table.primaryKey>
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="${basePackage}.mapper.${className}Mapper">
+
+    <resultMap id="BaseModelMap" type="${basePackage}.entity.${className}Entity">
+        <#list table.columns as column>
+        <result property="${column.columnFieldNameFirstLower}" column="${column.columnName}"/>
+        </#list>
+    </resultMap>
+
+    <parameterMap id="BaseParameterMap" type="${basePackage}.entity.${className}Entity"></parameterMap>
+
+    <sql id="selectCondition">
+        <where>
+            <#list table.columns as column>
+            <if test="condition.${column.columnFieldNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            </if>
+            </#list>
+        </where>
+    </sql>
+    <sql id="selectColumnList">
+        <#list table.columns as column>
+        ${table.tableName}.${column.columnName}<#if column_has_next>,</#if>
+        </#list>
+    </sql>
+    <sql id="updateColumnSet">
+        <set>
+            <#list table.columns as column>
+            <#if (!column.primaryKey && !column.autoIncrement)>
+            <if test="model.${column.columnFieldNameFirstLower} != null">
+                ${table.tableName}.${column.columnName} = <@mapperEl 'model.' + column.columnFieldNameFirstLower/><#if column_has_next>,</#if>
+            </if>
+            </#if>
+            </#list>
+        </set>
+    </sql>
+
+    <insert id="insert" parameterMap="BaseParameterMap"<#if primaryKeyColumn.autoIncrement> useGeneratedKeys="true" keyProperty="id"</#if>>
+        insert into ${table.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <#list table.columns as column>
+            <#if !column.autoIncrement>
+            <if test="model.${column.columnFieldNameFirstLower} != null">${column.columnName},</if>
+            </#if>
+        </#list>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <#list table.columns as column>
+            <#if !column.autoIncrement>
+                <if test="model.${column.columnFieldNameFirstLower} != null"><@mapperEl 'model.' + column.columnFieldNameFirstLower/>,</if>
+            </#if>
+        </#list>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        <foreach collection="list" item="item" index="index" separator=",">
+            insert into ${table.tableName}
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+            <#list table.columns as column>
+                <if test="item.${column.columnFieldNameFirstLower} != null">${column.columnName},</if>
+            </#list>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <#list table.columns as column>
+                <if test="item.${column.columnFieldNameFirstLower} != null"><@mapperEl 'item.' + column.columnFieldNameFirstLower/>,</if>
+            </#list>
+            </trim>
+        </foreach>
+    </insert>
+
+    <delete id="deleteByPk" parameterType="java.lang.${primaryKeyColumn.columnFieldType}">
+        DELETE FROM ${table.tableName}
+        WHERE ${table.tableName}.${primaryKeyColumn.columnName} = <@mapperEl 'pk'/>
+    </delete>
+
+    <delete id="deleteByCondition" parameterMap="SelectParameterMap">
+        DELETE FROM ${table.tableName}
+        <include refid="selectCondition"/>
+    </delete>
+
+    <update id="updateByPk" parameterMap="SelectParameterMap">
+        UPDATE ${table.tableName}
+        <include refid="updateColumnSet"/>
+        WHERE ${table.tableName}.${primaryKeyColumn.columnName} = <@mapperEl 'model.' + primaryKeyColumn.columnFieldNameFirstLower/>
+    </update>
+
+    <update id="updateByCondition">
+        UPDATE ${table.tableName}
+        <include refid="updateColumnSet"/>
+        <include refid="selectCondition"/>
+    </update>
+
+    <select id="getByPk" resultMap="ResultMapVo" parameterType="java.lang.${primaryKeyColumn.columnFieldType}">
+        SELECT
+        <include refid="selectColumnList"/>
+        FROM
+        ${table.tableName}
+        WHERE ${table.tableName}.${primaryKeyColumn.columnName} = <@mapperEl 'pk'/>
+    </select>
+
+    <select id="findByCondition" resultMap="ResultMapVo" parameterMap="SelectParameterMap">
+        SELECT
+        <include refid="selectColumnList"/>
+        FROM
+        ${table.tableName}
+        <include refid="selectCondition"/>
+    </select>
+</mapper>

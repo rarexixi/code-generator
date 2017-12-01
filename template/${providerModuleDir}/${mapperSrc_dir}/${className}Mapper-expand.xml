@@ -1,0 +1,86 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassNameFirstLower>
+<#assign primaryKeyColumn = table.primaryKey>
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 存放手写的sql -->
+<mapper namespace="${basePackage}.mapper.${className}Mapper">
+
+    <resultMap id="BaseResultMapVo" type="${basePackage}.entity.${className}Entity">
+    <#list table.columns as column>
+        <result property="${column.columnFieldNameFirstLower}" column="${column.columnName}"/>
+    </#list>
+    </resultMap>
+    <resultMap id="ResultMapVo" extends="BaseResultMapVo" type="${basePackage}.vo.${className}Vo"></resultMap>
+
+    <parameterMap id="ParameterMap" type="${basePackage}.entity.${className}Entity"></parameterMap>
+    <parameterMap id="SelectParameterMap" type="${basePackage}.parameter.select.${className}SelectParameter"></parameterMap>
+
+    <select id="get${className}ById" resultMap="ResultMapVo" parameterType="java.lang.${primaryKeyColumn.columnFieldType}">
+        SELECT DISTINCT
+        <#list table.columns as column>
+        ${column.tableName}.${column.columnName}<#if column_has_next>,</#if>
+        </#list>
+        FROM
+        ${table.tableName}
+        WHERE ${table.tableName}.id = <@mapperEl 'pk'/>
+    </select>
+
+    <select id="find${className}List" resultMap="ResultMapVo" parameterMap="SelectParameterMap">
+        SELECT DISTINCT
+        <#list table.columns as column>
+        ${column.tableName}.${column.columnName}<#if column_has_next>,</#if>
+        </#list>
+        FROM
+        ${table.tableName}
+        <where>
+        <#list table.columns as column>
+            <#if column.columnFieldNameFirstLower == 'isActive'>
+            <if test="${column.columnFieldNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl column.columnFieldNameFirstLower/>
+            </if>
+            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+            <if test="${column.columnFieldNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl column.columnFieldNameFirstLower/>
+            </if>
+            <if test="${column.columnFieldNameFirstLower}List != null and ${column.columnFieldNameFirstLower}List.size() > 0">
+                AND ${table.tableName}.${column.columnName} in
+                <foreach collection="${column.columnFieldNameFirstLower}List" item="item" open="(" close=")" separator=",">
+                ${r"#{item}"}
+                </foreach>
+            </if>
+            <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <if test="${column.columnFieldNameFirstLower}Min != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} >= ${r"#{"}${column.columnFieldNameFirstLower}Min${r"}"}
+                ]]>
+            </if>
+            <if test="${column.columnFieldNameFirstLower}Max != null">
+                <![CDATA[
+                AND ${table.tableName}.${column.columnName} <= ${r"#{"}${column.columnFieldNameFirstLower}Max${r"}"}
+                ]]>
+            </if>
+            <#elseif (column.columnFieldType == "String")>
+            <if test="${column.columnFieldNameFirstLower} != null and ${column.columnFieldNameFirstLower} != ''">
+                <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl column.columnFieldNameFirstLower/>
+            </if>
+            <if test="${column.columnFieldNameFirstLower}StartWith != null and ${column.columnFieldNameFirstLower}StartWith != ''">
+                AND ${table.tableName}.${column.columnName} LIKE concat(${r"#{"}${column.columnFieldNameFirstLower}StartWith${r"}"}, '%')
+            </if>
+            <if test="${column.columnFieldNameFirstLower}Like != null and ${column.columnFieldNameFirstLower}Like != ''">
+                AND ${table.tableName}.${column.columnName} LIKE concat('%', ${r"#{"}${column.columnFieldNameFirstLower}Like${r"}"}, '%')
+            </if>
+            <#else>
+            <if test="${column.columnFieldNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl column.columnFieldNameFirstLower/>
+            </if>
+            </#if>
+        </#list>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${r"${orderBy}"}
+        </if>
+    </select>
+</mapper>
