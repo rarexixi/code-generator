@@ -1,34 +1,13 @@
+<#assign className = table.tableClassName>
 package ${basePackage}.vo;
+
+import ${basePackage}.entity.${table.tableClassName}Entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 <#include "/include/java_copyright.ftl">
-public class ${table.tableClassName}Vo implements Serializable {
+public class ${className}Vo extends ${className}Entity {
 
-    <#list table.columns as column>
-    /**
-     * ${column.columnComment}
-     */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
-
-    </#list>
-
-    <#list table.columns as column>
-    /**
-    * 设置${column.columnComment}
-    */
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
-    }
-
-    /**
-    * 获取${column.columnComment}
-    */
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return this.${column.columnFieldNameFirstLower};
-    }
-
-    </#list>
 }

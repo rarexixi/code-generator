@@ -1,3 +1,4 @@
+<#assign className = table.tableClassName>
 package ${basePackage}.entity;
 
 import java.math.BigDecimal;
@@ -5,7 +6,7 @@ import java.util.Date;
 import java.io.Serializable;
 
 <#include "/include/java_copyright.ftl">
-public class ${table.tableClassName}Entity implements Serializable {
+public class ${className}Entity implements Serializable {
 
     <#list table.columns as column>
     /**

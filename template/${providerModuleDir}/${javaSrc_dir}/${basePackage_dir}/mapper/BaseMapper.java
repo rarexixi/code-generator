@@ -1,13 +1,13 @@
 package ${basePackage}.mapper;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Mapper
-public interface BaseMapper<T extends Serializable> {
+public interface BaseMapper<T extends Serializable, C extends Serializable> {
 
     /**
      * 添加
@@ -26,28 +26,12 @@ public interface BaseMapper<T extends Serializable> {
     int insertList(@Param("list") List<T> modelList);
 
     /**
-     * 根据主键删除
-     *
-     * @param pk
-     * @return
-     */
-    int deleteByPk(@Param("pk") Object pk);
-
-    /**
      * 根据条件删除
      *
      * @param condition
      * @return
      */
-    int deleteByCondition(@Param("condition") T condition);
-
-    /**
-     * 根据主键更新
-     *
-     * @param model
-     * @return
-     */
-    int updateByPk(@Param("model") T model);
+    int deleteByCondition(@Param("condition") C condition);
 
     /**
      * 根据条件更新
@@ -56,15 +40,7 @@ public interface BaseMapper<T extends Serializable> {
      * @param condition
      * @return
      */
-    int updateByCondition(@Param("model") T model, @Param("condition") T condition);
-
-    /**
-     * 根据主键获取
-     *
-     * @param pk
-     * @return
-     */
-    T getByPk(@Param("pk") Object pk);
+    int updateByCondition(@Param("model") T model, @Param("condition") C condition);
 
     /**
      * 查询
@@ -72,6 +48,6 @@ public interface BaseMapper<T extends Serializable> {
      * @param condition
      * @return
      */
-    List<T> findByCondition(@Param("condition") T condition);
+    List<T> findByCondition(@Param("condition") C condition);
 
 }

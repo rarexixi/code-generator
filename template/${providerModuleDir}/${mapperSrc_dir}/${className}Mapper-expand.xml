@@ -1,6 +1,9 @@
 <#assign className = table.tableClassName>
 <#assign classNameFirstLower = table.tableClassNameFirstLower>
-<#assign primaryKeyColumn = table.primaryKey>
+<#assign primaryKey = table.primaryKey>
+<#assign primaryKeyParameters = table.primaryKeyParameters>
+<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#assign firstPrimaryKey = table.firstPrimaryKey>
 <#macro mapperEl value>${r"#{"}${value}}</#macro>
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -8,25 +11,24 @@
 <!-- 存放手写的sql -->
 <mapper namespace="${basePackage}.mapper.${className}Mapper">
 
-    <resultMap id="BaseResultMapVo" type="${basePackage}.entity.${className}Entity">
-    <#list table.columns as column>
-        <result property="${column.columnFieldNameFirstLower}" column="${column.columnName}"/>
-    </#list>
-    </resultMap>
-    <resultMap id="ResultMapVo" extends="BaseResultMapVo" type="${basePackage}.vo.${className}Vo"></resultMap>
+    <resultMap id="ResultMapVo" extends="BaseModelMap" type="${basePackage}.vo.${className}Vo"></resultMap>
 
-    <parameterMap id="ParameterMap" type="${basePackage}.entity.${className}Entity"></parameterMap>
-    <parameterMap id="SelectParameterMap" type="${basePackage}.parameter.select.${className}SelectParameter"></parameterMap>
+    <parameterMap id="SelectParameterMap" type="${basePackage}.parameter.${className}SelectParameter"></parameterMap>
 
-    <select id="get${className}ById" resultMap="ResultMapVo" parameterType="java.lang.${primaryKeyColumn.columnFieldType}">
+    <#if table.hasPrimaryKey>
+    <select id="get${className}ByPk" resultMap="ResultMapVo">
         SELECT DISTINCT
         <#list table.columns as column>
         ${column.tableName}.${column.columnName}<#if column_has_next>,</#if>
         </#list>
         FROM
         ${table.tableName}
-        WHERE ${table.tableName}.id = <@mapperEl 'pk'/>
+        WHERE
+        <#list primaryKey as column>
+        <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl '${column.columnFieldNameFirstLower}'/>
+        </#list>
     </select>
+    </#if>
 
     <select id="find${className}List" resultMap="ResultMapVo" parameterMap="SelectParameterMap">
         SELECT DISTINCT

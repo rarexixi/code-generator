@@ -52,8 +52,8 @@ public class CodeGeneratorApplication implements CommandLineRunner {
 		System.out.println("\tgen/del aggregate :           生成聚合相关文件");
 		System.out.println("\tgen/del * :                   生成/删除所有表的相关文件");
 		System.out.println("\tgen/del table [table2...]:    根据表名生成/删除相关文件");
-		System.out.println("\tq(quit) :                 退出");
-		System.out.print("请输入命令:");
+		System.out.println("\tq(quit) :                     退出");
+		System.out.print("请输入命令: ");
 	}
 
 	private void processLine(Scanner sc, Set<String> tableNameSet) throws Exception {

@@ -1,18 +1,18 @@
 package ${basePackage}.service.impl;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.xi.filemanager.mapper.BaseMapper;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Transactional
-public class BaseServiceImpl<T extends Serializable> implements BaseMapper<T> {
+public class BaseServiceImpl<T extends Serializable, C extends Serializable> implements BaseMapper<T, C> {
 
     @Autowired
-    protected BaseMapper<T> mapper;
+    protected BaseMapper<T, C> mapper;
 
     /**
      * 添加
@@ -37,36 +37,14 @@ public class BaseServiceImpl<T extends Serializable> implements BaseMapper<T> {
     }
 
     /**
-     * 根据主键删除
-     *
-     * @param pk
-     * @return
-     */
-    @Override
-    public int deleteByPk(Object pk) {
-        return this.mapper.deleteByPk(pk);
-    }
-
-    /**
      * 根据条件删除
      *
      * @param condition
      * @return
      */
     @Override
-    public int deleteByCondition(T condition) {
+    public int deleteByCondition(C condition) {
         return this.mapper.deleteByCondition(condition);
-    }
-
-    /**
-     * 根据主键更新
-     *
-     * @param model
-     * @return
-     */
-    @Override
-    public int updateByPk(T model) {
-        return this.mapper.updateByPk(model);
     }
 
     /**
@@ -77,20 +55,8 @@ public class BaseServiceImpl<T extends Serializable> implements BaseMapper<T> {
      * @return
      */
     @Override
-    public int updateByCondition(T model, T condition) {
+    public int updateByCondition(T model, C condition) {
         return this.mapper.updateByCondition(model, condition);
-    }
-
-    /**
-     * 根据主键获取
-     *
-     * @param pk
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public T getByPk(Object pk) {
-        return this.mapper.getByPk(pk);
     }
 
     /**
@@ -101,7 +67,7 @@ public class BaseServiceImpl<T extends Serializable> implements BaseMapper<T> {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> findByCondition(T condition) {
+    public List<T> findByCondition(C condition) {
         return this.mapper.findByCondition(condition);
     }
 

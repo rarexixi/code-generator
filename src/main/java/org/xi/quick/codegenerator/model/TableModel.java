@@ -70,14 +70,48 @@ public class TableModel {
         return StringUtil.getFirstLower(StringUtil.getCamelCaseName(this.tableName));
     }
 
-    public ColumnModel getPrimaryKey() {
+    public boolean getHasPrimaryKey() {
+        List<ColumnModel> primaryKey = getPrimaryKey();
+        return primaryKey != null && !primaryKey.isEmpty();
+    }
+
+    public boolean getHasSinglePrimaryKey() {
+        List<ColumnModel> primaryKey = getPrimaryKey();
+        return primaryKey != null && primaryKey.size() == 1;
+    }
+
+    public ColumnModel getFirstPrimaryKey() {
+        List<ColumnModel> primaryKey = getPrimaryKey();
+        if (primaryKey == null || primaryKey.isEmpty()) return null;
+        return primaryKey.get(0);
+    }
+
+    public List<ColumnModel> getPrimaryKey() {
         List<ColumnModel> priKeys =
                 this.columns
                         .stream()
                         .filter(column -> column.getColumnKey().equals("PRI"))
                         .collect(Collectors.toList());
 
-        return priKeys.isEmpty() ? null : priKeys.get(0);
+        return priKeys;
+    }
+
+    public String getPrimaryKeyParameters() {
+        List<ColumnModel> primaryKey = getPrimaryKey();
+        if (primaryKey == null || primaryKey.isEmpty()) return "";
+        return primaryKey
+                .stream()
+                .map(column -> column.getColumnFieldType() + " " + column.getColumnFieldNameFirstLower())
+                .collect(Collectors.joining(", "));
+    }
+
+    public String getPrimaryKeyParameterValues() {
+        List<ColumnModel> primaryKey = getPrimaryKey();
+        if (primaryKey == null || primaryKey.isEmpty()) return "";
+        return primaryKey
+                .stream()
+                .map(column -> column.getColumnFieldNameFirstLower())
+                .collect(Collectors.joining(", "));
     }
 
     public Boolean getHasIsActive() {

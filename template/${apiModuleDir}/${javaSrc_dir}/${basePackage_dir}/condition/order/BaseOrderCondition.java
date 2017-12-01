@@ -1,4 +1,4 @@
-package ${basePackage}.parameter.select;
+package ${basePackage}.condition.order;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
-public class BaseSelectParameter implements Serializable {
+public class BaseOrderCondition {
 
-    public BaseSelectParameter() {
-        orderByMap = new HashMap<String, String>();
+    public BaseOrderCondition() {
+        orderByMap = new HashMap<>();
     }
 
     protected Map<String, String> orderByMap;

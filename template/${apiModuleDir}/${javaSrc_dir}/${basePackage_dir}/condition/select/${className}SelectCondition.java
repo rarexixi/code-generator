@@ -1,16 +1,12 @@
 <#assign className = table.tableClassName>
-package ${basePackage}.parameter.select;
+package ${basePackage}.condition.select;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}SelectParameter extends BaseSelectParameter implements Serializable {
-
-    public ${className}SelectParameter() {
-        super();
-    }
+public class ${className}SelectCondition implements Serializable {
     <#list table.columns as column>
 
     //region ${column.columnComment}
@@ -151,14 +147,6 @@ public class ${className}SelectParameter extends BaseSelectParameter implements 
         return this.${column.columnFieldNameFirstLower};
     }
     </#if>
-
-    public void set${column.columnFieldName}Asc() {
-        super.orderByMap.put("${column.tableName}.${column.columnName}", "ASC");
-    }
-
-    public void set${column.columnFieldName}Desc() {
-        super.orderByMap.put("${column.tableName}.${column.columnName}", "DESC");
-    }
 
     //endregion
     </#list>
