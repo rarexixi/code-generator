@@ -67,9 +67,6 @@
                 </trim>
             </foreach>
         </where>
-        <if test="condition.orderCondition.orderBy != null and condition.orderCondition.orderBy != ''">
-            ORDER BY ${r"${condition.orderCondition.orderBy}"}
-        </if>
     </sql>
     <sql id="selectColumnList">
         <#list table.columns as column>
@@ -143,5 +140,8 @@
         FROM
         ${table.tableName}
         <include refid="selectCondition"/>
+        <if test="order != null and order.orderBy != null and order.orderBy != ''">
+            ORDER BY ${r"${corder.orderBy}"}
+        </if>
     </select>
 </mapper>

@@ -1,5 +1,8 @@
 package ${basePackage}.service;
 
+import ${paginationFullClass};
+import ${basePackage}.condition.order.OrderCondition;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -42,8 +45,10 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * 查询
      *
      * @param condition
+     * @param order
+     * @param pagination
      * @return
      */
-    List<T> findByCondition(C condition);
+    ${paginationClass}<T> findByCondition(C condition, OrderCondition order, ${paginationClass} pagination);
 
 }

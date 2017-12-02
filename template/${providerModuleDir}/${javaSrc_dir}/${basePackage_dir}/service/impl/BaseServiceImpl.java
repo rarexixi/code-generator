@@ -1,15 +1,22 @@
 package ${basePackage}.service.impl;
 
+import ${paginationFullClass};
+
+import ${basePackage}.condition.order.OrderCondition;
+import ${basePackage}.service.BaseService;
+import ${basePackage}.mapper.BaseMapper;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.xi.filemanager.mapper.BaseMapper;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Transactional
-public class BaseServiceImpl<T extends Serializable, C extends Serializable> implements BaseMapper<T, C> {
+public class BaseServiceImpl<T extends Serializable, C extends Serializable> implements BaseService<T, C> {
 
     @Autowired
     protected BaseMapper<T, C> mapper;
@@ -63,12 +70,23 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      * 查询
      *
      * @param condition
+     * @param order
+     * @param pagination
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> findByCondition(C condition) {
-        return this.mapper.findByCondition(condition);
+    public ${paginationClass}<T> findByCondition(C condition, OrderCondition order, ${paginationClass} pagination) {
+
+        //先查询总数量
+        PageHelper.startPage(pagination.getPage(), pagination.getPageSize());
+        //分页查询数据
+        List<T> list = this.mapper.findByCondition(condition, order);
+        PageInfo page = new PageInfo(list);
+        pagination.setContent(list);
+        pagination.setDataNumber(page.getTotal());
+
+        return pagination;
     }
 
 }

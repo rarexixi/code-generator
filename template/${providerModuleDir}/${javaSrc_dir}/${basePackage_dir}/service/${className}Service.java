@@ -5,7 +5,7 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.service;
 
-import org.xi.common.model.Pagination;
+import ${paginationFullClass};
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
@@ -75,6 +75,6 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Pagination<${className}Vo> find${className}PageList(${className}SelectParameter parameter, Pagination pagination);
+    ${paginationClass}<${className}Vo> find${className}PageList(${className}SelectParameter parameter, ${paginationClass} pagination);
 
 }

@@ -5,14 +5,7 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import org.xi.common.model.Pagination;
+import ${paginationFullClass};
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.condition.select.${className}SelectCondition;
 import ${basePackage}.entity.${className}Entity;
@@ -20,6 +13,13 @@ import ${basePackage}.mapper.${className}Mapper;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.service.${className}Service;
 import ${basePackage}.vo.${className}Vo;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -123,7 +123,7 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Pagination<${className}Vo> find${className}PageList(${className}SelectParameter parameter, Pagination pagination) {
+    public ${paginationClass}<${className}Vo> find${className}PageList(${className}SelectParameter parameter, ${paginationClass} pagination) {
 
         //先查询总数量
         PageHelper.startPage(pagination.getPage(), pagination.getPageSize());

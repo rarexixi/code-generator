@@ -5,18 +5,17 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.api.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import org.xi.common.model.Result;
-import org.xi.common.model.Pagination;
+import ${resultFullClass};
+import ${paginationFullClass};
 import org.xi.common.utils.LogUtil;
-
 import ${basePackage}.api.service.${className}Api;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.service.${className}Service;
 import ${basePackage}.vo.${className}Vo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class ${className}ApiImpl implements ${className}Api {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> add${className}(${className}Entity ${classNameLower}, String sessionId) {
+    public ${resultClass}<${className}Entity> add${className}(${className}Entity ${classNameLower}, String sessionId) {
         return null;
     }
 
@@ -51,7 +50,7 @@ public class ${className}ApiImpl implements ${className}Api {
     <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> add${className}(List<${className}Entity> ${classNameLower}List, String sessionId) {
+    public ${resultClass}<${className}Entity> add${className}(List<${className}Entity> ${classNameLower}List, String sessionId) {
         return null;
     }
 
@@ -65,7 +64,7 @@ public class ${className}ApiImpl implements ${className}Api {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Pagination<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, Pagination pagination, String sessionId) {
+    public ${resultClass}<${paginationClass}<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, ${paginationClass} pagination, String sessionId) {
         return null;
     }
 

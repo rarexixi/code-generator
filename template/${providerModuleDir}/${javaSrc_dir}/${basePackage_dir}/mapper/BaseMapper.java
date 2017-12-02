@@ -1,5 +1,7 @@
 package ${basePackage}.mapper;
 
+import ${basePackage}.condition.order.OrderCondition;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -48,6 +50,6 @@ public interface BaseMapper<T extends Serializable, C extends Serializable> {
      * @param condition
      * @return
      */
-    List<T> findByCondition(@Param("condition") C condition);
+    List<T> findByCondition(@Param("condition") C condition, @Param("order") OrderCondition order);
 
 }
