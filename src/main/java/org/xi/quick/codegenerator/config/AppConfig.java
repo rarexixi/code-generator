@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
 import org.xi.quick.codegenerator.utils.StringUtil;
@@ -40,6 +41,17 @@ public class AppConfig {
 
     @Value("${file.aggregate}")
     String aggregateFile;
+
+
+    @Value("${field.status.valid}")
+    private String validStatusField;
+
+    @Value("${field.status.valid.value}")
+    private String statusFieldValidValue;
+
+    @Value("${field.status.invalid.value}")
+    private String statusFieldInvalidValue;
+
 
     @Bean(name = "databaseName")
     public String getDatabaseName() {
@@ -126,6 +138,23 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration, commonPropertiesMap,
                 templateRelativePath -> isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
+    }
+
+
+    /**
+     * 获取有效性字段
+     *
+     * @return
+     */
+    @Bean(name = "validStatusField")
+    public ValidStatusField getValidStatusField() {
+
+        ValidStatusField field = new ValidStatusField();
+        field.setFieldName(validStatusField);
+        field.setValidValue(statusFieldValidValue);
+        field.setInvalidValue(statusFieldInvalidValue);
+
+        return field;
     }
 
 

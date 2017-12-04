@@ -1,9 +1,11 @@
 package org.xi.quick.codegenerator.model;
 
 import org.xi.quick.codegenerator.entity.Table;
+import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.utils.StringUtil;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TableModel {
@@ -12,10 +14,11 @@ public class TableModel {
 
     }
 
-    public TableModel(Table table) {
+    public TableModel(Table table, ValidStatusField validStatusField) {
         this.databaseName = table.getTableSchema();
         this.tableName = table.getTableName();
         this.tableComment = table.getTableComment();
+        this.validStatusField = validStatusField;
     }
 
     //region 默认
@@ -23,6 +26,11 @@ public class TableModel {
     private String databaseName;
     private String tableName;
     private String tableComment;
+
+    /**
+     * 有效性字段
+     */
+    private ValidStatusField validStatusField;
 
     private List<ColumnModel> columns;
 
@@ -50,6 +58,14 @@ public class TableModel {
         this.tableComment = tableComment;
     }
 
+    public ValidStatusField getValidStatusField() {
+        return validStatusField;
+    }
+
+    public void setValidStatusField(ValidStatusField validStatusField) {
+        this.validStatusField = validStatusField;
+    }
+
     public List<ColumnModel> getColumns() {
         return columns;
     }
@@ -73,17 +89,6 @@ public class TableModel {
     public boolean getHasPrimaryKey() {
         List<ColumnModel> primaryKey = getPrimaryKey();
         return primaryKey != null && !primaryKey.isEmpty();
-    }
-
-    public boolean getHasSinglePrimaryKey() {
-        List<ColumnModel> primaryKey = getPrimaryKey();
-        return primaryKey != null && primaryKey.size() == 1;
-    }
-
-    public ColumnModel getFirstPrimaryKey() {
-        List<ColumnModel> primaryKey = getPrimaryKey();
-        if (primaryKey == null || primaryKey.isEmpty()) return null;
-        return primaryKey.get(0);
     }
 
     public List<ColumnModel> getPrimaryKey() {
@@ -114,14 +119,15 @@ public class TableModel {
                 .collect(Collectors.joining(", "));
     }
 
-    public Boolean getHasIsActive() {
-        List<ColumnModel> isActiveColumns =
+    public ColumnModel getValidStatusColumn() {
+
+        Optional<ColumnModel> columnOptional =
                 this.columns
                         .stream()
-                        .filter(column -> column.getColumnName().equals("is_active"))
-                        .collect(Collectors.toList());
+                        .filter(column -> column.getColumnName().equals(validStatusField.getFieldName()))
+                        .findFirst();
 
-        return isActiveColumns != null && isActiveColumns.size() == 1;
+        return columnOptional.isPresent() ? columnOptional.get() : null;
     }
 
     //endregion

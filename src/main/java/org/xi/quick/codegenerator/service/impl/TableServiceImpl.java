@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.entity.Column;
 import org.xi.quick.codegenerator.entity.Table;
+import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.mapper.ColumnsMapper;
 import org.xi.quick.codegenerator.mapper.TablesMapper;
 import org.xi.quick.codegenerator.model.ColumnModel;
@@ -27,6 +28,9 @@ public class TableServiceImpl implements TableService {
     @Autowired
     private ColumnsMapper columnsMapper;
 
+    @Autowired
+    private ValidStatusField validStatusField;
+
     /**
      * 获取所有表名
      *
@@ -48,7 +52,7 @@ public class TableServiceImpl implements TableService {
 
         Table table = tablesMapper.getTable(databaseName, tableName);
 
-        TableModel model = new TableModel(table);
+        TableModel model = new TableModel(table, validStatusField);
         List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
         List<ColumnModel> columnModels =
                 columnList
@@ -75,7 +79,7 @@ public class TableServiceImpl implements TableService {
 
         for (Table table : tables) {
 
-            TableModel model = new TableModel(table);
+            TableModel model = new TableModel(table, validStatusField);
             List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
             List<ColumnModel> columnModels =
                     columnList
@@ -89,4 +93,5 @@ public class TableServiceImpl implements TableService {
         }
         return tableModels;
     }
+
 }

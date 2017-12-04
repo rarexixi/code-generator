@@ -15,39 +15,6 @@ import java.util.List;
 
 <#include "/include/java_copyright.ftl">
 public interface ${className}Service extends BaseService<${className}Entity, ${className}Condition> {
-    <#if table.hasPrimaryKey>
-
-    /**
-     * 根据主键更新
-     *
-     * @param ${classNameLower}
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    int update${className}ByPk(${className}Entity ${classNameLower});
-
-    /**
-     * 根据主键物理删除
-     *
-     <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
-     </#list>
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    int delete${className}ByPk(${primaryKeyParameters});
-
-    /**
-     * 根据主键获取
-     *
-     <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
-     </#list>
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    ${className}Vo get${className}ByPk(${primaryKeyParameters});
-    </#if>
 
     /**
      * 添加
@@ -66,6 +33,63 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
     <#include "/include/author_info1.ftl">
      */
     int add${className}List(List<${className}Entity> ${classNameLower}List);
+    <#if table.hasPrimaryKey>
+
+    /**
+     * 根据主键物理删除
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    int delete${className}ByPk(${primaryKeyParameters});
+    <#if table.validStatusColumn??>
+
+    /**
+     * 根据主键冻结
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    int disable${className}ByPk(${primaryKeyParameters});
+
+    /**
+     * 根据主键激活
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    int enable${className}ByPk(${primaryKeyParameters});
+    </#if>
+
+    /**
+     * 根据主键更新
+     *
+     * @param ${classNameLower}
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    int update${className}ByPk(${className}Entity ${classNameLower});
+
+    /**
+     * 根据主键获取
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    ${className}Vo get${className}ByPk(${primaryKeyParameters});
+    </#if>
 
     /**
      * 分页查询

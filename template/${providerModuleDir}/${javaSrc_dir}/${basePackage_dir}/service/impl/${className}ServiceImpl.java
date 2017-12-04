@@ -30,65 +30,6 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
 
     @Autowired
     private ${className}Mapper ${classNameLower}Mapper;
-    <#if table.hasPrimaryKey>
-
-    /**
-     * 根据主键更新
-     *
-     * @param ${classNameLower}
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @Override
-    public int update${className}ByPk(${className}Entity ${classNameLower}) {
-
-        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
-        <#list primaryKey as column>
-        selectCondition.set${column.columnFieldName}(${classNameLower}.get${column.columnFieldName}());
-        </#list>
-        ${className}Condition condition = new ${className}Condition();
-        condition.getSelectConditionList().add(selectCondition);
-
-        return ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
-    }
-
-    /**
-     * 根据主键物理删除
-     *
-     <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
-     </#list>
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @Override
-    public int delete${className}ByPk(${primaryKeyParameters}) {
-
-        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
-        <#list primaryKey as column>
-        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        </#list>
-        ${className}Condition condition = new ${className}Condition();
-        condition.getSelectConditionList().add(selectCondition);
-
-        return ${classNameLower}Mapper.deleteByCondition(condition);
-    }
-
-    /**
-     * 根据主键获取
-     *
-     <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
-     </#list>
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @Override
-    public ${className}Vo get${className}ByPk(${primaryKeyParameters}) {
-        ${className}Vo vo = ${classNameLower}Mapper.get${className}ByPk(${primaryKeyParameterValues});
-        return vo;
-    }
-    </#if>
 
     /**
      * 添加
@@ -113,6 +54,116 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
     public int add${className}List(List<${className}Entity> ${classNameLower}List) {
         return super.insertList(${classNameLower}List);
     }
+    <#if table.hasPrimaryKey>
+
+    /**
+     * 根据主键物理删除
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Override
+    public int delete${className}ByPk(${primaryKeyParameters}) {
+
+        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
+        <#list primaryKey as column>
+        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        </#list>
+        ${className}Condition condition = new ${className}Condition();
+        condition.getSelectConditionList().add(selectCondition);
+
+        return ${classNameLower}Mapper.deleteByCondition(condition);
+    }
+    <#if table.validStatusColumn??>
+
+    /**
+     * 根据主键冻结
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    public int disable${className}ByPk(${primaryKeyParameters}) {
+
+        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
+        <#list primaryKey as column>
+        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        </#list>
+        ${className}Condition condition = new ${className}Condition();
+        condition.getSelectConditionList().add(selectCondition);
+
+        ${className}Entity ${classNameLower} = new ${className}Entity();
+        ${classNameLower}.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+
+        return ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+    }
+
+    /**
+     * 根据主键激活
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    public int enable${className}ByPk(${primaryKeyParameters}) {
+
+        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
+        <#list primaryKey as column>
+        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        </#list>
+        ${className}Condition condition = new ${className}Condition();
+        condition.getSelectConditionList().add(selectCondition);
+
+        ${className}Entity ${classNameLower} = new ${className}Entity();
+        ${classNameLower}.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+
+        return ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+    }
+    </#if>
+
+    /**
+     * 根据主键更新
+     *
+     * @param ${classNameLower}
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Override
+    public int update${className}ByPk(${className}Entity ${classNameLower}) {
+
+        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
+        <#list primaryKey as column>
+        selectCondition.set${column.columnFieldName}(${classNameLower}.get${column.columnFieldName}());
+        </#list>
+        ${className}Condition condition = new ${className}Condition();
+        condition.getSelectConditionList().add(selectCondition);
+
+        return ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+    }
+
+    /**
+     * 根据主键获取
+     *
+     <#list primaryKey as column>
+     * @param ${column.columnFieldNameFirstLower}
+     </#list>
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public ${className}Vo get${className}ByPk(${primaryKeyParameters}) {
+        ${className}Vo vo = ${classNameLower}Mapper.get${className}ByPk(${primaryKeyParameterValues});
+        return vo;
+    }
+    </#if>
 
     /**
      * 分页查询
@@ -122,6 +173,7 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Transactional(readOnly = true)
     @Override
     public ${paginationClass}<${className}Vo> find${className}PageList(${className}SelectParameter parameter, ${paginationClass} pagination) {
 
