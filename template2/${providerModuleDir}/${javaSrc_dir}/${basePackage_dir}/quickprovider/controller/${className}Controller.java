@@ -3,27 +3,28 @@
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
-package ${basePackage}.api.service.impl;
+package ${basePackage}.quickprovider.controller;
 
 import ${resultFullClass};
 import ${paginationFullClass};
 import org.xi.common.utils.LogUtil;
-import ${basePackage}.api.service.${className}Api;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
-import ${basePackage}.service.${className}Service;
+import ${basePackage}.quickprovider.service.${className}Service;
 import ${basePackage}.vo.${className}Vo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 <#include "/include/java_copyright.ftl">
-@Service("${className}Api")
-public class ${className}ApiImpl implements ${className}Api {
+@RestController
+@RequestMapping("/${classNameLower}")
+public class ${className}Controller {
 
-    private static LogUtil logger = LogUtil.build(${className}ApiImpl.class);
+    private static LogUtil logger = LogUtil.build(${className}Controller.class);
 
     @Autowired
     private ${className}Service ${classNameLower}Service;
@@ -36,7 +37,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @Override
+    @RequestMapping("/add${className}")
     public ${resultClass}<${className}Entity> add${className}(${className}Entity ${classNameLower}, String sessionId) {
         return null;
     }
@@ -49,8 +50,8 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @Override
-    public ${resultClass}<${className}Entity> add${className}(List<${className}Entity> ${classNameLower}List, String sessionId) {
+    @RequestMapping("/add${className}List")
+    public ${resultClass}<${className}Entity> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId) {
         return null;
     }
     <#if table.hasPrimaryKey>
@@ -65,7 +66,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @Override
+    @RequestMapping("/delete${className}ByPk")
     public ${resultClass}<${className}Entity> delete${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
     }
@@ -81,7 +82,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @Override
+    @RequestMapping("/disable${className}ByPk")
     public ${resultClass}<${className}Entity> disable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
     }
@@ -96,7 +97,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @Override
+    @RequestMapping("/enable${className}ByPk")
     public ${resultClass}<${className}Entity> enable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
     }
@@ -110,7 +111,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @Override
+    @RequestMapping("/update${className}ByPk")
     public ${resultClass}<${className}Entity> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId) {
 
     }
@@ -125,7 +126,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @Override
+    @RequestMapping("/get${className}ByPk")
     public ${resultClass}<${className}Vo> get${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
     }
@@ -140,7 +141,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @Override
+    @RequestMapping("/find${className}PageList")
     public ${resultClass}<${paginationClass}<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, ${paginationClass} pagination, String sessionId) {
         return null;
     }

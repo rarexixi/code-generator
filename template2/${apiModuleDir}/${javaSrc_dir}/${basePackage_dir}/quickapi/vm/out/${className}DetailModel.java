@@ -1,26 +1,37 @@
 <#assign className = table.tableClassName>
-package ${basePackage}.entity;
+<#assign classNameLower = table.tableClassNameFirstLower>
+package ${basePackage}.quickapi.vm.out;
 
-import ${annotationInsertNotNull}
-import ${annotationUpdateNotNull}
+import ${basePackage}.entity.${className}Entity;
+import ${basePackage}.vo.${className}Vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.io.Serializable;
 
-<#include "/include/java_copyright.ftl">
-public class ${className}Entity implements Serializable {
+public class ${className}DetailModel implements Serializable {
+
+    public ${className}DetailModel() {
+    }
+
+    public ${className}DetailModel(${className}Vo vo) {
+
+        <#list table.columns as column>
+        this.${column.columnFieldNameFirstLower} = vo.${column.columnFieldNameFirstLower};
+        </#list>
+    }
+
+    public ${className}DetailModel(${className}Entity entity) {
+
+        <#list table.columns as column>
+        this.${column.columnFieldNameFirstLower} = entity.${column.columnFieldNameFirstLower};
+        </#list>
+    }
 
     <#list table.columns as column>
     /**
      * ${column.columnComment}
      */
-<#if (column.primaryKey && column.autoIncrement)>
-    @InsertNotNull
-<#elseif (column.columnName != 'create_time' && column.columnName != 'update_time')>
-    @InsertNotNull
-    @UpdateNotNull
-</#if>
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     </#list>

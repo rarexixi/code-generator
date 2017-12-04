@@ -1,0 +1,147 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassNameFirstLower>
+<#assign primaryKey = table.primaryKey>
+<#assign primaryKeyParameters = table.primaryKeyParameters>
+<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="${basePackage}.mapper.${className}Mapper">
+
+    <resultMap id="BaseModelMap" type="${basePackage}.entity.${className}Entity">
+        <#list table.columns as column>
+        <result property="${column.columnFieldNameFirstLower}" column="${column.columnName}"/>
+        </#list>
+    </resultMap>
+
+    <parameterMap id="BaseParameterMap" type="${basePackage}.entity.${className}Entity"></parameterMap>
+    <parameterMap id="BaseConditionMap" type="${basePackage}.condition.${className}Condition"></parameterMap>
+
+    <sql id="selectCondition">
+        <where>
+            <foreach collection="condition.selectConditionList" item="item" open="(" close=")" separator=" OR ">
+                <trim prefixOverrides="AND|OR">
+                <#list table.columns as column>
+                    <#if column.columnFieldNameFirstLower == 'isActive'>
+                    <if test="item.${column.columnFieldNameFirstLower} != null">
+                        <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl 'item.' + column.columnFieldNameFirstLower/>
+                    </if>
+                    <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                    <if test="item.${column.columnFieldNameFirstLower} != null">
+                        <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl 'item.' + column.columnFieldNameFirstLower/>
+                    </if>
+                    <if test="item.${column.columnFieldNameFirstLower}List != null and item.${column.columnFieldNameFirstLower}List.size() > 0">
+                        AND ${table.tableName}.${column.columnName} in
+                        <foreach collection="item.${column.columnFieldNameFirstLower}List" item="it" open="(" close=")" separator=",">
+                        ${r"#{it}"}
+                        </foreach>
+                    </if>
+                    <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                    <if test="item.${column.columnFieldNameFirstLower}Min != null">
+                        <![CDATA[
+                        <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} >= <@mapperEl 'item.' + column.columnFieldNameFirstLower +'Min'/>
+                        ]]>
+                    </if>
+                    <if test="item.${column.columnFieldNameFirstLower}Max != null">
+                        <![CDATA[
+                        <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} <= <@mapperEl 'item.' + column.columnFieldNameFirstLower +'Max'/>
+                        ]]>
+                    </if>
+                    <#elseif (column.columnFieldType == "String")>
+                    <if test="item.${column.columnFieldNameFirstLower} != null and item.${column.columnFieldNameFirstLower} != ''">
+                        <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl 'item.' + column.columnFieldNameFirstLower/>
+                    </if>
+                    <if test="item.${column.columnFieldNameFirstLower}StartWith != null and item.${column.columnFieldNameFirstLower}StartWith != ''">
+                        AND ${table.tableName}.${column.columnName} LIKE concat(<@mapperEl 'item.' + column.columnFieldNameFirstLower +'StartWith'/>, '%')
+                    </if>
+                    <if test="item.${column.columnFieldNameFirstLower}Like != null and item.${column.columnFieldNameFirstLower}Like != ''">
+                        AND ${table.tableName}.${column.columnName} LIKE concat('%', <@mapperEl 'item.' + column.columnFieldNameFirstLower +'Like'/>, '%')
+                    </if>
+                    <#else>
+                    <if test="item.${column.columnFieldNameFirstLower} != null">
+                        <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl 'item.' + column.columnFieldNameFirstLower/>
+                    </if>
+                    </#if>
+                </#list>
+                </trim>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="selectColumnList">
+        <#list table.columns as column>
+        ${table.tableName}.${column.columnName}<#if column_has_next>,</#if>
+        </#list>
+    </sql>
+    <sql id="updateColumnSet">
+        <set>
+            <#list table.columns as column>
+            <#if (!column.primaryKey && !column.autoIncrement)>
+            <if test="model.${column.columnFieldNameFirstLower} != null">
+                ${table.tableName}.${column.columnName} = <@mapperEl 'model.' + column.columnFieldNameFirstLower/><#if column_has_next>,</#if>
+            </if>
+            </#if>
+            </#list>
+        </set>
+    </sql>
+
+    <insert id="insert" parameterMap="BaseParameterMap"<#if table.hasPrimaryKey><#if primaryKey[0].autoIncrement> useGeneratedKeys="true" keyProperty="${primaryKey[0].columnFieldNameFirstLower}"</#if></#if>>
+        insert into ${table.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <#list table.columns as column>
+            <#if !column.autoIncrement>
+            <if test="model.${column.columnFieldNameFirstLower} != null">${column.columnName},</if>
+            </#if>
+        </#list>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <#list table.columns as column>
+            <#if !column.autoIncrement>
+            <if test="model.${column.columnFieldNameFirstLower} != null"><@mapperEl 'model.' + column.columnFieldNameFirstLower/>,</if>
+            </#if>
+        </#list>
+        </trim>
+    </insert>
+
+    <insert id="insertList" parameterMap="BaseParameterMap">
+        <foreach collection="list" item="item" separator=";">
+            insert into ${table.tableName}
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+            <#list table.columns as column>
+                <#if !column.autoIncrement>
+                <if test="item.${column.columnFieldNameFirstLower} != null">${column.columnName},</if>
+                </#if>
+            </#list>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <#list table.columns as column>
+                <#if !column.autoIncrement>
+                <if test="item.${column.columnFieldNameFirstLower} != null"><@mapperEl 'item.' + column.columnFieldNameFirstLower/>,</if>
+                </#if>
+            </#list>
+            </trim>
+        </foreach>
+    </insert>
+
+    <delete id="deleteByCondition" parameterMap="BaseConditionMap">
+        DELETE FROM ${table.tableName}
+        <include refid="selectCondition"/>
+    </delete>
+
+    <update id="updateByCondition">
+        UPDATE ${table.tableName}
+        <include refid="updateColumnSet"/>
+        <include refid="selectCondition"/>
+    </update>
+
+    <select id="findByCondition" resultMap="BaseModelMap" parameterMap="BaseConditionMap">
+        SELECT
+        <include refid="selectColumnList"/>
+        FROM
+        ${table.tableName}
+        <include refid="selectCondition"/>
+        <if test="order != null and order.orderBy != null and order.orderBy != ''">
+            ORDER BY ${r"${corder.orderBy}"}
+        </if>
+    </select>
+</mapper>
