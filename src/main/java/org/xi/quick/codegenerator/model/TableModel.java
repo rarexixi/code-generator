@@ -23,8 +23,17 @@ public class TableModel {
 
     //region 默认
 
+    /**
+     * 数据库名
+     */
     private String databaseName;
+    /**
+     * 表名
+     */
     private String tableName;
+    /**
+     * 表说明
+     */
     private String tableComment;
 
     /**
@@ -32,6 +41,9 @@ public class TableModel {
      */
     private ValidStatusField validStatusField;
 
+    /**
+     * 表字段列表
+     */
     private List<ColumnModel> columns;
 
     public String getDatabaseName() {
@@ -78,19 +90,39 @@ public class TableModel {
 
     //region 扩展
 
+    /**
+     * 获取表对应的JAVA类名
+     *
+     * @return
+     */
     public String getTableClassName() {
         return StringUtil.getCamelCaseName(this.tableName);
     }
 
+    /**
+     * 获取表对应的JAVA类名首字母小写
+     *
+     * @return
+     */
     public String getTableClassNameFirstLower() {
         return StringUtil.getFirstLower(StringUtil.getCamelCaseName(this.tableName));
     }
 
+    /**
+     * 是否有主键
+     *
+     * @return
+     */
     public boolean getHasPrimaryKey() {
         List<ColumnModel> primaryKey = getPrimaryKey();
         return primaryKey != null && !primaryKey.isEmpty();
     }
 
+    /**
+     * 获取主键列表
+     *
+     * @return
+     */
     public List<ColumnModel> getPrimaryKey() {
         List<ColumnModel> priKeys =
                 this.columns
@@ -101,6 +133,11 @@ public class TableModel {
         return priKeys;
     }
 
+    /**
+     * 主键对应的JAVA参数，单个(Integer id)，多个(Integer userId, Integer userTypeId)
+     *
+     * @return
+     */
     public String getPrimaryKeyParameters() {
         List<ColumnModel> primaryKey = getPrimaryKey();
         if (primaryKey == null || primaryKey.isEmpty()) return "";
@@ -110,6 +147,11 @@ public class TableModel {
                 .collect(Collectors.joining(", "));
     }
 
+    /**
+     * 主键对应的JAVA参数值，单个(id) ，多个(userId, userTypeId)
+     *
+     * @return
+     */
     public String getPrimaryKeyParameterValues() {
         List<ColumnModel> primaryKey = getPrimaryKey();
         if (primaryKey == null || primaryKey.isEmpty()) return "";
@@ -119,6 +161,11 @@ public class TableModel {
                 .collect(Collectors.joining(", "));
     }
 
+    /**
+     * 有效性字段列
+     *
+     * @return
+     */
     public ColumnModel getValidStatusColumn() {
 
         Optional<ColumnModel> columnOptional =

@@ -6,8 +6,18 @@ package org.xi.quick.codegenerator.entity;
  */
 public class ValidStatusField {
 
+    /**
+     * 列名称
+     */
     private String fieldName;
+
+    /**
+     * 有效性值
+     */
     private String validValue;
+    /**
+     * 无效性值
+     */
     private String invalidValue;
 
     public String getFieldName() {

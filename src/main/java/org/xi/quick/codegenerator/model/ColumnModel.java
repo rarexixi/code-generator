@@ -29,18 +29,57 @@ public class ColumnModel {
 
     //region 默认
 
+    /**
+     * 数据库名
+     */
     private String databaseName;
+    /**
+     * 表名
+     */
     private String tableName;
+    /**
+     * 列名
+     */
     private String columnName;
+    /**
+     * 列位置
+     */
     private Long columnPosition;
+    /**
+     * 默认值
+     */
     private String columnDefault;
+    /**
+     * 是否为空
+     */
     private String isNullable;
+    /**
+     * 数据类型，int，varchar
+     */
     private String dataType;
+    /**
+     * 字符长度
+     */
     private Long charLength;
+    /**
+     * 字节长度
+     */
     private Long byteLength;
+    /**
+     * 列类型，int(11)，varchar(50)
+     */
     private String columnType;
+    /**
+     *
+     */
     private String columnKey;
+    /**
+     *
+     */
     private String extra;
+    /**
+     * 列说明
+     */
     private String columnComment;
 
     public String getDatabaseName() {
@@ -151,22 +190,47 @@ public class ColumnModel {
 
     //region 扩展
 
+    /**
+     * 获取列对应的JAVA字段名
+     *
+     * @return
+     */
     public String getColumnFieldName() {
         return StringUtil.getCamelCaseName(this.columnName);
     }
 
+    /**
+     * 获取列对应的JAVA字段名首字母小写
+     *
+     * @return
+     */
     public String getColumnFieldNameFirstLower() {
         return StringUtil.getFirstLower(StringUtil.getCamelCaseName(this.columnName));
     }
 
+    /**
+     * 获取列对应的JAVA字段类型
+     *
+     * @return
+     */
     public String getColumnFieldType() {
         return ColumnUtil.getFieldType(this.dataType);
     }
 
+    /**
+     * 是否自增长
+     *
+     * @return
+     */
     public boolean isAutoIncrement() {
         return this.extra.toLowerCase().equals("auto_increment");
     }
 
+    /**
+     * 是否是主键
+     *
+     * @return
+     */
     public boolean isPrimaryKey() {
         return this.columnKey.equals("PRI");
     }
