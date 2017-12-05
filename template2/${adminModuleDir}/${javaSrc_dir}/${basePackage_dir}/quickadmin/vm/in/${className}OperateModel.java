@@ -1,26 +1,19 @@
 <#assign className = table.tableClassName>
-package ${basePackage}.entity;
+<#assign classNameLower = table.tableClassNameFirstLower>
+package ${basePackage}.quickadmin.vm.in;
 
-import org.xi.common.annotation.InsertNotNull;
-import org.xi.common.annotation.UpdateNotNull;
+import ${basePackage}.entity.${className}Entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.io.Serializable;
 
-<#include "/include/java_copyright.ftl">
-public class ${className}Entity implements Serializable {
+public class ${className}OperateModel implements Serializable {
 
     <#list table.columns as column>
     /**
      * ${column.columnComment}
      */
-<#if (column.primaryKey && column.autoIncrement)>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-<#elseif (column.columnName != 'create_time' && column.columnName != 'update_time')>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-    @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-</#if>
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     </#list>
@@ -41,4 +34,15 @@ public class ${className}Entity implements Serializable {
     }
 
     </#list>
+    /**
+     * 获取数据表实体
+     */
+    public ${className}Entity get${className}Entity() {
+        ${className}Entity entity = new ${className}Entity();
+        <#list table.columns as column>
+        entity.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        </#list>
+        return entity;
+    }
+
 }

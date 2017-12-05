@@ -7,7 +7,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="${basePackage}.mapper.${className}Mapper">
+<mapper namespace="${basePackage}.quickprovider.mapper.${className}Mapper">
 
     <resultMap id="BaseModelMap" type="${basePackage}.entity.${className}Entity">
         <#list table.columns as column>
@@ -23,7 +23,7 @@
             <foreach collection="condition.selectConditionList" item="item" open="(" close=")" separator=" OR ">
                 <trim prefixOverrides="AND|OR">
                 <#list table.columns as column>
-                    <#if column.columnFieldNameFirstLower == 'isActive'>
+                    <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
                     <if test="item.${column.columnFieldNameFirstLower} != null">
                         <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl 'item.' + column.columnFieldNameFirstLower/>
                     </if>

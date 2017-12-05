@@ -1,7 +1,9 @@
 package org.xi.quick.codegenerator.utils;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -15,6 +17,11 @@ public class StringUtil {
     public static String getFirstLower(String s) {
 
         return s.substring(0, 1).toLowerCase() + s.substring(1);
+    }
+
+    public static String getFirstUpper(String s) {
+
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
     /**
@@ -80,5 +87,68 @@ public class StringUtil {
                     return o.toString();
                 })
                 .collect(Collectors.joining(delimiter));
+    }
+
+    /**
+     * 获取文件输出实际路径
+     *
+     * @param path
+     * @return
+     */
+    public static String getActualPath(String path, Map<Object, Object> commonPropertiesMap) {
+
+        Pattern pattern = Pattern.compile("\\$\\{[^\\}]*\\}");
+        Matcher matcher = pattern.matcher(path);
+        while (matcher.find()) {
+            String group = matcher.group();
+            String key = group.substring(2, group.length() - 1);
+
+            boolean isDir = key.endsWith("_dir");
+            boolean isLower = key.endsWith("_lower");
+            boolean isUpper = key.endsWith("_upper");
+            boolean isFirstLower = key.endsWith("_firstLower");
+            boolean isFirstUpper = key.endsWith("_firstUpper");
+            if (isDir) {
+                key = key.substring(0, key.length() - 4);
+            } else if (isLower || isUpper) {
+                key = key.substring(0, key.length() - 6);
+            } else if (isFirstLower || isFirstUpper) {
+                key = key.substring(0, key.length() - 11);
+            }
+
+            Object value = commonPropertiesMap.get(key);
+
+            if (value != null) {
+                String s = (String) value;
+                if (isDir) {
+                    path = path.replace(group, s.replaceAll("\\.", "/"));
+                } else if (isLower) {
+                    path = path.replace(group, s.toLowerCase());
+                } else if (isUpper) {
+                    path = path.replace(group, s.toUpperCase());
+                } else if (isFirstLower) {
+                    path = path.replace(group, getFirstLower(s));
+                } else if (isFirstUpper) {
+                    path = path.replace(group, getFirstUpper(s));
+                } else {
+                    path = path.replace(group, s);
+                }
+            }
+        }
+
+        return path;
+    }
+
+    /**
+     * 是否是类相关文件
+     *
+     * @param path
+     * @return
+     */
+    public static boolean isClassFile(String path) {
+
+        Pattern pattern = Pattern.compile("\\$\\{className(_[^\\}]*)?\\}");
+        Matcher matcher = pattern.matcher(path);
+        return matcher.find();
     }
 }

@@ -5,7 +5,6 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.quickprovider.service.impl;
 
-import ${paginationFullClass};
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.condition.select.${className}SelectCondition;
 import ${basePackage}.entity.${className}Entity;
@@ -40,7 +39,8 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     @Override
     public int add${className}(${className}Entity ${classNameLower}) {
-        return super.insert(${classNameLower});
+        int result = super.insert(${classNameLower});
+        return result;
     }
 
     /**
@@ -52,7 +52,8 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     @Override
     public int add${className}List(List<${className}Entity> ${classNameLower}List) {
-        return super.insertList(${classNameLower}List);
+        int result = super.insertList(${classNameLower}List);
+        return result;
     }
     <#if table.hasPrimaryKey>
 
@@ -68,14 +69,9 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
     @Override
     public int delete${className}ByPk(${primaryKeyParameters}) {
 
-        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
-        <#list primaryKey as column>
-        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        </#list>
-        ${className}Condition condition = new ${className}Condition();
-        condition.getSelectConditionList().add(selectCondition);
-
-        return ${classNameLower}Mapper.deleteByCondition(condition);
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        int result = ${classNameLower}Mapper.deleteByCondition(condition);
+        return result;
     }
     <#if table.validStatusColumn??>
 
@@ -90,17 +86,11 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     public int disable${className}ByPk(${primaryKeyParameters}) {
 
-        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
-        <#list primaryKey as column>
-        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        </#list>
-        ${className}Condition condition = new ${className}Condition();
-        condition.getSelectConditionList().add(selectCondition);
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
         ${className}Entity ${classNameLower} = new ${className}Entity();
         ${classNameLower}.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
-
-        return ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+        int result = ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+        return result;
     }
 
     /**
@@ -114,17 +104,11 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     public int enable${className}ByPk(${primaryKeyParameters}) {
 
-        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
-        <#list primaryKey as column>
-        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        </#list>
-        ${className}Condition condition = new ${className}Condition();
-        condition.getSelectConditionList().add(selectCondition);
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
         ${className}Entity ${classNameLower} = new ${className}Entity();
         ${classNameLower}.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
-
-        return ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+        int result = ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+        return result;
     }
     </#if>
 
@@ -138,14 +122,9 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
     @Override
     public int update${className}ByPk(${className}Entity ${classNameLower}) {
 
-        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
-        <#list primaryKey as column>
-        selectCondition.set${column.columnFieldName}(${classNameLower}.get${column.columnFieldName}());
-        </#list>
-        ${className}Condition condition = new ${className}Condition();
-        condition.getSelectConditionList().add(selectCondition);
-
-        return ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+        ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>${classNameLower}.get${column.columnFieldName}()</#list>);
+        int result = ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
+        return result;
     }
 
     /**
@@ -169,23 +148,28 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      * 分页查询
      *
      * @param parameter
-     * @param pagination
+     * @param page
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Transactional(readOnly = true)
     @Override
-    public ${paginationClass}<${className}Vo> find${className}PageList(${className}SelectParameter parameter, ${paginationClass} pagination) {
+    public PageInfo<${className}Vo> find${className}PageList(${className}SelectParameter parameter, PageInfo page) {
 
-        //先查询总数量
-        PageHelper.startPage(pagination.getPage(), pagination.getPageSize());
-        //分页查询数据
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<${className}Vo> list = ${classNameLower}Mapper.find${className}List(parameter);
-        PageInfo page = new PageInfo(list);
-        pagination.setContent(list);
-        pagination.setDataNumber(page.getTotal());
-
-        return pagination;
+        PageInfo<${className}Vo> pageInfo = new PageInfo<>(list);
+        return pageInfo;
     }
 
+    private ${className}Condition getPkCondition(${primaryKeyParameters}) {
+
+        ${className}SelectCondition selectCondition = new ${className}SelectCondition();
+        <#list primaryKey as column>
+        selectCondition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        </#list>
+        ${className}Condition condition = new ${className}Condition();
+        condition.getSelectConditionList().add(selectCondition);
+        return condition;
+    }
 }

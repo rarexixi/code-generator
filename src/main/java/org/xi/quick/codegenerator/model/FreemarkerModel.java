@@ -20,10 +20,6 @@ public class FreemarkerModel {
         return absolutePath;
     }
 
-    public String getAbsoluteDirectory() {
-        return absolutePath.substring(0, absolutePath.lastIndexOf("/"));
-    }
-
     public Template getTemplate() {
         return template;
     }

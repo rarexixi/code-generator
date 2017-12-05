@@ -1,7 +1,8 @@
 package ${basePackage}.quickprovider.service;
 
-import ${paginationFullClass};
 import ${basePackage}.condition.order.OrderCondition;
+
+import com.github.pagehelper.PageInfo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -46,9 +47,9 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      *
      * @param condition
      * @param order
-     * @param pagination
+     * @param page
      * @return
      */
-    ${paginationClass}<T> findByCondition(C condition, OrderCondition order, ${paginationClass} pagination);
+    PageInfo<T> findByCondition(C condition, OrderCondition order, PageInfo page);
 
 }

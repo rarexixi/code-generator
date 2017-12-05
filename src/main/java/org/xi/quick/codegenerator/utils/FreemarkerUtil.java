@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author 郗世豪（xish@cloud-young.com）
@@ -38,12 +40,15 @@ public class FreemarkerUtil {
      */
     public static void generate(FreemarkerModel outModel, String tableClassName, Object dataModel, String encoding) throws IOException, TemplateException {
 
+        if(outModel.getAbsolutePath().contains("html")) {
+            String s = outModel.getAbsolutePath();
+        }
         String absolutePath = getFilePath(outModel, tableClassName);
 
         logger.info("正在生成" + absolutePath);
 
         //创建文件路径
-        DirectoryUtil.createIfNotExists(outModel.getAbsoluteDirectory());
+        DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
 
         try (OutputStream stream = new FileOutputStream(absolutePath);
              Writer out = new OutputStreamWriter(stream, encoding)) {
@@ -69,10 +74,12 @@ public class FreemarkerUtil {
 
     public static String getFilePath(FreemarkerModel model, String tableClassName) {
 
-        String absolutePath = model.getAbsolutePath();
-        if (absolutePath.contains("${className}") && tableClassName != null && !tableClassName.isEmpty()) {
-            absolutePath = absolutePath.replace("${className}", tableClassName);
-        }
-        return absolutePath;
+        Map<Object, Object> map = new HashMap<>();
+        map.put("className", tableClassName);
+        return StringUtil.getActualPath(model.getAbsolutePath(), map);
+    }
+
+    public static String getAbsoluteDirectory(String absolutePath) {
+        return absolutePath.substring(0, absolutePath.lastIndexOf("/"));
     }
 }

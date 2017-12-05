@@ -38,7 +38,7 @@
         ${table.tableName}
         <where>
         <#list table.columns as column>
-            <#if column.columnFieldNameFirstLower == 'isActive'>
+            <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
             <if test="${column.columnFieldNameFirstLower} != null">
                 <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl column.columnFieldNameFirstLower/>
             </if>

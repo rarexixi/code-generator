@@ -21,6 +21,6 @@ public class ${className}Condition implements Serializable {
     }
 
     public List<${className}SelectCondition> getSelectConditionList() {
-        return this.selectConditionList;
+        return selectConditionList;
     }
 }

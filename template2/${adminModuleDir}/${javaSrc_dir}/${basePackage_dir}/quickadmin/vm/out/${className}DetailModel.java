@@ -1,26 +1,37 @@
 <#assign className = table.tableClassName>
-package ${basePackage}.entity;
+<#assign classNameLower = table.tableClassNameFirstLower>
+package ${basePackage}.quickadmin.vm.out;
 
-import org.xi.common.annotation.InsertNotNull;
-import org.xi.common.annotation.UpdateNotNull;
+import ${basePackage}.entity.${className}Entity;
+import ${basePackage}.vo.${className}Vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.io.Serializable;
 
-<#include "/include/java_copyright.ftl">
-public class ${className}Entity implements Serializable {
+public class ${className}DetailModel implements Serializable {
+
+    public ${className}DetailModel() {
+    }
+
+    public ${className}DetailModel(${className}Vo vo) {
+
+        <#list table.columns as column>
+        ${column.columnFieldNameFirstLower} = vo.get${column.columnFieldName}();
+        </#list>
+    }
+
+    public ${className}DetailModel(${className}Entity entity) {
+
+        <#list table.columns as column>
+        ${column.columnFieldNameFirstLower} = entity.get${column.columnFieldName}();
+        </#list>
+    }
 
     <#list table.columns as column>
     /**
      * ${column.columnComment}
      */
-<#if (column.primaryKey && column.autoIncrement)>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-<#elseif (column.columnName != 'create_time' && column.columnName != 'update_time')>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-    @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-</#if>
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     </#list>

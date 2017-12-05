@@ -30,7 +30,7 @@ public class ${className}OperateModel implements Serializable {
     * 获取${column.columnComment}
     */
     public ${column.columnFieldType} get${column.columnFieldName}() {
-        return this.${column.columnFieldNameFirstLower};
+        return ${column.columnFieldNameFirstLower};
     }
 
     </#list>
@@ -40,7 +40,7 @@ public class ${className}OperateModel implements Serializable {
     public ${className}Entity get${className}Entity() {
         ${className}Entity entity = new ${className}Entity();
         <#list table.columns as column>
-        entity.set${column.columnFieldName}(this.${column.columnFieldNameFirstLower});
+        entity.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
         </#list>
         return entity;
     }

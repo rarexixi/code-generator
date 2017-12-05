@@ -102,7 +102,7 @@ public class AppConfig {
                                                  Map<Object, Object> commonPropertiesMap) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration, commonPropertiesMap,
-                templateRelativePath -> templateRelativePath.contains("${className}")
+                templateRelativePath -> StringUtil.isClassFile(templateRelativePath)
                         && !isMatchingFolder(templateRelativePath, iningoredFolder)
                         && !isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
@@ -119,7 +119,7 @@ public class AppConfig {
                                                      Map<Object, Object> commonPropertiesMap) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration, commonPropertiesMap,
-                templateRelativePath -> !templateRelativePath.contains("${className}")
+                templateRelativePath -> !StringUtil.isClassFile(templateRelativePath)
                         && !isMatchingFolder(templateRelativePath, iningoredFolder)
                         && !isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
@@ -242,27 +242,8 @@ public class AppConfig {
      */
     private String getActualPath(String relativePath, Map<Object, Object> commonPropertiesMap) {
 
-        Pattern pattern = Pattern.compile("\\$\\{[^\\}]*\\}");
-        Matcher matcher = pattern.matcher(relativePath);
-        while (matcher.find()) {
-            String group = matcher.group();
-            String key = group.substring(2, group.length() - 1);
-
-            boolean isDir = key.endsWith("_dir");
-            if (isDir) {
-                key = key.substring(0, key.length() - 4);
-            }
-
-            Object value = commonPropertiesMap.get(key);
-
-            if (value != null) {
-                relativePath = isDir
-                        ? relativePath.replace(group, ((String) value).replaceAll("\\.", "/"))
-                        : relativePath.replace(group, (String) value);
-            }
-        }
-
         File directory = new File(outPath);
-        return directory.getAbsolutePath() + "/" + relativePath;
+        return directory.getAbsolutePath() + "/" + StringUtil.getActualPath(relativePath, commonPropertiesMap);
     }
+
 }

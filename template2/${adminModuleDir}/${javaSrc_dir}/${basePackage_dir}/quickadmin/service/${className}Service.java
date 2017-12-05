@@ -3,13 +3,13 @@
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
-package ${basePackage}.quickapi.service;
+package ${basePackage}.quickadmin.service;
 
 import org.xi.common.model.Result;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.vo.${className}Vo;
-import ${basePackage}.quickapi.service.hystric.${className}ServiceHystric;
+import ${basePackage}.quickadmin.service.hystric.${className}ServiceHystric;
 
 import com.github.pagehelper.PageInfo;
 
@@ -22,7 +22,6 @@ import java.util.List;
 
 <#include "/include/java_copyright.ftl">
 @FeignClient(value = "${serviceProvider}", fallback = ${className}ServiceHystric.class)
-@RequestMapping("/${className}")
 public interface ${className}Service {
 
     /**
@@ -33,8 +32,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/add${className}")
-    Result<${className}Entity> add${className}(${className}Entity ${classNameLower}, String sessionId);
+    @RequestMapping("/${classNameLower}/add${className}")
+    Result<Integer> add${className}(@RequestParam(value="${classNameLower}") ${className}Entity ${classNameLower}, @RequestParam("sessionId") String sessionId);
 
     /**
      * 添加列表
@@ -44,8 +43,8 @@ public interface ${className}Service {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/add${className}List")
-    Result<${className}Entity> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId);
+    @RequestMapping("/${classNameLower}/add${className}List")
+    Result<Integer> add${className}List(@RequestParam(value="${classNameLower}List") List<${className}Entity> ${classNameLower}List, @RequestParam("sessionId") String sessionId);
     <#if table.hasPrimaryKey>
 
     /**
@@ -58,8 +57,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/delete${className}ByPk")
-    Result<${className}Entity> delete${className}ByPk(${primaryKeyParameters}, String sessionId);
+    @RequestMapping("/${classNameLower}/delete${className}ByPk")
+    Result<Integer> delete${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
     <#if table.validStatusColumn??>
 
     /**
@@ -72,8 +71,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/disable${className}ByPk")
-    Result<${className}Entity> disable${className}ByPk(${primaryKeyParameters}, String sessionId);
+    @RequestMapping("/${classNameLower}/disable${className}ByPk")
+    Result<Integer> disable${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
 
     /**
      * 根据主键激活
@@ -85,8 +84,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/enable${className}ByPk")
-    Result<${className}Entity> enable${className}ByPk(${primaryKeyParameters}, String sessionId);
+    @RequestMapping("/${classNameLower}/enable${className}ByPk")
+    Result<Integer> enable${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
     </#if>
 
     /**
@@ -97,8 +96,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/update${className}ByPk")
-    Result<${className}Entity> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId);
+    @RequestMapping("/${classNameLower}/update${className}ByPk")
+    Result<Integer> update${className}ByPk(@RequestParam(value="${classNameLower}") ${className}Entity ${classNameLower}, String sessionId);
 
     /**
      * 根据主键获取
@@ -110,8 +109,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/get${className}ByPk")
-    Result<${className}Vo> get${className}ByPk(${primaryKeyParameters}, String sessionId);
+    @RequestMapping("/${classNameLower}/get${className}ByPk")
+    Result<${className}Vo> get${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
     </#if>
 
     /**
@@ -123,6 +122,6 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/find${className}PageList")
-    Result<PageInfo<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, PageInfo page, String sessionId);
+    @RequestMapping("/${classNameLower}/find${className}PageList")
+    Result<PageInfo<${className}Vo>> find${className}PageList(@RequestParam("parameter") ${className}SelectParameter parameter, @RequestParam("page") PageInfo page, @RequestParam("sessionId") String sessionId);
 }

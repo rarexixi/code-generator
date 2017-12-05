@@ -5,11 +5,12 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.quickprovider.service;
 
-import ${paginationFullClass};
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.vo.${className}Vo;
+
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -95,10 +96,10 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
      * 分页查询
      *
      * @param parameter
-     * @param pagination
+     * @param page
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ${paginationClass}<${className}Vo> find${className}PageList(${className}SelectParameter parameter, ${paginationClass} pagination);
+    PageInfo<${className}Vo> find${className}PageList(${className}SelectParameter parameter, PageInfo page);
 
 }

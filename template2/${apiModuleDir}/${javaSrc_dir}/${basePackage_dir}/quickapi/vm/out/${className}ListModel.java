@@ -17,14 +17,14 @@ public class ${className}ListModel implements Serializable {
     public ${className}ListModel(${className}Vo vo) {
 
         <#list table.columns as column>
-        this.${column.columnFieldNameFirstLower} = vo.${column.columnFieldNameFirstLower};
+        ${column.columnFieldNameFirstLower} = vo.get${column.columnFieldName}();
         </#list>
     }
 
     public ${className}ListModel(${className}Entity entity) {
 
         <#list table.columns as column>
-        this.${column.columnFieldNameFirstLower} = entity.${column.columnFieldNameFirstLower};
+        ${column.columnFieldNameFirstLower} = entity.get${column.columnFieldName}();
         </#list>
     }
 
@@ -48,7 +48,7 @@ public class ${className}ListModel implements Serializable {
     * 获取${column.columnComment}
     */
     public ${column.columnFieldType} get${column.columnFieldName}() {
-        return this.${column.columnFieldNameFirstLower};
+        return ${column.columnFieldNameFirstLower};
     }
 
     </#list>

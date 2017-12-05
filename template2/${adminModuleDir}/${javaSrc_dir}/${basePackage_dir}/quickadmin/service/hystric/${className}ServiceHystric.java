@@ -3,14 +3,14 @@
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
-package ${basePackage}.quickapi.service.hystric;
+package ${basePackage}.quickadmin.service.hystric;
 
 import org.xi.common.constant.OperationConstants;
 import org.xi.common.model.Result;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.vo.${className}Vo;
-import ${basePackage}.quickapi.service.${className}Service;
+import ${basePackage}.quickadmin.service.${className}Service;
 
 import com.github.pagehelper.PageInfo;
 
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 <#include "/include/java_copyright.ftl">
-@Service("${classNameLower}Service")
+@Service
 public class ${className}ServiceHystric implements ${className}Service {
 
     /**
@@ -31,7 +31,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> add${className}(${className}Entity ${classNameLower}, String sessionId) {
+    public Result<Integer> add${className}(${className}Entity ${classNameLower}, String sessionId) {
 
         return new Result<>(OperationConstants.SYSTEM_ERROR);
     }
@@ -45,7 +45,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId) {
+    public Result<Integer> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId) {
 
         return new Result<>(OperationConstants.SYSTEM_ERROR);
     }
@@ -62,7 +62,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> delete${className}ByPk(${primaryKeyParameters}, String sessionId) {
+    public Result<Integer> delete${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
         return new Result<>(OperationConstants.SYSTEM_ERROR);
     }
@@ -79,7 +79,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> disable${className}ByPk(${primaryKeyParameters}, String sessionId) {
+    public Result<Integer> disable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
         return new Result<>(OperationConstants.SYSTEM_ERROR);
     }
@@ -95,7 +95,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> enable${className}ByPk(${primaryKeyParameters}, String sessionId) {
+    public Result<Integer> enable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
         return new Result<>(OperationConstants.SYSTEM_ERROR);
     }
@@ -110,7 +110,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Entity> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId) {
+    public Result<Integer> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId) {
 
         return new Result<>(OperationConstants.SYSTEM_ERROR);
     }

@@ -1,6 +1,6 @@
 <#assign className = table.tableClassName>
 <#assign classNameLower = table.tableClassNameFirstLower>
-package ${basePackage}.quickapi.vm.in;
+package ${basePackage}.quickadmin.vm.in;
 
 import org.xi.condition.order.BaseOrderCondition;
 import ${basePackage}.parameter.${className}SelectParameter;

@@ -12,7 +12,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     <#list table.columns as column>
 
     //region ${column.columnComment}
-    <#if column.columnFieldNameFirstLower == 'isActive'>
+    <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
 
     /**
     * ${column.columnComment}
@@ -24,7 +24,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}() {
-        return this.${column.columnFieldNameFirstLower};
+        return ${column.columnFieldNameFirstLower};
     }
     <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
 
@@ -43,7 +43,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}() {
-        return this.${column.columnFieldNameFirstLower};
+        return ${column.columnFieldNameFirstLower};
     }
 
     public void set${column.columnFieldName}List(List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List) {
@@ -51,7 +51,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public List<${column.columnFieldType}> get${column.columnFieldName}List() {
-        return this.${column.columnFieldNameFirstLower}List;
+        return ${column.columnFieldNameFirstLower}List;
     }
 
     public void set${column.columnFieldName}In(${column.columnFieldType}... ${column.columnFieldNameFirstLower}List) {
@@ -79,7 +79,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}Min() {
-        return this.${column.columnFieldNameFirstLower}Min;
+        return ${column.columnFieldNameFirstLower}Min;
     }
 
     public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
@@ -87,7 +87,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}Max() {
-        return this.${column.columnFieldNameFirstLower}Max;
+        return ${column.columnFieldNameFirstLower}Max;
     }
 
     public void set${column.columnFieldName}Between(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min, ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
@@ -116,7 +116,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}() {
-        return this.${column.columnFieldNameFirstLower};
+        return ${column.columnFieldNameFirstLower};
     }
 
     public void set${column.columnFieldName}StartWith(${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith) {
@@ -124,7 +124,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}StartWith() {
-        return this.${column.columnFieldNameFirstLower}StartWith;
+        return ${column.columnFieldNameFirstLower}StartWith;
     }
 
     public void set${column.columnFieldName}Like(${column.columnFieldType} ${column.columnFieldNameFirstLower}Like) {
@@ -132,7 +132,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}Like() {
-        return this.${column.columnFieldNameFirstLower}Like;
+        return ${column.columnFieldNameFirstLower}Like;
     }
     <#else>
 
@@ -146,7 +146,7 @@ public class ${className}SelectParameter extends BaseOrderCondition {
     }
 
     public ${column.columnFieldType} get${column.columnFieldName}() {
-        return this.${column.columnFieldNameFirstLower};
+        return ${column.columnFieldNameFirstLower};
     }
     </#if>
 

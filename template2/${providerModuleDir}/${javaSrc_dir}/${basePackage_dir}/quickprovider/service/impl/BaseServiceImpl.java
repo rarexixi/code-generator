@@ -1,10 +1,8 @@
 package ${basePackage}.quickprovider.service.impl;
 
-import ${paginationFullClass};
-
 import ${basePackage}.condition.order.OrderCondition;
-import ${basePackage}.service.BaseService;
-import ${basePackage}.mapper.BaseMapper;
+import ${basePackage}.quickprovider.service.BaseService;
+import ${basePackage}.quickprovider.mapper.BaseMapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,7 +27,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int insert(T model) {
-        return this.mapper.insert(model);
+        return mapper.insert(model);
     }
 
     /**
@@ -40,7 +38,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int insertList(List<T> models) {
-        return this.mapper.insertList(models);
+        return mapper.insertList(models);
     }
 
     /**
@@ -51,7 +49,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int deleteByCondition(C condition) {
-        return this.mapper.deleteByCondition(condition);
+        return mapper.deleteByCondition(condition);
     }
 
     /**
@@ -63,7 +61,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int updateByCondition(T model, C condition) {
-        return this.mapper.updateByCondition(model, condition);
+        return mapper.updateByCondition(model, condition);
     }
 
     /**
@@ -71,22 +69,18 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      *
      * @param condition
      * @param order
-     * @param pagination
+     * @param page
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public ${paginationClass}<T> findByCondition(C condition, OrderCondition order, ${paginationClass} pagination) {
+    public PageInfo<T> findByCondition(C condition, OrderCondition order, PageInfo page) {
 
         //先查询总数量
-        PageHelper.startPage(pagination.getPage(), pagination.getPageSize());
-        //分页查询数据
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
         List<T> list = this.mapper.findByCondition(condition, order);
-        PageInfo page = new PageInfo(list);
-        pagination.setContent(list);
-        pagination.setDataNumber(page.getTotal());
-
-        return pagination;
+        PageInfo<T> pageInfo = new PageInfo<>(list);
+        return pageInfo;
     }
 
 }
