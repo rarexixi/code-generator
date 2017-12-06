@@ -1,5 +1,6 @@
 package ${basePackage}.quickprovider.service.impl;
 
+import org.xi.common.model.SearchPage;
 import ${basePackage}.condition.order.OrderCondition;
 import ${basePackage}.quickprovider.service.BaseService;
 import ${basePackage}.quickprovider.mapper.BaseMapper;
@@ -74,10 +75,13 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> findByCondition(C condition, OrderCondition order, PageInfo page) {
+    public PageInfo<T> findByCondition(C condition, OrderCondition order, SearchPage page) {
 
-        //先查询总数量
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        if (page == null) {
+            PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
+        } else {
+            PageHelper.startPage(page.getPageIndex(), page.getPageSize());
+        }
         List<T> list = this.mapper.findByCondition(condition, order);
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return pageInfo;

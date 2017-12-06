@@ -96,10 +96,9 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
      * 分页查询
      *
      * @param parameter
-     * @param page
      * @return
      <#include "/include/author_info1.ftl">
      */
-    PageInfo<${className}Vo> find${className}PageList(${className}SelectParameter parameter, PageInfo page);
+    PageInfo<${className}Vo> find${className}PageList(${className}SelectParameter parameter);
 
 }

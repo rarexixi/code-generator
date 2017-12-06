@@ -136,13 +136,12 @@ public class ${className}ServiceHystric implements ${className}Service {
      * 分页查询
      *
      * @param parameter
-     * @param page
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<PageInfo<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, PageInfo page, String sessionId) {
+    public Result<PageInfo<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, String sessionId) {
 
         return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }

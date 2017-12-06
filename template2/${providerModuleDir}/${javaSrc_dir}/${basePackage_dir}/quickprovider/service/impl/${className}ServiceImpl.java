@@ -5,6 +5,7 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.quickprovider.service.impl;
 
+import org.xi.common.model.SearchPage;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.condition.select.${className}SelectCondition;
 import ${basePackage}.entity.${className}Entity;
@@ -148,15 +149,18 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      * 分页查询
      *
      * @param parameter
-     * @param page
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<${className}Vo> find${className}PageList(${className}SelectParameter parameter, PageInfo page) {
+    public PageInfo<${className}Vo> find${className}PageList(${className}SelectParameter parameter) {
 
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        if (parameter == null) {
+            PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
+        } else {
+            PageHelper.startPage(parameter.getPageIndex(), parameter.getPageSize());
+        }
         List<${className}Vo> list = ${classNameLower}Mapper.find${className}List(parameter);
         PageInfo<${className}Vo> pageInfo = new PageInfo<>(list);
         return pageInfo;

@@ -23,7 +23,7 @@
             <foreach collection="condition.selectConditionList" item="item" open="(" close=")" separator=" OR ">
                 <trim prefixOverrides="AND|OR">
                 <#list table.columns as column>
-                    <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
+                    <#if column.columnName == table.validStatusField.fieldName>
                     <if test="item.${column.columnFieldNameFirstLower} != null">
                         <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl 'item.' + column.columnFieldNameFirstLower/>
                     </if>

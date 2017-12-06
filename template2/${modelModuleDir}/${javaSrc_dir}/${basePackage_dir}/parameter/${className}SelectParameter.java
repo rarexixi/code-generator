@@ -8,11 +8,11 @@ import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}SelectParameter extends BaseOrderCondition {
+public class ${className}SelectParameter extends BaseSelectParameter {
     <#list table.columns as column>
 
     //region ${column.columnComment}
-    <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
+    <#if column.columnName == table.validStatusField.fieldName>
 
     /**
     * ${column.columnComment}

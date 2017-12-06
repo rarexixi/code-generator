@@ -15,7 +15,7 @@ public class ${className}SearchModel extends BaseOrderCondition implements Seria
     <#list table.columns as column>
 
     //region ${column.columnComment}
-    <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
+    <#if column.columnName == table.validStatusField.fieldName>
 
     /**
     * ${column.columnComment}
@@ -170,7 +170,7 @@ public class ${className}SearchModel extends BaseOrderCondition implements Seria
     public ${className}SelectParameter get${className}SelectParameter() {
         ${className}SelectParameter parameter = new ${className}SelectParameter();
         <#list table.columns as column>
-        <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
+        <#if column.columnName == table.validStatusField.fieldName>
         parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
         <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
         parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});

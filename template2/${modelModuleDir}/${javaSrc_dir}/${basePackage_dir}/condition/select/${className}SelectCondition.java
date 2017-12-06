@@ -10,7 +10,7 @@ public class ${className}SelectCondition implements Serializable {
     <#list table.columns as column>
 
     //region ${column.columnComment}
-    <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
+    <#if column.columnName == table.validStatusField.fieldName>
 
     /**
     * ${column.columnComment}

@@ -1,0 +1,131 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassNameFirstLower>
+<#assign primaryKey = table.primaryKey>
+<#assign primaryKeyParameters = table.primaryKeyParameters>
+<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#macro mapperEl value>${r"${"}${value}}</#macro>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Insert title here</title>
+    <link rel="stylesheet" th:href="/resources/css/base.css" />
+</head>
+
+<body>
+    <div class="main-content" id="app">
+        <form>
+            <#list table.columns as column>
+            <#if column.columnName == table.validStatusField.fieldName>
+            <label for="${column.columnFieldNameFirstLower}">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <select name="${column.columnFieldNameFirstLower}" id="${column.columnFieldNameFirstLower}" v-model="params.${column.columnFieldNameFirstLower}">
+                <option value="-1">全部</option>
+                <option value="${table.validStatusField.validValue}">有效</option>
+                <option value="${table.validStatusField.invalidValue}">无效</option>
+            </select>
+            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+            <label for="${column.columnFieldNameFirstLower}">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <input name="${column.columnFieldNameFirstLower}" id="${column.columnFieldNameFirstLower}" v-model="params.${column.columnFieldNameFirstLower}" type="number" />
+            <#elseif column.columnFieldType == "Date">
+<#--
+            <label for="${column.columnFieldNameFirstLower}Min">开始${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <input name="${column.columnFieldNameFirstLower}Min" id="${column.columnFieldNameFirstLower}Min" v-model="params.${column.columnFieldNameFirstLower}Min" type="datetime" />
+            <label for="${column.columnFieldNameFirstLower}Max">结束${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <input name="${column.columnFieldNameFirstLower}Max" id="${column.columnFieldNameFirstLower}Max" v-model="params.${column.columnFieldNameFirstLower}Max" type="datetime" />
+-->
+            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <label for="${column.columnFieldNameFirstLower}Min">最小${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <input name="${column.columnFieldNameFirstLower}Min" id="${column.columnFieldNameFirstLower}Min" v-model="params.${column.columnFieldNameFirstLower}Min" type="text" />
+            <label for="${column.columnFieldNameFirstLower}Max">最大${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <input name="${column.columnFieldNameFirstLower}Max" id="${column.columnFieldNameFirstLower}Max" v-model="params.${column.columnFieldNameFirstLower}Max" type="text" />
+            <#elseif (column.columnFieldType == "String")>
+            <label for="${column.columnFieldNameFirstLower}StartWith">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <input name="${column.columnFieldNameFirstLower}StartWith" id="${column.columnFieldNameFirstLower}StartWith" v-model="params.${column.columnFieldNameFirstLower}StartWith" type="text" />
+            <#else>
+            <label for="${column.columnFieldNameFirstLower}">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+            <input name="${column.columnFieldNameFirstLower}" id="${column.columnFieldNameFirstLower}" v-model="params.${column.columnFieldNameFirstLower}" type="text" />
+            </#if>
+            </#list>
+            <input type="button" id="submit" value="搜索" @click="findList()" />
+            <input type="reset" value="重置" />
+        </form>
+        <table v-if="pageInfo">
+            <thead>
+                <tr>
+                    <#list table.columns as column>
+                    <th>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</th>
+                    </#list>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in pageInfo.list">
+                    <#list table.columns as column>
+                    <th>{{item.${column.columnFieldNameFirstLower}}}</th>
+                    </#list>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                params: {
+                    <#list table.columns as column>
+                    <#if column.columnName == table.validStatusField.fieldName>
+                    ${column.columnFieldNameFirstLower}: -1,
+                    <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                    ${column.columnFieldNameFirstLower}: null,
+                    <#elseif column.columnFieldType == "Date">
+<#--
+                    ${column.columnFieldNameFirstLower}Min: '',
+                    ${column.columnFieldNameFirstLower}Max: '',
+-->
+                    <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                    ${column.columnFieldNameFirstLower}Min: '',
+                    ${column.columnFieldNameFirstLower}Max: '',
+                    <#elseif (column.columnFieldType == "String")>
+                    ${column.columnFieldNameFirstLower}StartWith: '',
+                    <#else>
+                    ${column.columnFieldNameFirstLower}: '',
+                    </#if>
+                    </#list>
+                    pageIndex: 1,
+                    pageSize: 10
+                },
+                pageInfo: {}
+            },
+            mounted: function () {
+                this.findList();
+            },
+            methods: {
+                findList: function () {
+                    var that = this;
+                    $.ajax({
+                        type: 'get',
+                        url: '/user/find',
+                        data: this.params,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                that.pageInfo = response.result;
+                            } else {
+                                setTimeout(function () {
+                                }, 1000);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

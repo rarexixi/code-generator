@@ -18,6 +18,7 @@ import ${basePackage}.vo.${className}Vo;
 import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +44,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/add${className}", method = RequestMethod.POST)
-    public Result<Integer> add${className}(${className}Entity ${classNameLower}, String sessionId) {
+    public Result<Integer> add${className}(@RequestBody ${className}Entity ${classNameLower}, String sessionId) {
 
         String fieldName = "";
         if (${classNameLower} == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(${classNameLower}))) {
@@ -71,7 +72,7 @@ public class ${className}Controller {
     <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/add${className}List", method = RequestMethod.POST)
-    public Result<Integer> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId) {
+    public Result<Integer> add${className}List(@RequestBody List<${className}Entity> ${classNameLower}List, String sessionId) {
 
         if (${classNameLower}List == null || ${classNameLower}List.isEmpty()) {
             return new Result<>(OperationConstants.NOT_NULL);
@@ -182,7 +183,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/update${className}ByPk", method = RequestMethod.POST)
-    public Result<Integer> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId) {
+    public Result<Integer> update${className}ByPk(@RequestBody ${className}Entity ${classNameLower}, String sessionId) {
 
         String fieldName = "";
         if (${classNameLower} == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(${classNameLower}))) {
@@ -231,17 +232,16 @@ public class ${className}Controller {
      * 分页查询
      *
      * @param parameter
-     * @param page
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/find${className}PageList", method = RequestMethod.GET)
-    public Result<PageInfo<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, PageInfo page, String sessionId) {
+    @RequestMapping(value = "/find${className}PageList", method = RequestMethod.POST)
+    public Result<PageInfo<${className}Vo>> find${className}PageList(@RequestBody(required = false) ${className}SelectParameter parameter, String sessionId) {
 
         Result<PageInfo<${className}Vo>> result;
         try {
-            PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.find${className}PageList(parameter, page);
+            PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.find${className}PageList(parameter);
             result = new Result<>(paginationVo);
         } catch (Exception e) {
             logger.error("find${className}PageList", sessionId, e);

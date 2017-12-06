@@ -38,8 +38,8 @@
         ${table.tableName}
         <where>
         <#list table.columns as column>
-            <#if column.columnFieldNameFirstLower == table.validStatusField.fieldName>
-            <if test="${column.columnFieldNameFirstLower} != null">
+            <#if column.columnName == table.validStatusField.fieldName>
+            <if test="${column.columnFieldNameFirstLower} != null and (${column.columnFieldNameFirstLower} == 0 or ${column.columnFieldNameFirstLower} == 1)">
                 <#if (column_index > 0)>AND </#if>${table.tableName}.${column.columnName} = <@mapperEl column.columnFieldNameFirstLower/>
             </if>
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>

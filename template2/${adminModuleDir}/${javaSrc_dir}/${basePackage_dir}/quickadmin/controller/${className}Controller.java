@@ -36,15 +36,7 @@ public class ${className}Controller {
     ${className}Service ${classNameLower}Service;
 
     @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
-    public String index(${className}SelectParameter inModel, Model outModel) {
-
-        PageInfo<${className}Vo> page = new PageInfo<>();
-        Result<PageInfo<${className}Vo>> result = ${classNameLower}Service.find${className}PageList(inModel, page, sessionId);
-
-        if(result.isSuccess()) {
-            PageInfo<${className}Vo> pageInfo = result.getResult();
-            outModel.addAttribute("pageInfo", pageInfo);
-        }
+    public String index() {
         return "${className?lower_case}/list";
     }
 
@@ -58,6 +50,14 @@ public class ${className}Controller {
     public String detail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, Model outModel) {
 
         return "${className?lower_case}/detail";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = { "/find", "/find/" }, method = RequestMethod.GET)
+    public Result<PageInfo<${className}Vo>> find(${className}SelectParameter inModel) {
+
+        Result<PageInfo<${className}Vo>> result = ${classNameLower}Service.find${className}PageList(inModel, sessionId);
+        return result;
     }
 
     @ResponseBody

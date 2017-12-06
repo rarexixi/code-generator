@@ -1,5 +1,6 @@
 package ${basePackage}.quickprovider.service;
 
+import org.xi.common.model.SearchPage;
 import ${basePackage}.condition.order.OrderCondition;
 
 import com.github.pagehelper.PageInfo;
@@ -50,6 +51,6 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param page
      * @return
      */
-    PageInfo<T> findByCondition(C condition, OrderCondition order, PageInfo page);
+    PageInfo<T> findByCondition(C condition, OrderCondition order, SearchPage page);
 
 }
