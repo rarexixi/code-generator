@@ -32,7 +32,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/add${className}")
+    @RequestMapping(value = "/${classNameLower}/add${className}", method = RequestMethod.POST)
     Result<Integer> add${className}(@RequestParam(value="${classNameLower}") ${className}Entity ${classNameLower}, @RequestParam("sessionId") String sessionId);
 
     /**
@@ -43,7 +43,7 @@ public interface ${className}Service {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/add${className}List")
+    @RequestMapping(value = "/${classNameLower}/add${className}List", method = RequestMethod.POST)
     Result<Integer> add${className}List(@RequestParam(value="${classNameLower}List") List<${className}Entity> ${classNameLower}List, @RequestParam("sessionId") String sessionId);
     <#if table.hasPrimaryKey>
 
@@ -57,7 +57,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/delete${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/delete${className}ByPk", method = RequestMethod.GET)
     Result<Integer> delete${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
     <#if table.validStatusColumn??>
 
@@ -71,7 +71,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/disable${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/disable${className}ByPk", method = RequestMethod.GET)
     Result<Integer> disable${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
 
     /**
@@ -84,7 +84,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/enable${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/enable${className}ByPk", method = RequestMethod.GET)
     Result<Integer> enable${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
     </#if>
 
@@ -96,7 +96,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/update${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/update${className}ByPk", method = RequestMethod.POST)
     Result<Integer> update${className}ByPk(@RequestParam(value="${classNameLower}") ${className}Entity ${classNameLower}, String sessionId);
 
     /**
@@ -109,7 +109,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/get${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/get${className}ByPk", method = RequestMethod.GET)
     Result<${className}Vo> get${className}ByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam("sessionId") String sessionId);
     </#if>
 
@@ -122,6 +122,6 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/${classNameLower}/find${className}PageList")
+    @RequestMapping(value = "/${classNameLower}/find${className}PageList", method = RequestMethod.GET)
     Result<PageInfo<${className}Vo>> find${className}PageList(@RequestParam("parameter") ${className}SelectParameter parameter, @RequestParam("page") PageInfo page, @RequestParam("sessionId") String sessionId);
 }

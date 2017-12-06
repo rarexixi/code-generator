@@ -19,6 +19,7 @@ import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/add${className}")
+    @RequestMapping(value = "/add${className}", method = RequestMethod.POST)
     public Result<Integer> add${className}(${className}Entity ${classNameLower}, String sessionId) {
 
         String fieldName = "";
@@ -69,7 +70,7 @@ public class ${className}Controller {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/add${className}List")
+    @RequestMapping(value = "/add${className}List", method = RequestMethod.POST)
     public Result<Integer> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId) {
 
         if (${classNameLower}List == null || ${classNameLower}List.isEmpty()) {
@@ -105,7 +106,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/delete${className}ByPk")
+    @RequestMapping(value = "/delete${className}ByPk", method = RequestMethod.GET)
     public Result<Integer> delete${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
         Result<Integer> result;
@@ -131,7 +132,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/disable${className}ByPk")
+    @RequestMapping(value = "/disable${className}ByPk", method = RequestMethod.GET)
     public Result<Integer> disable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
         Result<Integer> result;
@@ -156,7 +157,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/enable${className}ByPk")
+    @RequestMapping(value = "/enable${className}ByPk", method = RequestMethod.GET)
     public Result<Integer> enable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
         Result<Integer> result;
@@ -180,7 +181,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/update${className}ByPk")
+    @RequestMapping(value = "/update${className}ByPk", method = RequestMethod.POST)
     public Result<Integer> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId) {
 
         String fieldName = "";
@@ -210,7 +211,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/get${className}ByPk")
+    @RequestMapping(value = "/get${className}ByPk", method = RequestMethod.GET)
     public Result<${className}Vo> get${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
         Result<${className}Vo> result;
@@ -235,7 +236,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/find${className}PageList")
+    @RequestMapping(value = "/find${className}PageList", method = RequestMethod.GET)
     public Result<PageInfo<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, PageInfo page, String sessionId) {
 
         Result<PageInfo<${className}Vo>> result;

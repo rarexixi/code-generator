@@ -33,7 +33,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<${className}Entity> add${className}(${className}Entity ${classNameLower}, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
     /**
@@ -47,7 +47,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<${className}Entity> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     <#if table.hasPrimaryKey>
 
@@ -64,7 +64,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<${className}Entity> delete${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     <#if table.validStatusColumn??>
 
@@ -81,7 +81,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<${className}Entity> disable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
     /**
@@ -97,7 +97,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<${className}Entity> enable${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>
 
@@ -112,7 +112,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<${className}Entity> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
     /**
@@ -128,7 +128,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<${className}Vo> get${className}ByPk(${primaryKeyParameters}, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>
 
@@ -144,7 +144,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     @Override
     public Result<PageInfo<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, PageInfo page, String sessionId) {
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
 }

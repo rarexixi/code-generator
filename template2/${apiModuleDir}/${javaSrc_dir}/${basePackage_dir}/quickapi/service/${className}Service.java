@@ -22,7 +22,6 @@ import java.util.List;
 
 <#include "/include/java_copyright.ftl">
 @FeignClient(value = "${serviceProvider}", fallback = ${className}ServiceHystric.class)
-@RequestMapping("/${className}")
 public interface ${className}Service {
 
     /**
@@ -33,7 +32,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/add${className}")
+    @RequestMapping(value = "/${classNameLower}/add${className}", method = RequestMethod.POST)
     Result<${className}Entity> add${className}(${className}Entity ${classNameLower}, String sessionId);
 
     /**
@@ -44,7 +43,7 @@ public interface ${className}Service {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/add${className}List")
+    @RequestMapping(value = "/${classNameLower}/add${className}List", method = RequestMethod.POST)
     Result<${className}Entity> add${className}List(List<${className}Entity> ${classNameLower}List, String sessionId);
     <#if table.hasPrimaryKey>
 
@@ -58,7 +57,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/delete${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/delete${className}ByPk", method = RequestMethod.GET)
     Result<${className}Entity> delete${className}ByPk(${primaryKeyParameters}, String sessionId);
     <#if table.validStatusColumn??>
 
@@ -72,7 +71,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/disable${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/disable${className}ByPk", method = RequestMethod.GET)
     Result<${className}Entity> disable${className}ByPk(${primaryKeyParameters}, String sessionId);
 
     /**
@@ -85,7 +84,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/enable${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/enable${className}ByPk", method = RequestMethod.GET)
     Result<${className}Entity> enable${className}ByPk(${primaryKeyParameters}, String sessionId);
     </#if>
 
@@ -97,7 +96,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/update${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/update${className}ByPk", method = RequestMethod.POST)
     Result<${className}Entity> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId);
 
     /**
@@ -110,7 +109,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/get${className}ByPk")
+    @RequestMapping(value = "/${classNameLower}/get${className}ByPk", method = RequestMethod.GET)
     Result<${className}Vo> get${className}ByPk(${primaryKeyParameters}, String sessionId);
     </#if>
 
@@ -123,6 +122,6 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping("/find${className}PageList")
+    @RequestMapping(value = "/${classNameLower}/find${className}PageList", method = RequestMethod.GET)
     Result<PageInfo<${className}Vo>> find${className}PageList(${className}SelectParameter parameter, PageInfo page, String sessionId);
 }

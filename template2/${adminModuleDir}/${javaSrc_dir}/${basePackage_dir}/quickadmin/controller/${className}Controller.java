@@ -7,12 +7,15 @@ package ${basePackage}.quickadmin.controller;
 
 import ${basePackage}.common.model.Result;
 import ${basePackage}.entity.${className}Entity;
+import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.quickadmin.service.${className}Service;
 import ${basePackage}.quickadmin.vm.in.${className}OperateModel;
 import ${basePackage}.quickadmin.vm.in.${className}SearchModel;
 import ${basePackage}.quickadmin.vm.out.${className}DetailModel;
 import ${basePackage}.quickadmin.vm.out.${className}ListModel;
 import ${basePackage}.vo.${className}Vo;
+
+import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -33,8 +36,15 @@ public class ${className}Controller {
     ${className}Service ${classNameLower}Service;
 
     @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
-    public String index(${className}SearchModel inModel, Model outModel) {
+    public String index(${className}SelectParameter inModel, Model outModel) {
 
+        PageInfo<${className}Vo> page = new PageInfo<>();
+        Result<PageInfo<${className}Vo>> result = ${classNameLower}Service.find${className}PageList(inModel, page, sessionId);
+
+        if(result.isSuccess()) {
+            PageInfo<${className}Vo> pageInfo = result.getResult();
+            outModel.addAttribute("pageInfo", pageInfo);
+        }
         return "${className?lower_case}/list";
     }
 
