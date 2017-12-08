@@ -35,22 +35,22 @@ public class ${className}Controller {
     @Autowired
     ${className}Service ${classNameLower}Service;
 
-    @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
-    public String index() {
-        return "${className?lower_case}/list";
-    }
-
-    @RequestMapping(value = { "/addoredit", "/addoredit/" }, method = RequestMethod.GET)
-    public String addOrEdit(${className}SearchModel inModel, Model outModel) {
-
-        return "${className?lower_case}/addoredit";
-    }
-
-    @RequestMapping(value = { "/detail", "/detail/" }, method = RequestMethod.GET)
-    public String detail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, Model outModel) {
-
-        return "${className?lower_case}/detail";
-    }
+    // @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
+    // public String index() {
+    //     return "${className?lower_case}/list";
+    // }
+    //
+    // @RequestMapping(value = { "/addoredit", "/addoredit/" }, method = RequestMethod.GET)
+    // public String addOrEdit(${className}SearchModel inModel, Model outModel) {
+    //
+    //     return "${className?lower_case}/addoredit";
+    // }
+    //
+    // @RequestMapping(value = { "/detail", "/detail/" }, method = RequestMethod.GET)
+    // public String detail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, Model outModel) {
+    //
+    //     return "${className?lower_case}/detail";
+    // }
 
     @ResponseBody
     @RequestMapping(value = { "/find", "/find/" }, method = RequestMethod.GET)
@@ -72,7 +72,13 @@ public class ${className}Controller {
     @RequestMapping(value = { "/save", "/save/" }, method = RequestMethod.POST)
     public Result<Integer> save(${className}Entity entity) {
 
-        return null;
+        Result<Integer> result;
+        if (<#list primaryKey as column><#if (column_index > 0)> && </#if>entity.get${column.columnFieldName}() != null</#list>) {
+            result = ${classNameLower}Service.add${className}(entity, sessionId);
+        } else {
+            result = ${classNameLower}Service.update${className}ByPk(entity, sessionId);
+        }
+        return result;
     }
 
     @ResponseBody

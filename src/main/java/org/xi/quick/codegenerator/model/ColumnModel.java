@@ -12,19 +12,27 @@ public class ColumnModel {
 
     public ColumnModel(Column column) {
 
-        this.databaseName = column.getTableSchema();
-        this.tableName = column.getTableName();
-        this.columnName = column.getColumnName();
-        this.columnPosition = column.getOrdinalPosition();
-        this.columnDefault = column.getColumnDefault();
-        this.isNullable = column.getIsNullable();
-        this.dataType = column.getDataType();
-        this.charLength = column.getCharacterMaximumLength();
-        this.byteLength = column.getCharacterOctetLength();
-        this.columnType = column.getColumnType();
-        this.columnKey = column.getColumnKey();
-        this.extra = column.getExtra();
-        this.columnComment = column.getColumnComment();
+        this(column, false);
+    }
+
+    public ColumnModel(Column column, boolean notRequired) {
+
+        if (column != null) {
+            this.databaseName = column.getTableSchema();
+            this.tableName = column.getTableName();
+            this.columnName = column.getColumnName();
+            this.columnPosition = column.getOrdinalPosition();
+            this.columnDefault = column.getColumnDefault();
+            this.isNullable = column.getIsNullable();
+            this.dataType = column.getDataType();
+            this.charLength = column.getCharacterMaximumLength();
+            this.byteLength = column.getCharacterOctetLength();
+            this.columnType = column.getColumnType();
+            this.columnKey = column.getColumnKey();
+            this.extra = column.getExtra();
+            this.columnComment = column.getColumnComment();
+        }
+        this.notRequired = notRequired;
     }
 
     //region 默认
@@ -81,6 +89,10 @@ public class ColumnModel {
      * 列说明
      */
     private String columnComment;
+    /**
+     * 是否不需要填写
+     */
+    private boolean notRequired;
 
     public String getDatabaseName() {
         return databaseName;
@@ -186,6 +198,13 @@ public class ColumnModel {
         this.columnComment = columnComment;
     }
 
+    public boolean isNotRequired() {
+        return notRequired;
+    }
+
+    public void setNotRequired(boolean notRequired) {
+        this.notRequired = notRequired;
+    }
     //endregion
 
     //region 扩展
@@ -233,6 +252,15 @@ public class ColumnModel {
      */
     public boolean isPrimaryKey() {
         return this.columnKey.equals("PRI");
+    }
+
+    /**
+     * 是否以_id结尾
+     *
+     * @return
+     */
+    public boolean isEndWithId() {
+        return this.columnName.endsWith("_id");
     }
 
     //endregion

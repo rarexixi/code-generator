@@ -1,6 +1,7 @@
 package org.xi.quick.codegenerator.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.entity.Column;
 import org.xi.quick.codegenerator.entity.Table;
@@ -31,6 +32,9 @@ public class TableServiceImpl implements TableService {
     @Autowired
     private ValidStatusField validStatusField;
 
+    @Value("${field.not_required}")
+    private String notRequiredField;
+
     /**
      * 获取所有表名
      *
@@ -57,7 +61,7 @@ public class TableServiceImpl implements TableService {
         List<ColumnModel> columnModels =
                 columnList
                         .stream()
-                        .map(entity -> new ColumnModel(entity))
+                        .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
                         .collect(Collectors.toList());
 
         model.setColumns(columnModels);
@@ -84,7 +88,7 @@ public class TableServiceImpl implements TableService {
             List<ColumnModel> columnModels =
                     columnList
                             .stream()
-                            .map(entity -> new ColumnModel(entity))
+                            .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
                             .collect(Collectors.toList());
 
             model.setColumns(columnModels);
@@ -92,6 +96,10 @@ public class TableServiceImpl implements TableService {
             tableModels.add(model);
         }
         return tableModels;
+    }
+
+    public boolean isNotRequiredField(String fieldName) {
+        return notRequiredField.startsWith(fieldName + ",") || notRequiredField.endsWith("," + fieldName) || notRequiredField.contains("," + fieldName + ",");
     }
 
 }

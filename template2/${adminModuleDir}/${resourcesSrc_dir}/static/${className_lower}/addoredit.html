@@ -1,12 +1,187 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassNameFirstLower>
+<#assign primaryKey = table.primaryKey>
+<#assign primaryKeyParameters = table.primaryKeyParameters>
+<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#macro mapperEl value>${r"${"}${value}}</#macro>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="/resources/css/base.css" />
+    <link rel="stylesheet" href="/resources/css/common.css" />
 </head>
-<body>
 
+<body>
+    <div class="container" id="app">
+        <div class="row">
+            <form>
+                <#list table.columns as column>
+                <#if column.notRequired>
+                <#elseif column.autoIncrement>
+                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
+                <#elseif column.endWithId>
+                <div class="form-group">
+                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class ="form-control">
+                        <option value="0">全部</option>
+                        <option v-for="item in ${column.columnFieldNameFirstLower?replace('Id', '')}List" v-bind:value="item.id">{{ item.${column.columnFieldName?replace('Id', '')}Name }}</option>
+                    </select>
+                </div>
+                <#elseif column.columnName == table.validStatusField.fieldName>
+                <div class="form-group">
+                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class ="form-control">
+                        <option value="${table.validStatusField.validValue}">有效</option>
+                        <option value="${table.validStatusField.invalidValue}">无效</option>
+                    </select>
+                </div>
+                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                <div class="form-group">
+                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class ="form-control" />
+                </div>
+                <#elseif column.columnFieldType == "Date">
+                <div class="form-group">
+                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class ="form-control" />
+                </div>
+                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                <div class="form-group">
+                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                </div>
+                <#elseif (column.columnFieldType == "String")>
+                <div class="form-group">
+                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                </div>
+                <#else>
+                <div class="form-group">
+                <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                </#if>
+                </#list>
+                <input type="button" value="保存" @click="save" class="btn btn-primary" />
+                <input type="reset" value="重置" @click="resetSave" class="btn btn-warning" />
+            </form>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="/resources/bootstrap/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]); return null;
+        }
+        var app = new Vue({
+            el: '#app',
+            data: {
+                addOrEditParams: {
+                    <#list table.columns as column>
+                    <#if column.notRequired>
+                    <#elseif column.endWithId>
+                    ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+                    <#elseif column.columnName == table.validStatusField.fieldName>
+                    ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+                    <#elseif column.columnFieldType == "Date">
+                    //${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+                    <#else>
+                    ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+                    </#if>
+                    </#list>
+                },
+                <#list table.columns as column>
+                <#if column.endWithId>
+                ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
+                </#if>
+                </#list>
+            },
+            mounted: function () {
+                <#list table.columns as column>
+                <#if column.endWithId>
+                this.init${column.columnFieldName?replace('Id', '')};
+                </#if>
+                </#list>
+                <#list primaryKey as column>
+                var ${column.columnFieldNameFirstLower} = getQueryString('${column.columnFieldNameFirstLower}');
+                </#list>
+                if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.columnFieldNameFirstLower} != null && ${column.columnFieldNameFirstLower} != ''</#list>) {
+                    this.getEditDetail();
+                }
+            },
+            methods: {
+                save: function () {
+                    var that = this;
+                    $.ajax({
+                        type: 'post',
+                        url: '/user/save',
+                        data: this.addOrEditParams,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                // 保存成功
+                            } else {
+                                setTimeout(function () {
+                                }, 1000);
+                            }
+                        }
+                    });
+                },
+                <#list table.columns as column>
+                <#if column.endWithId>
+                init${column.columnFieldName?replace('Id', '')}: function () {
+
+                }
+                </#if>
+                </#list>
+                getEditDetail: function () {
+                    var that = this;
+                    $.ajax({
+                        type: 'get',
+                        url: '/user/getdetail' + window.location.search,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                <#list table.columns as column>
+                                <#if column.notRequired>
+                                <#else>
+                                that.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                                </#if>
+                                </#list>
+                            } else {
+                                setTimeout(function () {
+                                }, 1000);
+                            }
+                        }
+                    });
+                },
+                resetSave: function() {
+                    <#list table.columns as column>
+                    <#if column.notRequired>
+                    <#elseif column.endWithId>
+                    this.addOrEditParams.${column.columnFieldNameFirstLower} = 0;
+                    <#elseif column.columnName == table.validStatusField.fieldName>
+                    this.addOrEditParams.${column.columnFieldNameFirstLower} = ${table.validStatusField.validValue};
+                    <#elseif column.columnFieldType == "Date">
+                    //${column.columnFieldNameFirstLower}: null<#if column_has_next>,</#if>
+                    <#else>
+                    this.addOrEditParams.${column.columnFieldNameFirstLower} = '';
+                    </#if>
+                    </#list>
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>
