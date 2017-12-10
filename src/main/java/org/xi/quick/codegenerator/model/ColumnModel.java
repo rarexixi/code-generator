@@ -6,10 +6,6 @@ import org.xi.quick.codegenerator.utils.StringUtil;
 
 public class ColumnModel {
 
-    public ColumnModel() {
-
-    }
-
     public ColumnModel(Column column) {
 
         this(column, false);
@@ -33,6 +29,7 @@ public class ColumnModel {
             this.columnComment = column.getColumnComment();
         }
         this.notRequired = notRequired;
+        initExtends();
     }
 
     //region 默认
@@ -209,13 +206,30 @@ public class ColumnModel {
 
     //region 扩展
 
+    private String columnFieldName;
+    private String columnFieldNameFirstLower;
+    private String columnFieldType;
+    private boolean autoIncrement;
+    private boolean primaryKey;
+    private boolean endWithId;
+
+    public void initExtends() {
+        columnFieldName = StringUtil.getCamelCaseName(this.columnName);
+        columnFieldNameFirstLower = StringUtil.getFirstLower(columnFieldName);
+        columnFieldType = ColumnUtil.getFieldType(this.dataType);
+        ;
+        autoIncrement = extra.toLowerCase().equals("auto_increment");
+        primaryKey = columnKey.equals("PRI");
+        endWithId = columnName.endsWith("_id");
+    }
+
     /**
      * 获取列对应的JAVA字段名
      *
      * @return
      */
     public String getColumnFieldName() {
-        return StringUtil.getCamelCaseName(this.columnName);
+        return columnFieldName;
     }
 
     /**
@@ -224,7 +238,7 @@ public class ColumnModel {
      * @return
      */
     public String getColumnFieldNameFirstLower() {
-        return StringUtil.getFirstLower(StringUtil.getCamelCaseName(this.columnName));
+        return columnFieldNameFirstLower;
     }
 
     /**
@@ -233,7 +247,7 @@ public class ColumnModel {
      * @return
      */
     public String getColumnFieldType() {
-        return ColumnUtil.getFieldType(this.dataType);
+        return columnFieldType;
     }
 
     /**
@@ -242,7 +256,7 @@ public class ColumnModel {
      * @return
      */
     public boolean isAutoIncrement() {
-        return this.extra.toLowerCase().equals("auto_increment");
+        return autoIncrement;
     }
 
     /**
@@ -251,7 +265,7 @@ public class ColumnModel {
      * @return
      */
     public boolean isPrimaryKey() {
-        return this.columnKey.equals("PRI");
+        return primaryKey;
     }
 
     /**
@@ -260,7 +274,7 @@ public class ColumnModel {
      * @return
      */
     public boolean isEndWithId() {
-        return this.columnName.endsWith("_id");
+        return endWithId;
     }
 
     //endregion

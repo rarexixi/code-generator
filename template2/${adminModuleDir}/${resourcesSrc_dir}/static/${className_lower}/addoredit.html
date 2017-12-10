@@ -1,5 +1,6 @@
 <#assign className = table.tableClassName>
 <#assign classNameFirstLower = table.tableClassNameFirstLower>
+<#assign classNameLower = table.tableClassName?lower_case>
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
@@ -27,44 +28,44 @@
                 <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
                 <#elseif column.endWithId>
                 <div class="form-group">
-                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class ="form-control">
+                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
                         <option value="0">全部</option>
                         <option v-for="item in ${column.columnFieldNameFirstLower?replace('Id', '')}List" v-bind:value="item.id">{{ item.${column.columnFieldName?replace('Id', '')}Name }}</option>
                     </select>
                 </div>
                 <#elseif column.columnName == table.validStatusField.fieldName>
                 <div class="form-group">
-                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class ="form-control">
+                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
                         <option value="${table.validStatusField.validValue}">有效</option>
                         <option value="${table.validStatusField.invalidValue}">无效</option>
                     </select>
                 </div>
                 <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
                 <div class="form-group">
-                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class ="form-control" />
+                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
                 </div>
                 <#elseif column.columnFieldType == "Date">
                 <div class="form-group">
-                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class ="form-control" />
+                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class="form-control" />
                 </div>
                 <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
                 <div class="form-group">
-                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
                 </div>
                 <#elseif (column.columnFieldType == "String")>
                 <div class="form-group">
-                    <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
                 </div>
                 <#else>
                 <div class="form-group">
-                <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
                 </#if>
                 </#list>
                 <input type="button" value="保存" @click="save" class="btn btn-primary" />
@@ -86,6 +87,11 @@
         var app = new Vue({
             el: '#app',
             data: {
+                <#list table.columns as column>
+                <#if column.endWithId>
+                ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
+                </#if>
+                </#list>
                 addOrEditParams: {
                     <#list table.columns as column>
                     <#if column.notRequired>
@@ -99,12 +105,7 @@
                     ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
                     </#if>
                     </#list>
-                },
-                <#list table.columns as column>
-                <#if column.endWithId>
-                ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
-                </#if>
-                </#list>
+                }
             },
             mounted: function () {
                 <#list table.columns as column>
@@ -120,11 +121,18 @@
                 }
             },
             methods: {
+                <#list table.columns as column>
+                <#if column.endWithId>
+                init${column.columnFieldName?replace('Id', '')}: function () {
+
+                },
+                </#if>
+                </#list>
                 save: function () {
                     var that = this;
                     $.ajax({
                         type: 'post',
-                        url: '/user/save',
+                        url: '/${classNameLower}/save',
                         data: this.addOrEditParams,
                         dataType: 'json',
                         success: function (response) {
@@ -137,18 +145,11 @@
                         }
                     });
                 },
-                <#list table.columns as column>
-                <#if column.endWithId>
-                init${column.columnFieldName?replace('Id', '')}: function () {
-
-                }
-                </#if>
-                </#list>
                 getEditDetail: function () {
                     var that = this;
                     $.ajax({
                         type: 'get',
-                        url: '/user/getdetail' + window.location.search,
+                        url: '/${classNameLower}/getdetail' + window.location.search,
                         dataType: 'json',
                         success: function (response) {
                             if (response.success == true) {

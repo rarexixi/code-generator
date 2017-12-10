@@ -1,5 +1,6 @@
 <#assign className = table.tableClassName>
 <#assign classNameFirstLower = table.tableClassNameFirstLower>
+<#assign classNameLower = table.tableClassName?lower_case>
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
@@ -20,16 +21,28 @@
 <body>
     <div class="container" id="app">
         <div class="row">
-            <#list table.columns as column>
-            <#if column.columnName == table.validStatusField.fieldName>
-            <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-            <span>{{detail.${column.columnFieldNameFirstLower}}}</span>
-            <#else>
-            <label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-            <span>{{detail.${column.columnFieldNameFirstLower}}}</span>
-            </#if>
-            </#list>
-            <input type="button" value="删除" @click="del" class="btn btn-danger" />
+            <div class="form-horizontal">
+                <#list table.columns as column>
+                <#if column.columnName == table.validStatusField.fieldName>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                        <div class="col-xs-9 col-md-8"><p class="form-control-static">{{detail.${column.columnFieldNameFirstLower}}}</p></div>
+                    </div>
+                </div>
+                <#else>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                        <div class="col-xs-9 col-md-8"><p class="form-control-static"><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" style="color: #42b983;">有效</span><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.invalidValue}" style="color: #e96900;">无效</span></p></div>
+                    </div>
+                </div>
+                </#if>
+                </#list>
+                <div class="form-group">
+                    <input type="button" value="删除" @click="del" class="btn btn-danger" />
+                </div>
+            </div>
         </div>
     </div>
 
@@ -62,7 +75,7 @@
                     var that = this;
                     $.ajax({
                         type: 'get',
-                        url: '/user/getdetail' + window.location.search,
+                        url: '/${classNameLower}/getdetail' + window.location.search,
                         dataType: 'json',
                         success: function (response) {
                             if (response.success == true) {
@@ -78,7 +91,7 @@
                     var that = this;
                     $.ajax({
                         type: 'get',
-                        url: '/user/delete?' + window.location.search,
+                        url: '/${classNameLower}/delete?' + window.location.search,
                         dataType: 'json',
                         success: function (response) {
                             if (response.success == true) {

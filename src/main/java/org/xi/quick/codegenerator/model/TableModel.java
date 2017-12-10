@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 
 public class TableModel {
 
-    public TableModel() {
-
-    }
-
-    public TableModel(Table table, ValidStatusField validStatusField) {
+    public TableModel(Table table, ValidStatusField validStatusField, List<ColumnModel> columns) {
         this.databaseName = table.getTableSchema();
         this.tableName = table.getTableName();
         this.tableComment = table.getTableComment();
         this.validStatusField = validStatusField;
+        this.columns = columns;
+
+        initTableClassName();
+        initColumns();
     }
 
     //region 默认
@@ -50,45 +50,71 @@ public class TableModel {
         return databaseName;
     }
 
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
-    }
-
     public String getTableName() {
         return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
     }
 
     public String getTableComment() {
         return tableComment;
     }
 
-    public void setTableComment(String tableComment) {
-        this.tableComment = tableComment;
-    }
-
     public ValidStatusField getValidStatusField() {
         return validStatusField;
-    }
-
-    public void setValidStatusField(ValidStatusField validStatusField) {
-        this.validStatusField = validStatusField;
     }
 
     public List<ColumnModel> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<ColumnModel> columns) {
-        this.columns = columns;
-    }
-
     //endregion
 
     //region 扩展
+
+    private String tableClassName;
+    private String tableClassNameFirstLower;
+
+    private List<ColumnModel> primaryKey;
+    private boolean hasPrimaryKey;
+    private boolean hasAutoIncrementUniquePrimaryKey;
+    private ColumnModel uniquePrimaryKey;
+    private String primaryKeyParameters;
+    private String primaryKeyParameterValues;
+    private ColumnModel validStatusColumn;
+
+
+    public void initTableClassName() {
+        tableClassName = StringUtil.getCamelCaseName(this.tableName);
+        tableClassNameFirstLower = StringUtil.getFirstLower(tableClassName);
+    }
+
+    public void initColumns() {
+        this.primaryKey =
+                this.columns
+                        .stream()
+                        .filter(column -> column.getColumnKey().equals("PRI"))
+                        .collect(Collectors.toList());
+        this.hasPrimaryKey = this.primaryKey != null && !primaryKey.isEmpty();
+        if (hasPrimaryKey) {
+            this.uniquePrimaryKey = this.primaryKey.size() == 1 ? this.primaryKey.get(0) : null;
+            this.hasAutoIncrementUniquePrimaryKey = this.uniquePrimaryKey != null && this.uniquePrimaryKey.isAutoIncrement();
+            this.primaryKeyParameters = primaryKey
+                    .stream()
+                    .map(column -> column.getColumnFieldType() + " " + column.getColumnFieldNameFirstLower())
+                    .collect(Collectors.joining(", "));
+            this.primaryKeyParameterValues = primaryKey
+                    .stream()
+                    .map(column -> column.getColumnFieldNameFirstLower())
+                    .collect(Collectors.joining(", "));
+        }
+        Optional<ColumnModel> columnOptional =
+                this.columns
+                        .stream()
+                        .filter(column -> column.getColumnName().equals(validStatusField.getFieldName()))
+                        .findFirst();
+
+        this.validStatusColumn = columnOptional.isPresent() ? columnOptional.get() : null;
+
+    }
 
     /**
      * 获取表对应的JAVA类名
@@ -96,8 +122,9 @@ public class TableModel {
      * @return
      */
     public String getTableClassName() {
-        return StringUtil.getCamelCaseName(this.tableName);
+        return tableClassName;
     }
+
 
     /**
      * 获取表对应的JAVA类名首字母小写
@@ -105,17 +132,7 @@ public class TableModel {
      * @return
      */
     public String getTableClassNameFirstLower() {
-        return StringUtil.getFirstLower(StringUtil.getCamelCaseName(this.tableName));
-    }
-
-    /**
-     * 是否有主键
-     *
-     * @return
-     */
-    public boolean getHasPrimaryKey() {
-        List<ColumnModel> primaryKey = getPrimaryKey();
-        return primaryKey != null && !primaryKey.isEmpty();
+        return tableClassNameFirstLower;
     }
 
     /**
@@ -124,13 +141,34 @@ public class TableModel {
      * @return
      */
     public List<ColumnModel> getPrimaryKey() {
-        List<ColumnModel> priKeys =
-                this.columns
-                        .stream()
-                        .filter(column -> column.getColumnKey().equals("PRI"))
-                        .collect(Collectors.toList());
+        return primaryKey;
+    }
 
-        return priKeys;
+    /**
+     * 是否有主键
+     *
+     * @return
+     */
+    public boolean isHasPrimaryKey() {
+        return hasPrimaryKey;
+    }
+
+    /**
+     * 是否有唯一自增主键
+     *
+     * @return
+     */
+    public boolean isHasAutoIncrementUniquePrimaryKey() {
+        return hasAutoIncrementUniquePrimaryKey;
+    }
+
+    /**
+     * 获取唯一主键
+     *
+     * @return
+     */
+    public ColumnModel getUniquePrimaryKey() {
+        return uniquePrimaryKey;
     }
 
     /**
@@ -139,13 +177,9 @@ public class TableModel {
      * @return
      */
     public String getPrimaryKeyParameters() {
-        List<ColumnModel> primaryKey = getPrimaryKey();
-        if (primaryKey == null || primaryKey.isEmpty()) return "";
-        return primaryKey
-                .stream()
-                .map(column -> column.getColumnFieldType() + " " + column.getColumnFieldNameFirstLower())
-                .collect(Collectors.joining(", "));
+        return primaryKeyParameters;
     }
+
 
     /**
      * 主键对应的JAVA参数值，单个(id) ，多个(userId, userTypeId)
@@ -153,12 +187,7 @@ public class TableModel {
      * @return
      */
     public String getPrimaryKeyParameterValues() {
-        List<ColumnModel> primaryKey = getPrimaryKey();
-        if (primaryKey == null || primaryKey.isEmpty()) return "";
-        return primaryKey
-                .stream()
-                .map(column -> column.getColumnFieldNameFirstLower())
-                .collect(Collectors.joining(", "));
+        return primaryKeyParameterValues;
     }
 
     /**
@@ -167,14 +196,7 @@ public class TableModel {
      * @return
      */
     public ColumnModel getValidStatusColumn() {
-
-        Optional<ColumnModel> columnOptional =
-                this.columns
-                        .stream()
-                        .filter(column -> column.getColumnName().equals(validStatusField.getFieldName()))
-                        .findFirst();
-
-        return columnOptional.isPresent() ? columnOptional.get() : null;
+        return validStatusColumn;
     }
 
     //endregion

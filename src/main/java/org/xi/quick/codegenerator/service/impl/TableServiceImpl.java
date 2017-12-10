@@ -55,8 +55,6 @@ public class TableServiceImpl implements TableService {
     public TableModel getTable(String tableName) {
 
         Table table = tablesMapper.getTable(databaseName, tableName);
-
-        TableModel model = new TableModel(table, validStatusField);
         List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
         List<ColumnModel> columnModels =
                 columnList
@@ -64,8 +62,8 @@ public class TableServiceImpl implements TableService {
                         .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
                         .collect(Collectors.toList());
 
-        model.setColumns(columnModels);
 
+        TableModel model = new TableModel(table, validStatusField, columnModels);
         return model;
     }
 
@@ -83,7 +81,6 @@ public class TableServiceImpl implements TableService {
 
         for (Table table : tables) {
 
-            TableModel model = new TableModel(table, validStatusField);
             List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
             List<ColumnModel> columnModels =
                     columnList
@@ -91,8 +88,7 @@ public class TableServiceImpl implements TableService {
                             .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
                             .collect(Collectors.toList());
 
-            model.setColumns(columnModels);
-
+            TableModel model = new TableModel(table, validStatusField, columnModels);
             tableModels.add(model);
         }
         return tableModels;

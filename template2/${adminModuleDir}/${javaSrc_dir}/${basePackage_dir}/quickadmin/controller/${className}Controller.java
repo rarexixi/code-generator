@@ -74,9 +74,9 @@ public class ${className}Controller {
 
         Result<Integer> result;
         if (<#list primaryKey as column><#if (column_index > 0)> && </#if>entity.get${column.columnFieldName}() != null</#list>) {
-            result = ${classNameLower}Service.add${className}(entity, sessionId);
-        } else {
             result = ${classNameLower}Service.update${className}ByPk(entity, sessionId);
+        } else {
+            result = ${classNameLower}Service.add${className}(entity, sessionId);
         }
         return result;
     }
