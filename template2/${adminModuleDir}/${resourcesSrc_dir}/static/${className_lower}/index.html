@@ -186,89 +186,142 @@
                         </#if>
                         </#list>
                         <td>
-                            <a href="javascript:;" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)">编辑</a>
-                            <a href="javascript:;" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)">详情</a>
+                            <a href="javascript:;" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" data-toggle="modal" data-target="#addOrEdit">编辑</a>
+                            <a href="javascript:;" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" data-toggle="modal" data-target="#detail">详情</a>
                             <a href="javascript:;" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)">删除</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <nav v-if="pageInfo">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item" v-if="pageInfo.hasPreviousPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.prePage)">Prev</a></li>
+                    <li class="page-item" v-if="1 < pageInfo.navigateFirstPage"><a class="page-link" href="javascript:;" @click="changePage(1)">1</a></li>
+                    <li class="page-item" v-if="2 < pageInfo.navigateFirstPage"><a class="page-link" href="javascript:;">...</a></li>
+                    <li class="page-item" v-for="(item, index) in pageInfo.navigatepageNums"><a class="page-link" href="javascript:;" @click="changePage(item)">{{item}}</a></li>
+                    <li class="page-item" v-if="pageInfo.pages > pageInfo.navigateLastPage+1"><a class="page-link" href="#javascript:;">...</a></li>
+                    <li class="page-item" v-if="pageInfo.pages > pageInfo.navigateLastPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.pages)">{{pageInfo.pages}}</a></li>
+                    <li class="page-item" v-if="pageInfo.hasNextPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.nextPage)">Next</a></li>
+                    <li class="page-item">
+                        <select v-model="searchParams.pageSize" class="form-control page-link" @change="changePageSize">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
-        <div class="form-horizontal">
-            <#list table.columns as column>
-            <#if column.columnName == table.validStatusField.fieldName>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                    <div class="col-xs-9 col-md-8"><p class="form-control-static"><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" style="color: #42b983;">有效</span><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.invalidValue}" style="color: #e96900;">无效</span></p></div>
+        <div id="detail" class="modal fade" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" @click="resetSave" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="form-horizontal">
+                                <#list table.columns as column>
+                                <#if column.columnName == table.validStatusField.fieldName>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                        <div class="col-xs-9 col-md-8"><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" style="color: #42b983;">有效</span><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.invalidValue}" style="color: #e96900;">无效</span></div>
+                                    </div>
+                                </div>
+                                <#else>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                        <div class="col-xs-9 col-md-8"><span>{{detail.${column.columnFieldNameFirstLower}}}</span></div>
+                                    </div>
+                                </div>
+                                </#if>
+                                </#list>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" value="关闭" @click="resetSave" data-dismiss="modal" class="btn btn-secondary"/>
+                        <input type="button" value="删除" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)" class="btn btn-danger" />
+                    </div>
                 </div>
-            </div>
-            <#else>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                    <div class="col-xs-9 col-md-8"><p class="form-control-static">{{detail.${column.columnFieldNameFirstLower}}}</p></div>
-                </div>
-            </div>
-            </#if>
-            </#list>
-            <div class="form-group">
-                <input type="button" value="删除" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)" class="btn btn-danger" />
             </div>
         </div>
 
-
-        <div class="row">
-            <#list table.columns as column>
-            <#if column.notRequired>
-            <#elseif column.autoIncrement>
-            <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
-            <#elseif column.endWithId>
-            <div class="form-group">
-                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
-                    <option value="0">全部</option>
-                    <option v-for="item in ${column.columnFieldNameFirstLower?replace('Id', '')}List" v-bind:value="item.id">{{ item.${column.columnFieldName?replace('Id', '')}Name }}</option>
-                </select>
+        <div id="addOrEdit" class="modal fade" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" @click="resetSave" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <#list table.columns as column>
+                                <#if column.notRequired>
+                                <#elseif column.autoIncrement>
+                                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
+                                <#elseif column.endWithId>
+                                <div class="form-group">
+                                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                                        <option value="0">全部</option>
+                                        <option v-for="item in ${column.columnFieldNameFirstLower?replace('Id', '')}List" v-bind:value="item.id">{{ item.${column.columnFieldName?replace('Id', '')}Name }}</option>
+                                    </select>
+                                </div>
+                                <#elseif column.columnName == table.validStatusField.fieldName>
+                                <div class="form-group">
+                                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                                        <option value="${table.validStatusField.validValue}">有效</option>
+                                        <option value="${table.validStatusField.invalidValue}">无效</option>
+                                    </select>
+                                </div>
+                                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                                <div class="form-group">
+                                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class ="form-control" />
+                                </div>
+                                <#elseif column.columnFieldType == "Date">
+                                <div class="form-group">
+                                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class ="form-control" />
+                                </div>
+                                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                                <div class="form-group">
+                                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                                </div>
+                                <#elseif (column.columnFieldType == "String")>
+                                <div class="form-group">
+                                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                                </div>
+                                <#else>
+                                <div class="form-group">
+                                    <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                                </div>
+                                </#if>
+                                </#list>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" value="取消" @click="resetSave" data-dismiss="modal" class="btn btn-secondary"/>
+                        <input type="button" value="保存" @click="save" class="btn btn-primary" />
+                    </div>
+                </div>
             </div>
-            <#elseif column.columnName == table.validStatusField.fieldName>
-            <div class="form-group">
-                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
-                    <option value="${table.validStatusField.validValue}">有效</option>
-                    <option value="${table.validStatusField.invalidValue}">无效</option>
-                </select>
-            </div>
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            <div class="form-group">
-                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class ="form-control" />
-            </div>
-            <#elseif column.columnFieldType == "Date">
-            <div class="form-group">
-                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class ="form-control" />
-            </div>
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-            <div class="form-group">
-                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
-            </div>
-            <#elseif (column.columnFieldType == "String")>
-            <div class="form-group">
-                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
-            </div>
-            <#else>
-            <div class="form-group">
-                <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
-            </div>
-            </#if>
-            </#list>
-            <input type="button" value="保存" @click="save" class="btn btn-primary" />
-            <input type="reset" value="重置" @click="resetSave" class="btn btn-warning" />
         </div>
     </div>
 
@@ -350,6 +403,14 @@
                 },
                 </#if>
                 </#list>
+                changePage: function(pageIndex) {
+                    this.searchParams.pageIndex = pageIndex;
+                    this.search();
+                },
+                changePageSize: function() {
+                    this.searchParams.pageIndex = 1;
+                    this.search();
+                },
                 search: function () {
                     var that = this;
                     $.ajax({

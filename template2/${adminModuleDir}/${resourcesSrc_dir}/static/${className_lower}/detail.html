@@ -20,28 +20,26 @@
 
 <body>
     <div class="container" id="app">
-        <div class="row">
-            <div class="form-horizontal">
-                <#list table.columns as column>
-                <#if column.columnName == table.validStatusField.fieldName>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                        <div class="col-xs-9 col-md-8"><p class="form-control-static">{{detail.${column.columnFieldNameFirstLower}}}</p></div>
-                    </div>
+        <div class="form-horizontal">
+            <#list table.columns as column>
+            <#if column.columnName == table.validStatusField.fieldName>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-xs-9 col-md-8"><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" style="color: #42b983;">有效</span><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.invalidValue}" style="color: #e96900;">无效</span></div>
                 </div>
-                <#else>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                        <div class="col-xs-9 col-md-8"><p class="form-control-static"><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" style="color: #42b983;">有效</span><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.invalidValue}" style="color: #e96900;">无效</span></p></div>
-                    </div>
+            </div>
+            <#else>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-xs-9 col-md-8"><span>{{detail.${column.columnFieldNameFirstLower}}}</span></div>
                 </div>
-                </#if>
-                </#list>
-                <div class="form-group">
-                    <input type="button" value="删除" @click="del" class="btn btn-danger" />
-                </div>
+            </div>
+            </#if>
+            </#list>
+            <div class="form-group">
+                <input type="button" value="删除" @click="del" class="btn btn-danger" />
             </div>
         </div>
     </div>

@@ -193,20 +193,27 @@
                     </tr>
                 </tbody>
             </table>
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li>
-                    <select v-model="searchParams.pageSize">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </li>
-            </ul>
+            <nav v-if="pageInfo">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item" v-if="pageInfo.hasPreviousPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.prePage)">Prev</a></li>
+                    <li class="page-item" v-if="1 < pageInfo.navigateFirstPage"><a class="page-link" href="javascript:;" @click="changePage(1)">1</a></li>
+                    <li class="page-item" v-if="2 < pageInfo.navigateFirstPage"><a class="page-link" href="javascript:;">...</a></li>
+                    <li class="page-item" v-for="(item, index) in pageInfo.navigatepageNums"><a class="page-link" href="javascript:;" @click="changePage(item)">{{item}}</a></li>
+                    <li class="page-item" v-if="pageInfo.pages > pageInfo.navigateLastPage+1"><a class="page-link" href="#javascript:;">...</a></li>
+                    <li class="page-item" v-if="pageInfo.pages > pageInfo.navigateLastPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.pages)">{{pageInfo.pages}}</a></li>
+                    <li class="page-item" v-if="pageInfo.hasNextPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.nextPage)">Next</a></li>
+                    <li class="page-item">
+                        <select v-model="searchParams.pageSize" class="form-control page-link" @change="changePageSize">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 
@@ -256,6 +263,14 @@
                 },
                 </#if>
                 </#list>
+                changePage: function(pageIndex) {
+                    this.searchParams.pageIndex = pageIndex;
+                    this.search();
+                },
+                changePageSize: function() {
+                    this.searchParams.pageIndex = 1;
+                    this.search();
+                },
                 search: function () {
                     var that = this;
                     $.ajax({
