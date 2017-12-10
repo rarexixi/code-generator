@@ -121,9 +121,13 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public int update${className}ByPk(${className}Entity ${classNameLower}) {
+    public int update${className}ByPk(${className}Entity ${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey>, ${primaryKeyParameters}</#if>) {
 
+        <#if !table.hasAutoIncrementUniquePrimaryKey>
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        <#else>
         ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>${classNameLower}.get${column.columnFieldName}()</#list>);
+        </#if>
         int result = ${classNameLower}Mapper.updateByCondition(${classNameLower}, condition);
         return result;
     }

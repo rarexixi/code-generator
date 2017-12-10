@@ -3,6 +3,7 @@
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#macro mapperEl value>${r"${"}${value}}</#macro>
 package ${basePackage}.quickadmin.controller;
 
 import ${basePackage}.common.model.Result;
@@ -18,39 +19,21 @@ import ${basePackage}.vo.${className}Vo;
 import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 <#include "/include/java_copyright.ftl">
 @Controller
 @RequestMapping({ "/${className?lower_case}" })
 public class ${className}Controller {
 
-    String sessionId = "quick-admin";
+    @Value("<@mapperEl 'spring.application.name'/>")
+    String sessionId;
 
     @Autowired
     ${className}Service ${classNameLower}Service;
-
-    // @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
-    // public String index() {
-    //     return "${className?lower_case}/list";
-    // }
-    //
-    // @RequestMapping(value = { "/addoredit", "/addoredit/" }, method = RequestMethod.GET)
-    // public String addOrEdit(${className}SearchModel inModel, Model outModel) {
-    //
-    //     return "${className?lower_case}/addoredit";
-    // }
-    //
-    // @RequestMapping(value = { "/detail", "/detail/" }, method = RequestMethod.GET)
-    // public String detail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, Model outModel) {
-    //
-    //     return "${className?lower_case}/detail";
-    // }
 
     @ResponseBody
     @RequestMapping(value = { "/find", "/find/" }, method = RequestMethod.GET)
@@ -70,14 +53,22 @@ public class ${className}Controller {
 
     @ResponseBody
     @RequestMapping(value = { "/save", "/save/" }, method = RequestMethod.POST)
-    public Result<Integer> save(${className}Entity entity) {
+    public Result<Integer> save(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}", required = false) ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         Result<Integer> result;
+        <#if !table.hasAutoIncrementUniquePrimaryKey>
+        if (<#list primaryKey as column><#if (column_index > 0)> && </#if>old${column.columnFieldName} != null</#list>) {
+            result = ${classNameLower}Service.update${className}ByPk(entity, ${table.primaryKeyOldParameterValues}, sessionId);
+        } else {
+            result = ${classNameLower}Service.add${className}(entity, sessionId);
+        }
+        <#else>
         if (<#list primaryKey as column><#if (column_index > 0)> && </#if>entity.get${column.columnFieldName}() != null</#list>) {
             result = ${classNameLower}Service.update${className}ByPk(entity, sessionId);
         } else {
             result = ${classNameLower}Service.add${className}(entity, sessionId);
         }
+        </#if>
         return result;
     }
 

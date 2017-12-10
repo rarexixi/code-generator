@@ -18,10 +18,7 @@ import ${basePackage}.vo.${className}Vo;
 import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,7 +41,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/add${className}", method = RequestMethod.POST)
-    public Result<Integer> add${className}(@RequestBody ${className}Entity ${classNameLower}, String sessionId) {
+    public Result<Integer> add${className}(@RequestBody ${className}Entity ${classNameLower}, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         String fieldName = "";
         if (${classNameLower} == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(${classNameLower}))) {
@@ -72,7 +69,7 @@ public class ${className}Controller {
     <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/add${className}List", method = RequestMethod.POST)
-    public Result<Integer> add${className}List(@RequestBody List<${className}Entity> ${classNameLower}List, String sessionId) {
+    public Result<Integer> add${className}List(@RequestBody List<${className}Entity> ${classNameLower}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (${classNameLower}List == null || ${classNameLower}List.isEmpty()) {
             return new Result<>(OperationConstants.NOT_NULL);
@@ -108,7 +105,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/delete${className}ByPk", method = RequestMethod.GET)
-    public Result<Integer> delete${className}ByPk(${primaryKeyParameters}, String sessionId) {
+    public Result<Integer> delete${className}ByPk(${primaryKeyParameters}, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         Result<Integer> result;
         try {
@@ -134,7 +131,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disable${className}ByPk", method = RequestMethod.GET)
-    public Result<Integer> disable${className}ByPk(${primaryKeyParameters}, String sessionId) {
+    public Result<Integer> disable${className}ByPk(${primaryKeyParameters}, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         Result<Integer> result;
         try {
@@ -159,7 +156,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enable${className}ByPk", method = RequestMethod.GET)
-    public Result<Integer> enable${className}ByPk(${primaryKeyParameters}, String sessionId) {
+    public Result<Integer> enable${className}ByPk(${primaryKeyParameters}, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         Result<Integer> result;
         try {
@@ -183,7 +180,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/update${className}ByPk", method = RequestMethod.POST)
-    public Result<Integer> update${className}ByPk(@RequestBody ${className}Entity ${classNameLower}, String sessionId) {
+    public Result<Integer> update${className}ByPk(@RequestBody ${className}Entity ${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         String fieldName = "";
         if (${classNameLower} == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(${classNameLower}))) {
@@ -192,7 +189,7 @@ public class ${className}Controller {
 
         Result<Integer> result;
         try {
-            int count = ${classNameLower}Service.update${className}ByPk(${classNameLower});
+            int count = ${classNameLower}Service.update${className}ByPk(${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey>, ${table.primaryKeyOldParameterValues}</#if>);
             result = new Result<>(count);
         } catch (Exception e) {
             logger.error("update${className}ByPk", sessionId, e);
@@ -213,7 +210,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/get${className}ByPk", method = RequestMethod.GET)
-    public Result<${className}Vo> get${className}ByPk(${primaryKeyParameters}, String sessionId) {
+    public Result<${className}Vo> get${className}ByPk(${primaryKeyParameters}, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         Result<${className}Vo> result;
         try {
@@ -237,7 +234,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/find${className}PageList", method = RequestMethod.POST)
-    public Result<PageInfo<${className}Vo>> find${className}PageList(@RequestBody(required = false) ${className}SelectParameter parameter, String sessionId) {
+    public Result<PageInfo<${className}Vo>> find${className}PageList(@RequestBody(required = false) ${className}SelectParameter parameter, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         Result<PageInfo<${className}Vo>> result;
         try {

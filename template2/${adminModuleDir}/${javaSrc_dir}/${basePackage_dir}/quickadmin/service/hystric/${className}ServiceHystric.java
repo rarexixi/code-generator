@@ -110,7 +110,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Integer> update${className}ByPk(${className}Entity ${classNameLower}, String sessionId) {
+    public Result<Integer> update${className}ByPk(${className}Entity ${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
 
         return new Result<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }

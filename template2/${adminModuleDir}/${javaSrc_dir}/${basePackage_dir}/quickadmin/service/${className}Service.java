@@ -98,7 +98,7 @@ public interface ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/${classNameLower}/update${className}ByPk", method = RequestMethod.POST)
-    Result<Integer> update${className}ByPk(@RequestBody ${className}Entity ${classNameLower}, @RequestParam("sessionId") String sessionId);
+    Result<Integer> update${className}ByPk(@RequestBody ${className}Entity ${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam("sessionId") String sessionId);
 
     /**
      * 根据主键获取

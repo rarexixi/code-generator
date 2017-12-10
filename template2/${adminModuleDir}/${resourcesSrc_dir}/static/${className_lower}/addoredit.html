@@ -92,6 +92,11 @@
                 ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
                 </#if>
                 </#list>
+                <#if !table.hasAutoIncrementUniquePrimaryKey>
+                <#list primaryKey as column>
+                old${column.columnFieldName}: '',
+                </#list>
+                </#if>
                 addOrEditParams: {
                     <#list table.columns as column>
                     <#if column.notRequired>
@@ -116,6 +121,9 @@
                 <#list primaryKey as column>
                 var ${column.columnFieldNameFirstLower} = getQueryString('${column.columnFieldNameFirstLower}');
                 </#list>
+                <#if !table.hasAutoIncrementUniquePrimaryKey>
+                <#list primaryKey as column>this.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
+                </#if>
                 if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.columnFieldNameFirstLower} != null && ${column.columnFieldNameFirstLower} != ''</#list>) {
                     this.getEditDetail();
                 }
@@ -132,7 +140,7 @@
                     var that = this;
                     $.ajax({
                         type: 'post',
-                        url: '/${classNameLower}/save',
+                        url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + that.old${column.columnFieldName}</#list></#if>,
                         data: this.addOrEditParams,
                         dataType: 'json',
                         success: function (response) {

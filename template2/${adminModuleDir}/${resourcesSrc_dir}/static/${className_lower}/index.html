@@ -22,126 +22,148 @@
     <div class="container" id="app">
         <div class="row">
             <form class="form-horizontal">
-                <#list table.columns as column>
-                <#if column.columnName == table.validStatusField.fieldName>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
-                                    <option value="-1">全部</option>
-                                    <option value="${table.validStatusField.validValue}">有效</option>
-                                    <option value="${table.validStatusField.invalidValue}">无效</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <#elseif column.endWithId>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
+                <div class="row">
+                    <#list table.columns as column>
+                    <#if column.columnName == table.validStatusField.fieldName>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
                                         <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
-                                    <option value="0">全部</option>
-                                    <option v-for="item in ${column.columnFieldNameFirstLower?replace('Id', '')}List" v-bind:value="item.id">{{ item.${column.columnFieldName?replace('Id', '')}Name }}</option>
-                                </select>
+                                            <option value="-1">全部</option>
+                                            <option value="${table.validStatusField.validValue}">有效</option>
+                                            <option value="${table.validStatusField.invalidValue}">无效</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <#elseif column.primaryKey>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    <#elseif column.endWithId>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                                <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
+                                            <option value="0">全部</option>
+                                            <option v-for="item in ${column.columnFieldNameFirstLower?replace('Id', '')}List" v-bind:value="item.id">{{ item.${column.columnFieldName?replace('Id', '')}Name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                    <#elseif column.primaryKey>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <#elseif column.columnFieldType == "Date">
-    <!--
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">开始${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
+                    <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">结束${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
+                    <#elseif column.columnFieldType == "Date">
+        <!--
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">开始${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-    -->
-                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">最小${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">结束${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">最大${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
+        -->
+                    <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">最小${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <#elseif (column.columnFieldType == "String")>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}StartWith" type="text" class="form-control" />
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">最大${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <#else>
-                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                            <div class="col-xs-9 col-md-8">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    <#elseif (column.columnFieldType == "String")>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}StartWith" type="text" class="form-control" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <#else>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                                    <div class="col-xs-9 col-md-8">
+                                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </#if>
+                    </#list>
                 </div>
-                </#if>
-                </#list>
                 <input type="button" id="submit" value="搜索" @click="search" class="btn btn-primary" />
                 <input type="reset" value="重置" @click="resetSearch" class="btn btn-warning" />
             </form>
@@ -262,6 +284,11 @@
                 ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
                 </#if>
                 </#list>
+                <#if !table.hasAutoIncrementUniquePrimaryKey>
+                <#list primaryKey as column>
+                old${column.columnFieldName}: '',
+                </#list>
+                </#if>
                 searchParams: {
                     <#list table.columns as column>
                     <#if column.columnName == table.validStatusField.fieldName>
@@ -367,6 +394,9 @@
                 edit: function (${primaryKeyParameterValues}) {
                     this.resetSave();
                     var that = this;
+                    <#if !table.hasAutoIncrementUniquePrimaryKey>
+                    <#list primaryKey as column>that.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
+                    </#if>
                     $.ajax({
                         type: 'get',
                         url: '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
@@ -390,12 +420,13 @@
                     var that = this;
                     $.ajax({
                         type: 'post',
-                        url: '/${classNameLower}/save',
+                        url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + that.old${column.columnFieldName}</#list></#if>,
                         data: this.addOrEditParams,
                         dataType: 'json',
                         success: function (response) {
                             if (response.success == true) {
                                 // 保存成功
+                                that.search();
                             } else {
                                 setTimeout(function () {
                                 }, 1000);

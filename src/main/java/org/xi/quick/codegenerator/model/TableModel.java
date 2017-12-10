@@ -79,6 +79,8 @@ public class TableModel {
     private ColumnModel uniquePrimaryKey;
     private String primaryKeyParameters;
     private String primaryKeyParameterValues;
+    private String primaryKeyOldParameters;
+    private String primaryKeyOldParameterValues;
     private ColumnModel validStatusColumn;
 
 
@@ -88,31 +90,39 @@ public class TableModel {
     }
 
     public void initColumns() {
-        this.primaryKey =
-                this.columns
+        primaryKey =
+                columns
                         .stream()
                         .filter(column -> column.getColumnKey().equals("PRI"))
                         .collect(Collectors.toList());
-        this.hasPrimaryKey = this.primaryKey != null && !primaryKey.isEmpty();
+        hasPrimaryKey = primaryKey != null && !primaryKey.isEmpty();
         if (hasPrimaryKey) {
-            this.uniquePrimaryKey = this.primaryKey.size() == 1 ? this.primaryKey.get(0) : null;
-            this.hasAutoIncrementUniquePrimaryKey = this.uniquePrimaryKey != null && this.uniquePrimaryKey.isAutoIncrement();
-            this.primaryKeyParameters = primaryKey
+            uniquePrimaryKey = primaryKey.size() == 1 ? primaryKey.get(0) : null;
+            hasAutoIncrementUniquePrimaryKey = uniquePrimaryKey != null && uniquePrimaryKey.isAutoIncrement();
+            primaryKeyParameters = primaryKey
                     .stream()
                     .map(column -> column.getColumnFieldType() + " " + column.getColumnFieldNameFirstLower())
                     .collect(Collectors.joining(", "));
-            this.primaryKeyParameterValues = primaryKey
+            primaryKeyParameterValues = primaryKey
                     .stream()
                     .map(column -> column.getColumnFieldNameFirstLower())
                     .collect(Collectors.joining(", "));
+            primaryKeyOldParameters = primaryKey
+                    .stream()
+                    .map(column -> column.getColumnFieldType() + " old" + column.getColumnFieldName())
+                    .collect(Collectors.joining(", "));
+            primaryKeyOldParameterValues = primaryKey
+                    .stream()
+                    .map(column -> "old" + column.getColumnFieldName())
+                    .collect(Collectors.joining(", "));
         }
         Optional<ColumnModel> columnOptional =
-                this.columns
+                columns
                         .stream()
                         .filter(column -> column.getColumnName().equals(validStatusField.getFieldName()))
                         .findFirst();
 
-        this.validStatusColumn = columnOptional.isPresent() ? columnOptional.get() : null;
+        validStatusColumn = columnOptional.isPresent() ? columnOptional.get() : null;
 
     }
 
@@ -188,6 +198,14 @@ public class TableModel {
      */
     public String getPrimaryKeyParameterValues() {
         return primaryKeyParameterValues;
+    }
+
+    public String getPrimaryKeyOldParameters() {
+        return primaryKeyOldParameters;
+    }
+
+    public String getPrimaryKeyOldParameterValues() {
+        return primaryKeyOldParameterValues;
     }
 
     /**

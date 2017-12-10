@@ -78,7 +78,7 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
      * @return
      <#include "/include/author_info1.ftl">
      */
-    int update${className}ByPk(${className}Entity ${classNameLower});
+    int update${className}ByPk(${className}Entity ${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey>, ${primaryKeyParameters}</#if>);
 
     /**
      * 根据主键获取
