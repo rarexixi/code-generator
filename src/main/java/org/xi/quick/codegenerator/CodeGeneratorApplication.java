@@ -31,11 +31,6 @@ public class CodeGeneratorApplication implements CommandLineRunner {
 
 		Set<String> tableNameSet = tableService.getTableNameList();
 
-		for (String tableName : tableNameSet) {
-			generatorService.generate(tableName);
-		}
-		if(true) return;
-
 		Scanner sc = new Scanner(System.in);
 
 		printUsages();

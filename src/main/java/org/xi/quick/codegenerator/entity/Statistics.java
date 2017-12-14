@@ -1,7 +1,5 @@
 package org.xi.quick.codegenerator.entity;
 
-import java.math.BigInteger;
-
 /**
  * @author 郗世豪（xish@cloud-young.com）
  * @date 2017/12/13 10:41
