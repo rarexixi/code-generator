@@ -14,7 +14,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>${table.tableComment}</title>
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="/resources/css/base.css" />
     <link rel="stylesheet" href="/resources/css/common.css" />
 </head>
 
@@ -40,12 +39,16 @@
             </#list>
             <div class="form-group">
                 <input type="button" value="删除" @click="del" class="btn btn-danger" />
+                <input type="button" value="返回" @click="goback" class="btn warning" />
             </div>
         </div>
     </div>
 
     <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/resources/bootstrap/js/bootstrap.js"></script>
+    <script src="/resources/bootstrap/js/jquery.bootstrap-growl.min.js"></script>
+    <script src="/resources/bootstrap/js/bootbox.min.js"></script>
+    <script src="/resources/js/common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
         var app = new Vue({
@@ -79,27 +82,30 @@
                             if (response.success == true) {
                                 that.detail = response.result;
                             } else {
-                                setTimeout(function () {
-                                }, 1000);
+                                commonNotify.error("获取详情失败！");
                             }
                         }
                     });
                 },
                 del: function () {
                     var that = this;
-                    $.ajax({
-                        type: 'get',
-                        url: '/${classNameLower}/delete?' + window.location.search,
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.success == true) {
-                                window.location.href = 'list.html';
-                            } else {
-                                setTimeout(function () {
-                                }, 1000);
+                    commonNotify.confirm("确定删除吗？", function() {
+                        $.ajax({
+                            type: 'get',
+                            url: '/${classNameLower}/delete' + window.location.search,
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success == true) {
+                                    commonNotify.success("删除成功！", that.goback);
+                                } else {
+                                    commonNotify.error("删除失败！");
+                                }
                             }
-                        }
+                        })
                     });
+                },
+                goback: function() {
+                    window.location.href = 'list.html';
                 }
             }
         });

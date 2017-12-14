@@ -14,7 +14,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>${table.tableComment}</title>
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="/resources/css/base.css" />
     <link rel="stylesheet" href="/resources/css/common.css" />
 </head>
 
@@ -193,27 +192,28 @@
                     </tr>
                 </tbody>
             </table>
-            <nav v-if="pageInfo">
-                <ul class="pagination justify-content-end">
-                    <li class="page-item" v-if="pageInfo.hasPreviousPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.prePage)">Prev</a></li>
-                    <li class="page-item" v-if="1 < pageInfo.navigateFirstPage"><a class="page-link" href="javascript:;" @click="changePage(1)">1</a></li>
-                    <li class="page-item" v-if="2 < pageInfo.navigateFirstPage"><a class="page-link" href="javascript:;">...</a></li>
-                    <li class="page-item" v-for="(item, index) in pageInfo.navigatepageNums"><a class="page-link" href="javascript:;" @click="changePage(item)">{{item}}</a></li>
-                    <li class="page-item" v-if="pageInfo.pages > pageInfo.navigateLastPage+1"><a class="page-link" href="#javascript:;">...</a></li>
-                    <li class="page-item" v-if="pageInfo.pages > pageInfo.navigateLastPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.pages)">{{pageInfo.pages}}</a></li>
-                    <li class="page-item" v-if="pageInfo.hasNextPage"><a class="page-link" href="javascript:;" @click="changePage(pageInfo.nextPage)">Next</a></li>
-                    <li class="page-item">
-                        <select v-model="searchParams.pageSize" class="form-control page-link" @change="changePageSize">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </li>
-                </ul>
-            </nav>
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <button type="button" class="btn btn-default" v-if="pageInfo.hasPreviousPage" @click="changePage(pageInfo.prePage)"><a class="page-link" href="javascript:;">上一页</a></button>
+                <button type="button" class="btn btn-default" v-if="1 < pageInfo.navigateFirstPage" @click="changePage(1)"><a class="page-link" href="javascript:;">1</a></button>
+                <button type="button" class="btn btn-default" v-if="2 < pageInfo.navigateFirstPage">...</button>
+                <button type="button" class="btn btn-default" v-for="(item, index) in pageInfo.navigatepageNums" @click="changePage(item)">{{item}}</button>
+                <button type="button" class="btn btn-default" v-if="pageInfo.pages > pageInfo.navigateLastPage+1">...</button>
+                <button type="button" class="btn btn-default" v-if="pageInfo.pages > pageInfo.navigateLastPage" @click="changePage(pageInfo.pages)">{{pageInfo.pages}}</button>
+                <button type="button" class="btn btn-default" v-if="pageInfo.hasNextPage" @click="changePage(pageInfo.nextPage)">下一页</button>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        每页 {{searchParams.pageSize}} 条
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li @click="changePageSize(5)"><a href="javascript:;">5</a></li>
+                        <li @click="changePageSize(10)"><a href="javascript:;">10</a></li>
+                        <li @click="changePageSize(20)"><a href="javascript:;">20</a></li>
+                        <li @click="changePageSize(50)"><a href="javascript:;">50</a></li>
+                        <li @click="changePageSize(100)"><a href="javascript:;">100</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <div id="detail" class="modal fade" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
@@ -249,7 +249,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" value="关闭" @click="resetSave" data-dismiss="modal" class="btn btn-secondary"/>
-                        <input type="button" value="删除" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)" class="btn btn-danger" />
+                        <input type="button" value="删除" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)" data-dismiss="modal" class="btn btn-danger" />
                     </div>
                 </div>
             </div>
@@ -318,7 +318,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" value="取消" @click="resetSave" data-dismiss="modal" class="btn btn-secondary"/>
-                        <input type="button" value="保存" @click="save" class="btn btn-primary" />
+                        <input type="button" value="保存" @click="save" data-dismiss="modal" class="btn btn-primary" />
                     </div>
                 </div>
             </div>
@@ -327,6 +327,9 @@
 
     <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/resources/bootstrap/js/bootstrap.js"></script>
+    <script src="/resources/bootstrap/js/jquery.bootstrap-growl.min.js"></script>
+    <script src="/resources/bootstrap/js/bootbox.min.js"></script>
+    <script src="/resources/js/common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
         var app = new Vue({
@@ -407,7 +410,8 @@
                     this.searchParams.pageIndex = pageIndex;
                     this.search();
                 },
-                changePageSize: function() {
+                changePageSize: function(pageSize) {
+                    this.searchParams.pageSize = pageSize;
                     this.searchParams.pageIndex = 1;
                     this.search();
                 },
@@ -422,8 +426,7 @@
                             if (response.success == true) {
                                 that.pageInfo = response.result;
                             } else {
-                                setTimeout(function () {
-                                }, 1000);
+                                commonNotify.error("获取列表！");
                             }
                         }
                     });
@@ -471,8 +474,7 @@
                                 </#if>
                                 </#list>
                             } else {
-                                setTimeout(function () {
-                                }, 1000);
+                                commonNotify.error("获取详情失败！");
                             }
                         }
                     });
@@ -486,11 +488,9 @@
                         dataType: 'json',
                         success: function (response) {
                             if (response.success == true) {
-                                // 保存成功
-                                that.search();
+                                commonNotify.success("操作成功！", that.search);
                             } else {
-                                setTimeout(function () {
-                                }, 1000);
+                                commonNotify.error("操作失败！");
                             }
                         }
                     });
@@ -519,26 +519,26 @@
                             if (response.success == true) {
                                 that.detail = response.result;
                             } else {
-                                setTimeout(function () {
-                                }, 1000);
+                                commonNotify.error("获取详情失败！");
                             }
                         }
                     });
                 },
                 del: function (${primaryKeyParameterValues}) {
                     var that = this;
-                    $.ajax({
-                        type: 'get',
-                        url: '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.success == true) {
-                                that.search();
-                            } else {
-                                setTimeout(function () {
-                                }, 1000);
+                    commonNotify.confirm("确定删除吗？", function() {
+                        $.ajax({
+                            type: 'get',
+                            url: '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success == true) {
+                                    commonNotify.success("删除成功！", that.search);
+                                } else {
+                                    commonNotify.error("删除失败！");
+                                }
                             }
-                        }
+                        })
                     });
                 }
             }

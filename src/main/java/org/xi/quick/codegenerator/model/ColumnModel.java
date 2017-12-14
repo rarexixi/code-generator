@@ -211,13 +211,13 @@ public class ColumnModel {
     private String columnFieldType;
     private boolean autoIncrement;
     private boolean primaryKey;
+    private boolean index;
     private boolean endWithId;
 
     public void initExtends() {
         columnFieldName = StringUtil.getCamelCaseName(this.columnName);
         columnFieldNameFirstLower = StringUtil.getFirstLower(columnFieldName);
         columnFieldType = ColumnUtil.getFieldType(this.dataType);
-        ;
         autoIncrement = extra.toLowerCase().equals("auto_increment");
         primaryKey = columnKey.equals("PRI");
         endWithId = columnName.endsWith("_id");
@@ -275,6 +275,19 @@ public class ColumnModel {
      */
     public boolean isEndWithId() {
         return endWithId;
+    }
+
+    /**
+     * 是否是索引
+     *
+     * @return
+     */
+    public boolean isIndex() {
+        return index;
+    }
+
+    public void setIndex(boolean index) {
+        this.index = index;
     }
 
     //endregion

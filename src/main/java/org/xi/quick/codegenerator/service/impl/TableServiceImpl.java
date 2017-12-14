@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.entity.Column;
+import org.xi.quick.codegenerator.entity.Statistics;
 import org.xi.quick.codegenerator.entity.Table;
 import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.mapper.ColumnsMapper;
+import org.xi.quick.codegenerator.mapper.StatisticsMapper;
 import org.xi.quick.codegenerator.mapper.TablesMapper;
 import org.xi.quick.codegenerator.model.ColumnModel;
+import org.xi.quick.codegenerator.model.StatisticsModel;
 import org.xi.quick.codegenerator.model.TableModel;
 import org.xi.quick.codegenerator.service.TableService;
 
@@ -28,6 +31,9 @@ public class TableServiceImpl implements TableService {
 
     @Autowired
     private ColumnsMapper columnsMapper;
+
+    @Autowired
+    private StatisticsMapper statisticsMapper;
 
     @Autowired
     private ValidStatusField validStatusField;
@@ -56,14 +62,20 @@ public class TableServiceImpl implements TableService {
 
         Table table = tablesMapper.getTable(databaseName, tableName);
         List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
+        List<Statistics> statisticsList = statisticsMapper.getStatistics(databaseName, table.getTableName());
         List<ColumnModel> columnModels =
                 columnList
                         .stream()
                         .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
                         .collect(Collectors.toList());
+        List<StatisticsModel> statisticModels =
+                statisticsList
+                        .stream()
+                        .map(entity -> new StatisticsModel(entity))
+                        .collect(Collectors.toList());
 
 
-        TableModel model = new TableModel(table, validStatusField, columnModels);
+        TableModel model = new TableModel(table, validStatusField, columnModels, statisticModels);
         return model;
     }
 
@@ -82,13 +94,19 @@ public class TableServiceImpl implements TableService {
         for (Table table : tables) {
 
             List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
+            List<Statistics> statisticsList = statisticsMapper.getStatistics(databaseName, table.getTableName());
             List<ColumnModel> columnModels =
                     columnList
                             .stream()
                             .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
                             .collect(Collectors.toList());
+            List<StatisticsModel> statisticModels =
+                    statisticsList
+                            .stream()
+                            .map(entity -> new StatisticsModel(entity))
+                            .collect(Collectors.toList());
 
-            TableModel model = new TableModel(table, validStatusField, columnModels);
+            TableModel model = new TableModel(table, validStatusField, columnModels, statisticModels);
             tableModels.add(model);
         }
         return tableModels;

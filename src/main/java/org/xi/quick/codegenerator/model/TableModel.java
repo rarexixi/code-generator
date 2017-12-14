@@ -4,18 +4,22 @@ import org.xi.quick.codegenerator.entity.Table;
 import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.utils.StringUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TableModel {
 
-    public TableModel(Table table, ValidStatusField validStatusField, List<ColumnModel> columns) {
+    public TableModel(Table table, ValidStatusField validStatusField, List<ColumnModel> columns, List<StatisticsModel> statistics) {
+
         this.databaseName = table.getTableSchema();
         this.tableName = table.getTableName();
         this.tableComment = table.getTableComment();
         this.validStatusField = validStatusField;
         this.columns = columns;
+        this.statistics = statistics;
 
         initTableClassName();
         initColumns();
@@ -46,6 +50,11 @@ public class TableModel {
      */
     private List<ColumnModel> columns;
 
+    /**
+     * 索引列表
+     */
+    private List<StatisticsModel> statistics;
+
     public String getDatabaseName() {
         return databaseName;
     }
@@ -64,6 +73,10 @@ public class TableModel {
 
     public List<ColumnModel> getColumns() {
         return columns;
+    }
+
+    public List<StatisticsModel> getStatistics() {
+        return statistics;
     }
 
     //endregion
@@ -90,11 +103,19 @@ public class TableModel {
     }
 
     public void initColumns() {
-        primaryKey =
-                columns
-                        .stream()
-                        .filter(column -> column.getColumnKey().equals("PRI"))
-                        .collect(Collectors.toList());
+
+        Map<String, List<StatisticsModel>> indexMap = statistics
+                .stream()
+                .collect(Collectors.groupingBy(index -> index.getColumnName()));
+
+        primaryKey = new ArrayList<>();
+        for (ColumnModel column : columns) {
+            if (column.getColumnKey().equals("PRI")) {
+                primaryKey.add(column);
+            }
+            column.setIndex(indexMap.containsKey(column.getColumnName()));
+        }
+
         hasPrimaryKey = primaryKey != null && !primaryKey.isEmpty();
         if (hasPrimaryKey) {
             uniquePrimaryKey = primaryKey.size() == 1 ? primaryKey.get(0) : null;

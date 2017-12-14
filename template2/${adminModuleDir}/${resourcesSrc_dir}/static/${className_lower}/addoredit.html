@@ -14,7 +14,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Insert title here</title>
     <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="/resources/css/base.css" />
     <link rel="stylesheet" href="/resources/css/common.css" />
 </head>
 
@@ -69,21 +68,19 @@
                 </#if>
                 </#list>
                 <input type="button" value="保存" @click="save" class="btn btn-primary" />
-                <input type="reset" value="重置" @click="resetSave" class="btn btn-warning" />
+                <input type="button" value="取消" @click="cancelSave" class="btn btn-warning" />
             </form>
         </div>
     </div>
 
     <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/resources/bootstrap/js/bootstrap.js"></script>
+    <script src="/resources/bootstrap/js/jquery.bootstrap-growl.min.js"></script>
+    <script src="/resources/bootstrap/js/bootbox.min.js"></script>
+    <script src="/resources/js/common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script>
 
-        function getQueryString(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) return decodeURI(r[2]); return null;
-        }
         var app = new Vue({
             el: '#app',
             data: {
@@ -119,7 +116,7 @@
                 </#if>
                 </#list>
                 <#list primaryKey as column>
-                var ${column.columnFieldNameFirstLower} = getQueryString('${column.columnFieldNameFirstLower}');
+                var ${column.columnFieldNameFirstLower} = commonFun.getParam('${column.columnFieldNameFirstLower}');
                 </#list>
                 <#if !table.hasAutoIncrementUniquePrimaryKey>
                 <#list primaryKey as column>this.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
@@ -145,10 +142,9 @@
                         dataType: 'json',
                         success: function (response) {
                             if (response.success == true) {
-                                // 保存成功
+                                commonNotify.success("操作成功！", that.cancelSave);
                             } else {
-                                setTimeout(function () {
-                                }, 1000);
+                                commonNotify.error("操作失败！");
                             }
                         }
                     });
@@ -168,25 +164,13 @@
                                 </#if>
                                 </#list>
                             } else {
-                                setTimeout(function () {
-                                }, 1000);
+                                commonNotify.error("获取详情失败！");
                             }
                         }
                     });
                 },
-                resetSave: function() {
-                    <#list table.columns as column>
-                    <#if column.notRequired>
-                    <#elseif column.endWithId>
-                    this.addOrEditParams.${column.columnFieldNameFirstLower} = 0;
-                    <#elseif column.columnName == table.validStatusField.fieldName>
-                    this.addOrEditParams.${column.columnFieldNameFirstLower} = ${table.validStatusField.validValue};
-                    <#elseif column.columnFieldType == "Date">
-                    //${column.columnFieldNameFirstLower}: null<#if column_has_next>,</#if>
-                    <#else>
-                    this.addOrEditParams.${column.columnFieldNameFirstLower} = '';
-                    </#if>
-                    </#list>
+                cancelSave: function() {
+                    window.location.href = 'list.html';
                 }
             }
         });
