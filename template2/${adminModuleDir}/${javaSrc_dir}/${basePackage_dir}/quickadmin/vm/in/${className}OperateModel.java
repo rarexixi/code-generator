@@ -10,15 +10,21 @@ import java.io.Serializable;
 
 public class ${className}OperateModel implements Serializable {
 
+    public ${className}OperateModel() {
+    }
+
     <#list table.columns as column>
+    <#if !column.notRequired>
     /**
      * ${column.columnComment}
      */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
+    </#if>
     </#list>
 
     <#list table.columns as column>
+    <#if !column.notRequired>
     /**
     * 设置${column.columnComment}
     */
@@ -33,16 +39,6 @@ public class ${className}OperateModel implements Serializable {
         return ${column.columnFieldNameFirstLower};
     }
 
+    </#if>
     </#list>
-    /**
-     * 获取数据表实体
-     */
-    public ${className}Entity get${className}Entity() {
-        ${className}Entity entity = new ${className}Entity();
-        <#list table.columns as column>
-        entity.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        </#list>
-        return entity;
-    }
-
 }

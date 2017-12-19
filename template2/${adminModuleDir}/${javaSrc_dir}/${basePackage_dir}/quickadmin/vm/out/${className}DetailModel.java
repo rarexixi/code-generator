@@ -14,20 +14,6 @@ public class ${className}DetailModel implements Serializable {
     public ${className}DetailModel() {
     }
 
-    public ${className}DetailModel(${className}Vo vo) {
-
-        <#list table.columns as column>
-        ${column.columnFieldNameFirstLower} = vo.get${column.columnFieldName}();
-        </#list>
-    }
-
-    public ${className}DetailModel(${className}Entity entity) {
-
-        <#list table.columns as column>
-        ${column.columnFieldNameFirstLower} = entity.get${column.columnFieldName}();
-        </#list>
-    }
-
     <#list table.columns as column>
     /**
      * ${column.columnComment}

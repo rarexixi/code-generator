@@ -14,20 +14,6 @@ public class ${className}ListModel implements Serializable {
     public ${className}ListModel() {
     }
 
-    public ${className}ListModel(${className}Vo vo) {
-
-        <#list table.columns as column>
-        ${column.columnFieldNameFirstLower} = vo.get${column.columnFieldName}();
-        </#list>
-    }
-
-    public ${className}ListModel(${className}Entity entity) {
-
-        <#list table.columns as column>
-        ${column.columnFieldNameFirstLower} = entity.get${column.columnFieldName}();
-        </#list>
-    }
-
     <#list table.columns as column>
     /**
      * ${column.columnComment}

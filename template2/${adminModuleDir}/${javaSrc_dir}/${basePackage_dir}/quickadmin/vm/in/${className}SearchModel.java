@@ -12,7 +12,12 @@ import java.util.List;
 import java.io.Serializable;
 
 public class ${className}SearchModel extends BaseOrderCondition implements Serializable {
+
+    public ${className}SearchModel() {
+    }
     <#list table.columns as column>
+    <#if (!column.index)>
+    <#else>
 
     //region ${column.columnComment}
     <#if column.columnName == table.validStatusField.fieldName>
@@ -162,32 +167,7 @@ public class ${className}SearchModel extends BaseOrderCondition implements Seria
     }
 
     //endregion
+    </#if>
     </#list>
-
-    /**
-     * 获取数据搜索实体
-     */
-    public ${className}SelectParameter get${className}SelectParameter() {
-        ${className}SelectParameter parameter = new ${className}SelectParameter();
-        <#list table.columns as column>
-        <#if column.columnName == table.validStatusField.fieldName>
-        parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-        parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        parameter.set${column.columnFieldName}List(${column.columnFieldNameFirstLower}List);
-        <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-        parameter.set${column.columnFieldName}Min(${column.columnFieldNameFirstLower}Min);
-        parameter.set${column.columnFieldName}Max(${column.columnFieldNameFirstLower}Max);
-        <#elseif (column.columnFieldType == "String")>
-        parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        parameter.set${column.columnFieldName}StartWith(${column.columnFieldNameFirstLower}StartWith);
-        parameter.set${column.columnFieldName}Like(${column.columnFieldNameFirstLower}Like);
-        <#else>
-        parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        </#if>
-        </#list>
-
-        return parameter;
-    }
 
 }

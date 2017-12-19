@@ -202,6 +202,7 @@ public class ColumnModel {
     public void setNotRequired(boolean notRequired) {
         this.notRequired = notRequired;
     }
+
     //endregion
 
     //region 扩展

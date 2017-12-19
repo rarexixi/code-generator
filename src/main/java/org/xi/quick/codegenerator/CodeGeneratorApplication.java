@@ -30,6 +30,10 @@ public class CodeGeneratorApplication implements CommandLineRunner {
 	public void run(String... strings) throws Exception {
 
 		Set<String> tableNameSet = tableService.getTableNameList();
+		for (String tableName : tableNameSet) {
+			generatorService.generate(tableName);
+		}
+		if(true) return;
 
 		Scanner sc = new Scanner(System.in);
 
