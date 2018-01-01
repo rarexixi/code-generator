@@ -1,12 +1,10 @@
 package org.xi.quick.codegenerator.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.entity.Column;
 import org.xi.quick.codegenerator.entity.Statistics;
 import org.xi.quick.codegenerator.entity.Table;
-import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.mapper.ColumnsMapper;
 import org.xi.quick.codegenerator.mapper.StatisticsMapper;
 import org.xi.quick.codegenerator.mapper.TablesMapper;
@@ -35,12 +33,6 @@ public class TableServiceImpl implements TableService {
     @Autowired
     private StatisticsMapper statisticsMapper;
 
-    @Autowired
-    private ValidStatusField validStatusField;
-
-    @Value("${field.not_required}")
-    private String notRequiredField;
-
     /**
      * 获取所有表名
      *
@@ -66,7 +58,7 @@ public class TableServiceImpl implements TableService {
         List<ColumnModel> columnModels =
                 columnList
                         .stream()
-                        .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
+                        .map(entity -> new ColumnModel(entity))
                         .collect(Collectors.toList());
         List<StatisticsModel> statisticModels =
                 statisticsList
@@ -75,7 +67,7 @@ public class TableServiceImpl implements TableService {
                         .collect(Collectors.toList());
 
 
-        TableModel model = new TableModel(table, validStatusField, columnModels, statisticModels);
+        TableModel model = new TableModel(table, columnModels, statisticModels);
         return model;
     }
 
@@ -98,7 +90,7 @@ public class TableServiceImpl implements TableService {
             List<ColumnModel> columnModels =
                     columnList
                             .stream()
-                            .map(entity -> new ColumnModel(entity, isNotRequiredField(entity.getColumnName())))
+                            .map(entity -> new ColumnModel(entity))
                             .collect(Collectors.toList());
             List<StatisticsModel> statisticModels =
                     statisticsList
@@ -106,14 +98,10 @@ public class TableServiceImpl implements TableService {
                             .map(entity -> new StatisticsModel(entity))
                             .collect(Collectors.toList());
 
-            TableModel model = new TableModel(table, validStatusField, columnModels, statisticModels);
+            TableModel model = new TableModel(table, columnModels, statisticModels);
             tableModels.add(model);
         }
         return tableModels;
-    }
-
-    public boolean isNotRequiredField(String fieldName) {
-        return notRequiredField.startsWith(fieldName + ",") || notRequiredField.endsWith("," + fieldName) || notRequiredField.contains("," + fieldName + ",");
     }
 
 }

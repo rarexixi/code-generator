@@ -83,7 +83,7 @@
                             if (response.success == true) {
                                 that.detail = response.result;
                             } else {
-                                commonNotify.error("获取详情失败！");
+                                commonNotify.danger("获取详情失败！");
                             }
                         }
                     });
@@ -99,7 +99,7 @@
                                 if (response.success == true) {
                                     commonNotify.success("删除成功！", that.goback);
                                 } else {
-                                    commonNotify.error("删除失败！");
+                                    commonNotify.danger("删除失败！");
                                 }
                             }
                         })

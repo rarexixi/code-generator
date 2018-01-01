@@ -42,17 +42,6 @@ public class AppConfig {
     @Value("${file.aggregate}")
     String aggregateFile;
 
-
-    @Value("${field.status.valid}")
-    private String validStatusField;
-
-    @Value("${field.status.valid.value}")
-    private String statusFieldValidValue;
-
-    @Value("${field.status.invalid.value}")
-    private String statusFieldInvalidValue;
-
-
     @Bean(name = "databaseName")
     public String getDatabaseName() {
         return StringUtil.getDatabaseNameFromJdbcUrl(datasourceUrl);
@@ -140,22 +129,6 @@ public class AppConfig {
         return templates;
     }
 
-
-    /**
-     * 获取有效性字段
-     *
-     * @return
-     */
-    @Bean(name = "validStatusField")
-    public ValidStatusField getValidStatusField() {
-
-        ValidStatusField field = new ValidStatusField();
-        field.setFieldName(validStatusField);
-        field.setValidValue(statusFieldValidValue);
-        field.setInvalidValue(statusFieldInvalidValue);
-
-        return field;
-    }
 
 
     /**

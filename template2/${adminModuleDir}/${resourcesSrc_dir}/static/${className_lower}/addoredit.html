@@ -144,7 +144,7 @@
                             if (response.success == true) {
                                 commonNotify.success("操作成功！", that.cancelSave);
                             } else {
-                                commonNotify.error("操作失败！");
+                                commonNotify.danger("操作失败！");
                             }
                         }
                     });
@@ -164,7 +164,7 @@
                                 </#if>
                                 </#list>
                             } else {
-                                commonNotify.error("获取详情失败！");
+                                commonNotify.danger("获取详情失败！");
                             }
                         }
                     });

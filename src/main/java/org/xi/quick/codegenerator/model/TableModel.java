@@ -2,6 +2,7 @@ package org.xi.quick.codegenerator.model;
 
 import org.xi.quick.codegenerator.entity.Table;
 import org.xi.quick.codegenerator.entity.ValidStatusField;
+import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 import org.xi.quick.codegenerator.utils.StringUtil;
 
 import java.util.ArrayList;
@@ -12,12 +13,11 @@ import java.util.stream.Collectors;
 
 public class TableModel {
 
-    public TableModel(Table table, ValidStatusField validStatusField, List<ColumnModel> columns, List<StatisticsModel> statistics) {
+    public TableModel(Table table, List<ColumnModel> columns, List<StatisticsModel> statistics) {
 
         this.databaseName = table.getTableSchema();
         this.tableName = table.getTableName();
         this.tableComment = table.getTableComment();
-        this.validStatusField = validStatusField;
         this.columns = columns;
         this.statistics = statistics;
 
@@ -39,11 +39,6 @@ public class TableModel {
      * 表说明
      */
     private String tableComment;
-
-    /**
-     * 有效性字段
-     */
-    private ValidStatusField validStatusField;
 
     /**
      * 表字段列表
@@ -68,7 +63,7 @@ public class TableModel {
     }
 
     public ValidStatusField getValidStatusField() {
-        return validStatusField;
+        return StaticConfigData.VALID_STATUS_FIELD;
     }
 
     public List<ColumnModel> getColumns() {
@@ -140,7 +135,7 @@ public class TableModel {
         Optional<ColumnModel> columnOptional =
                 columns
                         .stream()
-                        .filter(column -> column.getColumnName().equals(validStatusField.getFieldName()))
+                        .filter(column -> column.isValidStatus())
                         .findFirst();
 
         validStatusColumn = columnOptional.isPresent() ? columnOptional.get() : null;

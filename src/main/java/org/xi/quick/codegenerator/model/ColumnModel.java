@@ -1,17 +1,13 @@
 package org.xi.quick.codegenerator.model;
 
 import org.xi.quick.codegenerator.entity.Column;
+import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 import org.xi.quick.codegenerator.utils.ColumnUtil;
 import org.xi.quick.codegenerator.utils.StringUtil;
 
 public class ColumnModel {
 
     public ColumnModel(Column column) {
-
-        this(column, false);
-    }
-
-    public ColumnModel(Column column, boolean notRequired) {
 
         if (column != null) {
             this.databaseName = column.getTableSchema();
@@ -28,7 +24,8 @@ public class ColumnModel {
             this.extra = column.getExtra();
             this.columnComment = column.getColumnComment();
         }
-        this.notRequired = notRequired;
+        this.notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(this.columnName);
+        this.validStatus = StaticConfigData.VALID_STATUS_FIELD.getFieldName().equals(this.columnName);
         initExtends();
     }
 
@@ -90,117 +87,69 @@ public class ColumnModel {
      * 是否不需要填写
      */
     private boolean notRequired;
+    /**
+     * 是否有效性字段
+     */
+    private boolean validStatus;
 
     public String getDatabaseName() {
         return databaseName;
-    }
-
-    public void setDatabaseName(String databaseName) {
-        this.databaseName = databaseName;
     }
 
     public String getTableName() {
         return tableName;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
     public String getColumnName() {
         return columnName;
-    }
-
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
     }
 
     public Long getColumnPosition() {
         return columnPosition;
     }
 
-    public void setColumnPosition(Long columnPosition) {
-        this.columnPosition = columnPosition;
-    }
-
     public String getColumnDefault() {
         return columnDefault;
-    }
-
-    public void setColumnDefault(String columnDefault) {
-        this.columnDefault = columnDefault;
     }
 
     public String getIsNullable() {
         return isNullable;
     }
 
-    public void setIsNullable(String isNullable) {
-        this.isNullable = isNullable;
-    }
-
     public String getDataType() {
         return dataType;
-    }
-
-    public void setDataType(String dataType) {
-        this.dataType = dataType;
     }
 
     public Long getCharLength() {
         return charLength;
     }
 
-    public void setCharLength(Long charLength) {
-        this.charLength = charLength;
-    }
-
     public Long getByteLength() {
         return byteLength;
-    }
-
-    public void setByteLength(Long byteLength) {
-        this.byteLength = byteLength;
     }
 
     public String getColumnType() {
         return columnType;
     }
 
-    public void setColumnType(String columnType) {
-        this.columnType = columnType;
-    }
-
     public String getColumnKey() {
         return columnKey;
-    }
-
-    public void setColumnKey(String columnKey) {
-        this.columnKey = columnKey;
     }
 
     public String getExtra() {
         return extra;
     }
 
-    public void setExtra(String extra) {
-        this.extra = extra;
-    }
-
     public String getColumnComment() {
         return columnComment;
-    }
-
-    public void setColumnComment(String columnComment) {
-        this.columnComment = columnComment;
     }
 
     public boolean isNotRequired() {
         return notRequired;
     }
 
-    public void setNotRequired(boolean notRequired) {
-        this.notRequired = notRequired;
+    public boolean isValidStatus() {
+        return validStatus;
     }
 
     //endregion

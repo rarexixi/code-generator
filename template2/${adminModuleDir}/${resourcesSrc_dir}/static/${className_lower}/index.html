@@ -370,10 +370,16 @@
                 </#if>
                 </#list>
                 changePage: function(pageIndex) {
+                    if (this.searchParams.pageIndex == pageIndex) {
+                        return;
+                    }
                     this.searchParams.pageIndex = pageIndex;
                     this.search();
                 },
                 changePageSize: function(pageSize) {
+                    if (this.searchParams.pageSize == pageSize) {
+                        return;
+                    }
                     this.searchParams.pageSize = pageSize;
                     this.searchParams.pageIndex = 1;
                     this.search();
@@ -389,7 +395,7 @@
                             if (response.success == true) {
                                 that.pageInfo = response.result;
                             } else {
-                                commonNotify.error("获取列表！");
+                                commonNotify.danger("获取列表！");
                             }
                         }
                     });
@@ -437,7 +443,7 @@
                                 </#if>
                                 </#list>
                             } else {
-                                commonNotify.error("获取详情失败！");
+                                commonNotify.danger("获取详情失败！");
                             }
                         }
                     });
@@ -453,7 +459,7 @@
                             if (response.success == true) {
                                 commonNotify.success("操作成功！", that.search);
                             } else {
-                                commonNotify.error("操作失败！");
+                                commonNotify.danger("操作失败！");
                             }
                         }
                     });
@@ -482,7 +488,7 @@
                             if (response.success == true) {
                                 that.detail = response.result;
                             } else {
-                                commonNotify.error("获取详情失败！");
+                                commonNotify.danger("获取详情失败！");
                             }
                         }
                     });
@@ -498,7 +504,7 @@
                                 if (response.success == true) {
                                     commonNotify.success("删除成功！", that.search);
                                 } else {
-                                    commonNotify.error("删除失败！");
+                                    commonNotify.danger("删除失败！");
                                 }
                             }
                         })
