@@ -1,8 +1,8 @@
 package org.xi.quick.codegenerator.model;
 
 import org.xi.quick.codegenerator.entity.Column;
+import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
-import org.xi.quick.codegenerator.utils.ColumnUtil;
 import org.xi.quick.codegenerator.utils.StringUtil;
 
 public class ColumnModel {
@@ -167,7 +167,7 @@ public class ColumnModel {
     public void initExtends() {
         columnFieldName = StringUtil.getCamelCaseName(this.columnName);
         columnFieldNameFirstLower = StringUtil.getFirstLower(columnFieldName);
-        columnFieldType = ColumnUtil.getFieldType(this.dataType);
+        columnFieldType = DataTypeMapping.getFieldType(this.dataType);
         autoIncrement = extra.toLowerCase().equals("auto_increment");
         primaryKey = columnKey.equals("PRI");
         endWithId = columnName.endsWith("_id");

@@ -8,11 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
-import org.xi.quick.codegenerator.utils.StringUtil;
+import org.xi.quick.codegenerator.utils.PropertiesUtil;
 
 import java.io.*;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Configuration
 @PropertySource("classpath:config.properties")
@@ -29,6 +31,9 @@ public class AppConfig {
 
     @Value("${file.aggregate}")
     String aggregateFile;
+
+    @Value("${path.common.properties}")
+    String commonPropertiesPath;
 
     @Bean(name = "freeMarkerConfiguration")
     public freemarker.template.Configuration getConfiguration() throws IOException {
@@ -53,7 +58,7 @@ public class AppConfig {
     public List<FreemarkerModel> getAllTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
-                templateRelativePath -> StringUtil.isClassFile(templateRelativePath)
+                templateRelativePath -> isClassFile(templateRelativePath)
                         && !isMatchingFolder(templateRelativePath, ignoredFolder)
                         && !isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
@@ -69,7 +74,7 @@ public class AppConfig {
     public List<FreemarkerModel> getAllOnceTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
-                templateRelativePath -> !StringUtil.isClassFile(templateRelativePath)
+                templateRelativePath -> !isClassFile(templateRelativePath)
                         && !isMatchingFolder(templateRelativePath, ignoredFolder)
                         && !isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
@@ -125,6 +130,20 @@ public class AppConfig {
     }
 
     /**
+     * 获取公共配置
+     *
+     * @return
+     */
+    @Bean("commonProperties")
+    public Map<Object, Object> getCommonProperties() {
+
+        Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(commonPropertiesPath, codeEncoding);
+        commonPropertiesMap.put("now", new Date());
+
+        return commonPropertiesMap;
+    }
+
+    /**
      * 是否是匹配的文件夹
      *
      * @param templateRelativePath
@@ -160,6 +179,19 @@ public class AppConfig {
         }
 
         return false;
+    }
+
+    /**
+     * 是否是类相关文件
+     *
+     * @param path
+     * @return
+     */
+    private static boolean isClassFile(String path) {
+
+        Pattern pattern = Pattern.compile("\\$\\{className(_[^\\}]*)?\\}");
+        Matcher matcher = pattern.matcher(path);
+        return matcher.find();
     }
 
 }

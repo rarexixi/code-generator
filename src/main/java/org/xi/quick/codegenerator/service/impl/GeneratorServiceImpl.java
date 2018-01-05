@@ -1,19 +1,26 @@
 package org.xi.quick.codegenerator.service.impl;
 
 import freemarker.template.TemplateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.functionalinterface.BinaryConsumer;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.model.TableModel;
 import org.xi.quick.codegenerator.service.GeneratorService;
 import org.xi.quick.codegenerator.service.TableService;
-import org.xi.quick.codegenerator.utils.FreemarkerUtil;
+import org.xi.quick.codegenerator.utils.DirectoryUtil;
+import org.xi.quick.codegenerator.utils.FileUtil;
+import org.xi.quick.codegenerator.utils.StringUtil;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author 郗世豪（xish@cloud-young.com）
@@ -21,6 +28,14 @@ import java.util.Map;
  */
 @Service("generatorService")
 public class GeneratorServiceImpl implements GeneratorService {
+
+    Logger logger = LoggerFactory.getLogger(GeneratorServiceImpl.class);
+
+    @Value("${path.out}")
+    String outPath;
+
+    @Value("${codeEncoding}")
+    String codeEncoding;
 
     @Autowired
     List<FreemarkerModel> allTemplates;
@@ -33,6 +48,9 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     @Autowired
     TableService tableService;
+
+    @Autowired
+    Map<Object, Object> commonProperties;
 
     //region 生成
 
@@ -131,7 +149,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("className", table.getTableClassName());
 
         try {
-            FreemarkerUtil.generate(template, dataModel);
+            generate(template, dataModel);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TemplateException e) {
@@ -143,7 +161,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         for (FreemarkerModel template : templates) {
             try {
-                FreemarkerUtil.generate(template, dataModel);
+                generate(template, dataModel);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (TemplateException e) {
@@ -156,13 +174,13 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         Map<Object, Object> dataModel = new HashMap<>();
         dataModel.put("className", table.getTableClassName());
-        FreemarkerUtil.delete(template, dataModel);
+        delete(template, dataModel);
     }
 
     private void deleteOnce(List<FreemarkerModel> templates) {
 
         for (FreemarkerModel template : templates) {
-            FreemarkerUtil.delete(template);
+            delete(template);
         }
     }
 
@@ -194,6 +212,123 @@ public class GeneratorServiceImpl implements GeneratorService {
         for (TableModel table : tables) {
             allTemplates.forEach(template -> consumer.accept(template, table));
         }
+    }
+
+    /**
+     * 生成输出
+     *
+     * @param outModel
+     * @throws IOException
+     * @throws TemplateException
+     */
+    private void generate(FreemarkerModel outModel) throws IOException, TemplateException {
+
+        generate(outModel, new HashMap<>());
+    }
+
+    /**
+     * 生成输出
+     *
+     * @param outModel
+     * @param dataModel
+     * @throws IOException
+     * @throws TemplateException
+     */
+    private void generate(FreemarkerModel outModel, Map<Object, Object> dataModel) throws IOException, TemplateException {
+
+        dataModel.putAll(commonProperties);
+
+        String absolutePath = getFilePath(outModel, dataModel);
+
+        logger.info("正在生成" + absolutePath);
+
+        //创建文件路径
+        DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
+
+        try (OutputStream stream = new FileOutputStream(absolutePath);
+             Writer out = new OutputStreamWriter(stream, codeEncoding)) {
+
+            outModel.getTemplate().process(dataModel, out);
+        }
+    }
+
+    private void delete(FreemarkerModel outModel) {
+
+        delete(outModel, new HashMap<>());
+    }
+
+    private void delete(FreemarkerModel outModel, Map<Object, Object> dataModel) {
+
+        dataModel.putAll(commonProperties);
+
+        String absolutePath = getFilePath(outModel, dataModel);
+
+        logger.info("正在删除" + absolutePath);
+
+        FileUtil.delete(absolutePath);
+    }
+
+
+    private String getFilePath(FreemarkerModel model, Map<Object, Object> dataModel) {
+
+        File directory = new File(outPath);
+        return directory.getAbsolutePath() + "/" + getActualPath(model.getRelativePath(), dataModel);
+    }
+
+    private String getAbsoluteDirectory(String absolutePath) {
+        return absolutePath.substring(0, absolutePath.lastIndexOf("/"));
+    }
+
+
+    /**
+     * 获取文件输出实际路径
+     *
+     * @param path
+     * @param properties
+     * @return
+     */
+    private String getActualPath(String path, Map<Object, Object> properties) {
+
+        Pattern pattern = Pattern.compile("\\$\\{[^\\}]*\\}");
+        Matcher matcher = pattern.matcher(path);
+        while (matcher.find()) {
+            String group = matcher.group();
+            String key = group.substring(2, group.length() - 1);
+
+            boolean isDir = key.endsWith("_dir");
+            boolean isLower = key.endsWith("_lower");
+            boolean isUpper = key.endsWith("_upper");
+            boolean isFirstLower = key.endsWith("_firstLower");
+            boolean isFirstUpper = key.endsWith("_firstUpper");
+            if (isDir) {
+                key = key.substring(0, key.length() - 4);
+            } else if (isLower || isUpper) {
+                key = key.substring(0, key.length() - 6);
+            } else if (isFirstLower || isFirstUpper) {
+                key = key.substring(0, key.length() - 11);
+            }
+
+            Object value = properties.get(key);
+
+            if (value != null) {
+                String s = (String) value;
+                if (isDir) {
+                    path = path.replace(group, s.replaceAll("\\.", "/"));
+                } else if (isLower) {
+                    path = path.replace(group, s.toLowerCase());
+                } else if (isUpper) {
+                    path = path.replace(group, s.toUpperCase());
+                } else if (isFirstLower) {
+                    path = path.replace(group, StringUtil.getFirstLower(s));
+                } else if (isFirstUpper) {
+                    path = path.replace(group, StringUtil.getFirstUpper(s));
+                } else {
+                    path = path.replace(group, s);
+                }
+            }
+        }
+
+        return path;
     }
 
     //endregion

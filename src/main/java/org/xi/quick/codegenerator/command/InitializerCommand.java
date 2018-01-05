@@ -2,13 +2,13 @@ package org.xi.quick.codegenerator.command;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.xi.quick.codegenerator.entity.ValidStatusField;
+import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
+import org.xi.quick.codegenerator.utils.PropertiesUtil;
 
-import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,11 +42,8 @@ public class InitializerCommand implements CommandLineRunner {
     @Value("${codeEncoding}")
     String codeEncoding;
 
-    @Value("${path.out}")
-    String outPath;
-
-    @Value("${path.common.properties}")
-    String commonPropertiesPath;
+    @Value("${path.datatype.properties}")
+    String dataTypePropertiesPath;
 
     @Override
     public void run(String... strings) throws Exception {
@@ -55,8 +52,8 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.VALID_STATUS_FIELD = getValidStatusField();
         StaticConfigData.NOT_REQUIRED_FIELD_SET = getNotRequiredFieldSets();
         StaticConfigData.CODE_ENCODING = codeEncoding;
-        StaticConfigData.OUT_DIRECTORY = outPath;
-        StaticConfigData.COMMON_PROPERTIES = getCommonProperties();
+
+        DataTypeMapping.TYPE_MAP = getCommonProperties();
     }
 
     /**
@@ -103,26 +100,13 @@ public class InitializerCommand implements CommandLineRunner {
     }
 
     /**
-     * 获取公共配置
+     * 获取数据映射关系
      *
      * @return
      */
     private Map<Object, Object> getCommonProperties() {
 
-        Map<Object, Object> commonPropertiesMap = new HashMap<>();
-        Properties properties = new Properties();
-        try (InputStream inputStream = new FileInputStream(commonPropertiesPath);
-             Reader reader = new InputStreamReader(inputStream, codeEncoding)) {
-            properties.load(reader);
-            properties.forEach((key, value) -> commonPropertiesMap.put(key, value));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        commonPropertiesMap.put("now", new Date());
-
+        Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(dataTypePropertiesPath, codeEncoding);
         return commonPropertiesMap;
     }
 }
