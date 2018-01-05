@@ -4,6 +4,7 @@ import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
+import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 
 import java.io.*;
 import java.util.HashMap;
@@ -21,13 +22,12 @@ public class FreemarkerUtil {
      * 生成输出
      *
      * @param outModel
-     * @param dataModel
      * @throws IOException
      * @throws TemplateException
      */
-    public static void generate(FreemarkerModel outModel, Object dataModel, String encoding) throws IOException, TemplateException {
+    public static void generate(FreemarkerModel outModel) throws IOException, TemplateException {
 
-        generate(outModel, null, dataModel, encoding);
+        generate(outModel, new HashMap<>());
     }
 
     /**
@@ -38,12 +38,11 @@ public class FreemarkerUtil {
      * @throws IOException
      * @throws TemplateException
      */
-    public static void generate(FreemarkerModel outModel, String tableClassName, Object dataModel, String encoding) throws IOException, TemplateException {
+    public static void generate(FreemarkerModel outModel, Map<Object, Object> dataModel) throws IOException, TemplateException {
 
-        if(outModel.getAbsolutePath().contains("html")) {
-            String s = outModel.getAbsolutePath();
-        }
-        String absolutePath = getFilePath(outModel, tableClassName);
+        dataModel.putAll(StaticConfigData.COMMON_PROPERTIES);
+
+        String absolutePath = getFilePath(outModel, dataModel);
 
         logger.info("正在生成" + absolutePath);
 
@@ -51,7 +50,7 @@ public class FreemarkerUtil {
         DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
 
         try (OutputStream stream = new FileOutputStream(absolutePath);
-             Writer out = new OutputStreamWriter(stream, encoding)) {
+             Writer out = new OutputStreamWriter(stream, StaticConfigData.CODE_ENCODING)) {
 
             outModel.getTemplate().process(dataModel, out);
         }
@@ -59,12 +58,14 @@ public class FreemarkerUtil {
 
     public static void delete(FreemarkerModel outModel) {
 
-        delete(outModel, null);
+        delete(outModel, new HashMap<>());
     }
 
-    public static void delete(FreemarkerModel outModel, String tableClassName) {
+    public static void delete(FreemarkerModel outModel, Map<Object, Object> dataModel) {
 
-        String absolutePath = getFilePath(outModel, tableClassName);
+        dataModel.putAll(StaticConfigData.COMMON_PROPERTIES);
+
+        String absolutePath = getFilePath(outModel, dataModel);
 
         logger.info("正在删除" + absolutePath);
 
@@ -72,14 +73,13 @@ public class FreemarkerUtil {
     }
 
 
-    public static String getFilePath(FreemarkerModel model, String tableClassName) {
+    static String getFilePath(FreemarkerModel model, Map<Object, Object> dataModel) {
 
-        Map<Object, Object> map = new HashMap<>();
-        map.put("className", tableClassName);
-        return StringUtil.getActualPath(model.getAbsolutePath(), map);
+        File directory = new File(StaticConfigData.OUT_DIRECTORY);
+        return directory.getAbsolutePath() + "/" + StringUtil.getActualPath(model.getRelativePath(), dataModel);
     }
 
-    public static String getAbsoluteDirectory(String absolutePath) {
+    static String getAbsoluteDirectory(String absolutePath) {
         return absolutePath.substring(0, absolutePath.lastIndexOf("/"));
     }
 }

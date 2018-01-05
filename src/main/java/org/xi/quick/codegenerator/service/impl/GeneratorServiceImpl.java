@@ -2,7 +2,6 @@ package org.xi.quick.codegenerator.service.impl;
 
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.functionalinterface.BinaryConsumer;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
@@ -12,7 +11,6 @@ import org.xi.quick.codegenerator.service.TableService;
 import org.xi.quick.codegenerator.utils.FreemarkerUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +22,6 @@ import java.util.Map;
 @Service("generatorService")
 public class GeneratorServiceImpl implements GeneratorService {
 
-    @Value("${codeEncoding}")
-    String codeEncoding;
-
     @Autowired
     List<FreemarkerModel> allTemplates;
 
@@ -37,17 +32,17 @@ public class GeneratorServiceImpl implements GeneratorService {
     List<FreemarkerModel> allAggregateTemplates;
 
     @Autowired
-    Map<Object, Object> commonPropertiesMap;
-
-    @Autowired
     TableService tableService;
+
+    //region 生成
 
     /**
      * 生成所有数据类
      */
     @Override
     public void generateAll() {
-        dataLoop((template, table) -> generate(template, table));
+
+        loopAll((template, table) -> generate(template, table));
     }
 
     /**
@@ -57,7 +52,8 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void generate(String... tableNames) {
-        dataLoop((template, table) -> generate(template, table), tableNames);
+
+        loop((template, table) -> generate(template, table), tableNames);
     }
 
     /**
@@ -67,7 +63,6 @@ public class GeneratorServiceImpl implements GeneratorService {
     public void generateAllOnce() {
 
         Map<Object, Object> dataModel = new HashMap<>();
-        dataModel.putAll(commonPropertiesMap);
         generateOnce(allOnceTemplates, dataModel);
     }
 
@@ -77,19 +72,23 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public void generateAllAggregate() {
 
-        List<TableModel> tables = tableService.getTables(null);
+        List<TableModel> tables = tableService.getAllTables();
         Map<Object, Object> dataModel = new HashMap<>();
-        dataModel.putAll(commonPropertiesMap);
         dataModel.put("tableModels", tables);
         generateOnce(allAggregateTemplates, dataModel);
     }
+
+    //endregion
+
+    //region 删除
 
     /**
      * 删除所有数据类
      */
     @Override
     public void deleteAll() {
-        dataLoop((template, table) -> FreemarkerUtil.delete(template, table.getTableClassName()));
+
+        loopAll((template, table) -> delete(template, table));
     }
 
     /**
@@ -99,7 +98,8 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void delete(String... tableNames) {
-        dataLoop((template, table) -> FreemarkerUtil.delete(template, table.getTableClassName()), tableNames);
+
+        loop((template, table) -> delete(template, table), tableNames);
     }
 
     /**
@@ -108,9 +108,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public void deleteAllOnce() {
 
-        for (FreemarkerModel template : allOnceTemplates) {
-            FreemarkerUtil.delete(template);
-        }
+        deleteOnce(allOnceTemplates);
     }
 
     /**
@@ -119,19 +117,21 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public void deleteAllAggregate() {
 
-        for (FreemarkerModel template : allAggregateTemplates) {
-            FreemarkerUtil.delete(template);
-        }
+        deleteOnce(allAggregateTemplates);
     }
+
+    //endregion
+
+    //region 私有方法
 
     private void generate(FreemarkerModel template, TableModel table) {
 
         Map<Object, Object> dataModel = new HashMap<>();
-        dataModel.putAll(commonPropertiesMap);
         dataModel.put("table", table);
+        dataModel.put("className", table.getTableClassName());
 
         try {
-            FreemarkerUtil.generate(template, table.getTableClassName(), dataModel, codeEncoding);
+            FreemarkerUtil.generate(template, dataModel);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TemplateException e) {
@@ -139,33 +139,11 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
     }
 
-    private void dataLoop(BinaryConsumer<FreemarkerModel, TableModel> consumer, String... tableNames) {
-
-        List<TableModel> tables;
-        if (tableNames == null || tableNames.length == 0) {
-            tables = tableService.getTables(null);
-        } else {
-            tables = new ArrayList<>();
-            for (String tableName : tableNames) {
-                TableModel tableModel = tableService.getTable(tableName);
-                if (tableModel != null) {
-                    tables.add(tableModel);
-                }
-            }
-        }
-
-        for (TableModel table : tables) {
-            for (FreemarkerModel template : allTemplates) {
-                consumer.accept(template, table);
-            }
-        }
-    }
-
     private void generateOnce(List<FreemarkerModel> templates, Map<Object, Object> dataModel) {
 
         for (FreemarkerModel template : templates) {
             try {
-                FreemarkerUtil.generate(template, dataModel, codeEncoding);
+                FreemarkerUtil.generate(template, dataModel);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (TemplateException e) {
@@ -173,4 +151,50 @@ public class GeneratorServiceImpl implements GeneratorService {
             }
         }
     }
+
+    private void delete(FreemarkerModel template, TableModel table) {
+
+        Map<Object, Object> dataModel = new HashMap<>();
+        dataModel.put("className", table.getTableClassName());
+        FreemarkerUtil.delete(template, dataModel);
+    }
+
+    private void deleteOnce(List<FreemarkerModel> templates) {
+
+        for (FreemarkerModel template : templates) {
+            FreemarkerUtil.delete(template);
+        }
+    }
+
+    /**
+     * 执行操作
+     *
+     * @param consumer   消费方法
+     * @param tableNames 要操作的表名
+     */
+    private void loop(BinaryConsumer<FreemarkerModel, TableModel> consumer, String... tableNames) {
+
+        for (String tableName : tableNames) {
+            TableModel table = tableService.getTable(tableName);
+            if (table != null) {
+                allTemplates.forEach(template -> consumer.accept(template, table));
+            }
+        }
+    }
+
+    /**
+     * 执行操作
+     *
+     * @param consumer 消费方法
+     */
+    private void loopAll(BinaryConsumer<FreemarkerModel, TableModel> consumer) {
+
+        List<TableModel> tables = tableService.getAllTables();
+
+        for (TableModel table : tables) {
+            allTemplates.forEach(template -> consumer.accept(template, table));
+        }
+    }
+
+    //endregion
 }

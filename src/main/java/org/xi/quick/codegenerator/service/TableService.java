@@ -12,7 +12,7 @@ public interface TableService {
      *
      * @return
      */
-    Set<String> getTableNameList();
+    Set<String> getAllTableNameList();
 
     /**
      * 获取单表
@@ -23,10 +23,9 @@ public interface TableService {
     TableModel getTable(String tableName);
 
     /**
-     * 获取列表
+     * 获取所有列表
      *
-     * @param tableName
      * @return
      */
-    List<TableModel> getTables(String tableName);
+    List<TableModel> getAllTables();
 }

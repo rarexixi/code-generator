@@ -12,6 +12,7 @@ import org.xi.quick.codegenerator.model.ColumnModel;
 import org.xi.quick.codegenerator.model.StatisticsModel;
 import org.xi.quick.codegenerator.model.TableModel;
 import org.xi.quick.codegenerator.service.TableService;
+import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,6 @@ import java.util.stream.Collectors;
 
 @Service("tableService")
 public class TableServiceImpl implements TableService {
-
-    @Autowired
-    String databaseName;
 
     @Autowired
     private TablesMapper tablesMapper;
@@ -39,8 +37,8 @@ public class TableServiceImpl implements TableService {
      * @return
      */
     @Override
-    public Set<String> getTableNameList() {
-        return tablesMapper.getAllTableNameList(databaseName);
+    public Set<String> getAllTableNameList() {
+        return tablesMapper.getAllTableNameList(StaticConfigData.DATABASE_NAME);
     }
 
     /**
@@ -52,9 +50,9 @@ public class TableServiceImpl implements TableService {
     @Override
     public TableModel getTable(String tableName) {
 
-        Table table = tablesMapper.getTable(databaseName, tableName);
-        List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
-        List<Statistics> statisticsList = statisticsMapper.getStatistics(databaseName, table.getTableName());
+        Table table = tablesMapper.getTable(StaticConfigData.DATABASE_NAME, tableName);
+        List<Column> columnList = columnsMapper.getColumns(StaticConfigData.DATABASE_NAME, table.getTableName());
+        List<Statistics> statisticsList = statisticsMapper.getStatistics(StaticConfigData.DATABASE_NAME, table.getTableName());
         List<ColumnModel> columnModels =
                 columnList
                         .stream()
@@ -72,21 +70,20 @@ public class TableServiceImpl implements TableService {
     }
 
     /**
-     * 获取列表
+     * 获取所有列表
      *
-     * @param tableName
      * @return
      */
     @Override
-    public List<TableModel> getTables(String tableName) {
+    public List<TableModel> getAllTables() {
 
-        List<Table> tables = tablesMapper.getTables(databaseName, tableName);
+        List<Table> tables = tablesMapper.getAllTables(StaticConfigData.DATABASE_NAME);
         List<TableModel> tableModels = new ArrayList<>();
 
         for (Table table : tables) {
 
-            List<Column> columnList = columnsMapper.getColumns(databaseName, table.getTableName());
-            List<Statistics> statisticsList = statisticsMapper.getStatistics(databaseName, table.getTableName());
+            List<Column> columnList = columnsMapper.getColumns(StaticConfigData.DATABASE_NAME, table.getTableName());
+            List<Statistics> statisticsList = statisticsMapper.getStatistics(StaticConfigData.DATABASE_NAME, table.getTableName());
             List<ColumnModel> columnModels =
                     columnList
                             .stream()

@@ -8,16 +8,16 @@ import freemarker.template.Template;
  */
 public class FreemarkerModel {
 
-    public FreemarkerModel(String absolutePath, Template template) {
-        this.absolutePath = absolutePath;
+    public FreemarkerModel(String relativePath, Template template) {
+        this.relativePath = relativePath;
         this.template = template;
     }
 
-    private String absolutePath;
+    private String relativePath;
     private Template template;
 
-    public String getAbsolutePath() {
-        return absolutePath;
+    public String getRelativePath() {
+        return relativePath;
     }
 
     public Template getTemplate() {

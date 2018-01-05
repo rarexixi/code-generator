@@ -30,7 +30,7 @@ public class GeneratorCommand implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        Set<String> tableNameSet = tableService.getTableNameList();
+        Set<String> tableNameSet = tableService.getAllTableNameList();
 
         Scanner sc = new Scanner(System.in);
 
@@ -57,7 +57,7 @@ public class GeneratorCommand implements CommandLineRunner {
         System.out.print("请输入命令: ");
     }
 
-    private void processLine(Scanner sc, Set<String> tableNameSet) throws Exception {
+    private void processLine(Scanner sc, Set<String> tableNameSet) {
         String cmd = sc.next();
         if ("gen".equals(cmd)) {
             String[] args = getArgs(sc);

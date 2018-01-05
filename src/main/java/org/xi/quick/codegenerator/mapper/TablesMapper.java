@@ -28,11 +28,10 @@ public interface TablesMapper {
     Table getTable(@Param("databaseName") String databaseName, @Param("tableName") String tableName);
 
     /**
-     * 获取列表
+     * 获取所有列表
      *
      * @param databaseName
-     * @param tableName
      * @return
      */
-    List<Table> getTables(@Param("databaseName") String databaseName, @Param("tableName") String tableName);
+    List<Table> getAllTables(@Param("databaseName") String databaseName);
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
 import org.xi.quick.codegenerator.utils.StringUtil;
@@ -14,58 +13,22 @@ import org.xi.quick.codegenerator.utils.StringUtil;
 import java.io.*;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Configuration
 @PropertySource("classpath:config.properties")
 public class AppConfig {
 
-    @Value("${spring.datasource.url}")
-    String datasourceUrl;
-
     @Value("${path.template}")
     String templatePath;
-
-    @Value("${path.out}")
-    String outPath;
-
-    @Value("${path.common.properties}")
-    String commonPropertiesPath;
 
     @Value("${codeEncoding}")
     String codeEncoding;
 
-    @Value("${folder.ingored}")
-    String iningoredFolder;
+    @Value("${folder.ignored}")
+    String ignoredFolder;
 
     @Value("${file.aggregate}")
     String aggregateFile;
-
-    @Bean(name = "databaseName")
-    public String getDatabaseName() {
-        return StringUtil.getDatabaseNameFromJdbcUrl(datasourceUrl);
-    }
-
-    @Bean(name = "commonPropertiesMap")
-    public Map<Object, Object> getCommonPropertiesMap() {
-
-        Map<Object, Object> commonPropertiesMap = new HashMap<>();
-        Properties properties = new Properties();
-        try (InputStream inputStream = new FileInputStream(commonPropertiesPath);
-             Reader reader = new InputStreamReader(inputStream, codeEncoding)) {
-            properties.load(reader);
-            properties.forEach((key, value) -> commonPropertiesMap.put(key, value));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        commonPropertiesMap.put("now", new Date());
-
-        return commonPropertiesMap;
-    }
 
     @Bean(name = "freeMarkerConfiguration")
     public freemarker.template.Configuration getConfiguration() throws IOException {
@@ -87,12 +50,11 @@ public class AppConfig {
      * @throws IOException
      */
     @Bean(name = "allTemplates")
-    public List<FreemarkerModel> getAllTemplates(freemarker.template.Configuration freeMarkerConfiguration,
-                                                 Map<Object, Object> commonPropertiesMap) throws IOException {
+    public List<FreemarkerModel> getAllTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
-        List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration, commonPropertiesMap,
+        List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> StringUtil.isClassFile(templateRelativePath)
-                        && !isMatchingFolder(templateRelativePath, iningoredFolder)
+                        && !isMatchingFolder(templateRelativePath, ignoredFolder)
                         && !isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
     }
@@ -104,12 +66,11 @@ public class AppConfig {
      * @throws IOException
      */
     @Bean(name = "allOnceTemplates")
-    public List<FreemarkerModel> getAllOnceTemplates(freemarker.template.Configuration freeMarkerConfiguration,
-                                                     Map<Object, Object> commonPropertiesMap) throws IOException {
+    public List<FreemarkerModel> getAllOnceTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
-        List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration, commonPropertiesMap,
+        List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> !StringUtil.isClassFile(templateRelativePath)
-                        && !isMatchingFolder(templateRelativePath, iningoredFolder)
+                        && !isMatchingFolder(templateRelativePath, ignoredFolder)
                         && !isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
     }
@@ -121,27 +82,23 @@ public class AppConfig {
      * @throws IOException
      */
     @Bean(name = "allAggregateTemplates")
-    public List<FreemarkerModel> getAllAggregateTemplates(freemarker.template.Configuration freeMarkerConfiguration,
-                                                          Map<Object, Object> commonPropertiesMap) throws IOException {
+    public List<FreemarkerModel> getAllAggregateTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
-        List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration, commonPropertiesMap,
+        List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> isMatchingFile(templateRelativePath, aggregateFile));
         return templates;
     }
-
 
 
     /**
      * 获取匹配的模版
      *
      * @param freeMarkerConfiguration
-     * @param commonPropertiesMap
      * @param predicate
      * @return
      * @throws IOException
      */
     public List<FreemarkerModel> getMatchingTemplates(freemarker.template.Configuration freeMarkerConfiguration,
-                                                      Map<Object, Object> commonPropertiesMap,
                                                       Predicate<String> predicate) throws IOException {
 
         File directory = new File(templatePath);
@@ -159,8 +116,7 @@ public class AppConfig {
 
             Template template = freeMarkerConfiguration.getTemplate(templateRelativePath, codeEncoding);
 
-            String fileAbsolutePath = getActualPath(templateRelativePath, commonPropertiesMap);
-            FreemarkerModel outModel = new FreemarkerModel(fileAbsolutePath, template);
+            FreemarkerModel outModel = new FreemarkerModel(templateRelativePath, template);
 
             result.add(outModel);
         }
@@ -204,19 +160,6 @@ public class AppConfig {
         }
 
         return false;
-    }
-
-
-    /**
-     * 获取文件输出实际绝对路径
-     *
-     * @param relativePath
-     * @return
-     */
-    private String getActualPath(String relativePath, Map<Object, Object> commonPropertiesMap) {
-
-        File directory = new File(outPath);
-        return directory.getAbsolutePath() + "/" + StringUtil.getActualPath(relativePath, commonPropertiesMap);
     }
 
 }

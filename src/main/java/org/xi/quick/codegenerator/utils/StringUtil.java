@@ -1,6 +1,5 @@
 package org.xi.quick.codegenerator.utils;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -51,18 +50,6 @@ public class StringUtil {
         return String.join("", Arrays.stream(tableNameSplit).map(o -> o.substring(0, 1).toUpperCase() + o.substring(1)).collect(Collectors.toList()));
     }
 
-    public static String getDatabaseNameFromJdbcUrl(String url) {
-
-        Pattern pattern = Pattern.compile("/[^(/|\\?)]*\\?");
-        Matcher matcher = pattern.matcher(url);
-        if (matcher.find()) {
-            String group = matcher.group();
-            return group.substring(1, group.length() - 1);
-        }
-
-        return "";
-    }
-
     public static <T> String join(String delimiter, Collection<T> collection) {
 
         return collection.stream()
@@ -93,9 +80,10 @@ public class StringUtil {
      * 获取文件输出实际路径
      *
      * @param path
+     * @param properties
      * @return
      */
-    public static String getActualPath(String path, Map<Object, Object> commonPropertiesMap) {
+    public static String getActualPath(String path, Map<Object, Object> properties) {
 
         Pattern pattern = Pattern.compile("\\$\\{[^\\}]*\\}");
         Matcher matcher = pattern.matcher(path);
@@ -116,7 +104,7 @@ public class StringUtil {
                 key = key.substring(0, key.length() - 11);
             }
 
-            Object value = commonPropertiesMap.get(key);
+            Object value = properties.get(key);
 
             if (value != null) {
                 String s = (String) value;

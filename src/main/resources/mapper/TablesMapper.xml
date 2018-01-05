@@ -43,7 +43,7 @@
         </where>
     </select>
 
-    <select id="getTables" resultMap="resultMap" parameterType="java.lang.String">
+    <select id="getAllTables" resultMap="resultMap" parameterType="java.lang.String">
         SELECT
         `TABLE_CATALOG`,
         `TABLE_SCHEMA`,
@@ -56,9 +56,6 @@
         <where>
             <if test="databaseName != null and databaseName != ''">
                 TABLE_SCHEMA=#{databaseName}
-            </if>
-            <if test="tableName != null and tableName != ''">
-                AND TABLE_NAME=#{tableName}
             </if>
         </where>
     </select>
