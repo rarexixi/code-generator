@@ -25,15 +25,15 @@ import java.util.stream.Collectors;
 public class InitializerCommand implements CommandLineRunner {
 
     @Value("${spring.datasource.url}")
-    String datasourceUrl;
+    private String datasourceUrl;
 
-    @Value("${field.status.valid}")
+    @Value("${validStatusField.fieldName}")
     private String validStatusField;
 
-    @Value("${field.status.valid.value}")
+    @Value("${validStatusField.validValue}")
     private String statusFieldValidValue;
 
-    @Value("${field.status.invalid.value}")
+    @Value("${validStatusField.invalidValue}")
     private String statusFieldInvalidValue;
 
     @Value("${field.not_required}")
@@ -53,7 +53,7 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.NOT_REQUIRED_FIELD_SET = getNotRequiredFieldSets();
         StaticConfigData.CODE_ENCODING = codeEncoding;
 
-        DataTypeMapping.TYPE_MAP = getCommonProperties();
+        DataTypeMapping.TYPE_MAP = getTypeMap();
     }
 
     /**
@@ -104,7 +104,7 @@ public class InitializerCommand implements CommandLineRunner {
      *
      * @return
      */
-    private Map<Object, Object> getCommonProperties() {
+    private Map<Object, Object> getTypeMap() {
 
         Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(dataTypePropertiesPath, codeEncoding);
         return commonPropertiesMap;

@@ -10,11 +10,23 @@ import java.util.stream.Collectors;
  */
 public class StringUtil {
 
+    /**
+     * 获取首字母小写
+     *
+     * @param s
+     * @return
+     */
     public static String getFirstLower(String s) {
 
         return s.substring(0, 1).toLowerCase() + s.substring(1);
     }
 
+    /**
+     * 获取首字母大写
+     *
+     * @param s
+     * @return
+     */
     public static String getFirstUpper(String s) {
 
         return s.substring(0, 1).toUpperCase() + s.substring(1);
@@ -35,17 +47,22 @@ public class StringUtil {
      * 获取驼峰命名
      *
      * @param s
-     * @param split
+     * @param delimiter
      * @return
      */
-    public static String getCamelCaseName(String s, String split) {
+    public static String getCamelCaseName(String s, String delimiter) {
 
         if (s == null || s.isEmpty()) return s;
 
-        String[] tableNameSplit = s.split(split);
+        String[] tableNameSplit = s.split(delimiter);
 
-        return String.join("", Arrays.stream(tableNameSplit).map(o -> o.substring(0, 1).toUpperCase() + o.substring(1)).collect(Collectors.toList()));
+        String camelCaseName = Arrays.stream(tableNameSplit)
+                .map(o -> o.substring(0, 1).toUpperCase() + o.substring(1).toLowerCase())
+                .collect(Collectors.joining(""));
+
+        return camelCaseName;
     }
+
 
     public static <T> String join(String delimiter, Collection<T> collection) {
 
@@ -62,14 +79,6 @@ public class StringUtil {
 
     public static <T> String join(String delimiter, T[] collection) {
 
-        return Arrays.stream(collection)
-                .map(o -> {
-                    if (o == null) return "null";
-                    if (o instanceof String) {
-                        return (String) o;
-                    }
-                    return o.toString();
-                })
-                .collect(Collectors.joining(delimiter));
+        return join(delimiter, Arrays.asList(collection));
     }
 }
