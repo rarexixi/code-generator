@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.xi.quick</groupId>
-	<artifactId>codegenerator</artifactId>
+	<artifactId>code-generator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>codegenerator</name>
-	<description>Demo project for Spring Boot</description>
+	<name>code-generator</name>
+	<description>mysql 代码生成器</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
