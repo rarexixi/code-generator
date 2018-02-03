@@ -24,7 +24,7 @@ mysql code generator
 |primaryKeyParameterValues|主键对应的JAVA参数值       |单个(id) ，多个(userId, userTypeId)
 |primaryKeyParameters     |旧主键对应的JAVA参数         |单个(Integer oldId)，多个(Integer oldUserId, Integer oldUserTypeId)
 |primaryKeyParameterValues|旧主键对应的JAVA参数值       |单个(oldId) ，多个(oldUserId, oldUserTypeId)
-|validStatusColumn        |有效性字段                |deleted
+|validStatusColumn        |有效性字段                |
 
 ## ColumnModel
 
