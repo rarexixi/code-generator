@@ -13,13 +13,18 @@ mysql code generator
 |tableComment             |表说明                   |用户类型关系表
 |validStatusField         |配置的有效性字段           |
 |columns                  |表字段列表                |
+|statistics               |索引列表                  |
 |tableClassName           |表对应的JAVA类名          |UserTypeRela                    
 |tableClassNameFirstLower |表对应的JAVA类名首字母小写 |userTypeRela                            
 |hasPrimaryKey            |是否有主键                |true              
 |primaryKey               |主键列表                  |
+|hasAutoIncrementUniquePrimaryKey |是否有唯一自增主键  |
+|uniquePrimaryKey         |获取唯一主键               |
 |primaryKeyParameters     |主键对应的JAVA参数         |单个(Integer id)，多个(Integer userId, Integer userTypeId)
 |primaryKeyParameterValues|主键对应的JAVA参数值       |单个(id) ，多个(userId, userTypeId)
-|validStatusColumn        |有效性字段                |
+|primaryKeyParameters     |旧主键对应的JAVA参数         |单个(Integer oldId)，多个(Integer oldUserId, Integer oldUserTypeId)
+|primaryKeyParameterValues|旧主键对应的JAVA参数值       |单个(oldId) ，多个(oldUserId, oldUserTypeId)
+|validStatusColumn        |有效性字段                |deleted
 
 ## ColumnModel
 
@@ -37,11 +42,15 @@ mysql code generator
 |columnType                   |列类型                  |int(11)                                                                
 |columnKey                    |                       |PRI                                                                
 |extra                        |                       |auto_increment                                                         
-|columnComment                |列说明                  |用户ID                                                      
+|columnComment                |列说明                  |用户ID     
+|notRequired                  |不必须的                 |
+|validStatus                  |是有效性字段             |
 |columnFieldName              |对应的JAVA字段名         |UserId                                                              
 |columnFieldNameFirstLower    |对应的JAVA字段名首字母小写|userId                                                                   
 |columnFieldType              |对应的JAVA字段类型       |Integer                                                              
 |autoIncrement                |是否自增长              |false                                                        
-|primaryKey                   |是否是主键              |true                           
+|primaryKey                   |是否是主键              |true     
+|endWithId                    |数据库字段是否以_id结尾  |
+|index                        |是否是索引              |
 
 
