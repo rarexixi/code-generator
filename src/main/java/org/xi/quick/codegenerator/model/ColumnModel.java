@@ -23,6 +23,7 @@ public class ColumnModel {
             this.columnKey = column.getColumnKey();
             this.extra = column.getExtra();
             this.columnComment = column.getColumnComment();
+            this.index = column.getIndex();
         }
         this.notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(this.columnName);
         this.validStatus = StaticConfigData.VALID_STATUS_FIELD.getFieldName().equals(this.columnName);
@@ -91,6 +92,10 @@ public class ColumnModel {
      * 是否有效性字段
      */
     private boolean validStatus;
+    /**
+     * 是否是索引
+     */
+    private boolean index;
 
     public String getDatabaseName() {
         return databaseName;
@@ -152,6 +157,10 @@ public class ColumnModel {
         return validStatus;
     }
 
+    public boolean isIndex() {
+        return index;
+    }
+
     //endregion
 
     //region 扩展
@@ -161,7 +170,6 @@ public class ColumnModel {
     private String columnFieldType;
     private boolean autoIncrement;
     private boolean primaryKey;
-    private boolean index;
     private boolean endWithId;
 
     public void initExtends() {
@@ -225,19 +233,6 @@ public class ColumnModel {
      */
     public boolean isEndWithId() {
         return endWithId;
-    }
-
-    /**
-     * 是否是索引
-     *
-     * @return
-     */
-    public boolean isIndex() {
-        return index;
-    }
-
-    public void setIndex(boolean index) {
-        this.index = index;
     }
 
     //endregion

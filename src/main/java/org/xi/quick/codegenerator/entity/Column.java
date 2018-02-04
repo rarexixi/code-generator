@@ -24,6 +24,8 @@ public class Column {
     private String columnComment;
     private String generationExpression;
 
+    private Boolean index;
+
     public String getTableCatalog() {
         return tableCatalog;
     }
@@ -190,5 +192,13 @@ public class Column {
 
     public void setGenerationExpression(String generationExpression) {
         this.generationExpression = generationExpression;
+    }
+
+    public Boolean getIndex() {
+        return index;
+    }
+
+    public void setIndex(Boolean index) {
+        this.index = index;
     }
 }

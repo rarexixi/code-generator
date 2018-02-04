@@ -51,7 +51,7 @@ public class TableServiceImpl implements TableService {
     public TableModel getTable(String tableName) {
 
         Table table = tablesMapper.getTable(StaticConfigData.DATABASE_NAME, tableName);
-        List<Column> columnList = columnsMapper.getColumns(StaticConfigData.DATABASE_NAME, table.getTableName());
+        List<Column> columnList = columnsMapper.getColumnsWithIndex(StaticConfigData.DATABASE_NAME, table.getTableName());
         List<Statistics> statisticsList = statisticsMapper.getStatistics(StaticConfigData.DATABASE_NAME, table.getTableName());
         List<ColumnModel> columnModels =
                 columnList
@@ -82,7 +82,7 @@ public class TableServiceImpl implements TableService {
 
         for (Table table : tables) {
 
-            List<Column> columnList = columnsMapper.getColumns(StaticConfigData.DATABASE_NAME, table.getTableName());
+            List<Column> columnList = columnsMapper.getColumnsWithIndex(StaticConfigData.DATABASE_NAME, table.getTableName());
             List<Statistics> statisticsList = statisticsMapper.getStatistics(StaticConfigData.DATABASE_NAME, table.getTableName());
             List<ColumnModel> columnModels =
                     columnList

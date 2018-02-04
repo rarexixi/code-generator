@@ -24,6 +24,8 @@
         <result column="PRIVILEGES" property="privileges" jdbcType="VARCHAR"/>
         <result column="COLUMN_COMMENT" property="columnComment" jdbcType="VARCHAR"/>
         <result column="GENERATION_EXPRESSION" property="generationExpression" jdbcType="VARCHAR"/>
+
+        <result column="INDEX" property="index" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <select id="getColumns" resultMap="column" parameterType="java.lang.String">
@@ -59,5 +61,41 @@
                 AND TABLE_NAME=#{tableName}
             </if>
         </where>
+    </select>
+
+
+    <select id="getColumnsWithIndex" resultMap="column" parameterType="java.lang.String">
+        SELECT
+        `TABLE_CATALOG`,
+        `TABLE_SCHEMA`,
+        `TABLE_NAME`,
+        A.`COLUMN_NAME`,
+        `ORDINAL_POSITION`,
+        `COLUMN_DEFAULT`,
+        `IS_NULLABLE`,
+        `DATA_TYPE`,
+        `CHARACTER_MAXIMUM_LENGTH`,
+        `CHARACTER_OCTET_LENGTH`,
+        `NUMERIC_PRECISION`,
+        `NUMERIC_SCALE`,
+        `DATETIME_PRECISION`,
+        `CHARACTER_SET_NAME`,
+        `COLLATION_NAME`,
+        `COLUMN_TYPE`,
+        `COLUMN_KEY`,
+        `EXTRA`,
+        `PRIVILEGES`,
+        `COLUMN_COMMENT`,
+        `GENERATION_EXPRESSION`,
+        CASE COUNT(B.COLUMN_NAME) WHEN COUNT(B.COLUMN_NAME)>0 THEN TRUE ELSE FALSE END AS `INDEX`
+        FROM
+        (SELECT * FROM information_schema.COLUMNS
+        WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}) AS A
+        LEFT JOIN
+        (SELECT `COLUMN_NAME` FROM information_schema.`STATISTICS`
+        WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}) AS B
+        ON A.`COLUMN_NAME`=B.`COLUMN_NAME`
+        GROUP BY `COLUMN_NAME`
+        ORDER BY ORDINAL_POSITION
     </select>
 </mapper>

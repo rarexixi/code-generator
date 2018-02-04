@@ -99,16 +99,11 @@ public class TableModel {
 
     public void initColumns() {
 
-        Map<String, List<StatisticsModel>> indexMap = statistics
-                .stream()
-                .collect(Collectors.groupingBy(index -> index.getColumnName()));
-
         primaryKey = new ArrayList<>();
         for (ColumnModel column : columns) {
             if (column.getColumnKey().equals("PRI")) {
                 primaryKey.add(column);
             }
-            column.setIndex(indexMap.containsKey(column.getColumnName()));
         }
 
         hasPrimaryKey = primaryKey != null && !primaryKey.isEmpty();

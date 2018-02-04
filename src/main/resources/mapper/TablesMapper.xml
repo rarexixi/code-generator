@@ -15,10 +15,10 @@
         SELECT
         `TABLE_NAME`
         FROM
-        information_schema.TABLES
+        `information_schema`.`TABLES`
         <where>
             <if test="databaseName != null and databaseName != ''">
-                TABLE_SCHEMA=#{databaseName}
+                `TABLE_SCHEMA`=#{databaseName}
             </if>
         </where>
     </select>
@@ -32,13 +32,13 @@
         `TABLE_ROWS`,
         `TABLE_COMMENT`
         FROM
-        information_schema.TABLES
+        `information_schema`.`TABLES`
         <where>
             <if test="databaseName != null and databaseName != ''">
-                TABLE_SCHEMA=#{databaseName}
+                `TABLE_SCHEMA`=#{databaseName}
             </if>
             <if test="tableName != null and tableName != ''">
-                AND TABLE_NAME=#{tableName}
+                AND `TABLE_NAME`=#{tableName}
             </if>
         </where>
     </select>
@@ -52,10 +52,10 @@
         `TABLE_ROWS`,
         `TABLE_COMMENT`
         FROM
-        information_schema.TABLES
+        `information_schema`.`TABLES`
         <where>
             <if test="databaseName != null and databaseName != ''">
-                TABLE_SCHEMA=#{databaseName}
+                `TABLE_SCHEMA`=#{databaseName}
             </if>
         </where>
     </select>
