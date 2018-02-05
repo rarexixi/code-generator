@@ -18,10 +18,10 @@ codeEncoding: UTF-8
 
 # 模版路径
 path:
-  template: /Workspace/github.com/java/MysqlCodeGenerator/template-spring-cloud/
+  template: /Workspace/github.com/java/MysqlCodeGenerator/template-dubbo/
   out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/
   common:
-    properties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-springcloud.properties
+    properties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-dubbo.properties
   datatype:
     properties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties
 
@@ -31,7 +31,7 @@ folder:
 
 # 聚合文件
 file:
-  aggregate:
+  aggregate: spring-dubbo-provider.xml,spring-dubbo-consumer.xml
 
 validStatusField:
   fieldName: data_status    # 有效性字段名
@@ -40,6 +40,3 @@ validStatusField:
 
 field:
   notRequired: create_time,update_time # 不需要赋值的字段
-
-
-

@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Configuration
-@PropertySource("classpath:config.properties")
 public class AppConfig {
 
     @Value("${path.template}")

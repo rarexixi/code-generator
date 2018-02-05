@@ -5,12 +5,16 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://code.alibabatech.com/schema/dubbo
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="${adminModuleDir}" id="${adminModuleDir}"></dubbo:application>
+    <dubbo:protocol name="dubbo" port="-1"/>
+    <dubbo:registry id="zookeeper" protocol="zookeeper" address="${r'${zk.address.list}'}" timeout="10000"/>
+
     <#list tableModels as model>
 
     <!-- ${model.tableComment} -->
-    <dubbo:service interface="${basePackage}.api.service.${model.tableClassName}Api"
-                   ref="${model.tableClassNameFirstLower}Api" group="${dubboServiceGroup}" version="${dubboServiceVersion}"
-                   timeout="6000" registry="zookeeper"/>
+    <dubbo:reference interface="${basePackage}.api.service.${model.tableClassName}Api"
+                   id="${model.tableClassNameFirstLower}Api" group="${dubboServiceGroup}" version="${dubboServiceVersion}" />
     </#list>
 
 </beans>
