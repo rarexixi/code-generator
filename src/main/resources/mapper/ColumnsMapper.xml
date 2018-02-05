@@ -52,13 +52,13 @@
         `COLUMN_COMMENT`,
         `GENERATION_EXPRESSION`
         FROM
-        information_schema.COLUMNS
+        `information_schema``.`COLUMNS`
         <where>
             <if test="databaseName != null and databaseName != ''">
-                TABLE_SCHEMA=#{databaseName}
+                `TABLE_SCHEMA`=#{databaseName}
             </if>
             <if test="tableName != null and tableName != ''">
-                AND TABLE_NAME=#{tableName}
+                AND `TABLE_NAME`=#{tableName}
             </if>
         </where>
     </select>
@@ -87,15 +87,15 @@
         A.`PRIVILEGES`,
         A.`COLUMN_COMMENT`,
         A.`GENERATION_EXPRESSION`,
-        CASE COUNT(B.COLUMN_NAME) WHEN COUNT(B.COLUMN_NAME)>0 THEN TRUE ELSE FALSE END AS `INDEX`
+        (CASE COUNT(B.`COLUMN_NAME`) WHEN COUNT(B.`COLUMN_NAME`)>0 THEN TRUE ELSE FALSE END) AS `INDEX`
         FROM
-        (SELECT * FROM information_schema.COLUMNS
+        (SELECT * FROM `information_schema`.`COLUMNS`
         WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}) AS A
         LEFT JOIN
-        (SELECT `COLUMN_NAME` FROM information_schema.`STATISTICS`
+        (SELECT `COLUMN_NAME` FROM `information_schema`.`STATISTICS`
         WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}) AS B
         ON A.`COLUMN_NAME`=B.`COLUMN_NAME`
         GROUP BY `COLUMN_NAME`
-        ORDER BY ORDINAL_POSITION
+        ORDER BY `ORDINAL_POSITION`
     </select>
 </mapper>

@@ -36,7 +36,7 @@ public class InitializerCommand implements CommandLineRunner {
     @Value("${validStatusField.invalidValue}")
     private String statusFieldInvalidValue;
 
-    @Value("${field.not_required}")
+    @Value("${field.notRequired}")
     private String notRequiredField;
 
     @Value("${codeEncoding}")
