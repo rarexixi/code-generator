@@ -101,7 +101,7 @@ public class GeneratorConfigProperties {
     }
 
     public Set<String> getJustCopyFileSet() {
-        return file.getOrDefault("notRequired", null);
+        return file.getOrDefault("justCopy", null);
     }
 
     /**

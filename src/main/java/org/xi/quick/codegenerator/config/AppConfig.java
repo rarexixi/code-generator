@@ -46,7 +46,8 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> isClassFile(templateRelativePath)
                         && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoredFolderSet())
-                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
+                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
+                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
@@ -62,7 +63,8 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> !isClassFile(templateRelativePath)
                         && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoredFolderSet())
-                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
+                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
+                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
@@ -77,6 +79,20 @@ public class AppConfig {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
+        return templates;
+    }
+
+    /**
+     * 所有仅复制的文件
+     *
+     * @return
+     * @throws IOException
+     */
+    @Bean(name = "allJustCopyTemplates")
+    public List<FreemarkerModel> getAllJustCopyTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
+
+        List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
+                templateRelativePath -> isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
@@ -158,7 +174,7 @@ public class AppConfig {
 
         int lastIndex = templateRelativePath.lastIndexOf("/");
         if (lastIndex >= 0) {
-            templateRelativePath = templateRelativePath.substring(lastIndex);
+            templateRelativePath = templateRelativePath.substring(lastIndex + 1);
         }
 
         return files.contains(templateRelativePath);

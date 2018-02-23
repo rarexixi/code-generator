@@ -46,13 +46,13 @@ public class GeneratorCommand implements CommandLineRunner {
         }
     }
 
-
     private static void printUsages() {
         System.out.println("操作说明:");
         System.out.println("\tgen/del base :                生成/删除基本类型的相关文件");
         System.out.println("\tgen/del aggregate :           生成聚合相关文件");
         System.out.println("\tgen/del * :                   生成/删除所有表的相关文件");
         System.out.println("\tgen/del table [table2...]:    根据表名生成/删除相关文件");
+        System.out.println("\ts(show) :                     显示所有表名");
         System.out.println("\tq(quit) :                     退出");
         System.out.print("请输入命令: ");
     }
@@ -67,6 +67,8 @@ public class GeneratorCommand implements CommandLineRunner {
             String[] args = getArgs(sc);
             if (args.length == 0) return;
             operate(tableNameSet, args, OperateEnum.Delete);
+        } else if ("show".equals(cmd) || "s".equals(cmd)) {
+            System.out.println(String.join(" ", tableNameSet));
         } else if ("quit".equals(cmd) || "q".equals(cmd)) {
             System.exit(0);
         } else {
