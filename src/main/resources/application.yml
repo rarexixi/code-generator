@@ -13,33 +13,33 @@ spring:
 logging:
   level: info
 
-# 代码字符集
-codeEncoding: UTF-8
+generator:
+  # 代码字符集
+  encoding: UTF-8
 
-# 模版路径
-path:
-  template: /Workspace/github.com/java/MysqlCodeGenerator/template-spring-cloud/
-  out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/
-  common:
-    properties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-springcloud.properties
-  datatype:
-    properties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties
+  # 模版路径
+  path:
+    template: /Workspace/github.com/java/MysqlCodeGenerator/template-spring-cloud/
+    out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/
+    commonProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-springcloud.properties
+    datatypeProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties
 
-# 要忽略的文件夹
-folder:
-  ignored: include
+  # 要忽略的文件夹
+  folder:
+    ignored: include
 
-# 聚合文件
-file:
-  aggregate:
+  # 聚合文件
+  file:
+    aggregate:
+    justCopy:
 
-validStatusField:
-  fieldName: data_status    # 有效性字段名
-  validValue: 0             # 有效值
-  invalidValue: 1           # 无效值
+  validStatusField:
+    fieldName: data_status    # 有效性字段名
+    validValue: 0             # 有效值
+    invalidValue: 1           # 无效值
 
-field:
-  notRequired: create_time,update_time # 不需要赋值的字段
+  field:
+    notRequired: create_time,update_time # 不需要赋值的字段
 
 
 

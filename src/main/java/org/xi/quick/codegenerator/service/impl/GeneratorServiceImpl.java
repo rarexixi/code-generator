@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.xi.quick.codegenerator.config.GeneratorConfigProperties;
 import org.xi.quick.codegenerator.functionalinterface.BinaryConsumer;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.model.TableModel;
@@ -31,11 +32,8 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     Logger logger = LoggerFactory.getLogger(GeneratorServiceImpl.class);
 
-    @Value("${path.out}")
-    String outPath;
-
-    @Value("${codeEncoding}")
-    String codeEncoding;
+    @Autowired
+    GeneratorConfigProperties generatorConfigProperties;
 
     @Autowired
     List<FreemarkerModel> allTemplates;
@@ -246,7 +244,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
 
         try (OutputStream stream = new FileOutputStream(absolutePath);
-             Writer out = new OutputStreamWriter(stream, codeEncoding)) {
+             Writer out = new OutputStreamWriter(stream, generatorConfigProperties.getEncoding())) {
 
             outModel.getTemplate().process(dataModel, out);
         }
@@ -271,7 +269,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     private String getFilePath(FreemarkerModel model, Map<Object, Object> dataModel) {
 
-        File directory = new File(outPath);
+        File directory = new File(generatorConfigProperties.getOutPath());
         return directory.getAbsolutePath() + "/" + getActualPath(model.getRelativePath(), dataModel);
     }
 

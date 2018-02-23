@@ -1,0 +1,19 @@
+server:
+  port: 8800
+
+spring:
+  application:
+    name: ec-config-service
+  datasource:
+    url: jdbc:mysql://192.168.10.22:3306/platform_config?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: cy_ec_admin
+    password: 1qaz@WSX
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
+  type-aliases-package: com.cloudyoung.config.mapper
+
+logging:
+  level: info

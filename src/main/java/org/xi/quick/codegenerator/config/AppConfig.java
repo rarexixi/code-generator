@@ -2,10 +2,9 @@ package org.xi.quick.codegenerator.config;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
 import org.xi.quick.codegenerator.utils.PropertiesUtil;
@@ -19,29 +18,17 @@ import java.util.regex.Pattern;
 @Configuration
 public class AppConfig {
 
-    @Value("${path.template}")
-    String templatePath;
-
-    @Value("${codeEncoding}")
-    String codeEncoding;
-
-    @Value("${folder.ignored}")
-    String ignoredFolder;
-
-    @Value("${file.aggregate}")
-    String aggregateFile;
-
-    @Value("${path.common.properties}")
-    String commonPropertiesPath;
+    @Autowired
+    GeneratorConfigProperties generatorConfigProperties;
 
     @Bean(name = "freeMarkerConfiguration")
     public freemarker.template.Configuration getConfiguration() throws IOException {
 
-        File directory = new File(templatePath);
+        File directory = new File(generatorConfigProperties.getTemplatePath());
 
         freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_24);
         cfg.setDirectoryForTemplateLoading(directory);
-        cfg.setDefaultEncoding(codeEncoding);
+        cfg.setDefaultEncoding(generatorConfigProperties.getEncoding());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         return cfg;
@@ -58,8 +45,8 @@ public class AppConfig {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> isClassFile(templateRelativePath)
-                        && !isMatchingFolder(templateRelativePath, ignoredFolder)
-                        && !isMatchingFile(templateRelativePath, aggregateFile));
+                        && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoredFolderSet())
+                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
         return templates;
     }
 
@@ -74,8 +61,8 @@ public class AppConfig {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath -> !isClassFile(templateRelativePath)
-                        && !isMatchingFolder(templateRelativePath, ignoredFolder)
-                        && !isMatchingFile(templateRelativePath, aggregateFile));
+                        && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoredFolderSet())
+                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
         return templates;
     }
 
@@ -89,7 +76,7 @@ public class AppConfig {
     public List<FreemarkerModel> getAllAggregateTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
-                templateRelativePath -> isMatchingFile(templateRelativePath, aggregateFile));
+                templateRelativePath -> isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
         return templates;
     }
 
@@ -105,10 +92,10 @@ public class AppConfig {
     public List<FreemarkerModel> getMatchingTemplates(freemarker.template.Configuration freeMarkerConfiguration,
                                                       Predicate<String> predicate) throws IOException {
 
-        File directory = new File(templatePath);
+        File directory = new File(generatorConfigProperties.getTemplatePath());
         String dirAbsolutePath = directory.getAbsolutePath();
 
-        List<File> files = DirectoryUtil.getAllFiles(templatePath);
+        List<File> files = DirectoryUtil.getAllFiles(generatorConfigProperties.getTemplatePath());
         List<FreemarkerModel> result = new ArrayList<>();
 
         for (File file : files) {
@@ -118,7 +105,7 @@ public class AppConfig {
             String templateRelativePath = file.getAbsolutePath().substring(dirAbsolutePath.length() + 1);
             if (!predicate.test(templateRelativePath)) continue;
 
-            Template template = freeMarkerConfiguration.getTemplate(templateRelativePath, codeEncoding);
+            Template template = freeMarkerConfiguration.getTemplate(templateRelativePath, generatorConfigProperties.getEncoding());
 
             FreemarkerModel outModel = new FreemarkerModel(templateRelativePath, template);
 
@@ -136,7 +123,8 @@ public class AppConfig {
     @Bean("commonProperties")
     public Map<Object, Object> getCommonProperties() {
 
-        Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(commonPropertiesPath, codeEncoding);
+        Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(
+                generatorConfigProperties.getCommonPropertiesPath(), generatorConfigProperties.getEncoding());
         commonPropertiesMap.put("now", new Date());
 
         return commonPropertiesMap;
@@ -148,11 +136,9 @@ public class AppConfig {
      * @param templateRelativePath
      * @return
      */
-    private boolean isMatchingFolder(String templateRelativePath, String folders) {
+    private boolean isMatchingFolder(String templateRelativePath, Set<String> folders) {
 
-        String[] folderArr = folders.split(",");
-
-        for (String folder : folderArr) {
+        for (String folder : folders) {
             if (!folder.endsWith("/"))
                 folder += "/";
             if (templateRelativePath.startsWith(folder) || templateRelativePath.contains("/" + folder))
@@ -168,16 +154,14 @@ public class AppConfig {
      * @param templateRelativePath
      * @return
      */
-    private boolean isMatchingFile(String templateRelativePath, String files) {
+    private boolean isMatchingFile(String templateRelativePath, Set<String> files) {
 
-        String[] fileArr = files.split(",");
-
-        for (String filePath : fileArr) {
-            if (templateRelativePath.endsWith("/" + filePath))
-                return true;
+        int lastIndex = templateRelativePath.lastIndexOf("/");
+        if (lastIndex >= 0) {
+            templateRelativePath = templateRelativePath.substring(lastIndex);
         }
 
-        return false;
+        return files.contains(templateRelativePath);
     }
 
     /**
