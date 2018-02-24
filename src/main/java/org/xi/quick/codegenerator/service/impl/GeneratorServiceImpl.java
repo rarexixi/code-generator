@@ -17,6 +17,7 @@ import org.xi.quick.codegenerator.utils.FileUtil;
 import org.xi.quick.codegenerator.utils.StringUtil;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,9 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     @Autowired
     List<FreemarkerModel> allOnceTemplates;
+
+    @Autowired
+    List<FreemarkerModel> allJustCopyTemplates;
 
     @Autowired
     List<FreemarkerModel> allAggregateTemplates;
@@ -80,6 +84,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         Map<Object, Object> dataModel = new HashMap<>();
         generateOnce(allOnceTemplates, dataModel);
+        generateCopy(allJustCopyTemplates, dataModel);
     }
 
     /**
@@ -125,6 +130,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     public void deleteAllOnce() {
 
         deleteOnce(allOnceTemplates);
+        deleteOnce(allJustCopyTemplates);
     }
 
     /**
@@ -163,6 +169,27 @@ public class GeneratorServiceImpl implements GeneratorService {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (TemplateException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void generateCopy(List<FreemarkerModel> templates, Map<Object, Object> dataModel) {
+
+        for (FreemarkerModel outModel : templates) {
+
+            dataModel.putAll(commonProperties);
+
+            String targetPath = getFilePath(outModel, dataModel);
+            String sourcePath = generatorConfigProperties.getTemplatePath() + outModel.getRelativePath();
+
+            logger.info("正在生成" + targetPath);
+            try {
+                //创建文件路径
+                DirectoryUtil.createIfNotExists(getAbsoluteDirectory(targetPath));
+                FileUtil.deleteIfExists(new File(targetPath));
+                Files.copy(new File(sourcePath).toPath(), new File(targetPath).toPath());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
