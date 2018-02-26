@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
 import org.xi.quick.codegenerator.utils.PropertiesUtil;
+import org.xi.quick.codegenerator.utils.SystemUtil;
 
 import java.io.*;
 import java.util.*;
@@ -156,9 +157,9 @@ public class AppConfig {
     private boolean isMatchingFolder(String templateRelativePath, Set<String> folders) {
 
         for (String folder : folders) {
-            if (!folder.endsWith("/"))
-                folder += "/";
-            if (templateRelativePath.startsWith(folder) || templateRelativePath.contains("/" + folder))
+            if (!folder.endsWith(SystemUtil.SYSTEM_SLASH))
+                folder += SystemUtil.SYSTEM_SLASH;
+            if (templateRelativePath.startsWith(folder) || templateRelativePath.contains(SystemUtil.SYSTEM_SLASH + folder))
                 return true;
         }
 
@@ -173,7 +174,7 @@ public class AppConfig {
      */
     private boolean isMatchingFile(String templateRelativePath, Set<String> files) {
 
-        int lastIndex = templateRelativePath.lastIndexOf("/");
+        int lastIndex = templateRelativePath.lastIndexOf(SystemUtil.SYSTEM_SLASH);
         if (lastIndex >= 0) {
             templateRelativePath = templateRelativePath.substring(lastIndex + 1);
         }

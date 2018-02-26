@@ -15,6 +15,7 @@ import org.xi.quick.codegenerator.service.TableService;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
 import org.xi.quick.codegenerator.utils.FileUtil;
 import org.xi.quick.codegenerator.utils.StringUtil;
+import org.xi.quick.codegenerator.utils.SystemUtil;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -297,11 +298,11 @@ public class GeneratorServiceImpl implements GeneratorService {
     private String getFilePath(FreemarkerModel model, Map<Object, Object> dataModel) {
 
         File directory = new File(generatorConfigProperties.getOutPath());
-        return directory.getAbsolutePath() + "/" + getActualPath(model.getRelativePath(), dataModel);
+        return directory.getAbsolutePath() + SystemUtil.SYSTEM_SLASH + getActualPath(model.getRelativePath(), dataModel);
     }
 
     private String getAbsoluteDirectory(String absolutePath) {
-        return absolutePath.substring(0, absolutePath.lastIndexOf("/"));
+        return absolutePath.substring(0, absolutePath.lastIndexOf(SystemUtil.SYSTEM_SLASH));
     }
 
 
@@ -338,7 +339,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             if (value != null) {
                 String s = (String) value;
                 if (isDir) {
-                    path = path.replace(group, s.replaceAll("\\.", "/"));
+                    path = path.replace(group, s.replaceAll("\\.", SystemUtil.REGEX_SYSTEM_SLASH));
                 } else if (isLower) {
                     path = path.replace(group, s.toLowerCase());
                 } else if (isUpper) {

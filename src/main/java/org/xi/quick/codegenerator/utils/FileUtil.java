@@ -119,10 +119,9 @@ public class FileUtil {
      */
     public static void writeToFile(String filePath, List<String> lines, boolean append) throws IOException {
 
-        String newLine = "\n";
         try (FileWriter writer = new FileWriter(filePath, append)) {
             for (String line : lines) {
-                writer.write(line + newLine);
+                writer.write(line + SystemUtil.NEW_LINE);
             }
         }
     }
