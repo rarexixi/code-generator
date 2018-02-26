@@ -40,6 +40,13 @@ generator:
 
   field:
     notRequired: create_time,update_time # 不需要赋值的字段
+    select:
+    imgUrl:
+    videoUrl:
+    docUrl:
+    pageUrl:
+    otherUrl:
+    content:
 
 
 

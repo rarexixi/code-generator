@@ -15,9 +15,9 @@ public class TableModel {
 
     public TableModel(Table table, List<ColumnModel> columns, List<StatisticsModel> statistics) {
 
-        this.databaseName = table.getTableSchema();
-        this.tableName = table.getTableName();
-        this.tableComment = table.getTableComment();
+        databaseName = table.getTableSchema();
+        tableName = table.getTableName();
+        tableComment = table.getTableComment();
         this.columns = columns;
         this.statistics = statistics;
 

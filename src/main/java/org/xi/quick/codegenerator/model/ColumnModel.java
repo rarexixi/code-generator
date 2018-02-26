@@ -10,23 +10,21 @@ public class ColumnModel {
     public ColumnModel(Column column) {
 
         if (column != null) {
-            this.databaseName = column.getTableSchema();
-            this.tableName = column.getTableName();
-            this.columnName = column.getColumnName();
-            this.columnPosition = column.getOrdinalPosition();
-            this.columnDefault = column.getColumnDefault();
-            this.isNullable = column.getIsNullable();
-            this.dataType = column.getDataType();
-            this.charLength = column.getCharacterMaximumLength();
-            this.byteLength = column.getCharacterOctetLength();
-            this.columnType = column.getColumnType();
-            this.columnKey = column.getColumnKey();
-            this.extra = column.getExtra();
-            this.columnComment = column.getColumnComment();
-            this.index = column.getIndex();
+            databaseName = column.getTableSchema();
+            tableName = column.getTableName();
+            columnName = column.getColumnName();
+            columnPosition = column.getOrdinalPosition();
+            columnDefault = column.getColumnDefault();
+            isNullable = column.getIsNullable();
+            dataType = column.getDataType();
+            charLength = column.getCharacterMaximumLength();
+            byteLength = column.getCharacterOctetLength();
+            columnType = column.getColumnType();
+            columnKey = column.getColumnKey();
+            extra = column.getExtra();
+            columnComment = column.getColumnComment();
+            index = column.getIndex();
         }
-        this.notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(this.columnName);
-        this.validStatus = StaticConfigData.VALID_STATUS_FIELD.getFieldName().equals(this.columnName);
         initExtends();
     }
 
@@ -85,14 +83,6 @@ public class ColumnModel {
      */
     private String columnComment;
     /**
-     * 是否不需要填写
-     */
-    private boolean notRequired;
-    /**
-     * 是否有效性字段
-     */
-    private boolean validStatus;
-    /**
      * 是否是索引
      */
     private boolean index;
@@ -149,14 +139,6 @@ public class ColumnModel {
         return columnComment;
     }
 
-    public boolean isNotRequired() {
-        return notRequired;
-    }
-
-    public boolean isValidStatus() {
-        return validStatus;
-    }
-
     public boolean isIndex() {
         return index;
     }
@@ -170,7 +152,20 @@ public class ColumnModel {
     private String columnFieldType;
     private boolean autoIncrement;
     private boolean primaryKey;
+    private boolean validStatus;
+
+    private boolean select;
     private boolean endWithId;
+    private boolean notRequired;
+
+    private boolean imgUrl;
+    private boolean videoUrl;
+    private boolean docUrl;
+    private boolean pageUrl;
+    private boolean otherUrl;
+    private boolean url;
+    private boolean content;
+    private boolean ignoreSearch;
 
     public void initExtends() {
         columnFieldName = StringUtil.getCamelCaseName(this.columnName);
@@ -178,7 +173,20 @@ public class ColumnModel {
         columnFieldType = DataTypeMapping.getFieldType(this.dataType);
         autoIncrement = extra.toLowerCase().equals("auto_increment");
         primaryKey = columnKey.equals("PRI");
+        validStatus = StaticConfigData.VALID_STATUS_FIELD.getFieldName().equals(this.columnName);
+
+        select = StaticConfigData.SELECT_FIELD_SET.contains(columnName);
         endWithId = columnName.endsWith("_id");
+        notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(this.columnName);
+
+        imgUrl = StaticConfigData.IMG_URL_FIELD_SET.contains(columnName);
+        videoUrl = StaticConfigData.VIDEO_URL_FIELD_SET.contains(columnName);
+        docUrl = StaticConfigData.DOC_URL_FIELD_SET.contains(columnName);
+        pageUrl = StaticConfigData.PAGE_URL_FIELD_SET.contains(columnName);
+        otherUrl = StaticConfigData.OTHER_URL_FIELD_SET.contains(columnName);
+        url = StaticConfigData.ALL_URL_FIELD_SET.contains(columnName);
+        content = StaticConfigData.CONTENT_FIELD_SET.contains(columnName);
+        ignoreSearch = StaticConfigData.IGNORE_SEARCH_FIELD_SET.contains(columnName);
     }
 
     /**
@@ -209,7 +217,7 @@ public class ColumnModel {
     }
 
     /**
-     * 是否自增长
+     * 是自增长
      *
      * @return
      */
@@ -218,7 +226,7 @@ public class ColumnModel {
     }
 
     /**
-     * 是否是主键
+     * 是主键
      *
      * @return
      */
@@ -227,12 +235,111 @@ public class ColumnModel {
     }
 
     /**
-     * 是否以_id结尾
+     * 有效性字段
+     *
+     * @return
+     */
+    public boolean isValidStatus() {
+        return validStatus;
+    }
+
+    /**
+     * 是选择项
+     *
+     * @return
+     */
+    public boolean isSelect() {
+        return select;
+    }
+
+    /**
+     * 以_id结尾
      *
      * @return
      */
     public boolean isEndWithId() {
         return endWithId;
+    }
+
+    /**
+     * 不需要填写
+     *
+     * @return
+     */
+    public boolean isNotRequired() {
+        return notRequired;
+    }
+
+    /**
+     * 是图片路径
+     *
+     * @return
+     */
+    public boolean isImgUrl() {
+        return imgUrl;
+    }
+
+    /**
+     * 是视频路径
+     *
+     * @return
+     */
+    public boolean isVideoUrl() {
+        return videoUrl;
+    }
+
+    /**
+     * 是文档路径
+     *
+     * @return
+     */
+    public boolean isDocUrl() {
+        return docUrl;
+    }
+
+    /**
+     * 是页面路径
+     *
+     * @return
+     */
+    public boolean isPageUrl() {
+        return pageUrl;
+    }
+
+    /**
+     * 是其他路径
+     *
+     * @return
+     */
+    public boolean isOtherUrl() {
+        return otherUrl;
+    }
+
+    /**
+     * 是路径
+     *
+     * @return
+     */
+    public boolean isUrl() {
+        return url;
+    }
+
+    /**
+     * 是内容
+     *
+     * @return
+     */
+    public boolean isContent() {
+        return content;
+    }
+
+    /**
+     * 忽略查询
+     *
+     * @return
+     */
+    public boolean isIgnoreSearch() {
+        return ignoreSearch;
     }
 
     //endregion

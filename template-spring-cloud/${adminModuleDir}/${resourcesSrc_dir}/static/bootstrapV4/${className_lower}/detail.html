@@ -57,7 +57,7 @@
             data: {
                 detail: {
                     <#list table.columns as column>
-                    <#if column.endWithId>
+                    <#if (column.endWithId && column.select)>
                     ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
                     <#elseif column.columnName == table.validStatusField.fieldName>
                     ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>

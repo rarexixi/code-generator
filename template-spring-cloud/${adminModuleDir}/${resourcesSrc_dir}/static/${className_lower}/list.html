@@ -36,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                    <#elseif column.endWithId>
+                    <#elseif (column.endWithId && column.select)>
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                         <div class="form-group row">
                             <div class="col-xs-3 col-md-4"><label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
@@ -191,7 +191,7 @@
             el: '#app',
             data: {
                 <#list table.columns as column>
-                <#if column.endWithId>
+                <#if (column.endWithId && column.select)>
                 ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
                 </#if>
                 </#list>
@@ -223,7 +223,7 @@
             },
             methods: {
                 <#list table.columns as column>
-                <#if column.endWithId>
+                <#if (column.endWithId && column.select)>
                 init${column.columnFieldName?replace('Id', '')}: function () {
 
                 },

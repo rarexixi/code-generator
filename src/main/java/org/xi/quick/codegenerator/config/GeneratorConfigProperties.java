@@ -10,6 +10,8 @@ import java.util.*;
 @ConfigurationProperties(prefix = "generator")
 public class GeneratorConfigProperties {
 
+    private Set<String> emptySet = new HashSet<>();
+
     public GeneratorConfigProperties() {
         field = new HashMap<>();
         file = new HashMap<>();
@@ -76,32 +78,67 @@ public class GeneratorConfigProperties {
 
     //region 自定义
 
+    /**
+     * 获取模版路径
+     *
+     * @return
+     */
     public String getTemplatePath() {
         return path.getOrDefault("template", "");
     }
 
+    /**
+     * 获取输出路径
+     *
+     * @return
+     */
     public String getOutPath() {
         return path.getOrDefault("out", "");
     }
 
+    /**
+     * 获取公共配置路径
+     *
+     * @return
+     */
     public String getCommonPropertiesPath() {
         return path.getOrDefault("commonProperties", "");
     }
 
+    /**
+     * 获取数据对应关系文件路径
+     *
+     * @return
+     */
     public String getDataTypePropertiesPath() {
         return path.getOrDefault("dataTypeProperties", "");
     }
 
+    /**
+     * 获取忽略的文件夹集合
+     *
+     * @return
+     */
     public Set<String> getIgnoredFolderSet() {
-        return folder.getOrDefault("ignored", null);
+        return folder.getOrDefault("ignored", emptySet);
     }
 
+    /**
+     * 获取聚合文件集合
+     *
+     * @return
+     */
     public Set<String> getAggregateFileSet() {
-        return file.getOrDefault("aggregate", null);
+        return file.getOrDefault("aggregate", emptySet);
     }
 
+    /**
+     * 获取仅复制文件集合
+     *
+     * @return
+     */
     public Set<String> getJustCopyFileSet() {
-        return file.getOrDefault("justCopy", null);
+        return file.getOrDefault("justCopy", emptySet);
     }
 
     /**
@@ -110,7 +147,97 @@ public class GeneratorConfigProperties {
      * @return
      */
     public Set<String> getNotRequiredFieldSet() {
-        return field.getOrDefault("notRequired", null);
+        return field.getOrDefault("notRequired", emptySet);
+    }
+
+    /**
+     * 获取是选择项的字段集合
+     *
+     * @return
+     */
+    public Set<String> getSelectFieldSet() {
+        return field.getOrDefault("select", emptySet);
+    }
+
+    /**
+     * 获取图片路径的字段集合
+     *
+     * @return
+     */
+    public Set<String> getImgUrlFieldSet() {
+        return field.getOrDefault("imgUrl", emptySet);
+    }
+
+    /**
+     * 获取视频路径的字段集合
+     *
+     * @return
+     */
+    public Set<String> getVideoUrlFieldSet() {
+        return field.getOrDefault("videoUrl", emptySet);
+    }
+
+    /**
+     * 获取是文档路径字段集合
+     *
+     * @return
+     */
+    public Set<String> getDocUrlFieldSet() {
+        return field.getOrDefault("docUrl", emptySet);
+    }
+
+    /**
+     * 获取页面路径的字段集合
+     *
+     * @return
+     */
+    public Set<String> getPageUrlFieldSet() {
+        return field.getOrDefault("pageUrl", emptySet);
+    }
+
+    /**
+     * 获取其他路径的字段集合
+     *
+     * @return
+     */
+    public Set<String> getOtherUrlFieldSet() {
+        return field.getOrDefault("otherUrl", emptySet);
+    }
+
+    /**
+     * 获取所有路径的字段集合
+     *
+     * @return
+     */
+    public Set<String> getAllUrlFieldSet() {
+        Set<String> urlSet = new HashSet<>();
+        urlSet.addAll(getImgUrlFieldSet());
+        urlSet.addAll(getVideoUrlFieldSet());
+        urlSet.addAll(getDocUrlFieldSet());
+        urlSet.addAll(getPageUrlFieldSet());
+        urlSet.addAll(getOtherUrlFieldSet());
+        return urlSet;
+    }
+
+    /**
+     * 获取内容的字段集合
+     *
+     * @return
+     */
+    public Set<String> getContentFieldSet() {
+        return field.getOrDefault("content", emptySet);
+    }
+
+    /**
+     * 获取忽略查询的字段集合
+     *
+     * @return
+     */
+    public Set<String> getIgnoreSearchFieldSet() {
+        Set<String> fieldSet = new HashSet<>();
+        fieldSet.addAll(getAllUrlFieldSet());
+        fieldSet.addAll(getContentFieldSet());
+        return fieldSet;
     }
 
     //endregion

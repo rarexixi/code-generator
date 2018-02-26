@@ -142,6 +142,7 @@ public class AppConfig {
         Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(
                 generatorConfigProperties.getCommonPropertiesPath(), generatorConfigProperties.getEncoding());
         commonPropertiesMap.put("now", new Date());
+        commonPropertiesMap.put("validStatusField", generatorConfigProperties.getValidStatusField());
 
         return commonPropertiesMap;
     }

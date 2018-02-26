@@ -34,8 +34,20 @@ public class InitializerCommand implements CommandLineRunner {
     public void run(String... strings) throws Exception {
 
         StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(datasourceUrl);
+
         StaticConfigData.VALID_STATUS_FIELD = generatorConfigProperties.getValidStatusField();
+
         StaticConfigData.NOT_REQUIRED_FIELD_SET = generatorConfigProperties.getNotRequiredFieldSet();
+        StaticConfigData.SELECT_FIELD_SET = generatorConfigProperties.getSelectFieldSet();
+        StaticConfigData.IMG_URL_FIELD_SET = generatorConfigProperties.getImgUrlFieldSet();
+        StaticConfigData.VIDEO_URL_FIELD_SET = generatorConfigProperties.getVideoUrlFieldSet();
+        StaticConfigData.DOC_URL_FIELD_SET = generatorConfigProperties.getDocUrlFieldSet();
+        StaticConfigData.PAGE_URL_FIELD_SET = generatorConfigProperties.getPageUrlFieldSet();
+        StaticConfigData.OTHER_URL_FIELD_SET = generatorConfigProperties.getOtherUrlFieldSet();
+        StaticConfigData.ALL_URL_FIELD_SET = generatorConfigProperties.getAllUrlFieldSet();
+        StaticConfigData.CONTENT_FIELD_SET = generatorConfigProperties.getContentFieldSet();
+        StaticConfigData.IGNORE_SEARCH_FIELD_SET = generatorConfigProperties.getIgnoreSearchFieldSet();
+
         StaticConfigData.CODE_ENCODING = generatorConfigProperties.getEncoding();
 
         DataTypeMapping.TYPE_MAP = getTypeMap();
