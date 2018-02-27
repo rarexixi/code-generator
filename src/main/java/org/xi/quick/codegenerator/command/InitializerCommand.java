@@ -25,7 +25,11 @@ import java.util.regex.Pattern;
 public class InitializerCommand implements CommandLineRunner {
 
     @Value("${spring.datasource.url}")
-    private String datasourceUrl;
+    private String dbUrl;
+    @Value("${spring.datasource.username}")
+    private String dbUsername;
+    @Value("${spring.datasource.password}")
+    private String dbPassword;
 
     @Autowired
     GeneratorConfigProperties generatorConfigProperties;
@@ -33,7 +37,7 @@ public class InitializerCommand implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(datasourceUrl);
+        StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(dbUrl);
 
         StaticConfigData.VALID_STATUS_FIELD = generatorConfigProperties.getValidStatusField();
 
@@ -51,7 +55,9 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.CODE_ENCODING = generatorConfigProperties.getEncoding();
 
         StaticConfigData.COMMON_PROPERTIES.putAll(generatorConfigProperties.getCommonProperties());
-        StaticConfigData.COMMON_PROPERTIES.put("now", new Date());
+        StaticConfigData.COMMON_PROPERTIES.put("dbUrl", new Date());
+        StaticConfigData.COMMON_PROPERTIES.put("dbUsername", new Date());
+        StaticConfigData.COMMON_PROPERTIES.put("dbPassword", new Date());
         StaticConfigData.COMMON_PROPERTIES.put("validStatusField", generatorConfigProperties.getValidStatusField());
 
         DataTypeMapping.DATA_TYPE_MAP = generatorConfigProperties.getDataTypeMap();
