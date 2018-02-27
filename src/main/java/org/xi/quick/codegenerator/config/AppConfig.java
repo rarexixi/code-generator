@@ -92,7 +92,7 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
                         isMatchingFolder(templateRelativePath, generatorConfigProperties.getAggregateFolderSet())
-                                && isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
+                                || isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
         return templates;
     }
 
@@ -108,7 +108,7 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
                         isMatchingFolder(templateRelativePath, generatorConfigProperties.getJustCopyFolderSet())
-                                && isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                                || isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
