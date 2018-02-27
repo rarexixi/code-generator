@@ -263,7 +263,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         String absolutePath = getFilePath(outModel, dataModel);
 
-        System.out.println("正在生成" + absolutePath);
+        logger.info("正在生成" + absolutePath);
 
         //创建文件路径
         DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
