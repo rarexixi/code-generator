@@ -9,35 +9,30 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-
+  output:
+    ansi:
+      enabled: always
 logging:
-  level: info
+  level:
+  pattern:
+    console: "%d - %msg%n"
 
 generator:
-  # 代码字符集
-  encoding: UTF-8
-
-  # 模版路径
+  encoding: UTF-8 # 代码字符集
   path:
-    template: /Workspace/github.com/java/MysqlCodeGenerator/template-spring-cloud/
-    out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/
-    commonProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-springcloud.properties
-    datatypeProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties
-
-  # 要忽略的文件夹
+    template: /Workspace/github.com/java/MysqlCodeGenerator/template-spring-cloud/  # 模版路径
+    out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/                  # 输出路径
+    commonProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-springcloud.properties  # 自定义配置路径
+    dataTypeProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties         # 数据库-java代码类型对应文件路径
   folder:
-    ignored: include
-
-  # 聚合文件
+    ignored: include  # 要忽略的文件夹
   file:
-    aggregate:
-    justCopy:
-
+    aggregate:  # 聚合文件
+    justCopy:   # 仅复制文件
   validStatusField:
     fieldName: data_status    # 有效性字段名
     validValue: 0             # 有效值
     invalidValue: 1           # 无效值
-
   field:
     notRequired: create_time,update_time # 不需要赋值的字段
     select:
@@ -47,6 +42,3 @@ generator:
     pageUrl:
     otherUrl:
     content:
-
-
-

@@ -12,8 +12,8 @@ import org.xi.quick.codegenerator.utils.StringUtil;
  * @author 郗世豪（xish@cloud-young.com）
  * @date 2017/11/29 16:08
  */
-@Component
 @Aspect
+@Component
 public class GeneratorAspect {
 
     static Logger logger = LoggerFactory.getLogger(GeneratorAspect.class);

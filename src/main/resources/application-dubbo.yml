@@ -22,7 +22,7 @@ generator:
     template: /Workspace/github.com/java/MysqlCodeGenerator/template-dubbo/
     out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/
     commonProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-dubbo.properties
-    datatypeProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties
+    dataTypeProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties
 
   # 要忽略的文件夹
   folder:
