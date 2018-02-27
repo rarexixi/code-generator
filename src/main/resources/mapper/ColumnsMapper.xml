@@ -52,7 +52,7 @@
         `COLUMN_COMMENT`,
         `GENERATION_EXPRESSION`
         FROM
-        `information_schema``.`COLUMNS`
+        `information_schema`.`COLUMNS`
         <where>
             <if test="databaseName != null and databaseName != ''">
                 `TABLE_SCHEMA`=#{databaseName}
