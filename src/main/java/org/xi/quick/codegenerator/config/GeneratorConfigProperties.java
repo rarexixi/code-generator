@@ -140,8 +140,35 @@ public class GeneratorConfigProperties {
      *
      * @return
      */
-    public Set<String> getIgnoredFolderSet() {
-        return folder.getOrDefault("ignored", emptySet);
+    public Set<String> getIgnoreFolderSet() {
+        return folder.getOrDefault("ignore", emptySet);
+    }
+
+    /**
+     * 获取聚合文件夹集合
+     *
+     * @return
+     */
+    public Set<String> getAggregateFolderSet() {
+        return folder.getOrDefault("aggregate", emptySet);
+    }
+
+    /**
+     * 获取仅复制文件夹集合
+     *
+     * @return
+     */
+    public Set<String> getJustCopyFolderSet() {
+        return folder.getOrDefault("justCopy", emptySet);
+    }
+
+    /**
+     * 获取忽略的文件集合
+     *
+     * @return
+     */
+    public Set<String> getIgnoreFileSet() {
+        return file.getOrDefault("ignore", emptySet);
     }
 
     /**

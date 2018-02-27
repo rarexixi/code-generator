@@ -44,10 +44,16 @@ public class AppConfig {
     public List<FreemarkerModel> getAllTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
-                templateRelativePath -> isClassFile(templateRelativePath)
-                        && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoredFolderSet())
-                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
-                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                templateRelativePath ->
+                        isClassFile(templateRelativePath)
+                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoreFolderSet())
+                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getIgnoreFileSet())
+
+                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getAggregateFolderSet())
+                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
+
+                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getJustCopyFolderSet())
+                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
@@ -61,10 +67,16 @@ public class AppConfig {
     public List<FreemarkerModel> getAllOnceTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
-                templateRelativePath -> !isClassFile(templateRelativePath)
-                        && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoredFolderSet())
-                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
-                        && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                templateRelativePath ->
+                        !isClassFile(templateRelativePath)
+                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoreFolderSet())
+                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getIgnoreFileSet())
+
+                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getAggregateFolderSet())
+                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
+
+                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getJustCopyFolderSet())
+                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
@@ -78,7 +90,9 @@ public class AppConfig {
     public List<FreemarkerModel> getAllAggregateTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
-                templateRelativePath -> isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
+                templateRelativePath ->
+                        isMatchingFolder(templateRelativePath, generatorConfigProperties.getAggregateFolderSet())
+                                && isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
         return templates;
     }
 
@@ -92,7 +106,9 @@ public class AppConfig {
     public List<FreemarkerModel> getAllJustCopyTemplates(freemarker.template.Configuration freeMarkerConfiguration) throws IOException {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
-                templateRelativePath -> isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                templateRelativePath ->
+                        isMatchingFolder(templateRelativePath, generatorConfigProperties.getJustCopyFolderSet())
+                                && isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
