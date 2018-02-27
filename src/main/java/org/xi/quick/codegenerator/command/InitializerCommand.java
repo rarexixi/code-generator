@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.xi.quick.codegenerator.config.GeneratorConfigProperties;
 import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
-import org.xi.quick.codegenerator.utils.PropertiesUtil;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -55,9 +54,10 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.CODE_ENCODING = generatorConfigProperties.getEncoding();
 
         StaticConfigData.COMMON_PROPERTIES.putAll(generatorConfigProperties.getCommonProperties());
-        StaticConfigData.COMMON_PROPERTIES.put("dbUrl", new Date());
-        StaticConfigData.COMMON_PROPERTIES.put("dbUsername", new Date());
-        StaticConfigData.COMMON_PROPERTIES.put("dbPassword", new Date());
+        StaticConfigData.COMMON_PROPERTIES.put("now", new Date());
+        StaticConfigData.COMMON_PROPERTIES.put("dbUrl", dbUrl);
+        StaticConfigData.COMMON_PROPERTIES.put("dbUsername", dbUsername);
+        StaticConfigData.COMMON_PROPERTIES.put("dbPassword", dbPassword);
         StaticConfigData.COMMON_PROPERTIES.put("validStatusField", generatorConfigProperties.getValidStatusField());
 
         DataTypeMapping.DATA_TYPE_MAP = generatorConfigProperties.getDataTypeMap();

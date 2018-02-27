@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
-import org.xi.quick.codegenerator.utils.PropertiesUtil;
 import org.xi.quick.codegenerator.utils.SystemUtil;
 
 import java.io.*;

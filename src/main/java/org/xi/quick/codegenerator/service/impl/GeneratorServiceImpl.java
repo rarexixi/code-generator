@@ -11,6 +11,7 @@ import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.model.TableModel;
 import org.xi.quick.codegenerator.service.GeneratorService;
 import org.xi.quick.codegenerator.service.TableService;
+import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
 import org.xi.quick.codegenerator.utils.FileUtil;
 import org.xi.quick.codegenerator.utils.StringUtil;
@@ -175,7 +176,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         for (FreemarkerModel outModel : templates) {
 
-            dataModel.putAll(generatorConfigProperties.getCommonProperties());
+            dataModel.putAll(StaticConfigData.COMMON_PROPERTIES);
 
             String targetPath = getFilePath(outModel, dataModel);
             String sourcePath = generatorConfigProperties.getTemplatePath() + outModel.getRelativePath();
@@ -258,7 +259,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     private void generate(FreemarkerModel outModel, Map<Object, Object> dataModel) throws IOException, TemplateException {
 
-        dataModel.putAll(generatorConfigProperties.getCommonProperties());
+        dataModel.putAll(StaticConfigData.COMMON_PROPERTIES);
 
         String absolutePath = getFilePath(outModel, dataModel);
 
@@ -281,7 +282,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     private void delete(FreemarkerModel outModel, Map<Object, Object> dataModel) {
 
-        dataModel.putAll(generatorConfigProperties.getCommonProperties());
+        dataModel.putAll(StaticConfigData.COMMON_PROPERTIES);
 
         String absolutePath = getFilePath(outModel, dataModel);
 

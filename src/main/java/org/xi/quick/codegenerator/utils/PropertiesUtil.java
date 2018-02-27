@@ -21,20 +21,18 @@ public class PropertiesUtil {
      */
     public static Map<Object, Object> getProperties(String path, String encoding) {
 
-        Map<Object, Object> commonPropertiesMap = new HashMap<>();
+        Map<Object, Object> propertiesMap = new HashMap<>();
         Properties properties = new Properties();
         try (InputStream inputStream = new FileInputStream(path);
              Reader reader = new InputStreamReader(inputStream, encoding)) {
             properties.load(reader);
-            properties.forEach((key, value) -> commonPropertiesMap.put(key, value));
+            properties.forEach((key, value) -> propertiesMap.put(key, value));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        commonPropertiesMap.put("now", new Date());
-
-        return commonPropertiesMap;
+        return propertiesMap;
     }
 }
