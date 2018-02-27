@@ -15,6 +15,18 @@ public class StaticConfigData {
 
     static {
         NOT_REQUIRED_FIELD_SET = new HashSet<>();
+        SELECT_FIELD_SET = new HashSet<>();
+        IMG_URL_FIELD_SET = new HashSet<>();
+        VIDEO_URL_FIELD_SET = new HashSet<>();
+        DOC_URL_FIELD_SET = new HashSet<>();
+        PAGE_URL_FIELD_SET = new HashSet<>();
+        OTHER_URL_FIELD_SET = new HashSet<>();
+        ALL_URL_FIELD_SET = new HashSet<>();
+        CONTENT_FIELD_SET = new HashSet<>();
+        IGNORE_SEARCH_FIELD_SET = new HashSet<>();
+
+        CODE_ENCODING = "UTF-8";
+
         COMMON_PROPERTIES = new HashMap<>();
     }
 
