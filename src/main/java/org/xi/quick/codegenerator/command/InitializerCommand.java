@@ -50,7 +50,11 @@ public class InitializerCommand implements CommandLineRunner {
 
         StaticConfigData.CODE_ENCODING = generatorConfigProperties.getEncoding();
 
-        DataTypeMapping.TYPE_MAP = getTypeMap();
+        StaticConfigData.COMMON_PROPERTIES.putAll(generatorConfigProperties.getCommonProperties());
+        StaticConfigData.COMMON_PROPERTIES.put("now", new Date());
+        StaticConfigData.COMMON_PROPERTIES.put("validStatusField", generatorConfigProperties.getValidStatusField());
+
+        DataTypeMapping.DATA_TYPE_MAP = generatorConfigProperties.getDataTypeMap();
     }
 
     /**
@@ -71,15 +75,4 @@ public class InitializerCommand implements CommandLineRunner {
         return "";
     }
 
-    /**
-     * 获取数据映射关系
-     *
-     * @return
-     */
-    private Map<Object, Object> getTypeMap() {
-
-        Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(
-                generatorConfigProperties.getDataTypePropertiesPath(), generatorConfigProperties.getEncoding());
-        return commonPropertiesMap;
-    }
 }

@@ -17,6 +17,8 @@ public class GeneratorConfigProperties {
         file = new HashMap<>();
         folder = new HashMap<>();
         path = new HashMap<>();
+        commonProperties = new HashMap<>();
+        dataTypeMap = new HashMap<>();
     }
 
     private String encoding;
@@ -27,6 +29,9 @@ public class GeneratorConfigProperties {
     private Map<String, String> path;
 
     private ValidStatusField validStatusField;
+
+    private Map<String, String> commonProperties;
+    private Map<String, String> dataTypeMap;
 
     public String getEncoding() {
         return encoding;
@@ -74,6 +79,22 @@ public class GeneratorConfigProperties {
 
     public void setValidStatusField(ValidStatusField validStatusField) {
         this.validStatusField = validStatusField;
+    }
+
+    public Map<String, String> getCommonProperties() {
+        return commonProperties;
+    }
+
+    public void setCommonProperties(Map<String, String> commonProperties) {
+        this.commonProperties = commonProperties;
+    }
+
+    public Map<String, String> getDataTypeMap() {
+        return dataTypeMap;
+    }
+
+    public void setDataTypeMap(Map<String, String> dataTypeMap) {
+        this.dataTypeMap = dataTypeMap;
     }
 
     //region 自定义

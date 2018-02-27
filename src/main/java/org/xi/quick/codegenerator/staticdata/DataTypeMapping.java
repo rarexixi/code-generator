@@ -10,13 +10,13 @@ import java.util.Map;
 public class DataTypeMapping {
 
     static {
-        TYPE_MAP = new HashMap<>();
+        DATA_TYPE_MAP = new HashMap<>();
     }
 
-    public static Map<Object, Object> TYPE_MAP;
+    public static Map<String, String> DATA_TYPE_MAP;
 
     public static String getFieldType(String dataType) {
-        String type = (String) TYPE_MAP.get(dataType);
+        String type = DATA_TYPE_MAP.get(dataType);
         return type == null ? dataType : type;
     }
 }

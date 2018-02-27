@@ -39,5 +39,5 @@ public class StaticConfigData {
 
     public static String CODE_ENCODING;
 
-    public static Map<Object, Object> COMMON_PROPERTIES;
+    public static Map<String, Object> COMMON_PROPERTIES;
 }

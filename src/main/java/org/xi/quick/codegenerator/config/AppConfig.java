@@ -133,22 +133,6 @@ public class AppConfig {
     }
 
     /**
-     * 获取公共配置
-     *
-     * @return
-     */
-    @Bean("commonProperties")
-    public Map<Object, Object> getCommonProperties() {
-
-        Map<Object, Object> commonPropertiesMap = PropertiesUtil.getProperties(
-                generatorConfigProperties.getCommonPropertiesPath(), generatorConfigProperties.getEncoding());
-        commonPropertiesMap.put("now", new Date());
-        commonPropertiesMap.put("validStatusField", generatorConfigProperties.getValidStatusField());
-
-        return commonPropertiesMap;
-    }
-
-    /**
      * 是否是匹配的文件夹
      *
      * @param templateRelativePath

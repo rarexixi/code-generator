@@ -41,3 +41,43 @@ generator:
   field:
     notRequired: create_time,update_time # 不需要赋值的字段
     select:
+
+  # 公共自定义属性
+  commonProperties:
+    apiModuleDir: quick-api
+    providerModuleDir: quick-provider
+    adminModuleDir: quick-admin
+    webModuleDir: quick-web
+    basePackage: org.xi.quick
+
+    dubboServiceGroup: ${quick.group}
+    dubboServiceVersion: ${quick.version}
+
+    author: 郗世豪（rarexixi@outlook.com）
+    codeVersion: 1.0
+    javaSrc: src.main.java
+    javaTestSrc: src.test.java
+    resourcesSrc: src.main.resources
+
+    resultClass: Result
+    resultFullClass: org.xi.common.model.Result
+    paginationClass: Pagination
+    paginationFullClass: org.xi.common.model.Pagination
+
+  # 获取数据映射关系
+  dataTypeMap:
+    tinyint: Integer
+    smallint: Integer
+    int: Integer
+    bigint: Long
+    float: Float
+    double: Double
+    decimal: BigDecimal
+    numeric: BigDecimal
+    bit: Boolean
+    character: Character
+    varchar: String
+    char: String
+    date: Date
+    datetime: Date
+    timestamp: Date

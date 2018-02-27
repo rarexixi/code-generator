@@ -4,7 +4,6 @@ import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.config.GeneratorConfigProperties;
 import org.xi.quick.codegenerator.functionalinterface.BinaryConsumer;
@@ -51,9 +50,6 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     @Autowired
     TableService tableService;
-
-    @Autowired
-    Map<Object, Object> commonProperties;
 
     //region 生成
 
@@ -179,7 +175,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         for (FreemarkerModel outModel : templates) {
 
-            dataModel.putAll(commonProperties);
+            dataModel.putAll(generatorConfigProperties.getCommonProperties());
 
             String targetPath = getFilePath(outModel, dataModel);
             String sourcePath = generatorConfigProperties.getTemplatePath() + outModel.getRelativePath();
@@ -262,11 +258,11 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     private void generate(FreemarkerModel outModel, Map<Object, Object> dataModel) throws IOException, TemplateException {
 
-        dataModel.putAll(commonProperties);
+        dataModel.putAll(generatorConfigProperties.getCommonProperties());
 
         String absolutePath = getFilePath(outModel, dataModel);
 
-        logger.info("正在生成" + absolutePath);
+        System.out.println("正在生成" + absolutePath);
 
         //创建文件路径
         DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
@@ -285,7 +281,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     private void delete(FreemarkerModel outModel, Map<Object, Object> dataModel) {
 
-        dataModel.putAll(commonProperties);
+        dataModel.putAll(generatorConfigProperties.getCommonProperties());
 
         String absolutePath = getFilePath(outModel, dataModel);
 
