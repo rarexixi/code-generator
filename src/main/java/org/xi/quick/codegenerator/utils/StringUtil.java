@@ -10,6 +10,10 @@ import java.util.stream.Collectors;
  */
 public class StringUtil {
 
+    public static boolean isNullOrEmpty(String s) {
+        return s == null || s.trim() == "";
+    }
+
     /**
      * 获取首字母小写
      *

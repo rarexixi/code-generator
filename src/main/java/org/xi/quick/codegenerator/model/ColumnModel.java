@@ -136,7 +136,7 @@ public class ColumnModel {
     }
 
     public String getColumnComment() {
-        return columnComment;
+        return StringUtil.isNullOrEmpty(columnComment) ? columnFieldName : columnComment;
     }
 
     public boolean isIndex() {

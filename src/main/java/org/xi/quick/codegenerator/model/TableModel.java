@@ -59,7 +59,7 @@ public class TableModel {
     }
 
     public String getTableComment() {
-        return tableComment;
+        return StringUtil.isNullOrEmpty(tableComment) ? tableClassName : tableComment;
     }
 
     public ValidStatusField getValidStatusField() {
