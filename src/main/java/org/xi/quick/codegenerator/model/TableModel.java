@@ -93,7 +93,7 @@ public class TableModel {
 
 
     public void initTableClassName() {
-        tableClassName = StringUtil.getCamelCaseName(this.tableName);
+        tableClassName = StringUtil.getCamelCaseName(tableName);
         tableClassNameFirstLower = StringUtil.getFirstLower(tableClassName);
     }
 
