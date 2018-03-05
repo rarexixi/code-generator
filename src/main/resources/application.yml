@@ -29,11 +29,16 @@ generator:
   file:
     ignore:     # 要忽略的文件
     aggregate:  # 聚合文件
-    justCopy:   # 仅复制文件
-  validStatusField:
+    justCopy:
+  valid-status-field:
     fieldName: data_status    # 是否有效字段
     validValue: 0             # 有效值
-    invalidValue: 1           # 无效值
+    invalidValue: 1
+  fk-select-fields:
+    - nameSet: type_id
+      foreignTable: user_type
+      keyField: id
+      valueField: user_type_name
   # 一些特殊字段，多个之间用","分隔
   field:
     notRequired: create_time,update_time  # 不需要赋值的字段
@@ -78,4 +83,5 @@ generator:
     date: Date
     datetime: Date
     timestamp: Date
+
 

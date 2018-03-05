@@ -1,5 +1,6 @@
 package org.xi.quick.codegenerator.staticdata;
 
+import org.xi.quick.codegenerator.entity.FkSelectField;
 import org.xi.quick.codegenerator.entity.ValidStatusField;
 
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class StaticConfigData {
     //endregion
 
     public static ValidStatusField VALID_STATUS_FIELD;
+    public static FkSelectField[] FK_SELECT_FIELDS;
 
     public static String CODE_ENCODING;
 

@@ -39,6 +39,7 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(dbUrl);
 
         StaticConfigData.VALID_STATUS_FIELD = generatorConfigProperties.getValidStatusField();
+        StaticConfigData.FK_SELECT_FIELDS = generatorConfigProperties.getFkSelectFields();
 
         StaticConfigData.NOT_REQUIRED_FIELD_SET = generatorConfigProperties.getNotRequiredFieldSet();
         StaticConfigData.SELECT_FIELD_SET = generatorConfigProperties.getSelectFieldSet();

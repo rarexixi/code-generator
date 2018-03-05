@@ -1,0 +1,6 @@
+server:
+  port: 8820
+
+spring:
+  application:
+    name: ${adminApiModuleName}

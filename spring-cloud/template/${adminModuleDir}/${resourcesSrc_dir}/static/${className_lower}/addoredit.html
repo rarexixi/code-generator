@@ -25,7 +25,7 @@
                 <#if column.notRequired>
                 <#elseif column.autoIncrement>
                 <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
-                <#elseif (column.endWithId && column.select)>
+                <#elseif column.fkSelect>
                 <div class="form-group">
                     <label class="control-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
                     <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
@@ -85,7 +85,7 @@
             el: '#app',
             data: {
                 <#list table.columns as column>
-                <#if (column.endWithId && column.select)>
+                <#if column.fkSelect>
                 ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
                 </#if>
                 </#list>
@@ -97,7 +97,7 @@
                 addOrEditParams: {
                     <#list table.columns as column>
                     <#if column.notRequired>
-                    <#elseif (column.endWithId && column.select)>
+                    <#elseif column.fkSelect>
                     ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
                     <#elseif column.columnName == table.validStatusField.fieldName>
                     ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
@@ -111,7 +111,7 @@
             },
             mounted: function () {
                 <#list table.columns as column>
-                <#if (column.endWithId && column.select)>
+                <#if column.fkSelect>
                 this.init${column.columnFieldName?replace('Id', '')};
                 </#if>
                 </#list>
@@ -127,7 +127,7 @@
             },
             methods: {
                 <#list table.columns as column>
-                <#if (column.endWithId && column.select)>
+                <#if column.fkSelect>
                 init${column.columnFieldName?replace('Id', '')}: function () {
 
                 },

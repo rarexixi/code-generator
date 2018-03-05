@@ -2,6 +2,7 @@ package org.xi.quick.codegenerator.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.xi.quick.codegenerator.entity.FkSelectField;
 import org.xi.quick.codegenerator.entity.ValidStatusField;
 
 import java.util.*;
@@ -17,6 +18,7 @@ public class GeneratorConfigProperties {
         file = new HashMap<>();
         folder = new HashMap<>();
         path = new HashMap<>();
+
         commonProperties = new HashMap<>();
         dataTypeMap = new HashMap<>();
     }
@@ -29,6 +31,7 @@ public class GeneratorConfigProperties {
     private Map<String, String> path;
 
     private ValidStatusField validStatusField;
+    private FkSelectField[] fkSelectFields;
 
     private Map<String, String> commonProperties;
     private Map<String, String> dataTypeMap;
@@ -81,6 +84,14 @@ public class GeneratorConfigProperties {
         this.validStatusField = validStatusField;
     }
 
+    public FkSelectField[] getFkSelectFields() {
+        return fkSelectFields;
+    }
+
+    public void setFkSelectFields(FkSelectField[] fkSelectFields) {
+        this.fkSelectFields = fkSelectFields;
+    }
+
     public Map<String, String> getCommonProperties() {
         return commonProperties;
     }
@@ -115,24 +126,6 @@ public class GeneratorConfigProperties {
      */
     public String getOutPath() {
         return path.getOrDefault("out", "");
-    }
-
-    /**
-     * 获取公共配置路径
-     *
-     * @return
-     */
-    public String getCommonPropertiesPath() {
-        return path.getOrDefault("commonProperties", "");
-    }
-
-    /**
-     * 获取数据对应关系文件路径
-     *
-     * @return
-     */
-    public String getDataTypePropertiesPath() {
-        return path.getOrDefault("dataTypeProperties", "");
     }
 
     /**

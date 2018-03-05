@@ -36,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                    <#elseif (column.endWithId && column.select)>
+                    <#elseif column.fkSelect>
                     <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                         <div class="form-group row">
                             <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
@@ -232,7 +232,7 @@
                                 <#if column.notRequired>
                                 <#elseif column.autoIncrement>
                                 <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
-                                <#elseif (column.endWithId && column.select)>
+                                <#elseif column.fkSelect>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
                                     <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
@@ -299,7 +299,7 @@
             el: '#app',
             data: {
                 <#list table.columns as column>
-                <#if (column.endWithId && column.select)>
+                <#if column.fkSelect>
                 ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
                 </#if>
                 </#list>
@@ -333,7 +333,7 @@
                 addOrEditParams: {
                     <#list table.columns as column>
                     <#if column.notRequired>
-                    <#elseif (column.endWithId && column.select)>
+                    <#elseif column.fkSelect>
                     ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
                     <#elseif column.columnName == table.validStatusField.fieldName>
                     ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
@@ -346,7 +346,7 @@
                 },
                 detail: {
                     <#list table.columns as column>
-                    <#if (column.endWithId && column.select)>
+                    <#if column.fkSelect>
                     ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
                     <#elseif column.columnName == table.validStatusField.fieldName>
                     ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
@@ -363,7 +363,7 @@
             },
             methods: {
                 <#list table.columns as column>
-                <#if (column.endWithId && column.select)>
+                <#if column.fkSelect>
                 init${column.columnFieldName?replace('Id', '')}: function () {
 
                 },
@@ -467,7 +467,7 @@
                 resetSave: function() {
                     <#list table.columns as column>
                     <#if column.notRequired>
-                    <#elseif (column.endWithId && column.select)>
+                    <#elseif column.fkSelect>
                     this.addOrEditParams.${column.columnFieldNameFirstLower} = 0;
                     <#elseif column.columnName == table.validStatusField.fieldName>
                     this.addOrEditParams.${column.columnFieldNameFirstLower} = ${table.validStatusField.validValue};

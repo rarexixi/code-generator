@@ -21,48 +21,59 @@ generator:
   path:
     template: /Workspace/github.com/java/MysqlCodeGenerator/template-dubbo/
     out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/
-    commonProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/common-dubbo.properties
-    dataTypeProperties: /Workspace/github.com/java/MysqlCodeGenerator/src/main/resources/data-type.properties
-
-  # 要忽略的文件夹
   folder:
-    ignored: include
-
-  # 聚合文件
+    ignore: include  # 要忽略的文件夹
+    aggregate:       # 聚合文件夹
+    justCopy:        # 仅复制文件夹
   file:
-    aggregate: spring-dubbo-provider.xml,spring-dubbo-consumer.xml
-    justCopy: pom.xml
-
-  validStatusField:
-    fieldName: data_status    # 有效性字段名
+    ignore:     # 要忽略的文件
+    aggregate:  # 聚合文件
+    justCopy:
+  valid-status-field:
+    fieldName: data_status    # 是否有效字段
     validValue: 0             # 有效值
-    invalidValue: 1           # 无效值
-
+    invalidValue: 1
+  fk-select-fields:
+    - nameSet: type_id
+      foreignTable: user_type
+      keyField: id
+      valueField: user_type_name
+  # 一些特殊字段，多个之间用","分隔
   field:
-    notRequired: create_time,update_time # 不需要赋值的字段
-    select:
+    notRequired: create_time,update_time  # 不需要赋值的字段
+    select:                               # 选择项字段
+    imgUrl:                               # 图片路径字段
+    videoUrl:                             # 视频路径字段
+    docUrl:                               # 文档路径字段
+    pageUrl:                              # 页面路径字段
+    otherUrl:                             # 其他路径字段
+    content:                              # 内容路径字段
 
   # 公共自定义属性
   commonProperties:
-    apiModuleDir: quick-api
-    providerModuleDir: quick-provider
-    adminModuleDir: quick-admin
-    webModuleDir: quick-web
-    basePackage: org.xi.quick
 
-    dubboServiceGroup: ${quick.group}
-    dubboServiceVersion: ${quick.version}
+    projectName: quick
+    projectShortName: quick
+    projectGroup: org.xi
+    projectVersion: 1.0-SNAPSHOT
+
+    basePackage: org.xi.quick
+    baseCommonPackage: org.xi.common
+
+    commonModuleName: quick-common
+    apiModuleName: quick-api
+    providerModuleName: quick-provider
+    adminApiModuleName: quick-api
+    adminWebModuleName: quick-web
+
+    dubboServiceGroup: quick
+    dubboServiceVersion: 1.0.0
 
     author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
     javaSrc: src.main.java
     javaTestSrc: src.test.java
     resourcesSrc: src.main.resources
-
-    resultClass: Result
-    resultFullClass: org.xi.common.model.Result
-    paginationClass: Pagination
-    paginationFullClass: org.xi.common.model.Pagination
 
   # 获取数据映射关系
   dataTypeMap:

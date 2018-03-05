@@ -1,9 +1,12 @@
 package org.xi.quick.codegenerator.model;
 
 import org.xi.quick.codegenerator.entity.Column;
+import org.xi.quick.codegenerator.entity.FkSelectField;
 import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 import org.xi.quick.codegenerator.utils.StringUtil;
+
+import java.util.Arrays;
 
 public class ColumnModel {
 
@@ -150,12 +153,15 @@ public class ColumnModel {
     private String columnFieldName;
     private String columnFieldNameFirstLower;
     private String columnFieldType;
+
+    private FkSelectField fkSelectField;
+    private boolean fkSelect;
+
     private boolean autoIncrement;
     private boolean primaryKey;
     private boolean validStatus;
 
     private boolean select;
-    private boolean endWithId;
     private boolean notRequired;
 
     private boolean imgUrl;
@@ -175,9 +181,17 @@ public class ColumnModel {
         primaryKey = columnKey.equals("PRI");
         validStatus = StaticConfigData.VALID_STATUS_FIELD.getFieldName().equals(this.columnName);
 
+        fkSelect = false;
+        for (FkSelectField field : StaticConfigData.FK_SELECT_FIELDS) {
+            if (field.getNameSet() != null && field.getNameSet().contains(columnName)) {
+                fkSelectField = field;
+                fkSelect = true;
+                break;
+            }
+        }
+
         select = StaticConfigData.SELECT_FIELD_SET.contains(columnName);
-        endWithId = columnName.endsWith("_id");
-        notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(this.columnName);
+        notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(columnName);
 
         imgUrl = StaticConfigData.IMG_URL_FIELD_SET.contains(columnName);
         videoUrl = StaticConfigData.VIDEO_URL_FIELD_SET.contains(columnName);
@@ -216,6 +230,14 @@ public class ColumnModel {
         return columnFieldType;
     }
 
+    public FkSelectField getFkSelectField() {
+        return fkSelectField;
+    }
+
+    public boolean isFkSelect() {
+        return fkSelect;
+    }
+
     /**
      * 是自增长
      *
@@ -250,15 +272,6 @@ public class ColumnModel {
      */
     public boolean isSelect() {
         return select;
-    }
-
-    /**
-     * 以_id结尾
-     *
-     * @return
-     */
-    public boolean isEndWithId() {
-        return endWithId;
     }
 
     /**
