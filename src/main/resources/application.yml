@@ -20,25 +20,26 @@ logging:
 generator:
   encoding: UTF-8 # 代码字符集
   path:
-    template: /Workspace/github.com/java/MysqlCodeGenerator/spring-cloud/template/  # 模版路径
-    out: /Workspace/github.com/java/MysqlCodeGenerator/target/out/                  # 输出路径
+    template: /Workspace/github.com/java/MysqlCodeGenerator/dubbo/template/  # 模版路径
+    out: /Workspace/github.com/java/MysqlCodeGenerator/dubbo/out/            # 输出路径
   folder:
-    ignore: include  # 要忽略的文件夹
-    aggregate:       # 聚合文件夹
-    justCopy:        # 仅复制文件夹
+    ignore: include                                     # 要忽略的文件夹
+    aggregate:                                          # 聚合文件夹
+    justCopy: resources/bootstrap, resources/css        # 仅复制文件夹
   file:
-    ignore:     # 要忽略的文件
-    aggregate:  # 聚合文件
-    justCopy:
+    ignore:                                             # 要忽略的文件
+    aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, nav.html # 聚合文件
+    justCopy: mybatis-config.xml, common.js
   valid-status-field:
     fieldName: data_status    # 是否有效字段
     validValue: 0             # 有效值
     invalidValue: 1
   fk-select-fields:
-    - nameSet: type_id
+    - nameSet: user_type_id
       foreignTable: user_type
       keyField: id
       valueField: user_type_name
+
   # 一些特殊字段，多个之间用","分隔
   field:
     notRequired: create_time,update_time  # 不需要赋值的字段
@@ -52,15 +53,24 @@ generator:
 
   # 公共自定义属性
   commonProperties:
-    modelModuleDir: quick-model
-    providerModuleDir: quick-provider
-    apiModuleDir: quick-api
-    adminModuleDir: quick-admin
-    basePackage: org.xi
+    projectName: quick-auto
+    projectShortName: quick
+    projectGroup: org.xi
+    projectVersion: 1.0-SNAPSHOT
 
-    serviceProvider: quick-service
+    basePackage: org.xi.quick
+    baseCommonPackage: org.xi.common
 
-    author: 郗世豪（xish@cloud-young.com）
+    commonModuleName: quick-common
+    apiModuleName: quick-api
+    providerModuleName: quick-provider
+    adminApiModuleName: quick-admin-api
+    adminWebModuleName: quick-admin-web
+
+    dubboServiceGroup: quick
+    dubboServiceVersion: 1.0.0
+
+    author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
     javaSrc: src.main.java
     javaTestSrc: src.test.java

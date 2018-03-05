@@ -53,7 +53,7 @@ var app = new Vue({
             var that = this;
             $.ajax({
                 type: 'get',
-                url: '/${urlNamePrefix}${column.columnFieldName?replace('Id', '')?lower_case}/find',
+                url: '/${column.fkSelectField.foreignClass?lower_case}/find',
                 data: {
                     pageIndex: 1,
                     pageSize: 1000
