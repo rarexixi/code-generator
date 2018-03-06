@@ -30,7 +30,7 @@
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
                     <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
                         <option value="0">全部</option>
-                        <option v-for="item in ${column.columnFieldNameFirstLower?replace('Id', '')}List" v-bind:value="item.id">{{ item.${column.columnFieldName?replace('Id', '')}Name }}</option>
+                        <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.valueField?uncap_first} }}</option>
                     </select>
                 </div>
                 <#elseif column.columnName == table.validStatusField.fieldName>
@@ -87,7 +87,7 @@
             data: {
                 <#list table.columns as column>
                 <#if column.fkSelect>
-                ${column.columnFieldNameFirstLower?replace('Id', '')}List: [],
+                ${column.fkSelectField.foreignClass?uncap_first}List: [],
                 </#if>
                 </#list>
                 <#if !table.hasAutoIncrementUniquePrimaryKey>

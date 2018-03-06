@@ -44,7 +44,7 @@
                             <div class="col-9 col-sm-12 col-md-8">
                                 <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
                                     <option value="">全部</option>
-                                    <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.id">{{ item.${column.columnFieldNameFirstLower?replace('Id', '')}Name }}</option>
+                                    <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
                                 </select>
                             </div>
                         </div>

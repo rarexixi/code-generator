@@ -17,11 +17,12 @@ public class TableModel {
 
         databaseName = table.getTableSchema();
         tableName = table.getTableName();
-        tableComment = table.getTableComment();
+        tableClassName = StringUtil.getCamelCaseName(tableName);
+        String comment = table.getTableComment();
+        tableComment = StringUtil.isNullOrEmpty(comment) ? tableClassName : comment;
         this.columns = columns;
         this.statistics = statistics;
 
-        initTableClassName();
         initColumns();
     }
 
@@ -35,6 +36,10 @@ public class TableModel {
      * 表名
      */
     private String tableName;
+    /**
+     * 表对应的JAVA类名
+     */
+    private String tableClassName;
     /**
      * 表说明
      */
@@ -58,8 +63,12 @@ public class TableModel {
         return tableName;
     }
 
+    public String getTableClassName() {
+        return tableClassName;
+    }
+
     public String getTableComment() {
-        return StringUtil.isNullOrEmpty(tableComment) ? tableClassName : tableComment;
+        return tableComment;
     }
 
     public ValidStatusField getValidStatusField() {
@@ -78,9 +87,6 @@ public class TableModel {
 
     //region 扩展
 
-    private String tableClassName;
-    private String tableClassNameFirstLower;
-
     private List<ColumnModel> primaryKey;
     private boolean hasPrimaryKey;
     private boolean hasAutoIncrementUniquePrimaryKey;
@@ -90,12 +96,6 @@ public class TableModel {
     private String primaryKeyOldParameters;
     private String primaryKeyOldParameterValues;
     private ColumnModel validStatusColumn;
-
-
-    public void initTableClassName() {
-        tableClassName = StringUtil.getCamelCaseName(tableName);
-        tableClassNameFirstLower = StringUtil.getFirstLower(tableClassName);
-    }
 
     public void initColumns() {
 
@@ -135,25 +135,6 @@ public class TableModel {
 
         validStatusColumn = columnOptional.isPresent() ? columnOptional.get() : null;
 
-    }
-
-    /**
-     * 获取表对应的JAVA类名
-     *
-     * @return
-     */
-    public String getTableClassName() {
-        return tableClassName;
-    }
-
-
-    /**
-     * 获取表对应的JAVA类名首字母小写
-     *
-     * @return
-     */
-    public String getTableClassNameFirstLower() {
-        return tableClassNameFirstLower;
     }
 
     /**

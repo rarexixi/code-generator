@@ -30,7 +30,7 @@
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
                     <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
                         <option value="0">请选择</option>
-                        <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.id">{{ item.${column.columnFieldNameFirstLower?replace('Id', '')}Name }}</option>
+                        <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
                     </select>
                 </div>
                 <#elseif column.columnName == table.validStatusField.fieldName>
