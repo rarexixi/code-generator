@@ -64,6 +64,8 @@ generator:
     commonModuleName: quick-common
     adminModuleName: quick-admin
 
+    adminModuleApplicatioName: QuickAdminApplication
+
     dubboServiceGroup: quick
     dubboServiceVersion: 1.0.0
 

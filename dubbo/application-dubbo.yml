@@ -67,6 +67,9 @@ generator:
     adminApiModuleName: quick-admin-api
     adminWebModuleName: quick-admin-web
 
+    providerModuleApplicationName: EcCarProviderApplication
+    adminApiModuleApplicatioName: EcCarAdminApplication
+
     dubboServiceGroup: quick
     dubboServiceVersion: 1.0.0
 
