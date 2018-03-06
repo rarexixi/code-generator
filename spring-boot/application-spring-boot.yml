@@ -53,7 +53,7 @@ generator:
 
   # 公共自定义属性
   commonProperties:
-    projectName: quick-auto
+    projectName: quick-boot
     projectShortName: quick
     projectGroup: org.xi
     projectVersion: 1.0-SNAPSHOT

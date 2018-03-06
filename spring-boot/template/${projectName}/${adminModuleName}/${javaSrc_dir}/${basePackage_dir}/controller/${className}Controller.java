@@ -54,7 +54,7 @@ public class ${className}Controller {
 
         Result<Integer> result;
         try {
-            int count = ${classNameLower}Service.add${className}List(${classNameLower}List);
+            int count = ${classNameLower}Service.addList(${classNameLower}List);
             result = new Result<>(count);
         } catch (Exception e) {
             logger.error("addList", e);
@@ -79,7 +79,7 @@ public class ${className}Controller {
 
         Result<Integer> result;
         try {
-            int count = ${classNameLower}Service.delete${className}ByPk(${primaryKeyParameterValues});
+            int count = ${classNameLower}Service.deleteByPk(${primaryKeyParameterValues});
             result = new Result<>(count);
         } catch (Exception e) {
             logger.error("delete", e);
@@ -104,7 +104,7 @@ public class ${className}Controller {
 
         Result<Integer> result;
         try {
-            int count = ${classNameLower}Service.disable${className}ByPk(${primaryKeyParameterValues});
+            int count = ${classNameLower}Service.disableByPk(${primaryKeyParameterValues});
             result = new Result<>(count);
         } catch (Exception e) {
             logger.error("disable", e);
@@ -128,7 +128,7 @@ public class ${className}Controller {
 
         Result<Integer> result;
         try {
-            int count = ${classNameLower}Service.enable${className}ByPk(${primaryKeyParameterValues});
+            int count = ${classNameLower}Service.enableByPk(${primaryKeyParameterValues});
             result = new Result<>(count);
         } catch (Exception e) {
             logger.error("enable", e);
@@ -158,9 +158,9 @@ public class ${className}Controller {
         try {
             int count;
             if (<#list primaryKey as column><#if (column_index > 0)> || </#if>${classNameLower}.get${column.columnFieldName}() == null</#list>) {
-                count = ${classNameLower}Service.add${className}(${classNameLower});
+                count = ${classNameLower}Service.add(${classNameLower});
             } else {
-                count = ${classNameLower}Service.update${className}ByPk(${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey>, ${table.primaryKeyOldParameterValues}</#if>);
+                count = ${classNameLower}Service.updateByPk(${classNameLower}<#if !table.hasAutoIncrementUniquePrimaryKey>, ${table.primaryKeyOldParameterValues}</#if>);
             }
 
             result = new Result<>(count);
@@ -186,7 +186,7 @@ public class ${className}Controller {
 
         Result<${className}Vo> result;
         try {
-            ${className}Vo vo = ${classNameLower}Service.get${className}ByPk(${primaryKeyParameterValues});
+            ${className}Vo vo = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
             result = new Result<>(vo);
         } catch (Exception e) {
             logger.error("getDetail", e);
@@ -209,7 +209,7 @@ public class ${className}Controller {
 
         Result<PageInfo<${className}Vo>> result;
         try {
-            PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.find${className}PageList(parameter);
+            PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.findPageList(parameter);
             result = new Result<>(paginationVo);
         } catch (Exception e) {
             logger.error("find", e);
