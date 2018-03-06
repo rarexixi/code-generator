@@ -1,0 +1,196 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassName?uncap_first>
+<#assign classNameLower = table.tableClassName?lower_case>
+<#assign primaryKey = table.primaryKey>
+<#assign primaryKeyParameters = table.primaryKeyParameters>
+<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#macro mapperEl value>${r"${"}${value}}</#macro>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>${(table.tableComment?split("[（ ,，(]", "r"))[0]}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/resources/css/common.css" />
+</head>
+
+<body>
+    <div class="container" id="app">
+        <div class="">
+            <form>
+                <#list table.columns as column>
+                <#if column.notRequired>
+                <#elseif column.autoIncrement>
+                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
+                <#elseif column.fkSelect>
+                <div class="form-group">
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <option value="0">请选择</option>
+                        <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
+                    </select>
+                </div>
+                <#elseif column.columnName == table.validStatusField.fieldName>
+                <div class="form-group">
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <option value="${table.validStatusField.validValue}">有效</option>
+                        <option value="${table.validStatusField.invalidValue}">无效</option>
+                    </select>
+                </div>
+                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                <div class="form-group">
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                </div>
+                <#elseif column.columnFieldType == "Date">
+                <div class="form-group">
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class="form-control" />
+                </div>
+                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                <div class="form-group">
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                </div>
+                <#elseif (column.columnFieldType == "String")>
+                <div class="form-group">
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                </div>
+                <#else>
+                <div class="form-group">
+                <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                </#if>
+                </#list>
+                <input type="button" value="保存" @click="save" class="btn btn-primary" />
+                <input type="button" value="取消" @click="cancelSave" class="btn" />
+            </form>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/resources/bootstrap/js/jquery.bootstrap-growl.min.js"></script>
+    <script src="/resources/bootstrap/js/bootbox.min.js"></script>
+    <script src="/resources/js/common.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                <#list table.columns as column>
+                <#if column.fkSelect>
+                ${column.fkSelectField.foreignClass?uncap_first}List: [],
+                </#if>
+                </#list>
+                <#if !table.hasAutoIncrementUniquePrimaryKey>
+                <#list primaryKey as column>
+                old${column.columnFieldName}: '',
+                </#list>
+                </#if>
+                addOrEditParams: {
+                    <#list table.columns as column>
+                    <#if column.notRequired>
+                    <#elseif column.fkSelect>
+                    ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+                    <#elseif column.columnName == table.validStatusField.fieldName>
+                    ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+                    <#elseif column.columnFieldType == "Date">
+                    //${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+                    <#else>
+                    ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+                    </#if>
+                    </#list>
+                }
+            },
+            mounted: function () {
+                <#list table.columns as column>
+                <#if column.fkSelect>
+                this.init${column.columnFieldName?replace('Id', '')}();
+                </#if>
+                </#list>
+                <#list primaryKey as column>
+                var ${column.columnFieldNameFirstLower} = commonFun.getParam('${column.columnFieldNameFirstLower}');
+                </#list>
+                <#if !table.hasAutoIncrementUniquePrimaryKey>
+                <#list primaryKey as column>this.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
+                </#if>
+                if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.columnFieldNameFirstLower} != null && ${column.columnFieldNameFirstLower} != ''</#list>) {
+                    this.getEditDetail();
+                }
+            },
+            methods: {
+                <#list table.columns as column>
+                <#if column.fkSelect>
+                init${column.columnFieldName?replace('Id', '')}: function () {
+                    var that = this;
+                    $.ajax({
+                        type: 'get',
+                        url: '/${column.fkSelectField.foreignClass?lower_case}/find',
+                        data: {
+                            pageIndex: 1,
+                            pageSize: 1000
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                that.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
+                            } else {
+                                commonNotify.danger("获取列表失败！");
+                            }
+                        }
+                    });
+                },
+                </#if>
+                </#list>
+                save: function () {
+                    var that = this;
+                    $.ajax({
+                        type: 'post',
+                        url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + that.old${column.columnFieldName}</#list></#if>,
+                        data: this.addOrEditParams,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                commonNotify.success("操作成功！", that.cancelSave);
+                            } else {
+                                commonNotify.danger("操作失败！");
+                            }
+                        }
+                    });
+                },
+                getEditDetail: function () {
+                    var that = this;
+                    $.ajax({
+                        type: 'get',
+                        url: '/${classNameLower}/getdetail' + window.location.search,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success == true) {
+                                <#list table.columns as column>
+                                <#if column.notRequired>
+                                <#else>
+                                that.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                                </#if>
+                                </#list>
+                            } else {
+                                commonNotify.danger("获取详情失败！");
+                            }
+                        }
+                    });
+                },
+                cancelSave: function() {
+                    window.location.href = 'list.html';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

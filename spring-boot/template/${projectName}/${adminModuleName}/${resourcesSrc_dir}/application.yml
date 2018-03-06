@@ -1,0 +1,16 @@
+server:
+  port: 8810
+
+spring:
+  application:
+    name: ${providerModuleName}
+  datasource:
+    url: ${dbUrl}
+    username: ${dbUsername}
+    password: ${dbPassword}
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
+  type-aliases-package: ${basePackage}.mapper
