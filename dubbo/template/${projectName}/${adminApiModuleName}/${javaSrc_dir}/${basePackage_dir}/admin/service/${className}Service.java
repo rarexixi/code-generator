@@ -5,10 +5,11 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.admin.service;
 
-import ${baseCommonPackage}.model.Result;
+import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.model.SearchPage;
-import ${basePackage}.entity.${className}Entity;
-import ${basePackage}.parameter.${className}SelectParameter;
+import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
+import ${basePackage}.admin.vm.detail.${className}DetailVm;
+import ${basePackage}.admin.vm.search.${className}SearchVm;
 import ${basePackage}.vo.${className}Vo;
 
 import com.github.pagehelper.PageInfo;
@@ -21,11 +22,11 @@ public interface ${className}Service {
     /**
      * 添加
      *
-     * @param entity
+     * @param vm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> add(${className}Entity entity);
+    ResponseVo<Integer> add(${className}AddOrEditVm vm);
 
     /**
      * 添加列表
@@ -34,7 +35,7 @@ public interface ${className}Service {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    Result<Integer> addList(List<${className}Entity> list);
+    ResponseVo<Integer> addList(List<${className}AddOrEditVm> list);
     <#if table.hasPrimaryKey>
 
     /**
@@ -46,7 +47,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> deleteByPk(${primaryKeyParameters});
+    ResponseVo<Integer> deleteByPk(${primaryKeyParameters});
     <#if table.validStatusColumn??>
 
     /**
@@ -58,7 +59,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> disableByPk(${primaryKeyParameters});
+    ResponseVo<Integer> disableByPk(${primaryKeyParameters});
 
     /**
      * 根据主键激活
@@ -69,17 +70,17 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> enableByPk(${primaryKeyParameters});
+    ResponseVo<Integer> enableByPk(${primaryKeyParameters});
     </#if>
 
     /**
      * 根据主键更新
      *
-     * @param entity
+     * @param vm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>);
+    ResponseVo<Integer> updateByPk(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>);
 
     /**
      * 根据主键获取
@@ -90,15 +91,15 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<${className}Vo> getByPk(${primaryKeyParameters});
+    ResponseVo<${className}DetailVm> getByPk(${primaryKeyParameters});
     </#if>
 
     /**
      * 分页查询
      *
-     * @param parameter
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<PageInfo<${className}Vo>> findPageList(${className}SelectParameter parameter);
+    ResponseVo<PageInfo<${className}Vo>> findPageList(${className}SearchVm searchVm);
 }

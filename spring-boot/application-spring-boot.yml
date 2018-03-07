@@ -28,8 +28,8 @@ generator:
     justCopy: resources/bootstrap, resources/css        # 仅复制文件夹
   file:
     ignore:                                             # 要忽略的文件
-    aggregate: nav.html # 聚合文件
-    justCopy: mybatis-config.xml, common.js
+    aggregate: nav.html                                 # 聚合文件
+    justCopy: mybatis-config.xml, common.js             # 仅复制文件
   valid-status-field:
     fieldName: data_status    # 是否有效字段
     validValue: 0             # 有效值

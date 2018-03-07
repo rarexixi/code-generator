@@ -5,54 +5,49 @@ mybatis:
   type-aliases-package: org.xi.quick.codegenerator.mapper
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/quick_test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://127.0.0.1/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-  output:
-    ansi:
-      enabled: always
 logging:
-  level:
-  pattern:
-    console: "[%p] %msg%n"
+  level: info
 
 generator:
-  encoding: UTF-8 # 代码字符集
+  encoding: UTF-8                                           # 代码字符集
   path:
     template: /Workspace/github.com/java/MysqlCodeGenerator/dubbo/template/  # 模版路径
     out: /Workspace/github.com/java/MysqlCodeGenerator/dubbo/out/            # 输出路径
   folder:
-    ignore: include                                     # 要忽略的文件夹
-    aggregate:                                          # 聚合文件夹
-    justCopy: resources/bootstrap, resources/css        # 仅复制文件夹
+    ignore: include                                         # 要忽略的文件夹
+    aggregate:                                              # 聚合文件夹
+    justCopy: resources/bootstrap, resources/css            # 仅复制文件夹
   file:
-    ignore:                                             # 要忽略的文件
-    aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, nav.html # 聚合文件
-    justCopy: mybatis-config.xml, common.js
+    ignore:                                                 # 要忽略的文件
+    aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, nav.html
+                                                            # 聚合文件
+    justCopy: mybatis-config.xml, common.js                 # 仅复制文件
   valid-status-field:
-    fieldName: data_status    # 是否有效字段
-    validValue: 0             # 有效值
-    invalidValue: 1
+    fieldName: is_deleted                                   # 有效性字段名
+    validValue: 0                                           # 有效值
+    invalidValue: 1                                         # 无效值
   fk-select-fields:
     - nameSet: user_type_id
       foreignTable: user_type
       keyField: id
       valueField: user_type_name
-
-  # 一些特殊字段，多个之间用","分隔
   field:
-    notRequired: create_time,update_time  # 不需要赋值的字段
-    select:                               # 选择项字段
-    imgUrl:                               # 图片路径字段
-    videoUrl:                             # 视频路径字段
-    docUrl:                               # 文档路径字段
-    pageUrl:                              # 页面路径字段
-    otherUrl:                             # 其他路径字段
-    content:                              # 内容路径字段
+    notRequired: create_time, update_time                   # 不需要赋值的字段
+    select:
+    imgUrl: photo
+    videoUrl:
+    docUrl:
+    pageUrl:
+    otherUrl:
+    content: introduction, remark
 
   # 公共自定义属性
   commonProperties:
+
     projectName: quick-auto
     projectShortName: quick
     projectGroup: org.xi
@@ -67,8 +62,8 @@ generator:
     adminApiModuleName: quick-admin-api
     adminWebModuleName: quick-admin-web
 
-    providerModuleApplicationName: EcCarProviderApplication
-    adminApiModuleApplicatioName: EcCarAdminApplication
+    providerModuleApplicationName: QuickProviderApplication
+    adminApiModuleApplicatioName: QuickAdminApplication
 
     dubboServiceGroup: quick
     dubboServiceVersion: 1.0.0

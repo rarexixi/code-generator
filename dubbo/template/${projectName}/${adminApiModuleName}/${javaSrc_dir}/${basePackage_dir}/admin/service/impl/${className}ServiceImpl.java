@@ -5,9 +5,13 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.admin.service.impl;
 
+import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.model.Result;
 import ${baseCommonPackage}.model.SearchPage;
 import ${basePackage}.admin.service.${className}Service;
+import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
+import ${basePackage}.admin.vm.detail.${className}DetailVm;
+import ${basePackage}.admin.vm.search.${className}SearchVm;
 import ${basePackage}.api.service.${className}Api;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
@@ -20,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
 @Service("${classNameLower}Service")
@@ -34,13 +39,23 @@ public class ${className}ServiceImpl implements ${className}Service {
     /**
      * 添加
      *
-     * @param entity
+     * @param vm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Integer> add(${className}Entity entity) {
-        return ${classNameLower}Api.add(entity, sessionId);
+    public ResponseVo<Integer> add(${className}AddOrEditVm vm) {
+
+        ResponseVo<Integer> responseVo;
+        ${className}Entity entity = vm.get${className}Entity();
+        Result<Integer> apiResult = ${classNameLower}Api.add(entity, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
 
     /**
@@ -51,8 +66,18 @@ public class ${className}ServiceImpl implements ${className}Service {
     <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Integer> addList(List<${className}Entity> list) {
-        return ${classNameLower}Api.addList(list, sessionId);
+    public ResponseVo<Integer> addList(List<${className}AddOrEditVm> list) {
+
+        ResponseVo<Integer> responseVo;
+        List<${className}Entity> entityList = list.stream().map(o->o.get${className}Entity()).collect(Collectors.toList());
+        Result<Integer> apiResult = ${classNameLower}Api.addList(entityList, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
     <#if table.hasPrimaryKey>
 
@@ -66,8 +91,17 @@ public class ${className}ServiceImpl implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Integer> deleteByPk(${primaryKeyParameters}) {
-        return ${classNameLower}Api.deleteByPk(${primaryKeyParameterValues}, sessionId);
+    public ResponseVo<Integer> deleteByPk(${primaryKeyParameters}) {
+
+        ResponseVo<Integer> responseVo;
+        Result<Integer> apiResult = ${classNameLower}Api.deleteByPk(${primaryKeyParameterValues}, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
     <#if table.validStatusColumn??>
 
@@ -81,8 +115,17 @@ public class ${className}ServiceImpl implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Integer> disableByPk(${primaryKeyParameters}) {
-        return ${classNameLower}Api.disableByPk(${primaryKeyParameterValues}, sessionId);
+    public ResponseVo<Integer> disableByPk(${primaryKeyParameters}) {
+
+        ResponseVo<Integer> responseVo;
+        Result<Integer> apiResult = ${classNameLower}Api.disableByPk(${primaryKeyParameterValues}, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
 
     /**
@@ -95,21 +138,39 @@ public class ${className}ServiceImpl implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Integer> enableByPk(${primaryKeyParameters}) {
-        return ${classNameLower}Api.enableByPk(${primaryKeyParameterValues}, sessionId);
+    public ResponseVo<Integer> enableByPk(${primaryKeyParameters}) {
+
+        ResponseVo<Integer> responseVo;
+        Result<Integer> apiResult = ${classNameLower}Api.enableByPk(${primaryKeyParameterValues}, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
     </#if>
 
     /**
      * 根据主键更新
      *
-     * @param entity
+     * @param vm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
-        return ${classNameLower}Api.updateByPk(entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, sessionId);
+    public ResponseVo<Integer> updateByPk(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
+
+        ResponseVo<Integer> responseVo;
+        Result<Integer> apiResult = ${classNameLower}Api.updateByPk(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
 
     /**
@@ -122,20 +183,45 @@ public class ${className}ServiceImpl implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<${className}Vo> getByPk(${primaryKeyParameters}) {
-        return ${classNameLower}Api.getByPk(${primaryKeyParameterValues}, sessionId);
+    public ResponseVo<${className}DetailVm> getByPk(${primaryKeyParameters}) {
+
+        ResponseVo<${className}DetailVm> responseVo;
+        Result<${className}Vo> apiResult = ${classNameLower}Api.getByPk(${primaryKeyParameterValues}, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(true);
+            ${className}Vo vo;
+            if ((vo = apiResult.getResult()) != null) {
+                ${className}DetailVm vm = new ${className}DetailVm(vo);
+                responseVo.setResult(vm);
+            }
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
     </#if>
 
     /**
      * 分页查询
      *
-     * @param parameter
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public Result<PageInfo<${className}Vo>> findPageList(${className}SelectParameter parameter) {
-        return ${classNameLower}Api.findPageList(parameter, sessionId);
+    public ResponseVo<PageInfo<${className}Vo>> findPageList(${className}SearchVm searchVm) {
+
+        ResponseVo<PageInfo<${className}Vo>> responseVo;
+        ${className}SelectParameter parameter = searchVm.get${className}SelectParameter();
+        Result<PageInfo<${className}Vo>> apiResult = ${classNameLower}Api.findPageList(parameter, sessionId);
+        if (apiResult.isSuccess()) {
+            PageInfo<${className}Vo> pageInfo = apiResult.getResult();
+            responseVo = new ResponseVo<>(pageInfo);
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
     }
 }
