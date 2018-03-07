@@ -6,11 +6,11 @@ mysql code generator
 其中other map object
 包括
 ```
-"now", new Date(),
-"dbUrl", 数据库连接串,
-"dbUsername", 数据库连接用户名,
-"dbPassword", 数据库连接密码,
-"validStatusField", 有效字段（类型是ValidStatusField）,
+"now": new Date(),
+"dbUrl": 数据库连接串,
+"dbUsername": 数据库连接用户名,
+"dbPassword": 数据库连接密码,
+"validStatusField": 有效字段（类型是ValidStatusField）,
 commonProperties配置的map
 ```
 对于表，页面model为
