@@ -76,7 +76,7 @@ commonProperties配置的map
 |index                        |是否是索引                |Boolean               |
 |columnFieldName              |对应的JAVA字段名          |String                |UserId
 |columnFieldType              |对应的JAVA字段类型        |String                |Integer
-|fkSelectField                |逻辑外键选择项            |Boolean               |
+|fkSelectField                |逻辑外键选择项            |FkSelectField         |
 |fkSelect                     |是否是逻辑外键选择项      |Boolean               |
 |autoIncrement                |是否自增长                |Boolean               |
 |primaryKey                   |是否是主键                |Boolean               |
