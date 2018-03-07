@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.xi.quick</groupId>
-    <artifactId>code-generator</artifactId>
+    <artifactId>mysql-code-generator</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>code-generator</name>
+    <name>mysql-code-generator</name>
     <description>mysql 代码生成器</description>
 
     <parent>
