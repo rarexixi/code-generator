@@ -1,6 +1,7 @@
 <#assign className = table.tableClassName>
 <#assign classNameFirstLower = table.tableClassName?uncap_first>
 <#assign classNameLower = table.tableClassName?lower_case>
+<#assign tableShortComment = (table.tableComment?split("[（ ,，(]", "r"))[0]>
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
@@ -12,13 +13,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>${(table.tableComment?split("[（ ,，(]", "r"))[0]}</title>
+    <title>${tableShortComment}详情</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="/resources/css/common.css" />
 </head>
 
 <body>
     <div class="container" id="app">
+        <div class="row">
+            <div class="col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/"></a></li>
+                    <li class="breadcrumb-item">${tableShortComment}列表</li>
+                    <li class="breadcrumb-item active" aria-current="page">${tableShortComment}详情</li>
+                </ol>
+            </div>
+        </div>
         <div class="">
             <#list table.columns as column>
             <#if column.columnName == table.validStatusField.fieldName>

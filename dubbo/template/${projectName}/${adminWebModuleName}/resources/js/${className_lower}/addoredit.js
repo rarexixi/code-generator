@@ -19,6 +19,7 @@ var app = new Vue({
         old${column.columnFieldName}: '',
         </#list>
         </#if>
+        addOrEditTitle: '',
         addOrEditParams: {
             <#list table.columns as column>
             <#if column.notRequired>
@@ -49,6 +50,9 @@ var app = new Vue({
         if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.columnFieldNameFirstLower} != null && ${column.columnFieldNameFirstLower} != ''</#list>) {
             this.getEditDetail();
         }
+
+        this.addOrEditTitle = window.location.search == '' ? '添加' : '更新';
+        document.title = this.addOrEditTitle + document.title;
     },
     methods: {
         <#list table.columns as column>
