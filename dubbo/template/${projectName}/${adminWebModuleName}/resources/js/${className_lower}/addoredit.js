@@ -28,7 +28,7 @@ var app = new Vue({
             <#elseif column.columnName == table.validStatusField.fieldName>
             ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
             <#elseif column.columnFieldType == "Date">
-            //${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
             <#else>
             ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
             </#if>

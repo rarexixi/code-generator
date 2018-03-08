@@ -22,8 +22,8 @@ var app = new Vue({
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
             ${column.columnFieldNameFirstLower}: '',
             <#elseif column.columnFieldType == "Date">
-            //${column.columnFieldNameFirstLower}Min: '',
-            //${column.columnFieldNameFirstLower}Max: '',
+            ${column.columnFieldNameFirstLower}Min: '',
+            ${column.columnFieldNameFirstLower}Max: '',
             <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
             ${column.columnFieldNameFirstLower}Min: '',
             ${column.columnFieldNameFirstLower}Max: '',
@@ -109,9 +109,10 @@ var app = new Vue({
             var that = this;
             that.checkedList = [];
             $.ajax({
-                type: 'get',
+                type: 'post',
                 url: '/${classNameLower}/find',
-                data: this.searchParams,
+                contentType : 'application/json',
+                data : JSON.stringify(that.searchParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -140,8 +141,8 @@ var app = new Vue({
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
             this.searchParams.${column.columnFieldNameFirstLower} = '';
             <#elseif column.columnFieldType == "Date">
-            //this.searchParams.${column.columnFieldNameFirstLower}Min = '';
-            //this.searchParams.${column.columnFieldNameFirstLower}Max = '';
+            this.searchParams.${column.columnFieldNameFirstLower}Min = '';
+            this.searchParams.${column.columnFieldNameFirstLower}Max = '';
             <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
             this.searchParams.${column.columnFieldNameFirstLower}Min = '';
             this.searchParams.${column.columnFieldNameFirstLower}Max = '';
