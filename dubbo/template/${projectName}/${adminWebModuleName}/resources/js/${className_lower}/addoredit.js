@@ -83,7 +83,8 @@ var app = new Vue({
             $.ajax({
                 type: 'post',
                 url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + that.old${column.columnFieldName}</#list></#if>,
-                data: this.addOrEditParams,
+                contentType : 'application/json',
+                data : JSON.stringify(that.addOrEditParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
