@@ -41,7 +41,7 @@ CREATE TABLE `user_info`
 (
   `id`           INT           NOT NULL
   COMMENT '用户ID',
-  `true_name`    VARCHAR(50)   NOT NULL
+  `true_name`    VARCHAR(50)   NOT NULL DEFAULT ''
   COMMENT '用户姓名',
   `age`          INT           NOT NULL DEFAULT 0
   COMMENT '年龄',
@@ -115,6 +115,52 @@ CREATE TABLE `user_type_relation`
   COLLATE = utf8_unicode_ci
   COMMENT ='用户类型关系';
 
+CREATE TABLE `multi_pk`
+(
+  `key1`        INT         NOT NULL
+  COMMENT '主键1',
+  `key2`        INT         NOT NULL
+  COMMENT '主键2',
+  `value`       VARCHAR(50) NOT NULL
+  COMMENT '值',
+  `is_deleted`  TINYINT     NOT NULL DEFAULT 0
+  COMMENT '是否删除',
+  `create_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp
+  COMMENT '创建时间',
+  `update_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+  COMMENT '更新时间',
+
+  PRIMARY KEY (`key1`, `key2`),
+  INDEX (`create_time`),
+  INDEX (`update_time`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COLLATE = utf8_unicode_ci
+  COMMENT ='多主键测试表';
+
+# CREATE TABLE `no_pk`
+# (
+#   `key`        INT         NOT NULL
+#   COMMENT '键',
+#   `value`       VARCHAR(50) NOT NULL
+#   COMMENT '值',
+#   `is_deleted`  TINYINT     NOT NULL DEFAULT 0
+#   COMMENT '是否删除',
+#   `create_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp
+#   COMMENT '创建时间',
+#   `update_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+#   COMMENT '更新时间',
+#
+#   INDEX (`key`),
+#   INDEX (`create_time`),
+#   INDEX (`update_time`)
+# )
+#   ENGINE = InnoDB
+#   DEFAULT CHARSET = utf8
+#   COLLATE = utf8_unicode_ci
+#   COMMENT ='无主键测试表';
+
 INSERT INTO user_type (id, user_type_name) VALUES (1, '超级管理员'), (2, '管理员'), (3, '普通用户');
 INSERT INTO user (username, email, password, nick_name) VALUES
   ('root', 'root@example.com', '123456', 'root'),
@@ -154,8 +200,14 @@ INSERT INTO user (username, email, password, nick_name) VALUES
   ('user29', 'user29@example.com', '123456', 'user29'),
   ('user30', 'user30@example.com', '123456', 'user30');
 
+INSERT INTO user_info (id, true_name, age, sex) VALUES
+  (1, 'root', 30, 0),(2, 'admin1', 25, 1),(3, 'admin2', 43, 1),(4, 'admin3', 23, 0),(5, 'admin4', 24, 0);
+
 INSERT INTO user_type_relation (user_id, user_type_id) VALUES
   (1, 1), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2),
   (7, 3), (8, 3), (9, 3), (10, 3), (11, 3), (12, 3), (13, 3), (14, 3), (15, 3), (16, 3),
   (17, 3), (18, 3), (19, 3), (20, 3), (21, 3), (22, 3), (23, 3), (24, 3), (25, 3), (26, 3),
   (27, 3), (28, 3), (29, 3), (30, 3), (31, 3), (32, 3), (33, 3), (34, 3), (35, 3), (36, 3);
+
+INSERT INTO multi_pk (key1, key2, `value`) VALUES
+  (1, 30, 'root'),(2, 25, 'admin1'),(1, 43, 'admin2'),(4, 23, 'admin3'),(5, 24, 'admin4');

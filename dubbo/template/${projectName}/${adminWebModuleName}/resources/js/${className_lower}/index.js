@@ -41,6 +41,8 @@ var app = new Vue({
             pageIndex: 1,
             pageSize: 10
         },
+        checkedList: [],
+        allChecked: false,
         pageInfo: {},
         addOrEditParams: {
             <#list table.columns as column>
@@ -77,6 +79,24 @@ var app = new Vue({
         this.init${column.columnFieldName?replace('Id', '')}();
         </#if>
         </#list>
+    },
+    watch: {
+        'checkedList': {
+            handler: function (val, oldVal) {
+                var that = this;
+                var listLength = 0;
+                if (that.pageInfo.list) {
+                    listLength = that.pageInfo.list.length;
+                }
+
+                if (that.checkedList.length === listLength && listLength > 0) {
+                    that.allChecked = true;
+                } else {
+                    that.allChecked = false;
+                }
+            },
+            deep: true
+        }
     },
     methods: {
         <#list table.columns as column>
@@ -119,10 +139,11 @@ var app = new Vue({
         },
         search: function () {
             var that = this;
+            that.checkedList = [];
             $.ajax({
                 type: 'get',
                 url: '/${classNameLower}/find',
-                data: this.searchParams,
+                data: that.searchParams,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -133,6 +154,16 @@ var app = new Vue({
                 }
             });
         },
+        <#if table.validStatusColumn??>
+        changeValidSearch: function(valid) {
+            var that = this;
+            if (that.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
+                return;
+            }
+            that.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
+            that.search();
+        },
+        </#if>
         resetSearch: function() {
             <#list table.columns as column>
             <#if column.ignoreSearch>
@@ -187,7 +218,7 @@ var app = new Vue({
             $.ajax({
                 type: 'post',
                 url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + that.old${column.columnFieldName}</#list></#if>,
-                data: this.addOrEditParams,
+                data: that.addOrEditParams,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -227,18 +258,78 @@ var app = new Vue({
                 }
             });
         },
-        del: function (${primaryKeyParameterValues}) {
+        <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+        checkAll: function (moduleName) {
             var that = this;
-            commonNotify.confirm("确定删除吗？", function() {
+
+            if (that.allChecked) {
+                that.checkedList = [];
+            } else {
+                that.checkedList = [];
+                if (that.pageInfo.list) {
+                    that.pageInfo.list.forEach(function (item) {
+                        that.checkedList.push(item.${table.uniquePrimaryKey.columnFieldName?uncap_first});
+                    });
+                }
+            }
+        },
+        <#if table.validStatusColumn??>
+        enableSelected: function () {
+            this.execSelected("确定激活吗？", '/${classNameLower}/enablelist', "激活成功！", "激活失败！");
+        },
+        disableSelected: function () {
+            this.execSelected("确定冻结吗？", '/${classNameLower}/disablelist', "冻结成功！", "冻结失败！");
+        },
+        </#if>
+        delSelected: function () {
+            this.execSelected("确定删除吗？", '/${classNameLower}/deletelist', "删除成功！", "删除失败！");
+        },
+        execSelected: function (confirmMsg, url, successMsg, failMsg) {
+            var that = this;
+            commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
-                    type: 'get',
-                    url: '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                    type: 'post',
+                    url: url,
+                    contentType : 'application/json',
+                    data : JSON.stringify(that.checkedList),
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success("删除成功！", that.search);
+                            commonNotify.success(successMsg, that.search);
                         } else {
-                            commonNotify.danger("删除失败！");
+                            commonNotify.danger(failMsg);
+                        }
+                    }
+                });
+            });
+        },
+        </#if>
+        <#if table.validStatusColumn??>
+        enable: function (${primaryKeyParameterValues}) {
+            var url = '/${classNameLower}/enable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            this.exec("确定激活吗？", url, "激活成功！", "激活失败！");
+        },
+        disable: function (${primaryKeyParameterValues}) {
+            var url = '/${classNameLower}/disable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            this.exec("确定冻结吗？", url, "冻结成功！", "冻结失败！");
+        },
+        </#if>
+        del: function (${primaryKeyParameterValues}) {
+            var url = '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            this.exec("确定删除吗？", url, "删除成功！", "删除失败！");
+        },
+        exec: function (confirmMsg, url, successMsg, failMsg) {
+            var that = this;
+            commonNotify.confirm(confirmMsg, function() {
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success == true) {
+                            commonNotify.success(successMsg, that.search);
+                        } else {
+                            commonNotify.danger(failMsg);
                         }
                     }
                 })

@@ -54,12 +54,28 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-     @RequestMapping(value = { "/delete", "/delete/" }, method = RequestMethod.GET)
+     @RequestMapping(value = { "/delete" }, method = RequestMethod.GET)
      public ResponseVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
         ResponseVo<Integer> result = ${classNameLower}Service.deleteByPk(${primaryKeyParameterValues});
         return result;
     }
+    <#if (table.uniquePrimaryKey??)>
+
+    /**
+     * 根据主键列表物理删除
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+     @RequestMapping(value = { "/deletelist" }, method = RequestMethod.POST)
+     public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+
+        ResponseVo<Integer> result = ${classNameLower}Service.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        return result;
+    }
+    </#if>
     <#if table.validStatusColumn??>
 
     /**
@@ -93,6 +109,36 @@ public class ${className}Controller {
         ResponseVo<Integer> result = ${classNameLower}Service.enableByPk(${primaryKeyParameterValues});
         return result;
     }
+    <#if (table.uniquePrimaryKey??)>
+
+    /**
+     * 根据主键列表冻结
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @RequestMapping(value = "/disablelist", method = RequestMethod.POST)
+    public ResponseVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+
+        ResponseVo<Integer> result = ${classNameLower}Service.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        return result;
+    }
+
+    /**
+     * 根据主键列表激活
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @RequestMapping(value = "/enablelist", method = RequestMethod.POST)
+    public ResponseVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+
+        ResponseVo<Integer> result = ${classNameLower}Service.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        return result;
+    }
+    </#if>
     </#if>
 
     /**
@@ -102,7 +148,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/save", "/save/" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "/save" }, method = RequestMethod.POST)
     public ResponseVo<Integer> save(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}", required = false) ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         ResponseVo<Integer> result;
@@ -124,7 +170,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/getdetail", "/getdetail/" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/getdetail" }, method = RequestMethod.GET)
     public ResponseVo<${className}DetailVm> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
         ResponseVo<${className}DetailVm> result = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
@@ -139,7 +185,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/find", "/find/" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/find" }, method = RequestMethod.GET)
     public ResponseVo<PageInfo<${className}Vo>> find(${className}SearchVm searchVm) {
 
         ResponseVo<PageInfo<${className}Vo>> result = ${classNameLower}Service.findPageList(searchVm);

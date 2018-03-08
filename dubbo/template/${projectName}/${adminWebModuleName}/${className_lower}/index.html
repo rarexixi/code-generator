@@ -143,13 +143,13 @@
             <div class="col-12">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">全部</a>
+                        <a @click="changeValidSearch('')" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === '' }" href="javascript:;">全部</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">有效</a>
+                        <a @click="changeValidSearch(${table.validStatusField.validValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.validValue} }" href="#">有效</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">无效</a>
+                        <a @click="changeValidSearch(${table.validStatusField.invalidValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.invalidValue} }" href="#">无效</a>
                     </li>
                 </ul>
             </div>
@@ -159,21 +159,42 @@
         <div class="row">
             <div class="col-12">
                 <div class="navbar navbar-light">
-                    <input type="button" value="添加" @click="add" class="btn btn-info" data-toggle="modal" data-target="#addOrEdit" />
+                    <form class="form-inline">
+                        <input type="button" value="添加" @click="add" class="btn btn-info mr-2" data-toggle="modal" data-target="#addOrEdit" />
+                        <#if table.validStatusColumn??>
+                        <input type="button" value="激活" @click="enableSelected" class="btn btn-success mr-2" v-if="checkedList.length > 0" />
+                        <input type="button" value="冻结" @click="disableSelected" class="btn btn-warning mr-2" v-if="checkedList.length > 0" />
+                        </#if>
+                        <#if table.uniquePrimaryKey??>
+                        <input type="button" value="删除" @click="delSelected" class="btn btn-danger" v-if="checkedList.length > 0" />
+                        </#if>
+                    </form>
                 </div>
                 <table v-if="pageInfo" class="table table-striped table-hover">
                     <thead>
                         <tr>
+                            <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+                            <th><input type="checkbox" v-model="allChecked" @click="checkAll()"/></th>
+                            </#if>
                             <#list table.columns as column>
+                            <#if column.content>
+                            <!-- <th>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</th> -->
+                            <#else>
                             <th>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</th>
+                            </#if>
                             </#list>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in pageInfo.list">
+                            <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+                            <td><input type="checkbox" v-model="checkedList" :value="item.${table.uniquePrimaryKey.columnFieldName?uncap_first}" /></td>
+                            </#if>
                             <#list table.columns as column>
-                            <#if column.columnName == table.validStatusField.fieldName>
+                            <#if column.content>
+                            <!-- <td><span>{{item.${column.columnFieldNameFirstLower}}}</span></td> -->
+                            <#elseif column.columnName == table.validStatusField.fieldName>
                             <td><span v-if="item.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-success">有效</span><span v-else class="text-danger">无效</span></td>
                             <#elseif column.imgUrl>
                             <td>
@@ -184,9 +205,13 @@
                             </#if>
                             </#list>
                             <td>
-                                <a href="javascript:;" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" data-toggle="modal" data-target="#addOrEdit">编辑</a>
-                                <a href="javascript:;" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" data-toggle="modal" data-target="#detail">详情</a>
-                                <a href="javascript:;" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)">删除</a>
+                                <a href="javascript:;" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" data-toggle="modal" data-target="#addOrEdit" class="text-info">编辑</a>
+                                <a href="javascript:;" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" data-toggle="modal" data-target="#detail" class="text-secondary">详情</a>
+                                <#if table.validStatusColumn??>
+                                <a href="javascript:;" @click="disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" v-if="item.${table.validStatusColumn.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-warning">冻结</a>
+                                <a href="javascript:;" @click="enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" v-else class="text-success">激活</a>
+                                </#if>
+                                <a href="javascript:;" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" class="text-danger">删除</a>
                             </td>
                         </tr>
                     </tbody>

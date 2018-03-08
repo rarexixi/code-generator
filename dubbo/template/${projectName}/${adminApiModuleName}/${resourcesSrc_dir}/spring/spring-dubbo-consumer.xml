@@ -12,7 +12,7 @@
     <#list tableModels as model>
 
     <!-- ${model.tableComment} -->
-    <dubbo:reference interface="${basePackage}.api.service.${model.tableClassName}Api"
+    <dubbo:reference interface="${basePackage}.api.${model.tableClassName}Api"
                    id="${model.tableClassName?uncap_first}Api" group="${'${' + projectShortName + '.group}'}" version="${'${' + projectShortName + '.version}'}" />
     </#list>
 

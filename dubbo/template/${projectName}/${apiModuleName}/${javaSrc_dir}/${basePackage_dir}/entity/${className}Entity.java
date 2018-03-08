@@ -17,7 +17,7 @@ public class ${className}Entity implements Serializable {
      */
 <#if (column.primaryKey && column.autoIncrement)>
     @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-<#elseif (column.columnName != 'create_time' && column.columnName != 'update_time')>
+<#elseif (!column.notRequired && (column.isNullable == 'NO' && !(column.columnDefault??)))>
     @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
     @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
 </#if>

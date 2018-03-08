@@ -13,7 +13,7 @@
     <#list tableModels as model>
 
     <!-- ${model.tableComment} -->
-    <dubbo:service interface="${basePackage}.api.service.${model.tableClassName}Api"
+    <dubbo:service interface="${basePackage}.api.${model.tableClassName}Api"
                    ref="${model.tableClassName?uncap_first}Api" group="${'${' + projectShortName + '.group}'}" version="${'${' + projectShortName + '.version}'}"
                    timeout="6000" registry="zookeeper"/>
     </#list>

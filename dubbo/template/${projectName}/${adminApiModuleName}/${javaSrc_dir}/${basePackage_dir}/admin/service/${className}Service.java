@@ -48,6 +48,17 @@ public interface ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     ResponseVo<Integer> deleteByPk(${primaryKeyParameters});
+    <#if (table.uniquePrimaryKey??)>
+
+    /**
+     * 根据主键列表物理删除
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    ResponseVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+    </#if>
     <#if table.validStatusColumn??>
 
     /**
@@ -71,6 +82,26 @@ public interface ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     ResponseVo<Integer> enableByPk(${primaryKeyParameters});
+    <#if (table.uniquePrimaryKey??)>
+
+    /**
+     * 根据主键列表冻结
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    ResponseVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+
+    /**
+     * 根据主键列表激活
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    ResponseVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+    </#if>
     </#if>
 
     /**

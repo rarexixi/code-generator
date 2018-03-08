@@ -12,7 +12,7 @@ import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
 import ${basePackage}.admin.vm.search.${className}SearchVm;
-import ${basePackage}.api.service.${className}Api;
+import ${basePackage}.api.${className}Api;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.vo.${className}Vo;
@@ -103,6 +103,29 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         return responseVo;
     }
+    <#if (table.uniquePrimaryKey??)>
+
+    /**
+     * 根据主键列表物理删除
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Override
+    public ResponseVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+
+        ResponseVo<Integer> responseVo;
+        Result<Integer> apiResult = ${classNameLower}Api.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
+    }
+    </#if>
     <#if table.validStatusColumn??>
 
     /**
@@ -150,6 +173,50 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         return responseVo;
     }
+    <#if (table.uniquePrimaryKey??)>
+
+    /**
+     * 根据主键列表冻结
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Override
+    public ResponseVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+
+        ResponseVo<Integer> responseVo;
+        Result<Integer> apiResult = ${classNameLower}Api.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
+    }
+
+    /**
+     * 根据主键列表激活
+     *
+     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Override
+    public ResponseVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+
+        ResponseVo<Integer> responseVo;
+        Result<Integer> apiResult = ${classNameLower}Api.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
+    }
+    </#if>
     </#if>
 
     /**
