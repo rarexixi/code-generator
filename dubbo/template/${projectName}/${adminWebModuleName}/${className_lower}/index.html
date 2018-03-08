@@ -146,10 +146,10 @@
                         <a @click="changeValidSearch('')" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === '' }" href="javascript:;">全部</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="changeValidSearch(${table.validStatusField.validValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.validValue} }" href="#">有效</a>
+                        <a @click="changeValidSearch(${table.validStatusField.validValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.validValue} }" href="javascript:;">有效</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="changeValidSearch(${table.validStatusField.invalidValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.invalidValue} }" href="#">无效</a>
+                        <a @click="changeValidSearch(${table.validStatusField.invalidValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.invalidValue} }" href="javascript:;">无效</a>
                     </li>
                 </ul>
             </div>
