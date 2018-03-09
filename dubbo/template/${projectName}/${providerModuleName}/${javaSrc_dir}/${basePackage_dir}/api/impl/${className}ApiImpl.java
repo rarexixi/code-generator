@@ -74,7 +74,7 @@ public class ${className}ApiImpl implements ${className}Api {
         if (list == null || list.isEmpty()) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
-        String fieldName = "";
+        String fieldName;
         for (${className}Entity entity : list) {
             if (!StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(entity))) {
                 return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
@@ -106,6 +106,10 @@ public class ${className}ApiImpl implements ${className}Api {
      */
     public Result<Integer> deleteByPk(${primaryKeyParameters}, String sessionId) {
 
+        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+            return new Result<>(OperationConstants.NOT_NULL);
+        }
+
         Result<Integer> result;
         try {
             ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
@@ -130,13 +134,17 @@ public class ${className}ApiImpl implements ${className}Api {
      */
     public Result<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
+        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+            return new Result<>(OperationConstants.NOT_NULL);
+        }
+
         Result<Integer> result;
         try {
             ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
             int count = ${classNameLower}Service.deleteByCondition(condition);
             result = new Result<>(count);
         } catch (Exception e) {
-            logger.error("deleteByPk", sessionId, e);
+            logger.error("deleteByPkList", sessionId, e);
             result = new Result<>(OperationConstants.SYSTEM_ERROR);
         }
 
@@ -156,6 +164,10 @@ public class ${className}ApiImpl implements ${className}Api {
      <#include "/include/author_info1.ftl">
      */
     public Result<Integer> disableByPk(${primaryKeyParameters}, String sessionId) {
+
+        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+            return new Result<>(OperationConstants.NOT_NULL);
+        }
 
         Result<Integer> result;
         try {
@@ -184,6 +196,10 @@ public class ${className}ApiImpl implements ${className}Api {
      */
     public Result<Integer> enableByPk(${primaryKeyParameters}, String sessionId) {
 
+        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+            return new Result<>(OperationConstants.NOT_NULL);
+        }
+
         Result<Integer> result;
         try {
             ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
@@ -210,6 +226,10 @@ public class ${className}ApiImpl implements ${className}Api {
      */
     public Result<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
+        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+            return new Result<>(OperationConstants.NOT_NULL);
+        }
+
         Result<Integer> result;
         try {
             ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
@@ -218,7 +238,7 @@ public class ${className}ApiImpl implements ${className}Api {
             int count = ${classNameLower}Service.updateByCondition(entity, condition);
             result = new Result<>(count);
         } catch (Exception e) {
-            logger.error("disableByPk", sessionId, e);
+            logger.error("disableByPkList", sessionId, e);
             result = new Result<>(OperationConstants.SYSTEM_ERROR);
         }
 
@@ -235,6 +255,10 @@ public class ${className}ApiImpl implements ${className}Api {
      */
     public Result<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
+        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+            return new Result<>(OperationConstants.NOT_NULL);
+        }
+
         Result<Integer> result;
         try {
             ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
@@ -243,7 +267,7 @@ public class ${className}ApiImpl implements ${className}Api {
             int count = ${classNameLower}Service.updateByCondition(entity, condition);
             result = new Result<>(count);
         } catch (Exception e) {
-            logger.error("enableByPk", sessionId, e);
+            logger.error("enableByPkList", sessionId, e);
             result = new Result<>(OperationConstants.SYSTEM_ERROR);
         }
 
@@ -263,7 +287,7 @@ public class ${className}ApiImpl implements ${className}Api {
     public Result<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
 
         String fieldName = "";
-        if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(entity))) {
+        if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtil.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list>)</#if> || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(entity))) {
             return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
@@ -295,6 +319,10 @@ public class ${className}ApiImpl implements ${className}Api {
      <#include "/include/author_info1.ftl">
      */
     public Result<${className}Vo> getByPk(${primaryKeyParameters}, String sessionId) {
+
+        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+            return new Result<>(OperationConstants.NOT_NULL);
+        }
 
         Result<${className}Vo> result;
         try {

@@ -149,7 +149,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/save" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> save(@RequestBody ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}", required = false) ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
+    public ResponseVo<Integer> save(@RequestBody ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         ResponseVo<Integer> result;
         if (<#list primaryKey as column><#if (column_index > 0)> || </#if>vm.get${column.columnFieldName}() == null</#list>) {

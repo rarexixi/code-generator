@@ -45,7 +45,9 @@ var app = new Vue({
         var ${column.columnFieldNameFirstLower} = commonFun.getParam('${column.columnFieldNameFirstLower}');
         </#list>
         <#if !table.hasAutoIncrementUniquePrimaryKey>
-        <#list primaryKey as column>this.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
+        <#list primaryKey as column>
+        this.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};
+        </#list>
         </#if>
         if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.columnFieldNameFirstLower} != null && ${column.columnFieldNameFirstLower} != ''</#list>) {
             this.getEditDetail();

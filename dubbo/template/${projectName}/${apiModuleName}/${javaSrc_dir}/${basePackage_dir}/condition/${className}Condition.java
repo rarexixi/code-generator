@@ -15,8 +15,8 @@ public class ${className}Condition implements Serializable {
     <#if column.columnName == table.validStatusField.fieldName>
 
     /**
-    * ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
@@ -29,13 +29,13 @@ public class ${className}Condition implements Serializable {
     <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
 
     /**
-    * ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     /**
-    * ${column.columnComment} 列表
-    */
+     * ${column.columnComment} 列表
+     */
     private List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List;
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
@@ -65,13 +65,13 @@ public class ${className}Condition implements Serializable {
     <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
 
     /**
-    * <#if column.columnFieldType == "Date">开始<#else>最小</#if> ${column.columnComment}
-    */
+     * <#if column.columnFieldType == "Date">开始<#else>最小</#if> ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
 
     /**
-    * <#if column.columnFieldType == "Date">结束<#else>最大</#if> ${column.columnComment}
-    */
+     * <#if column.columnFieldType == "Date">结束<#else>最大</#if> ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
 
     public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
@@ -97,18 +97,18 @@ public class ${className}Condition implements Serializable {
     <#elseif (column.columnFieldType == "String")>
 
     /**
-    * ${column.columnComment} (完全匹配）
-    */
+     * ${column.columnComment} (完全匹配）
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     /**
-    * ${column.columnComment} (开始匹配)
-    */
+     * ${column.columnComment} (开始匹配)
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith;
 
     /**
-    * ${column.columnComment} (泛匹配)
-    */
+     * ${column.columnComment} (泛匹配)
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Like;
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
@@ -137,8 +137,8 @@ public class ${className}Condition implements Serializable {
     <#else>
 
     /**
-    * ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
