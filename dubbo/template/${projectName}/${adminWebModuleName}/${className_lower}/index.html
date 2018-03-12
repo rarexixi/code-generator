@@ -37,7 +37,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
                             <option value="">全部</option>
                             <option value="${table.validStatusField.validValue}">有效</option>
                             <option value="${table.validStatusField.invalidValue}">无效</option>
@@ -50,7 +50,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
                             <option value="">全部</option>
                             <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
                         </select>
@@ -62,7 +62,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">开始${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">结束${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">最小${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">最大${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -268,7 +268,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-3 col-sm-12 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                                        <div class="col-9 col-sm-12 col-md-8"><img :src="item.${column.columnFieldNameFirstLower}" alt=""></div>
+                                        <div class="col-9 col-sm-12 col-md-8"><img :src="detail.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}"></div>
                                     </div>
                                 </div>
                                 <#elseif column.columnFieldType == "Date">
@@ -312,11 +312,11 @@
                                 <#list table.columns as column>
                                 <#if column.notRequired>
                                 <#elseif column.autoIncrement>
-                                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
+                                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
                                 <#elseif column.fkSelect>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
                                         <option value="0">请选择</option>
                                         <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
                                     </select>
@@ -324,7 +324,7 @@
                                 <#elseif column.columnName == table.validStatusField.fieldName>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
                                         <option value="${table.validStatusField.validValue}">有效</option>
                                         <option value="${table.validStatusField.invalidValue}">无效</option>
                                     </select>
@@ -332,32 +332,32 @@
                                 <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class ="form-control" />
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class ="form-control" />
                                 </div>
                                 <#elseif column.columnFieldType == "Date">
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class ="form-control" />
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class ="form-control" />
                                 </div>
                                 <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
                                 </div>
                                 <#elseif (column.content)>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <textarea v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control"></textarea>
+                                    <textarea v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control"></textarea>
                                 </div>
                                 <#elseif (column.columnFieldType == "String")>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
                                 </div>
                                 <#else>
                                 <div class="form-group">
                                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
+                                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class ="form-control" />
                                 </div>
                                 </#if>
                                 </#list>
@@ -382,6 +382,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="/resources/js/common.js"></script>
     <script src="/resources/js/${classNameLower}/index.js"></script>
+    <script src="/resources/js/paramBind.js"></script>
 </body>
 
 </html>

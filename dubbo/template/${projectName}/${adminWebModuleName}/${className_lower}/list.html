@@ -37,7 +37,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
                             <option value="">全部</option>
                             <option value="${table.validStatusField.validValue}">有效</option>
                             <option value="${table.validStatusField.invalidValue}">无效</option>
@@ -50,7 +50,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
                             <option value="">全部</option>
                             <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
                         </select>
@@ -62,7 +62,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">开始${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">结束${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">最小${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">最大${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
                 <div class="form-group row">
                     <div class="col-3 col-sm-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-9 col-sm-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -255,6 +255,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="/resources/js/common.js"></script>
     <script src="/resources/js/${classNameLower}/list.js"></script>
+    <script src="/resources/js/paramBind.js"></script>
 </body>
 
 </html>

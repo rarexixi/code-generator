@@ -43,7 +43,7 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
-                    <div class="col-xs-9 col-md-8"><img :src="item.${column.columnFieldNameFirstLower}" alt=""></div>
+                    <div class="col-xs-9 col-md-8"><img :src="detail.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}"></div>
                 </div>
             </div>
             <#elseif column.columnFieldType == "Date">
