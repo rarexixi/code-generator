@@ -46,13 +46,8 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
                         isClassFile(templateRelativePath)
-                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoreFolderSet())
                                 && !isMatchingFile(templateRelativePath, generatorConfigProperties.getIgnoreFileSet())
-
-                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getAggregateFolderSet())
                                 && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
-
-                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getJustCopyFolderSet())
                                 && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
@@ -69,13 +64,8 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
                         !isClassFile(templateRelativePath)
-                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getIgnoreFolderSet())
                                 && !isMatchingFile(templateRelativePath, generatorConfigProperties.getIgnoreFileSet())
-
-                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getAggregateFolderSet())
                                 && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
-
-                                && !isMatchingFolder(templateRelativePath, generatorConfigProperties.getJustCopyFolderSet())
                                 && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
@@ -91,8 +81,7 @@ public class AppConfig {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
-                        isMatchingFolder(templateRelativePath, generatorConfigProperties.getAggregateFolderSet())
-                                || isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
+                        isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
         return templates;
     }
 
@@ -107,8 +96,7 @@ public class AppConfig {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
-                        isMatchingFolder(templateRelativePath, generatorConfigProperties.getJustCopyFolderSet())
-                                || isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                        isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
         return templates;
     }
 
@@ -148,24 +136,6 @@ public class AppConfig {
     }
 
     /**
-     * 是否是匹配的文件夹
-     *
-     * @param templateRelativePath
-     * @return
-     */
-    private boolean isMatchingFolder(String templateRelativePath, Set<String> folders) {
-
-        for (String folder : folders) {
-            if (!folder.endsWith(SystemUtil.SYSTEM_SLASH))
-                folder += SystemUtil.SYSTEM_SLASH;
-            if (templateRelativePath.startsWith(folder) || templateRelativePath.contains(SystemUtil.SYSTEM_SLASH + folder))
-                return true;
-        }
-
-        return false;
-    }
-
-    /**
      * 是否是匹配模版
      *
      * @param templateRelativePath
@@ -173,12 +143,12 @@ public class AppConfig {
      */
     private boolean isMatchingFile(String templateRelativePath, Set<String> files) {
 
-        int lastIndex = templateRelativePath.lastIndexOf(SystemUtil.SYSTEM_SLASH);
-        if (lastIndex >= 0) {
-            templateRelativePath = templateRelativePath.substring(lastIndex + 1);
+        for (String file : files) {
+            if (templateRelativePath.startsWith(file) || templateRelativePath.contains(SystemUtil.SYSTEM_SLASH + file))
+                return true;
         }
 
-        return files.contains(templateRelativePath);
+        return false;
     }
 
     /**
