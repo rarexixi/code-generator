@@ -74,3 +74,15 @@ var commonFun = {
     }
 };
 
+$(function() {
+
+    $('input[type="datetime"]').datetimepicker({
+        autoclose: 1
+    });
+    
+    $('input[type="date"]').datetimepicker({
+        format: 'yyyy-mm-dd',
+        minView: "month",
+        autoclose: 1
+    });
+});
