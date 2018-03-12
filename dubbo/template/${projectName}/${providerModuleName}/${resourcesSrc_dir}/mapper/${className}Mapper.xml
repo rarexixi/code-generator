@@ -26,10 +26,6 @@
             <if test="condition.${column.columnFieldNameFirstLower} != null">
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
             </if>
-            <#elseif column.columnFieldNameFirstLower == 'isActive'>
-            <if test="condition.${column.columnFieldNameFirstLower} != null">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
-            </if>
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
             <if test="condition.${column.columnFieldNameFirstLower} != null">
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
@@ -40,7 +36,31 @@
                     ${r"#{it}"}
                 </foreach>
             </if>
-            <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <if test="condition.${column.columnFieldNameFirstLower}Min != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
+                ]]>
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}Max != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Max'/>
+                ]]>
+            </if>
+            <#elseif (column.columnFieldType == "Date")>
+            <if test="condition.${column.columnFieldNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}Min != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
+                ]]>
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}Max != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Max'/>
+                ]]>
+            </if>
+            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
             <if test="condition.${column.columnFieldNameFirstLower}Min != null">
                 <![CDATA[
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
@@ -60,6 +80,12 @@
             </if>
             <if test="condition.${column.columnFieldNameFirstLower}Like != null and condition.${column.columnFieldNameFirstLower}Like != ''">
                 AND `${table.tableName}`.`${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Like'/>, '%')
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}List != null and condition.${column.columnFieldNameFirstLower}List.size() > 0">
+                AND `${table.tableName}`.`${column.columnName}` in
+                <foreach collection="condition.${column.columnFieldNameFirstLower}List" item="it" open="(" close=")" separator=",">
+                    ${r"#{it}"}
+                </foreach>
             </if>
             <#else>
             <if test="condition.${column.columnFieldNameFirstLower} != null">

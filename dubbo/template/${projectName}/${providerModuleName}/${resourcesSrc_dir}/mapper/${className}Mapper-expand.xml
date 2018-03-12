@@ -43,10 +43,6 @@
             <if test="${column.columnFieldNameFirstLower} != null">
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl column.columnFieldNameFirstLower/>
             </if>
-            <#elseif column.columnFieldNameFirstLower == 'isActive'>
-            <if test="${column.columnFieldNameFirstLower} != null">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl column.columnFieldNameFirstLower/>
-            </if>
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
             <if test="${column.columnFieldNameFirstLower} != null">
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl column.columnFieldNameFirstLower/>
@@ -57,7 +53,31 @@
                     ${r"#{item}"}
                 </foreach>
             </if>
-            <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <if test="${column.columnFieldNameFirstLower}Min != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= ${r"#{"}${column.columnFieldNameFirstLower}Min${r"}"}
+                ]]>
+            </if>
+            <if test="${column.columnFieldNameFirstLower}Max != null">
+                <![CDATA[
+                AND `${table.tableName}`.`${column.columnName}` <= ${r"#{"}${column.columnFieldNameFirstLower}Max${r"}"}
+                ]]>
+            </if>
+            <#elseif (column.columnFieldType == "Date")>
+            <if test="${column.columnFieldNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl column.columnFieldNameFirstLower/>
+            </if>
+            <if test="${column.columnFieldNameFirstLower}Min != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= ${r"#{"}${column.columnFieldNameFirstLower}Min${r"}"}
+                ]]>
+            </if>
+            <if test="${column.columnFieldNameFirstLower}Max != null">
+                <![CDATA[
+                AND `${table.tableName}`.`${column.columnName}` <= ${r"#{"}${column.columnFieldNameFirstLower}Max${r"}"}
+                ]]>
+            </if>
+            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
             <if test="${column.columnFieldNameFirstLower}Min != null">
                 <![CDATA[
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= ${r"#{"}${column.columnFieldNameFirstLower}Min${r"}"}
@@ -77,6 +97,12 @@
             </if>
             <if test="${column.columnFieldNameFirstLower}Like != null and ${column.columnFieldNameFirstLower}Like != ''">
                 AND `${table.tableName}`.`${column.columnName}` LIKE concat('%', ${r"#{"}${column.columnFieldNameFirstLower}Like${r"}"}, '%')
+            </if>
+            <if test="${column.columnFieldNameFirstLower}List != null and ${column.columnFieldNameFirstLower}List.size() > 0">
+                AND `${table.tableName}`.`${column.columnName}` in
+                <foreach collection="${column.columnFieldNameFirstLower}List" item="item" open="(" close=")" separator=",">
+                    ${r"#{item}"}
+                </foreach>
             </if>
             <#else>
             <if test="${column.columnFieldNameFirstLower} != null">

@@ -62,12 +62,13 @@ var app = new Vue({
         init${column.columnFieldName?replace('Id', '')}: function () {
             var that = this;
             $.ajax({
-                type: 'get',
+                type: 'post',
                 url: '/${column.fkSelectField.foreignClass?lower_case}/find',
-                data: {
+                contentType : 'application/json',
+                data : JSON.stringify({
                     pageIndex: 1,
                     pageSize: 1000
-                },
+                }),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
