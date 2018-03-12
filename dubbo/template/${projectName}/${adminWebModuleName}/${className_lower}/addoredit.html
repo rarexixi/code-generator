@@ -60,7 +60,7 @@
                 <#elseif column.columnFieldType == "Date">
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="datetime" class="form-control" />
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower} | formatDate" type="datetime" class="form-control" />
                 </div>
                 <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
                 <div class="form-group">
@@ -95,8 +95,8 @@
     <script src="/resources/bootstrap/plugins/js/jquery.bootstrap-growl.min.js"></script>
     <script src="/resources/bootstrap/plugins/js/bootbox.min.js"></script>
     <script src="/resources/bootstrap/plugins/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="/resources/js/common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/resources/js/common.js"></script>
     <script src="/resources/js/${classNameLower}/addoredit.js"></script>
 </body>
 

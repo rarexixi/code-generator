@@ -2,6 +2,8 @@
 <#assign sortCount = 0>
 package ${basePackage}.admin.vm.addoredit;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ${basePackage}.admin.databind.DateJsonDeserializer;
 import ${basePackage}.entity.${className}Entity;
 
 import java.io.Serializable;
@@ -24,6 +26,23 @@ public class ${className}AddOrEditVm implements Serializable {
 
     <#list table.columns as column>
     <#if column.notRequired>
+    <#elseif (column.columnFieldType == "Date")>
+    /**
+    * 获取${column.columnComment}
+    */
+    @JsonDeserialize(using = DateJsonDeserializer.class)
+    public ${column.columnFieldType} get${column.columnFieldName}() {
+        return ${column.columnFieldNameFirstLower};
+    }
+
+    /**
+    * 设置${column.columnComment}
+    */
+    @JsonDeserialize(using = DateJsonDeserializer.class)
+    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
+        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    }
+
     <#else>
     /**
     * 获取${column.columnComment}

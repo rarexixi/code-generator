@@ -2,6 +2,8 @@
 <#assign sortCount = 0>
 package ${basePackage}.admin.vm.search;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ${basePackage}.admin.databind.DateJsonDeserializer;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${baseCommonPackage}.model.SearchPage;
 
@@ -46,15 +48,44 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
     public ${column.columnFieldType} get${column.columnFieldName}() {
         return ${column.columnFieldNameFirstLower};
     }
-    <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+    <#elseif (column.columnFieldType == "Date")>
 
     /**
-    * <#if column.columnFieldType == "Date">开始<#else>最小</#if> ${column.columnComment}
+    * 开始 ${column.columnComment}
+    */
+    @JsonDeserialize(using = DateJsonDeserializer.class)
+    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+
+    /**
+    * 结束 ${column.columnComment}
+    */
+    @JsonDeserialize(using = DateJsonDeserializer.class)
+    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
+
+    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
+        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    }
+
+    public ${column.columnFieldType} get${column.columnFieldName}Min() {
+        return ${column.columnFieldNameFirstLower}Min;
+    }
+
+    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
+        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    }
+
+    public ${column.columnFieldType} get${column.columnFieldName}Max() {
+        return ${column.columnFieldNameFirstLower}Max;
+    }
+    <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+
+    /**
+    * 最小 ${column.columnComment}
     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
 
     /**
-    * <#if column.columnFieldType == "Date">结束<#else>最大</#if> ${column.columnComment}
+    * 最大 ${column.columnComment}
     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
 

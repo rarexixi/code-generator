@@ -169,7 +169,7 @@
                         </#if>
                     </form>
                 </div>
-                <table v-if="pageInfo" class="table table-striped table-hover">
+                <table v-if="pageInfo && pageInfo.list && pageInfo.list.length > 0" class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
@@ -196,9 +196,9 @@
                             <#elseif column.columnName == table.validStatusField.fieldName>
                             <td><span v-if="item.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-success">有效</span><span v-else class="text-danger">无效</span></td>
                             <#elseif column.imgUrl>
-                            <td>
-                                <img :src="item.${column.columnFieldNameFirstLower}" alt="">
-                            </td>
+                            <td><img :src="item.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}"></td>
+                            <#elseif column.columnFieldType == "Date">
+                            <td><span>{{item.${column.columnFieldNameFirstLower} | formatDate}}</span></td>
                             <#else>
                             <td><span>{{item.${column.columnFieldNameFirstLower}}}</span></td>
                             </#if>
@@ -215,7 +215,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <div v-else class="alert alert-warning" role="alert">
+                    暂无数据
+                </div>
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown" v-if="pageInfo && pageInfo.list && pageInfo.list.length > 0">
                     <div class="btn btn-secondary" v-if="pageInfo.hasPreviousPage" @click="changePage(pageInfo.prePage)">上一页</div>
                     <div class="btn btn-secondary" v-if="1 < pageInfo.navigateFirstPage" @click="changePage(1)">1</div>
                     <div class="btn btn-secondary" v-if="2 < pageInfo.navigateFirstPage">...</div>
@@ -249,8 +252,8 @@
     <script src="/resources/bootstrap/plugins/js/jquery.bootstrap-growl.min.js"></script>
     <script src="/resources/bootstrap/plugins/js/bootbox.min.js"></script>
     <script src="/resources/bootstrap/plugins/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="/resources/js/common.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/resources/js/common.js"></script>
     <script src="/resources/js/${classNameLower}/list.js"></script>
 </body>
 

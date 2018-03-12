@@ -240,7 +240,7 @@ var app = new Vue({
             <#elseif column.columnName == table.validStatusField.fieldName>
             this.addOrEditParams.${column.columnFieldNameFirstLower} = ${table.validStatusField.validValue};
             <#elseif column.columnFieldType == "Date">
-            //${column.columnFieldNameFirstLower}: null<#if column_has_next>,</#if>
+            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
             <#else>
             this.addOrEditParams.${column.columnFieldNameFirstLower} = '';
             </#if>
