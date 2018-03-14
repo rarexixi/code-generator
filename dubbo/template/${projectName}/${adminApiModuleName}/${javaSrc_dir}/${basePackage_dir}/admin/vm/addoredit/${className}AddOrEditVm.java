@@ -44,6 +44,7 @@ public class ${className}AddOrEditVm implements Serializable {
         this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
     }
 
+    </#if>
     </#list>
 
     public ${className}Entity get${className}Entity() {
