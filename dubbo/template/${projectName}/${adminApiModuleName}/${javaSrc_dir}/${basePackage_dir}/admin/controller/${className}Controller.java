@@ -37,7 +37,7 @@ public class ${className}Controller {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/addList", method = RequestMethod.POST)
+    @RequestMapping(value = { "/addList" }, method = RequestMethod.POST)
     public ResponseVo<Integer> addList(@RequestBody List<${className}AddOrEditVm> list) {
 
         ResponseVo<Integer> result = ${classNameLower}Service.addList(list);

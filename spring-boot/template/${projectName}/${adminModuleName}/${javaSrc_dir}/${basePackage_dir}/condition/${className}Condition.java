@@ -15,8 +15,8 @@ public class ${className}Condition implements Serializable {
     <#if column.columnName == table.validStatusField.fieldName>
 
     /**
-    * ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
@@ -29,14 +29,24 @@ public class ${className}Condition implements Serializable {
     <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
 
     /**
-    * ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     /**
-    * ${column.columnComment} 列表
-    */
+     * ${column.columnComment} 列表
+     */
     private List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List;
+
+    /**
+     * 最小 ${column.columnComment}
+     */
+    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+
+    /**
+     * 最大 ${column.columnComment}
+     */
+    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
         this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
@@ -62,16 +72,82 @@ public class ${className}Condition implements Serializable {
             this.${column.columnFieldNameFirstLower}List.add(${column.columnFieldNameFirstLower});
         }
     }
-    <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+
+    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
+        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    }
+
+    public ${column.columnFieldType} get${column.columnFieldName}Min() {
+        return ${column.columnFieldNameFirstLower}Min;
+    }
+
+    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
+        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    }
+
+    public ${column.columnFieldType} get${column.columnFieldName}Max() {
+        return ${column.columnFieldNameFirstLower}Max;
+    }
+
+    public void set${column.columnFieldName}Between(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min, ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
+        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    }
+    <#elseif (column.columnFieldType == "Date")>
 
     /**
-    * <#if column.columnFieldType == "Date">开始<#else>最小</#if> ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
+    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+
+    /**
+     * 开始 ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
 
     /**
-    * <#if column.columnFieldType == "Date">结束<#else>最大</#if> ${column.columnComment}
-    */
+     * 结束 ${column.columnComment}
+     */
+    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
+
+    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
+        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    }
+
+    public ${column.columnFieldType} get${column.columnFieldName}() {
+        return ${column.columnFieldNameFirstLower};
+    }
+
+    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
+        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    }
+
+    public ${column.columnFieldType} get${column.columnFieldName}Min() {
+        return ${column.columnFieldNameFirstLower}Min;
+    }
+
+    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
+        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    }
+
+    public ${column.columnFieldType} get${column.columnFieldName}Max() {
+        return ${column.columnFieldNameFirstLower}Max;
+    }
+
+    public void set${column.columnFieldName}Between(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min, ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
+        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    }
+    <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+
+    /**
+     * 最小 ${column.columnComment}
+     */
+    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+
+    /**
+     * 最大 ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
 
     public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
@@ -97,19 +173,24 @@ public class ${className}Condition implements Serializable {
     <#elseif (column.columnFieldType == "String")>
 
     /**
-    * ${column.columnComment} (完全匹配）
-    */
+     * ${column.columnComment} (完全匹配）
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     /**
-    * ${column.columnComment} (开始匹配)
-    */
+     * ${column.columnComment} (开始匹配)
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith;
 
     /**
-    * ${column.columnComment} (泛匹配)
-    */
+     * ${column.columnComment} (泛匹配)
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Like;
+
+    /**
+     * ${column.columnComment} 列表
+     */
+    private List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List;
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
         this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
@@ -134,11 +215,28 @@ public class ${className}Condition implements Serializable {
     public ${column.columnFieldType} get${column.columnFieldName}Like() {
         return ${column.columnFieldNameFirstLower}Like;
     }
+
+    public void set${column.columnFieldName}List(List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List) {
+        this.${column.columnFieldNameFirstLower}List = ${column.columnFieldNameFirstLower}List;
+    }
+
+    public List<${column.columnFieldType}> get${column.columnFieldName}List() {
+        return ${column.columnFieldNameFirstLower}List;
+    }
+
+    public void set${column.columnFieldName}In(${column.columnFieldType}... ${column.columnFieldNameFirstLower}List) {
+        if (this.${column.columnFieldNameFirstLower}List == null) {
+            this.${column.columnFieldNameFirstLower}List = new ArrayList<${column.columnFieldType}>();
+        }
+        for (${column.columnFieldType} ${column.columnFieldNameFirstLower} : ${column.columnFieldNameFirstLower}List) {
+            this.${column.columnFieldNameFirstLower}List.add(${column.columnFieldNameFirstLower});
+        }
+    }
     <#else>
 
     /**
-    * ${column.columnComment}
-    */
+     * ${column.columnComment}
+     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {

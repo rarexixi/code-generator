@@ -19,6 +19,9 @@ public class ${className}AddOrEditVm implements Serializable {
     /**
      * ${column.columnComment}
      */
+    <#if (column.columnFieldType == "Date")>
+    @JsonDeserialize(using = DateJsonDeserializer.class)
+    </#if>
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     </#if>
@@ -26,23 +29,6 @@ public class ${className}AddOrEditVm implements Serializable {
 
     <#list table.columns as column>
     <#if column.notRequired>
-    <#elseif (column.columnFieldType == "Date")>
-    /**
-    * 获取${column.columnComment}
-    */
-    @JsonDeserialize(using = DateJsonDeserializer.class)
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
-    }
-
-    /**
-    * 设置${column.columnComment}
-    */
-    @JsonDeserialize(using = DateJsonDeserializer.class)
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
-    }
-
     <#else>
     /**
     * 获取${column.columnComment}
@@ -58,7 +44,6 @@ public class ${className}AddOrEditVm implements Serializable {
         this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
     }
 
-    </#if>
     </#list>
 
     public ${className}Entity get${className}Entity() {

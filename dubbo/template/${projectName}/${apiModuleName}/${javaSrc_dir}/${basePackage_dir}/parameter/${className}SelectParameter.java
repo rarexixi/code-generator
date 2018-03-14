@@ -41,12 +41,12 @@ public class ${className}SelectParameter extends BaseSelectParameter {
     private List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List;
 
     /**
-     * <#if column.columnFieldType == "Date">开始<#else>最小</#if> ${column.columnComment}
+     * 最小 ${column.columnComment}
      */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
 
     /**
-     * <#if column.columnFieldType == "Date">结束<#else>最大</#if> ${column.columnComment}
+     * 最大 ${column.columnComment}
      */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
 
@@ -103,12 +103,12 @@ public class ${className}SelectParameter extends BaseSelectParameter {
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     /**
-     * <#if column.columnFieldType == "Date">开始<#else>最小</#if> ${column.columnComment}
+     * 开始 ${column.columnComment}
      */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
 
     /**
-     * <#if column.columnFieldType == "Date">结束<#else>最大</#if> ${column.columnComment}
+     * 结束 ${column.columnComment}
      */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
 
@@ -143,12 +143,12 @@ public class ${className}SelectParameter extends BaseSelectParameter {
     <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
 
     /**
-     * <#if column.columnFieldType == "Date">开始<#else>最小</#if> ${column.columnComment}
+     * 最小 ${column.columnComment}
      */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
 
     /**
-     * <#if column.columnFieldType == "Date">结束<#else>最大</#if> ${column.columnComment}
+     * 最大 ${column.columnComment}
      */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
 

@@ -143,7 +143,17 @@ public class OperationCheckUtil {
         return messageList;
     }
 
-    static boolean isNullOrEmpty(Object object) {
+    public static boolean isNullOrEmpty(Object... objects) {
+
+        for (Object object : objects) {
+            if (isNullOrEmpty(object)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNullOrEmpty(Object object) {
         if (object == null) {
             return true;
         }
