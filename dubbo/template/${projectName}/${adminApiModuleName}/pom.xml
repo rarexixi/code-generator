@@ -4,7 +4,6 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>${adminApiModuleName}</artifactId>
-	<version>${projectVersion}</version>
 	<packaging>jar</packaging>
 	<name>${adminApiModuleName}</name>
 	<description>Description</description>
@@ -25,13 +24,19 @@
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo</artifactId>
+			<groupId>com.alibaba.boot</groupId>
+			<artifactId>dubbo-spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>fastjson</artifactId>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
 		</dependency>
         <dependency>
             <groupId>com.101tec</groupId>
@@ -40,8 +45,11 @@
 
 		<dependency>
 			<groupId>${projectGroup}</groupId>
+			<artifactId>${commonModuleName}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${projectGroup}</groupId>
 			<artifactId>${apiModuleName}</artifactId>
-			<version>${projectVersion}</version>
 		</dependency>
 	</dependencies>
 

@@ -4,3 +4,23 @@ server:
 spring:
   application:
     name: ${adminApiModuleName}
+
+dubbo:
+  application:
+    id: ${adminApiModuleName}
+    name: ${adminApiModuleName}
+    owner:
+  protocol:
+    id: dubbo
+    name: dubbo
+  consumer:
+    group: ${dubboServiceGroup}
+    version: ${dubboServiceVersion}
+  registry:
+    id: ${dubboServiceProtocol}
+    protocol: ${dubboServiceProtocol}
+    address: ${dubboRegistryAddress}
+    group: ${dubboServiceGroup}
+    version: ${dubboServiceVersion}
+  scan:
+    base-packages: ${basePackage}.admin.service

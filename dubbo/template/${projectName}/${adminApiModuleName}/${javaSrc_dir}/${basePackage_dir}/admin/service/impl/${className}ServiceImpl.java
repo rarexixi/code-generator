@@ -17,9 +17,9 @@ import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.vo.${className}Vo;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Value("${r'${spring.application.name}'}")
     private String sessionId;
 
-    @Autowired
+    @Reference
     private ${className}Api ${classNameLower}Api;
 
     /**

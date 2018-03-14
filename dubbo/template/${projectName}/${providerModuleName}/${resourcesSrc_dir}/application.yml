@@ -14,3 +14,23 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   config-location: classpath:mybatis-config.xml
   type-aliases-package: ${basePackage}.mapper
+
+dubbo:
+  application:
+    id: ${providerModuleName}
+    name: ${providerModuleName}
+    owner:
+  protocol:
+    id: dubbo
+    name: dubbo
+  provider:
+    group: ${dubboServiceGroup}
+    version: ${dubboServiceVersion}
+  registry:
+    id: ${dubboServiceProtocol}
+    protocol: ${dubboServiceProtocol}
+    address: ${dubboRegistryAddress}
+    group: ${dubboServiceGroup}
+    version: ${dubboServiceVersion}
+  scan:
+    base-packages: ${basePackage}.api

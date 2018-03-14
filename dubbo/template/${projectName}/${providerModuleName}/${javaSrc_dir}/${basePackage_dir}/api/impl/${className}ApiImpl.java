@@ -18,15 +18,15 @@ import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.service.${className}Service;
 import ${basePackage}.vo.${className}Vo;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 <#include "/include/java_copyright.ftl">
-@Service("${classNameLower}Api")
+@Service
 public class ${className}ApiImpl implements ${className}Api {
 
     private static LogUtil logger = LogUtil.build(${className}ApiImpl.class);

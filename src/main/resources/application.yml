@@ -16,7 +16,7 @@ generator:
   encoding: UTF-8                                           # 代码字符集
   path:
     template: /Workspace/github.com/java/mysql-code-generator/dubbo/template/  # 模版路径
-    out: /Workspace/github.com/java/mysql-code-generator/dubbo/out/            # 输出路径
+    out: /Workspace/gitee.com/            # 输出路径
   file:
     ignore: include/                                        # 要忽略的文件
     aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, nav.html
@@ -45,7 +45,7 @@ generator:
   # 公共自定义属性
   commonProperties:
 
-    projectName: quick-auto
+    projectName: quick-dubbo-auto
     projectShortName: quick
     projectGroup: org.xi
     projectVersion: 1.0-SNAPSHOT
@@ -64,6 +64,8 @@ generator:
 
     dubboServiceGroup: quick
     dubboServiceVersion: 1.0.0
+    dubboServiceProtocol: zookeeper
+    dubboRegistryAddress: 192.168.10.31:2181,192.168.10.32:2181,192.168.10.33:2181
 
     author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
