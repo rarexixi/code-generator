@@ -10,9 +10,6 @@ spring:
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
-logging:
-  level: info
-
 generator:
   encoding: UTF-8 # 代码字符集
   path:

@@ -13,7 +13,6 @@ spring:
     ansi:
       enabled: always
 logging:
-  level:
   pattern:
     console: "[%p] %msg%n"
 
