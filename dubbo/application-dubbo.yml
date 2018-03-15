@@ -10,14 +10,16 @@ spring:
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
+dollar: $
+
 generator:
-  encoding: UTF-8                                           # 代码字符集
+  encoding: UTF-8           # 代码字符集
   path:
-    template: ./template/  # 模版路径
-    out: ./out/            # 输出路径
+    template: ./template/   # 模版路径
+    out: ./out/             # 输出路径
   file:
     ignore: include/                                        # 要忽略的文件
-    aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, nav.html
+    aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, ${dollar}{adminWebModuleName}/index.html
                                                             # 聚合文件
     justCopy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js
                                                             # 仅复制文件

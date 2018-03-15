@@ -11,10 +11,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 
 generator:
-  encoding: UTF-8 # 代码字符集
+  encoding: UTF-8           # 代码字符集
   path:
-    template: ./template/  # 模版路径
-    out: ./out/            # 输出路径
+    template: ./template/   # 模版路径
+    out: ./out/             # 输出路径
   file:
     ignore: include/                                        # 要忽略的文件
     aggregate: nav.html
