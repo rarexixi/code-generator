@@ -23,15 +23,15 @@ generator:
                                                             # 聚合文件
     justCopy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js
                                                             # 仅复制文件
-  valid-status-field:
-    fieldName: is_deleted                                   # 有效性字段名
+  valid-status-field:                                       # 是否删除字段
+    fieldName: is_deleted                                   # 字段名
     validValue: 0                                           # 有效值
     invalidValue: 1                                         # 无效值
-  fk-select-fields:
-    - nameSet: user_type_id
-      foreignTable: user_type
-      keyField: id
-      valueField: user_type_name
+  fk-select-fields:                                         # 逻辑外键字段，用于前台select生成
+    - nameSet: user_type_id                                 # 当前表字段名
+      foreignTable: user_type                               # 对应的关联表
+      keyField: id                                          # 对应的关联表外键字段
+      valueField: user_type_name                            # 对应的关联表外键值
   field:
     notRequired: create_time, update_time                   # 不需要赋值的字段
     select:
