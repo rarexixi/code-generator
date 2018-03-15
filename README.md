@@ -1,23 +1,25 @@
 # MysqlCodeGenerator
-mysql code generator
 
+mysql代码生成器，示例有dubbo，spring-boot，spring-cloud三套模版，模版页面采用bootstrap V4布局
 
 ## 使用方式
 
 下载源码，使用maven打包，并将jar包重命名为codegen.jar，复制到对应模版目录下（codegen.bat/codegen.sh同级目录）
+
 ```
 $ mvn package -Dmaven.test.skip=true
 $ mv target/mysql-code-generator-0.0.1-SNAPSHOT.jar ./dubbo/codegen.jar
 ```
+
 修改对应的yml文件的数据库连接及其他设置，然后运行codegen.bat/codegen.sh，根据提示生成代码即可
+
 示例配置对应的sql为/sql/create_tables.sql
 
 ## 模版说明
 
 模版引擎采用freemarker
-公共属性在commonProperties
-其中other map object
-包括
+
+公共属性在commonProperties，其中other map object包括
 ```
 "now": new Date(),
 "dbUrl": 数据库连接串,
@@ -26,6 +28,7 @@ $ mv target/mysql-code-generator-0.0.1-SNAPSHOT.jar ./dubbo/codegen.jar
 "validStatusField": 有效字段（类型是ValidStatusField）,
 commonProperties配置的map
 ```
+
 对于表，页面model为
 ```
 {
@@ -33,12 +36,14 @@ commonProperties配置的map
     other map object
 }
 ```
+
 对于基本文件，页面model为
 ```
 {
     other map object
 }
 ```
+
 对于聚合文件，页面model为
 ```
 {
