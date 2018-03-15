@@ -1,0 +1,18 @@
+server:
+  port: ${adminServicePort}
+
+spring:
+  application:
+    name: ${adminModuleName}
+  cloud:
+    service-registry:
+      auto-registration:
+        enabled: false
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:${eurekaServerPort}/eureka/
+
+feign:
+  hystrix:
+    enabled: true
