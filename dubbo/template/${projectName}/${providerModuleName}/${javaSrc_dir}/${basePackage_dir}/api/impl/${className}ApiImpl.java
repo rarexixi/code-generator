@@ -42,6 +42,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> add(${className}Entity entity, String sessionId) {
 
         String fieldName = "";
@@ -69,6 +70,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
     <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> addList(List<${className}Entity> list, String sessionId) {
 
         if (list == null || list.isEmpty()) {
@@ -104,6 +106,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> deleteByPk(${primaryKeyParameters}, String sessionId) {
 
         if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
@@ -132,6 +135,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
         if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
@@ -163,6 +167,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> disableByPk(${primaryKeyParameters}, String sessionId) {
 
         if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
@@ -194,6 +199,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> enableByPk(${primaryKeyParameters}, String sessionId) {
 
         if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
@@ -224,6 +230,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
         if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
@@ -253,6 +260,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
         if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
@@ -284,6 +292,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
 
         String fieldName = "";
@@ -318,6 +327,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<${className}Vo> getByPk(${primaryKeyParameters}, String sessionId) {
 
         if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
@@ -345,6 +355,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
+    @Override
     public Result<PageInfo<${className}Vo>> findPageList(${className}SelectParameter parameter, String sessionId) {
 
         Result<PageInfo<${className}Vo>> result;
