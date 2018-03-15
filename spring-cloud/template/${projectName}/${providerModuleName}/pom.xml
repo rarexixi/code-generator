@@ -24,16 +24,16 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <!--访问/info时，读取application中info下内容-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -49,14 +49,14 @@
             <artifactId>pagehelper</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>${projectGroup}</groupId>
-			<artifactId>${commonModuleName}</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${projectGroup}</groupId>
-			<artifactId>${modelModuleName}</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>${projectGroup}</groupId>
+            <artifactId>${commonModuleName}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${projectGroup}</groupId>
+            <artifactId>${modelModuleName}</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

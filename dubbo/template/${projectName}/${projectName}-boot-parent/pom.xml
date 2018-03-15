@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>${projectGroup}</groupId>
-	<artifactId>${projectName}-boot-parent</artifactId>
-	<version>${projectVersion}</version>
-	<packaging>pom</packaging>
+    <groupId>${projectGroup}</groupId>
+    <artifactId>${projectName}-boot-parent</artifactId>
+    <version>${projectVersion}</version>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -20,8 +20,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-		<pagehelper.version>5.1.2</pagehelper.version>
-		<mybatis-spring-boot.version>1.3.1</mybatis-spring-boot.version>
+        <pagehelper.version>5.1.2</pagehelper.version>
+        <mybatis-spring-boot.version>1.3.1</mybatis-spring-boot.version>
         <dubbo.version>2.6.0</dubbo.version>
         <dubbo-boot.version>0.1.0</dubbo-boot.version>
         <fastjson.version>1.2.46</fastjson.version>
@@ -34,7 +34,7 @@
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
-    			<version>${r'${mybatis-spring-boot.version}'}</version>
+                <version>${r'${mybatis-spring-boot.version}'}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>spring-boot-starter</artifactId>
@@ -46,13 +46,13 @@
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper</artifactId>
-    			<version>${r'${pagehelper.version}'}</version>
+                <version>${r'${pagehelper.version}'}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.alibaba.boot</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
-    			<version>${r'${dubbo-boot.version}'}</version>
+                <version>${r'${dubbo-boot.version}'}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>
@@ -78,7 +78,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-    			<version>${r'${fastjson.version}'}</version>
+                <version>${r'${fastjson.version}'}</version>
             </dependency>
 
             <dependency>
@@ -125,21 +125,21 @@
                 </exclusions>
             </dependency>
 
-    		<dependency>
-    			<groupId>${projectGroup}</groupId>
-    			<artifactId>${commonModuleName}</artifactId>
-    			<version>${projectVersion}</version>
+            <dependency>
+                <groupId>${projectGroup}</groupId>
+                <artifactId>${commonModuleName}</artifactId>
+                <version>${projectVersion}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
                         <artifactId>*</artifactId>
                     </exclusion>
                 </exclusions>
-    		</dependency>
-    		<dependency>
-    			<groupId>${projectGroup}</groupId>
-    			<artifactId>${apiModuleName}</artifactId>
-    			<version>${projectVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>${projectGroup}</groupId>
+                <artifactId>${apiModuleName}</artifactId>
+                <version>${projectVersion}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>${projectGroup}</groupId>
@@ -150,17 +150,17 @@
                         <artifactId>pagehelper</artifactId>
                     </exclusion>
                 </exclusions>
-    		</dependency>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

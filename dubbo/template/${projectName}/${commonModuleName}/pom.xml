@@ -8,12 +8,12 @@
     <name>${commonModuleName}</name>
     <description>Description</description>
 
-	<parent>
-		<groupId>${projectGroup}</groupId>
-		<artifactId>${projectName}-common-parent</artifactId>
-		<version>${projectVersion}</version>
+    <parent>
+        <groupId>${projectGroup}</groupId>
+        <artifactId>${projectName}-common-parent</artifactId>
+        <version>${projectVersion}</version>
         <relativePath/>
-	</parent>
+    </parent>
 
     <dependencies>
         <dependency>

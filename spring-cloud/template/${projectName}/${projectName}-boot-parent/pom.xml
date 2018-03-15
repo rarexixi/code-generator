@@ -61,21 +61,21 @@
                 <version>${r'${pagehelper.version}'}</version>
             </dependency>
 
-    		<dependency>
-    			<groupId>${projectGroup}</groupId>
-    			<artifactId>${commonModuleName}</artifactId>
-    			<version>${projectVersion}</version>
+            <dependency>
+                <groupId>${projectGroup}</groupId>
+                <artifactId>${commonModuleName}</artifactId>
+                <version>${projectVersion}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
                         <artifactId>*</artifactId>
                     </exclusion>
                 </exclusions>
-    		</dependency>
-    		<dependency>
-    			<groupId>${projectGroup}</groupId>
-    			<artifactId>${modelModuleName}</artifactId>
-    			<version>${projectVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>${projectGroup}</groupId>
+                <artifactId>${modelModuleName}</artifactId>
+                <version>${projectVersion}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>${projectGroup}</groupId>
@@ -86,7 +86,7 @@
                         <artifactId>pagehelper</artifactId>
                     </exclusion>
                 </exclusions>
-    		</dependency>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

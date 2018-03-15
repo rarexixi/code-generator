@@ -6,7 +6,7 @@
 	<groupId>${projectGroup}</groupId>
 	<artifactId>${projectName}-common-parent</artifactId>
 	<version>${projectVersion}</version>
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
