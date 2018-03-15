@@ -1,6 +1,19 @@
 # MysqlCodeGenerator
 mysql code generator
 
+
+## 使用方式
+
+下载源码，使用maven打包，并将jar包重命名为codegen.jar，复制到对应模版目录下（codegen.bat/codegen.sh同级目录）
+```
+$ mvn package -Dmaven.test.skip=true
+$ mv target/mysql-code-generator-0.0.1-SNAPSHOT.jar ./dubbo/codegen.jar
+```
+修改对应的yml文件的数据库连接及其他设置，然后运行codegen.bat/codegen.sh，根据提示生成代码即可
+示例配置对应的sql为/sql/create_tables.sql
+
+## 模版说明
+
 模版引擎采用freemarker
 公共属性在commonProperties
 其中other map object
@@ -34,7 +47,7 @@ commonProperties配置的map
 }
 ```
 
-## TableModel
+### TableModel
 
 |FieldName                            |FieldRemark                |type                  |example
 |-------------------------------------|---------------------------|----------------------|--------------------
@@ -56,7 +69,7 @@ commonProperties配置的map
 |primaryKeyParameterValues            |旧主键对应的JAVA参数值     |String                |单个(oldId) ，多个(oldUserId, oldUserTypeId)
 |validStatusColumn                    |有效性字段                 |ColumnModel           |
 
-## ColumnModel
+### ColumnModel
 
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
@@ -92,11 +105,3 @@ commonProperties配置的map
 |content                      |是否是内容字段            |Boolean               |
 |ignoreSearch                 |是否忽略查询              |Boolean               |
 
-## 使用方式
-
-下载源码，使用maven打包，并将jar包重命名为codegen.jar，复制到对应模版目录下（codegen.bat/codegen.sh同级目录）
-```
-$ mvn package -Dmaven.test.skip=true
-$ mv target/mysql-code-generator-0.0.1-SNAPSHOT.jar ./dubbo/codegen.jar
-```
-然后运行codegen.bat/codegen.sh，根据提示生成代码即可
