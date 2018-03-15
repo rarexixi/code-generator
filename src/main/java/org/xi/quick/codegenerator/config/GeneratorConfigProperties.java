@@ -16,7 +16,6 @@ public class GeneratorConfigProperties {
     public GeneratorConfigProperties() {
         field = new HashMap<>();
         file = new HashMap<>();
-        folder = new HashMap<>();
         path = new HashMap<>();
 
         commonProperties = new HashMap<>();
@@ -27,7 +26,6 @@ public class GeneratorConfigProperties {
 
     private Map<String, Set<String>> field;
     private Map<String, Set<String>> file;
-    private Map<String, Set<String>> folder;
     private Map<String, String> path;
 
     private ValidStatusField validStatusField;
@@ -58,14 +56,6 @@ public class GeneratorConfigProperties {
 
     public void setFile(Map<String, Set<String>> file) {
         this.file = file;
-    }
-
-    public Map<String, Set<String>> getFolder() {
-        return folder;
-    }
-
-    public void setFolder(Map<String, Set<String>> folder) {
-        this.folder = folder;
     }
 
     public Map<String, String> getPath() {
@@ -126,33 +116,6 @@ public class GeneratorConfigProperties {
      */
     public String getOutPath() {
         return path.getOrDefault("out", "");
-    }
-
-    /**
-     * 获取忽略的文件夹集合
-     *
-     * @return
-     */
-    public Set<String> getIgnoreFolderSet() {
-        return folder.getOrDefault("ignore", emptySet);
-    }
-
-    /**
-     * 获取聚合文件夹集合
-     *
-     * @return
-     */
-    public Set<String> getAggregateFolderSet() {
-        return folder.getOrDefault("aggregate", emptySet);
-    }
-
-    /**
-     * 获取仅复制文件夹集合
-     *
-     * @return
-     */
-    public Set<String> getJustCopyFolderSet() {
-        return folder.getOrDefault("justCopy", emptySet);
     }
 
     /**
