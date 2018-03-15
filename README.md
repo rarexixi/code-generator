@@ -92,4 +92,11 @@ commonProperties配置的map
 |content                      |是否是内容字段            |Boolean               |
 |ignoreSearch                 |是否忽略查询              |Boolean               |
 
+## 使用方式
 
+下载源码，使用maven打包，并将jar包重命名为codegen.jar，复制到对应模版目录下（codegen.bat/codegen.sh同级目录）
+```
+$ mvn package -Dmaven.test.skip=true
+$ mv target/mysql-code-generator-0.0.1-SNAPSHOT.jar ./dubbo/codegen.jar
+```
+然后运行codegen.bat/codegen.sh，根据提示生成代码即可
