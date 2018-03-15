@@ -11,7 +11,7 @@ $ mvn package -Dmaven.test.skip=true
 $ mv target/mysql-code-generator-0.0.1-SNAPSHOT.jar ./dubbo/codegen.jar
 ```
 
-修改对应的yml文件的数据库连接及其他设置，然后运行codegen.bat/codegen.sh，根据提示生成代码即可
+修改对应的yml文件的数据库连接及其他设置，然后运行codegen.bat/codegen.sh，根据提示生成代码，一般gen base，gen aggregate，gen *即可
 
 示例配置对应的sql为/sql/create_tables.sql
 
