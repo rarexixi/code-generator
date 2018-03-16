@@ -19,7 +19,7 @@ generator:
     ignore: include/                                        # 要忽略的文件
     aggregate: static/index.html
                                                             # 聚合文件
-    justCopy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js
+    just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js
                                                             # 仅复制文件
   valid-status-field:                                       # 是否删除字段
     fieldName: is_deleted                                   # 字段名
@@ -31,17 +31,17 @@ generator:
       keyField: id                                          # 对应的关联表外键字段
       valueField: user_type_name                            # 对应的关联表外键值
   field:
-    notRequired: create_time, update_time                   # 不需要赋值的字段
+    not-required: create_time, update_time
     select:
-    imgUrl: photo
-    videoUrl:
-    docUrl:
-    pageUrl:
-    otherUrl:
+    img-url: photo
+    video-url:
+    doc-url:
+    page-url:
+    other-url:
     content: introduction, remark
 
   # 公共自定义属性
-  commonProperties:
+  common-properties:
     projectName: quick-cloud-auto
     projectShortName: quick
     projectGroup: org.xi
@@ -71,7 +71,7 @@ generator:
     resourcesSrc: src.main.resources
 
   # 获取数据映射关系
-  dataTypeMap:
+  data-type-map:
     tinyint: Integer
     smallint: Integer
     int: Integer
