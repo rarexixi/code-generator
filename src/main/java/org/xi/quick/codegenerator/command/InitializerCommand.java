@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.xi.quick.codegenerator.config.GeneratorConfigProperties;
+import org.xi.quick.codegenerator.properties.FieldProperties;
+import org.xi.quick.codegenerator.properties.FileProperties;
+import org.xi.quick.codegenerator.properties.GeneratorProperties;
+import org.xi.quick.codegenerator.properties.PathProperties;
 import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 
@@ -31,37 +34,40 @@ public class InitializerCommand implements CommandLineRunner {
     private String dbPassword;
 
     @Autowired
-    GeneratorConfigProperties generatorConfigProperties;
+    GeneratorProperties generator;
+
+    @Autowired
+    FieldProperties generatorField;
 
     @Override
     public void run(String... strings) throws Exception {
 
         StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(dbUrl);
 
-        StaticConfigData.VALID_STATUS_FIELD = generatorConfigProperties.getValidStatusField();
-        StaticConfigData.FK_SELECT_FIELDS = generatorConfigProperties.getFkSelectFields();
+        StaticConfigData.VALID_STATUS_FIELD = generator.getValidStatusField();
+        StaticConfigData.FK_SELECT_FIELDS = generator.getFkSelectFields();
 
-        StaticConfigData.NOT_REQUIRED_FIELD_SET = generatorConfigProperties.getNotRequiredFieldSet();
-        StaticConfigData.SELECT_FIELD_SET = generatorConfigProperties.getSelectFieldSet();
-        StaticConfigData.IMG_URL_FIELD_SET = generatorConfigProperties.getImgUrlFieldSet();
-        StaticConfigData.VIDEO_URL_FIELD_SET = generatorConfigProperties.getVideoUrlFieldSet();
-        StaticConfigData.DOC_URL_FIELD_SET = generatorConfigProperties.getDocUrlFieldSet();
-        StaticConfigData.PAGE_URL_FIELD_SET = generatorConfigProperties.getPageUrlFieldSet();
-        StaticConfigData.OTHER_URL_FIELD_SET = generatorConfigProperties.getOtherUrlFieldSet();
-        StaticConfigData.ALL_URL_FIELD_SET = generatorConfigProperties.getAllUrlFieldSet();
-        StaticConfigData.CONTENT_FIELD_SET = generatorConfigProperties.getContentFieldSet();
-        StaticConfigData.IGNORE_SEARCH_FIELD_SET = generatorConfigProperties.getIgnoreSearchFieldSet();
+        StaticConfigData.NOT_REQUIRED_FIELD_SET = generatorField.getNotRequired();
+        StaticConfigData.SELECT_FIELD_SET = generatorField.getSelect();
+        StaticConfigData.IMG_URL_FIELD_SET = generatorField.getImgUrl();
+        StaticConfigData.VIDEO_URL_FIELD_SET = generatorField.getVideoUrl();
+        StaticConfigData.DOC_URL_FIELD_SET = generatorField.getDocUrl();
+        StaticConfigData.PAGE_URL_FIELD_SET = generatorField.getPageUrl();
+        StaticConfigData.OTHER_URL_FIELD_SET = generatorField.getOtherUrl();
+        StaticConfigData.ALL_URL_FIELD_SET = getAllUrlFieldSet();
+        StaticConfigData.CONTENT_FIELD_SET = generatorField.getContent();
+        StaticConfigData.IGNORE_SEARCH_FIELD_SET = getIgnoreSearchFieldSet();
 
-        StaticConfigData.CODE_ENCODING = generatorConfigProperties.getEncoding();
+        StaticConfigData.CODE_ENCODING = generator.getEncoding();
 
-        StaticConfigData.COMMON_PROPERTIES.putAll(generatorConfigProperties.getCommonProperties());
+        StaticConfigData.COMMON_PROPERTIES.putAll(generator.getCommonProperties());
         StaticConfigData.COMMON_PROPERTIES.put("now", new Date());
         StaticConfigData.COMMON_PROPERTIES.put("dbUrl", dbUrl);
         StaticConfigData.COMMON_PROPERTIES.put("dbUsername", dbUsername);
         StaticConfigData.COMMON_PROPERTIES.put("dbPassword", dbPassword);
-        StaticConfigData.COMMON_PROPERTIES.put("validStatusField", generatorConfigProperties.getValidStatusField());
+        StaticConfigData.COMMON_PROPERTIES.put("validStatusField", generator.getValidStatusField());
 
-        DataTypeMapping.DATA_TYPE_MAP = generatorConfigProperties.getDataTypeMap();
+        DataTypeMapping.DATA_TYPE_MAP = generator.getDataTypeMap();
     }
 
     /**
@@ -80,6 +86,33 @@ public class InitializerCommand implements CommandLineRunner {
         }
 
         return "";
+    }
+
+    /**
+     * 获取所有路径的字段集合
+     *
+     * @return
+     */
+    public Set<String> getAllUrlFieldSet() {
+        Set<String> urlSet = new HashSet<>();
+        urlSet.addAll(generatorField.getImgUrl());
+        urlSet.addAll(generatorField.getVideoUrl());
+        urlSet.addAll(generatorField.getDocUrl());
+        urlSet.addAll(generatorField.getPageUrl());
+        urlSet.addAll(generatorField.getOtherUrl());
+        return urlSet;
+    }
+
+    /**
+     * 获取忽略查询的字段集合
+     *
+     * @return
+     */
+    public Set<String> getIgnoreSearchFieldSet() {
+        Set<String> fieldSet = new HashSet<>();
+        fieldSet.addAll(getAllUrlFieldSet());
+        fieldSet.addAll(generatorField.getContent());
+        return fieldSet;
     }
 
 }

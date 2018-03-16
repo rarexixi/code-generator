@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
+import org.xi.quick.codegenerator.properties.FieldProperties;
+import org.xi.quick.codegenerator.properties.FileProperties;
+import org.xi.quick.codegenerator.properties.PathProperties;
+import org.xi.quick.codegenerator.properties.GeneratorProperties;
 import org.xi.quick.codegenerator.utils.DirectoryUtil;
 import org.xi.quick.codegenerator.utils.SystemUtil;
 
@@ -19,16 +23,22 @@ import java.util.regex.Pattern;
 public class AppConfig {
 
     @Autowired
-    GeneratorConfigProperties generatorConfigProperties;
+    GeneratorProperties generator;
+
+    @Autowired
+    PathProperties generatorPath;
+
+    @Autowired
+    FileProperties generatorFile;
 
     @Bean(name = "freeMarkerConfiguration")
     public freemarker.template.Configuration getConfiguration() throws IOException {
 
-        File directory = new File(generatorConfigProperties.getTemplatePath());
+        File directory = new File(generatorPath.getTemplate());
 
         freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_24);
         cfg.setDirectoryForTemplateLoading(directory);
-        cfg.setDefaultEncoding(generatorConfigProperties.getEncoding());
+        cfg.setDefaultEncoding(generator.getEncoding());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         return cfg;
@@ -46,9 +56,9 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
                         isClassFile(templateRelativePath)
-                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getIgnoreFileSet())
-                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
-                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                                && !isMatchingFile(templateRelativePath, generatorFile.getIgnore())
+                                && !isMatchingFile(templateRelativePath, generatorFile.getAggregate())
+                                && !isMatchingFile(templateRelativePath, generatorFile.getJustCopy()));
         return templates;
     }
 
@@ -64,9 +74,9 @@ public class AppConfig {
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
                         !isClassFile(templateRelativePath)
-                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getIgnoreFileSet())
-                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet())
-                                && !isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                                && !isMatchingFile(templateRelativePath, generatorFile.getIgnore())
+                                && !isMatchingFile(templateRelativePath, generatorFile.getAggregate())
+                                && !isMatchingFile(templateRelativePath, generatorFile.getJustCopy()));
         return templates;
     }
 
@@ -81,7 +91,7 @@ public class AppConfig {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
-                        isMatchingFile(templateRelativePath, generatorConfigProperties.getAggregateFileSet()));
+                        isMatchingFile(templateRelativePath, generatorFile.getAggregate()));
         return templates;
     }
 
@@ -96,7 +106,7 @@ public class AppConfig {
 
         List<FreemarkerModel> templates = getMatchingTemplates(freeMarkerConfiguration,
                 templateRelativePath ->
-                        isMatchingFile(templateRelativePath, generatorConfigProperties.getJustCopyFileSet()));
+                        isMatchingFile(templateRelativePath, generatorFile.getJustCopy()));
         return templates;
     }
 
@@ -112,10 +122,10 @@ public class AppConfig {
     public List<FreemarkerModel> getMatchingTemplates(freemarker.template.Configuration freeMarkerConfiguration,
                                                       Predicate<String> predicate) throws IOException {
 
-        File directory = new File(generatorConfigProperties.getTemplatePath());
+        File directory = new File(generatorPath.getTemplate());
         String dirAbsolutePath = directory.getAbsolutePath();
 
-        List<File> files = DirectoryUtil.getAllFiles(generatorConfigProperties.getTemplatePath());
+        List<File> files = DirectoryUtil.getAllFiles(generatorPath.getTemplate());
         List<FreemarkerModel> result = new ArrayList<>();
 
         for (File file : files) {
@@ -125,7 +135,7 @@ public class AppConfig {
             String templateRelativePath = file.getAbsolutePath().substring(dirAbsolutePath.length() + 1);
             if (!predicate.test(templateRelativePath)) continue;
 
-            Template template = freeMarkerConfiguration.getTemplate(templateRelativePath, generatorConfigProperties.getEncoding());
+            Template template = freeMarkerConfiguration.getTemplate(templateRelativePath, generator.getEncoding());
 
             FreemarkerModel outModel = new FreemarkerModel(templateRelativePath, template);
 

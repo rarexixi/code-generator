@@ -5,10 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.xi.quick.codegenerator.config.GeneratorConfigProperties;
+import org.xi.quick.codegenerator.properties.GeneratorProperties;
 import org.xi.quick.codegenerator.functionalinterface.BinaryConsumer;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.model.TableModel;
+import org.xi.quick.codegenerator.properties.PathProperties;
 import org.xi.quick.codegenerator.service.GeneratorService;
 import org.xi.quick.codegenerator.service.TableService;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
@@ -35,7 +36,10 @@ public class GeneratorServiceImpl implements GeneratorService {
     Logger logger = LoggerFactory.getLogger(GeneratorServiceImpl.class);
 
     @Autowired
-    GeneratorConfigProperties generatorConfigProperties;
+    GeneratorProperties generator;
+
+    @Autowired
+    PathProperties generatorPath;
 
     @Autowired
     List<FreemarkerModel> allTemplates;
@@ -179,7 +183,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             dataModel.putAll(StaticConfigData.COMMON_PROPERTIES);
 
             String targetPath = getFilePath(outModel, dataModel);
-            String sourcePath = generatorConfigProperties.getTemplatePath() + outModel.getRelativePath();
+            String sourcePath = generatorPath.getTemplate() + outModel.getRelativePath();
 
             logger.info("正在生成" + targetPath);
             try {
@@ -269,7 +273,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
 
         try (OutputStream stream = new FileOutputStream(absolutePath);
-             Writer out = new OutputStreamWriter(stream, generatorConfigProperties.getEncoding())) {
+             Writer out = new OutputStreamWriter(stream, generator.getEncoding())) {
 
             outModel.getTemplate().process(dataModel, out);
         }
@@ -294,7 +298,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     private String getFilePath(FreemarkerModel model, Map<Object, Object> dataModel) {
 
-        File directory = new File(generatorConfigProperties.getOutPath());
+        File directory = new File(generatorPath.getOut());
         return directory.getAbsolutePath() + SystemUtil.SYSTEM_SLASH + getActualPath(model.getRelativePath(), dataModel);
     }
 
