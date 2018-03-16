@@ -5,7 +5,7 @@
 
     <groupId>org.xi.quick</groupId>
     <artifactId>mysql-code-generator</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>mysql-code-generator</name>
