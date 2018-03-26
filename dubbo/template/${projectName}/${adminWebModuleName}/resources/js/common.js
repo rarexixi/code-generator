@@ -1,6 +1,5 @@
 var commonNotify = {
     delay: 1000,
-
     info: function (message, callback) {
         var that = this;
         $.bootstrapGrowl(message, {
@@ -43,7 +42,6 @@ var commonNotify = {
         }
     },
     confirm: function (message, callback) {
-
         bootbox.confirm({
             buttons: {
                 confirm: {
@@ -65,12 +63,19 @@ var commonNotify = {
 };
 
 var commonFun = {
-
     getParam: function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
         if (r != null) return decodeURI(r[2]);
         return null;
+    },
+    setVueModel: function (vueObj, targetModel, val) {
+        var index = targetModel.indexOf('.');
+        if(index === -1) {
+            Vue.set(vueObj, targetModel, val);
+            return;
+        }
+        Vue.set(vueObj[targetModel.substr(0, index)], targetModel.substr(index + 1), val);
     }
 };
 
@@ -95,17 +100,4 @@ Vue.filter('formatDate', function (timestamp) {
         }
     }
     return fmt;
-});
-
-$(function() {
-
-    $('input[type="datetime"]').datetimepicker({
-        autoclose: 1
-    });
-
-    $('input[type="date"]').datetimepicker({
-        format: 'yyyy-mm-dd',
-        minView: "month",
-        autoclose: 1
-    });
 });
