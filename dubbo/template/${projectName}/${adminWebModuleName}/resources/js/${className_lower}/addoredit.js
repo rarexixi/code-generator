@@ -60,7 +60,7 @@ var app = new Vue({
         <#list table.columns as column>
         <#if column.fkSelect>
         init${column.columnFieldName?replace('Id', '')}: function () {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'post',
                 url: '/${column.fkSelectField.foreignClass?lower_case}/find',
@@ -72,7 +72,7 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        that.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
+                        self.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
                     } else {
                         commonNotify.danger("获取列表失败！");
                     }
@@ -82,16 +82,16 @@ var app = new Vue({
         </#if>
         </#list>
         save: function () {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + that.old${column.columnFieldName}</#list></#if>,
+                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
                 contentType : 'application/json',
-                data : JSON.stringify(that.addOrEditParams),
+                data : JSON.stringify(self.addOrEditParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        commonNotify.success("操作成功！", that.cancelSave);
+                        commonNotify.success("操作成功！", self.cancelSave);
                     } else {
                         commonNotify.danger("操作失败！");
                     }
@@ -99,7 +99,7 @@ var app = new Vue({
             });
         },
         getEditDetail: function () {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'get',
                 url: '/${classNameLower}/getdetail' + window.location.search,
@@ -109,7 +109,7 @@ var app = new Vue({
                         <#list table.columns as column>
                         <#if column.notRequired>
                         <#else>
-                        that.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                        self.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
                         </#if>
                         </#list>
                     } else {

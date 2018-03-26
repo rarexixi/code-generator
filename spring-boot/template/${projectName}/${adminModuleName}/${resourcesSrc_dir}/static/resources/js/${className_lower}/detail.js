@@ -28,14 +28,14 @@ var app = new Vue({
     },
     methods: {
         get: function () {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'get',
                 url: '/${classNameLower}/getdetail' + window.location.search,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        that.detail = response.result;
+                        self.detail = response.result;
                     } else {
                         commonNotify.danger("获取详情失败！");
                     }
@@ -43,7 +43,7 @@ var app = new Vue({
             });
         },
         del: function () {
-            var that = this;
+            var self = this;
             commonNotify.confirm("确定删除吗？", function() {
                 $.ajax({
                     type: 'get',
@@ -51,7 +51,7 @@ var app = new Vue({
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success("删除成功！", that.goback);
+                            commonNotify.success("删除成功！", self.goback);
                         } else {
                             commonNotify.danger("删除失败！");
                         }

@@ -51,16 +51,16 @@ var app = new Vue({
     watch: {
         'checkedList': {
             handler: function (val, oldVal) {
-                var that = this;
+                var self = this;
                 var listLength = 0;
-                if (that.pageInfo.list) {
-                    listLength = that.pageInfo.list.length;
+                if (self.pageInfo.list) {
+                    listLength = self.pageInfo.list.length;
                 }
 
-                if (that.checkedList.length === listLength && listLength > 0) {
-                    that.allChecked = true;
+                if (self.checkedList.length === listLength && listLength > 0) {
+                    self.allChecked = true;
                 } else {
-                    that.allChecked = false;
+                    self.allChecked = false;
                 }
             },
             deep: true
@@ -70,7 +70,7 @@ var app = new Vue({
         <#list table.columns as column>
         <#if column.fkSelect>
         init${column.columnFieldName?replace('Id', '')}: function () {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'post',
                 url: '/${column.fkSelectField.foreignClass?lower_case}/find',
@@ -82,7 +82,7 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        that.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
+                        self.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
                     } else {
                         commonNotify.danger("获取列表失败！");
                     }
@@ -107,17 +107,17 @@ var app = new Vue({
             this.search();
         },
         search: function () {
-            var that = this;
-            that.checkedList = [];
+            var self = this;
+            self.checkedList = [];
             $.ajax({
                 type: 'post',
                 url: '/${classNameLower}/find',
                 contentType : 'application/json',
-                data : JSON.stringify(that.searchParams),
+                data : JSON.stringify(self.searchParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        that.pageInfo = response.result;
+                        self.pageInfo = response.result;
                     } else {
                         commonNotify.danger("获取列表！");
                     }
@@ -126,12 +126,12 @@ var app = new Vue({
         },
         <#if table.validStatusColumn??>
         changeValidSearch: function(valid) {
-            var that = this;
-            if (that.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
+            var self = this;
+            if (self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
                 return;
             }
-            that.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
-            that.search();
+            self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
+            self.search();
         },
         </#if>
         resetSearch: function() {
@@ -170,15 +170,15 @@ var app = new Vue({
         },
         <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
         checkAll: function (moduleName) {
-            var that = this;
+            var self = this;
 
-            if (that.allChecked) {
-                that.checkedList = [];
+            if (self.allChecked) {
+                self.checkedList = [];
             } else {
-                that.checkedList = [];
-                if (that.pageInfo.list) {
-                    that.pageInfo.list.forEach(function (item) {
-                        that.checkedList.push(item.${table.uniquePrimaryKey.columnFieldName?uncap_first});
+                self.checkedList = [];
+                if (self.pageInfo.list) {
+                    self.pageInfo.list.forEach(function (item) {
+                        self.checkedList.push(item.${table.uniquePrimaryKey.columnFieldName?uncap_first});
                     });
                 }
             }
@@ -195,20 +195,21 @@ var app = new Vue({
             this.execSelected("确定删除吗？", '/${classNameLower}/deletelist', "删除成功！", "删除失败！");
         },
         execSelected: function (confirmMsg, url, successMsg, failMsg) {
-            var that = this;
+            var self = this;
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'post',
                     url: url,
                     contentType : 'application/json',
-                    data : JSON.stringify(that.checkedList),
+                    data : JSON.stringify(self.checkedList),
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success(successMsg, that.search);
+                            commonNotify.success(successMsg, self.search);
                         } else {
                             commonNotify.danger(failMsg);
                         }
+                        self.checkedList = [];
                     }
                 });
             });
@@ -229,7 +230,7 @@ var app = new Vue({
             this.exec("确定删除吗？", url, "删除成功！", "删除失败！");
         },
         exec: function (confirmMsg, url, successMsg, failMsg) {
-            var that = this;
+            var self = this;
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'get',
@@ -237,7 +238,7 @@ var app = new Vue({
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success(successMsg, that.search);
+                            commonNotify.success(successMsg, self.search);
                         } else {
                             commonNotify.danger(failMsg);
                         }

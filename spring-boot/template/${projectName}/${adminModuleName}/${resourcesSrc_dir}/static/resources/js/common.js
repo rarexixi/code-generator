@@ -1,44 +1,44 @@
 var commonNotify = {
     delay: 1000,
     info: function (message, callback) {
-        var that = this;
+        var self = this;
         $.bootstrapGrowl(message, {
             type: 'info',
             delay: 1000,
             align: 'center'
         });
         if (callback) {
-            setTimeout(callback, that.delay);
+            setTimeout(callback, self.delay);
         }
     },
     success: function (message, callback) {
-        var that = this;
+        var self = this;
         $.bootstrapGrowl(message, {
             type: 'success',
             delay: 1000
         });
         if (callback) {
-            setTimeout(callback, that.delay);
+            setTimeout(callback, self.delay);
         }
     },
     danger: function (message, callback) {
-        var that = this;
+        var self = this;
         $.bootstrapGrowl(message, {
             type: 'danger',
             delay: 1000
         });
         if (callback) {
-            setTimeout(callback, that.delay);
+            setTimeout(callback, self.delay);
         }
     },
     warning: function (message, callback) {
-        var that = this;
+        var self = this;
         $.bootstrapGrowl(message, {
             type: 'warning',
             delay: 1000
         });
         if (callback) {
-            setTimeout(callback, that.delay);
+            setTimeout(callback, self.delay);
         }
     },
     confirm: function (message, callback) {

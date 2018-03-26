@@ -83,16 +83,16 @@ var app = new Vue({
     watch: {
         'checkedList': {
             handler: function (val, oldVal) {
-                var that = this;
+                var self = this;
                 var listLength = 0;
-                if (that.pageInfo.list) {
-                    listLength = that.pageInfo.list.length;
+                if (self.pageInfo.list) {
+                    listLength = self.pageInfo.list.length;
                 }
 
-                if (that.checkedList.length === listLength && listLength > 0) {
-                    that.allChecked = true;
+                if (self.checkedList.length === listLength && listLength > 0) {
+                    self.allChecked = true;
                 } else {
-                    that.allChecked = false;
+                    self.allChecked = false;
                 }
             },
             deep: true
@@ -102,7 +102,7 @@ var app = new Vue({
         <#list table.columns as column>
         <#if column.fkSelect>
         init${column.columnFieldName?replace('Id', '')}: function () {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'post',
                 url: '/${column.fkSelectField.foreignClass?lower_case}/find',
@@ -114,7 +114,7 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        that.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
+                        self.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
                     } else {
                         commonNotify.danger("获取列表失败！");
                     }
@@ -139,17 +139,17 @@ var app = new Vue({
             this.search();
         },
         search: function () {
-            var that = this;
-            that.checkedList = [];
+            var self = this;
+            self.checkedList = [];
             $.ajax({
                 type: 'post',
                 url: '/${classNameLower}/find',
                 contentType : 'application/json',
-                data : JSON.stringify(that.searchParams),
+                data : JSON.stringify(self.searchParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        that.pageInfo = response.result;
+                        self.pageInfo = response.result;
                     } else {
                         commonNotify.danger("获取列表失败！");
                     }
@@ -158,12 +158,12 @@ var app = new Vue({
         },
         <#if table.validStatusColumn??>
         changeValidSearch: function(valid) {
-            var that = this;
-            if (that.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
+            var self = this;
+            if (self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
                 return;
             }
-            that.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
-            that.search();
+            self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
+            self.search();
         },
         </#if>
         resetSearch: function() {
@@ -193,9 +193,9 @@ var app = new Vue({
         },
         edit: function (${primaryKeyParameterValues}) {
             this.resetSave();
-            var that = this;
+            var self = this;
             <#if !table.hasAutoIncrementUniquePrimaryKey>
-            <#list primaryKey as column>that.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
+            <#list primaryKey as column>self.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
             </#if>
             $.ajax({
                 type: 'get',
@@ -206,7 +206,7 @@ var app = new Vue({
                         <#list table.columns as column>
                         <#if column.notRequired>
                         <#else>
-                        that.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                        self.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
                         </#if>
                         </#list>
                     } else {
@@ -216,16 +216,16 @@ var app = new Vue({
             });
         },
         save: function () {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + that.old${column.columnFieldName}</#list></#if>,
+                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
                 contentType : 'application/json',
-                data : JSON.stringify(that.addOrEditParams),
+                data : JSON.stringify(self.addOrEditParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        commonNotify.success("操作成功！", that.search);
+                        commonNotify.success("操作成功！", self.search);
                     } else {
                         commonNotify.danger("操作失败！");
                     }
@@ -247,14 +247,14 @@ var app = new Vue({
             </#list>
         },
         get: function (${primaryKeyParameterValues}) {
-            var that = this;
+            var self = this;
             $.ajax({
                 type: 'get',
                 url: '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        that.detail = response.result;
+                        self.detail = response.result;
                     } else {
                         commonNotify.danger("获取详情失败！");
                     }
@@ -263,15 +263,15 @@ var app = new Vue({
         },
         <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
         checkAll: function (moduleName) {
-            var that = this;
+            var self = this;
 
-            if (that.allChecked) {
-                that.checkedList = [];
+            if (self.allChecked) {
+                self.checkedList = [];
             } else {
-                that.checkedList = [];
-                if (that.pageInfo.list) {
-                    that.pageInfo.list.forEach(function (item) {
-                        that.checkedList.push(item.${table.uniquePrimaryKey.columnFieldName?uncap_first});
+                self.checkedList = [];
+                if (self.pageInfo.list) {
+                    self.pageInfo.list.forEach(function (item) {
+                        self.checkedList.push(item.${table.uniquePrimaryKey.columnFieldName?uncap_first});
                     });
                 }
             }
@@ -288,20 +288,21 @@ var app = new Vue({
             this.execSelected("确定删除吗？", '/${classNameLower}/deletelist', "删除成功！", "删除失败！");
         },
         execSelected: function (confirmMsg, url, successMsg, failMsg) {
-            var that = this;
+            var self = this;
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'post',
                     url: url,
                     contentType : 'application/json',
-                    data : JSON.stringify(that.checkedList),
+                    data : JSON.stringify(self.checkedList),
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success(successMsg, that.search);
+                            commonNotify.success(successMsg, self.search);
                         } else {
                             commonNotify.danger(failMsg);
                         }
+                        self.checkedList = [];
                     }
                 });
             });
@@ -322,7 +323,7 @@ var app = new Vue({
             this.exec("确定删除吗？", url, "删除成功！", "删除失败！");
         },
         exec: function (confirmMsg, url, successMsg, failMsg) {
-            var that = this;
+            var self = this;
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'get',
@@ -330,7 +331,7 @@ var app = new Vue({
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success(successMsg, that.search);
+                            commonNotify.success(successMsg, self.search);
                         } else {
                             commonNotify.danger(failMsg);
                         }
