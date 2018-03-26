@@ -254,16 +254,19 @@ public class ${className}Controller {
     public Result<Integer> save(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}", required = false) ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         String fieldName = "";
-        if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(entity))) {
-            return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
-        }
 
         Result<Integer> result;
         try {
             int count;
             if (<#list primaryKey as column><#if (column_index > 0)> || </#if><#if !table.hasAutoIncrementUniquePrimaryKey>old${column.columnFieldName}<#else>entity.get${column.columnFieldName}()</#if> == null</#list>) {
+                if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(entity))) {
+                    return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+                }
                 count = ${classNameLower}Service.insert(entity);
             } else {
+                if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(entity))) {
+                    return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+                }
                 <#if !table.hasAutoIncrementUniquePrimaryKey>
                 ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
                 <#else>
