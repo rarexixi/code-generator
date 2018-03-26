@@ -42,7 +42,6 @@
         <dependency>
             <groupId>${projectGroup}</groupId>
             <artifactId>${commonModuleName}</artifactId>
-            <version>${projectVersion}</version>
         </dependency>
     </dependencies>
 
