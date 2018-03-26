@@ -40,8 +40,15 @@
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
                     <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
-                        <option value="0">请选择</option>
+                        <option value="">请选择</option>
                         <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
+                    </select>
+                </div>
+                <#elseif column.select>
+                <div class="form-group">
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                        <option value="">请选择</option>
                     </select>
                 </div>
                 <#elseif column.columnName == table.validStatusField.fieldName>
