@@ -44,7 +44,7 @@
 <script>
     $('#sideNav .nav-link').click(function () {
         $('#sideNav .nav-link.text-info').removeClass('text-info').addClass('text-muted');
-        $(this).addClass('text-info')
+        $(this).removeClass('text-muted').addClass('text-info');
         var targetSrc = $(this).attr('href');
         if (targetSrc == '' || targetSrc.startsWith('javascript')) return;
         var target = $(this).attr('target');
