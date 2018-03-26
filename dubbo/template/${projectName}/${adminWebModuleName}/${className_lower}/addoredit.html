@@ -39,7 +39,7 @@
                 <#elseif column.fkSelect>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
                         <option value="0">请选择</option>
                         <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
                     </select>
@@ -47,7 +47,7 @@
                 <#elseif column.columnName == table.validStatusField.fieldName>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control">
+                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
                         <option value="${table.validStatusField.validValue}">有效</option>
                         <option value="${table.validStatusField.invalidValue}">无效</option>
                     </select>

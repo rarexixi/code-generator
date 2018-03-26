@@ -37,7 +37,7 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
                             <option value="">全部</option>
                             <option value="${table.validStatusField.validValue}">有效</option>
                             <option value="${table.validStatusField.invalidValue}">无效</option>
@@ -50,7 +50,7 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
                             <option value="">全部</option>
                             <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
                         </select>
