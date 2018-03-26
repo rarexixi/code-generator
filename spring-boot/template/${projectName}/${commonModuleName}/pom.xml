@@ -8,35 +8,19 @@
     <artifactId>${commonModuleName}</artifactId>
     <version>${projectVersion}</version>
     <packaging>jar</packaging>
-    <name>${commonModuleName}</name>
-    <description>Description</description>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+    <parent>
+        <groupId>${projectGroup}</groupId>
+        <artifactId>${projectName}-common-parent</artifactId>
+        <version>${projectVersion}</version>
+        <relativePath/>
+    </parent>
 
     <dependencies>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
         </dependency>
-
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${r'${java.version}'}</source>
-                    <target>${r'${java.version}'}</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
