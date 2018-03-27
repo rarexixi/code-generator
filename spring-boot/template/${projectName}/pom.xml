@@ -18,6 +18,8 @@
     <modules>
         <module>${adminModuleName}</module>
         <module>${commonModuleName}</module>
+        <module>${projectName}-boot-parent</module>
+        <module>${projectName}-common-parent</module>
     </modules>
 
 </project>
