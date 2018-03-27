@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.xi.quick.codegenerator.entity.SelectField;
 import org.xi.quick.codegenerator.properties.FieldProperties;
-import org.xi.quick.codegenerator.properties.FileProperties;
 import org.xi.quick.codegenerator.properties.GeneratorProperties;
-import org.xi.quick.codegenerator.properties.PathProperties;
 import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 
@@ -48,7 +47,6 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.FK_SELECT_FIELDS = generator.getFkSelectFields();
 
         StaticConfigData.NOT_REQUIRED_FIELD_SET = generatorField.getNotRequired();
-        StaticConfigData.SELECT_FIELD_SET = generatorField.getSelect();
         StaticConfigData.IMG_URL_FIELD_SET = generatorField.getImgUrl();
         StaticConfigData.VIDEO_URL_FIELD_SET = generatorField.getVideoUrl();
         StaticConfigData.DOC_URL_FIELD_SET = generatorField.getDocUrl();
@@ -57,6 +55,8 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.ALL_URL_FIELD_SET = getAllUrlFieldSet();
         StaticConfigData.CONTENT_FIELD_SET = generatorField.getContent();
         StaticConfigData.IGNORE_SEARCH_FIELD_SET = getIgnoreSearchFieldSet();
+        StaticConfigData.SELECT_FIELD_ARRAY = generatorField.getSelect();
+        StaticConfigData.SELECT_FIELD_NAME_SET = getSelectFieldNameSet(generatorField.getSelect());
 
         StaticConfigData.CODE_ENCODING = generator.getEncoding();
 
@@ -115,4 +115,11 @@ public class InitializerCommand implements CommandLineRunner {
         return fieldSet;
     }
 
+    public Set<String> getSelectFieldNameSet(SelectField[] select) {
+        Set<String> nameSet = new HashSet<>();
+        for (SelectField selectField : select) {
+            nameSet.addAll(selectField.getNameSet());
+        }
+        return nameSet;
+    }
 }

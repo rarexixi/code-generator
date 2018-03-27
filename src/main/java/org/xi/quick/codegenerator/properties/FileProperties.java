@@ -3,11 +3,18 @@ package org.xi.quick.codegenerator.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
 @ConfigurationProperties(prefix = "generator.file")
 public class FileProperties {
+
+    public FileProperties() {
+        ignore = new HashSet<>();
+        aggregate = new HashSet<>();
+        justCopy = new HashSet<>();
+    }
 
     /**
      * 忽略的文件集合

@@ -2,6 +2,7 @@ package org.xi.quick.codegenerator.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.xi.quick.codegenerator.entity.SelectField;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +10,17 @@ import java.util.Set;
 @Component
 @ConfigurationProperties(prefix = "generator.field")
 public class FieldProperties {
+
+    public FieldProperties() {
+        notRequired = new HashSet<>();
+        imgUrl = new HashSet<>();
+        videoUrl = new HashSet<>();
+        docUrl = new HashSet<>();
+        pageUrl = new HashSet<>();
+        otherUrl = new HashSet<>();
+        content = new HashSet<>();
+        select = new SelectField[0];
+    }
 
     /**
      * 不需要填写的字段集合
@@ -18,7 +30,7 @@ public class FieldProperties {
     /**
      * 选择项的字段集合
      */
-    private Set<String> select;
+    private SelectField[] select;
 
     /**
      * 图片路径的字段集合
@@ -50,20 +62,17 @@ public class FieldProperties {
      */
     private Set<String> content;
 
+    /**
+     * 选择项的字段名集合
+     */
+    private Set<String> selectFieldNameSet;
+
     public Set<String> getNotRequired() {
         return notRequired;
     }
 
     public void setNotRequired(Set<String> notRequired) {
         this.notRequired = notRequired;
-    }
-
-    public Set<String> getSelect() {
-        return select;
-    }
-
-    public void setSelect(Set<String> select) {
-        this.select = select;
     }
 
     public Set<String> getImgUrl() {
@@ -112,5 +121,13 @@ public class FieldProperties {
 
     public void setContent(Set<String> content) {
         this.content = content;
+    }
+
+    public SelectField[] getSelect() {
+        return select;
+    }
+
+    public void setSelect(SelectField[] select) {
+        this.select = select;
     }
 }

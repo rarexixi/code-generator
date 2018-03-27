@@ -2,6 +2,8 @@ package org.xi.quick.codegenerator.model;
 
 import org.xi.quick.codegenerator.entity.Column;
 import org.xi.quick.codegenerator.entity.FkSelectField;
+import org.xi.quick.codegenerator.entity.SelectField;
+import org.xi.quick.codegenerator.entity.SelectOption;
 import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
 import org.xi.quick.codegenerator.utils.StringUtil;
@@ -162,6 +164,7 @@ public class ColumnModel {
     private boolean validStatus;
 
     private boolean select;
+    private SelectOption[] selectOptions;
     private boolean notRequired;
 
     private boolean imgUrl;
@@ -190,7 +193,17 @@ public class ColumnModel {
             }
         }
 
-        select = StaticConfigData.SELECT_FIELD_SET.contains(columnName);
+        select = StaticConfigData.SELECT_FIELD_NAME_SET.contains(columnName);
+        if (select) {
+            for (SelectField selectField : StaticConfigData.SELECT_FIELD_ARRAY) {
+                if (selectField.getNameSet().contains(columnName)
+                        && (selectField.getTableName().equals(tableName) || StringUtil.isNullOrEmpty(selectField.getTableName()))) {
+                    selectOptions = selectField.getOptions();
+                }
+            }
+        } else {
+            selectOptions = new SelectOption[0];
+        }
         notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(columnName);
 
         imgUrl = StaticConfigData.IMG_URL_FIELD_SET.contains(columnName);
@@ -272,6 +285,15 @@ public class ColumnModel {
      */
     public boolean isSelect() {
         return select;
+    }
+
+    /**
+     * 选择项列表
+     *
+     * @return
+     */
+    public SelectOption[] getSelectOptions() {
+        return selectOptions;
     }
 
     /**

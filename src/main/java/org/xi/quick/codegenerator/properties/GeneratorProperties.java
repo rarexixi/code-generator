@@ -12,6 +12,7 @@ import java.util.*;
 public class GeneratorProperties {
 
     public GeneratorProperties() {
+        fkSelectFields = new FkSelectField[0];
         commonProperties = new HashMap<>();
         dataTypeMap = new HashMap<>();
     }
