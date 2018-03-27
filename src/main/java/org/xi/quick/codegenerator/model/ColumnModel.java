@@ -197,7 +197,7 @@ public class ColumnModel {
         if (select) {
             for (SelectField selectField : StaticConfigData.SELECT_FIELD_ARRAY) {
                 if (selectField.getNameSet().contains(columnName)
-                        && (selectField.getTableName().equals(tableName) || StringUtil.isNullOrEmpty(selectField.getTableName()))) {
+                        && (StringUtil.isNullOrEmpty(selectField.getTableName()) || selectField.getTableName().equals(tableName))) {
                     selectOptions = selectField.getOptions();
                 }
             }
