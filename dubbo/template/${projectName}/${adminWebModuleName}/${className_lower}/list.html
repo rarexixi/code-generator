@@ -209,7 +209,13 @@
                             <#elseif column.columnName == table.validStatusField.fieldName>
                             <td><span v-if="item.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-success">有效</span><span v-else class="text-danger">无效</span></td>
                             <#elseif column.imgUrl>
-                            <td><img :src="item.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}"></td>
+                            <td>
+                                <div class="ratio ratio-4by3 table-img-container">
+                                    <div class="content center">
+                                        <img :src="item.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}" class="content" />
+                                    </div>
+                                </div>
+                            </td>
                             <#elseif column.columnFieldType == "Date">
                             <td><span>{{item.${column.columnFieldNameFirstLower} | formatDate}}</span></td>
                             <#else>
