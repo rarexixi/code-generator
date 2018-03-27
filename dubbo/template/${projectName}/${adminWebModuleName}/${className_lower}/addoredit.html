@@ -49,6 +49,9 @@
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
                     <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
                         <option value="">请选择</option>
+                        <#list column.selectOptions as option>
+                        <option value="${option.value}">${option.text}</option>
+                        </#list>
                     </select>
                 </div>
                 <#elseif column.columnName == table.validStatusField.fieldName>
