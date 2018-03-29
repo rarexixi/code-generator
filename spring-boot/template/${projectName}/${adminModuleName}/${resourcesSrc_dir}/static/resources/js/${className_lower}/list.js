@@ -11,7 +11,7 @@ var app = new Vue({
     data: {
         <#list table.columns as column>
         <#if column.fkSelect>
-        ${column.fkSelectField.foreignClass?uncap_first}List: [],
+        ${column.columnFieldName?uncap_first}SelectList: [],
         </#if>
         </#list>
         searchParams: {
@@ -82,7 +82,7 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        self.${column.fkSelectField.foreignClass?uncap_first}List = response.result.list;
+                        self.${column.columnFieldName?uncap_first}SelectList = response.result.list;
                     } else {
                         commonNotify.danger("获取列表失败！");
                     }

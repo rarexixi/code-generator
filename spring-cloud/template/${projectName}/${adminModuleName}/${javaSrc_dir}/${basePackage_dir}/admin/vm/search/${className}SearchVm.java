@@ -19,7 +19,7 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
     <#assign sortCount = sortCount + 2>
 
     //region ${column.columnComment}
-    <#if column.columnName == table.validStatusField.fieldName>
+    <#if (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
     <#assign sortCount = sortCount - 2>
 
     /**
@@ -154,7 +154,7 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
     <#list table.columns as column>
     <#if column.ignoreSearch>
     <#else>
-        <#if column.columnName == table.validStatusField.fieldName>
+        <#if (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
         parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
         <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
         parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});

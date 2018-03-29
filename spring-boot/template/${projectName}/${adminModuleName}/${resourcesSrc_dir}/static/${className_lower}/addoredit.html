@@ -41,7 +41,7 @@
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
                     <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
                         <option value="">请选择</option>
-                        <option v-for="item in ${column.fkSelectField.foreignClass?uncap_first}List" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.foreignClass?uncap_first}Name }}</option>
+                        <option v-for="item in ${column.columnFieldName?uncap_first}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.valueField?uncap_first} }}</option>
                     </select>
                 </div>
                 <#elseif column.select>
