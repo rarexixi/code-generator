@@ -28,11 +28,6 @@ public class FieldProperties {
     private Set<String> notRequired;
 
     /**
-     * 选择项的字段集合
-     */
-    private SelectField[] select;
-
-    /**
      * 图片路径的字段集合
      */
     private Set<String> imgUrl;
@@ -63,9 +58,9 @@ public class FieldProperties {
     private Set<String> content;
 
     /**
-     * 选择项的字段名集合
+     * 选择项的字段集合
      */
-    private Set<String> selectFieldNameSet;
+    private SelectField[] select;
 
     public Set<String> getNotRequired() {
         return notRequired;
