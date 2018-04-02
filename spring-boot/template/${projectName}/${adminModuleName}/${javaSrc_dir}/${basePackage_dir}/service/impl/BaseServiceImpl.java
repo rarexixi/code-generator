@@ -15,10 +15,9 @@ import java.io.Serializable;
 import java.util.List;
 
 @Transactional
-public class BaseServiceImpl<T extends Serializable, C extends Serializable> implements BaseService<T, C> {
+public abstract class BaseServiceImpl<T extends Serializable, C extends Serializable> implements BaseService<T, C> {
 
-    @Autowired
-    protected BaseMapper<T, C> mapper;
+    protected abstract BaseMapper<T, C> getMapper();
 
     /**
      * 添加
@@ -28,6 +27,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int insert(T model) {
+        BaseMapper<T, C> mapper = getMapper();
         return mapper.insert(model);
     }
 
@@ -39,6 +39,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int insertList(List<T> models) {
+        BaseMapper<T, C> mapper = getMapper();
         return mapper.insertList(models);
     }
 
@@ -50,6 +51,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int deleteByCondition(C condition) {
+        BaseMapper<T, C> mapper = getMapper();
         return mapper.deleteByCondition(condition);
     }
 
@@ -61,6 +63,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int deleteByConditionList(List<C> conditionList) {
+        BaseMapper<T, C> mapper = getMapper();
         return mapper.deleteByConditionList(conditionList);
     }
 
@@ -73,6 +76,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int updateByCondition(T model, C condition) {
+        BaseMapper<T, C> mapper = getMapper();
         return mapper.updateByCondition(model, condition);
     }
 
@@ -85,6 +89,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
      */
     @Override
     public int updateByConditionList(T model, List<C> conditionList) {
+        BaseMapper<T, C> mapper = getMapper();
         return mapper.updateByConditionList(model, conditionList);
     }
 
@@ -97,6 +102,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
     @Transactional(readOnly = true)
     @Override
     public T getByCondition(C condition) {
+        BaseMapper<T, C> mapper = getMapper();
         return mapper.getByCondition(condition);
     }
 
@@ -112,6 +118,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
     @Override
     public PageInfo<T> findByCondition(C condition, OrderCondition order, SearchPage page) {
 
+        BaseMapper<T, C> mapper = getMapper();
         if (page == null) {
             PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
         } else {
@@ -134,6 +141,7 @@ public class BaseServiceImpl<T extends Serializable, C extends Serializable> imp
     @Override
     public PageInfo<T> findByConditionList(List<C> conditionList, OrderCondition order, SearchPage page) {
 
+        BaseMapper<T, C> mapper = getMapper();
         if (page == null) {
             PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
         } else {

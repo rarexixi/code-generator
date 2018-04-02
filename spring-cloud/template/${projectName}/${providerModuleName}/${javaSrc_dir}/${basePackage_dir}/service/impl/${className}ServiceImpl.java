@@ -70,4 +70,9 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
         return pageInfo;
     }
 
+    @Override
+    protected BaseMapper<${className}Entity, ${className}Condition> getMapper() {
+        return ${classNameLower}Mapper;
+    }
+
 }

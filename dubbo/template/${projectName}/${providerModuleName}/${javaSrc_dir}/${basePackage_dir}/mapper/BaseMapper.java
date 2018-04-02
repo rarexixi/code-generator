@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import java.io.Serializable;
 import java.util.List;
 
-@Mapper
 public interface BaseMapper<T extends Serializable, C extends Serializable> {
 
     /**

@@ -22,7 +22,7 @@ var app = new Vue({
         searchParams: {
             <#list table.columns as column>
             <#if column.ignoreSearch>
-            <#elseif column.columnName == table.validStatusField.fieldName>
+            <#elseif (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
             ${column.columnFieldNameFirstLower}: '',
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
             ${column.columnFieldNameFirstLower}: '',
@@ -169,7 +169,7 @@ var app = new Vue({
         resetSearch: function() {
             <#list table.columns as column>
             <#if column.ignoreSearch>
-            <#elseif column.columnName == table.validStatusField.fieldName>
+            <#elseif (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
             this.searchParams.${column.columnFieldNameFirstLower} = '';
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
             this.searchParams.${column.columnFieldNameFirstLower} = '';
