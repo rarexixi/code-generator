@@ -1,7 +1,7 @@
 package org.xi.quick.codegenerator.properties;
 
-import com.sun.istack.internal.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -13,13 +13,13 @@ public class PathProperties {
     /**
      * 模版路径
      */
-    @NotNull
+    @NonNull
     private String template;
 
     /**
      * 输出路径
      */
-    @NotNull
+    @NonNull
     private String out;
 
     public String getTemplate() {
