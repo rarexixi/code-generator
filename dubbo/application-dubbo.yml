@@ -34,7 +34,7 @@ generator:
       valueField: user_type_name                            # 对应的关联表外键值
   field:
     not-required: create_time, update_time
-    select:
+    #select:
     img-url: photo
     video-url:
     doc-url:

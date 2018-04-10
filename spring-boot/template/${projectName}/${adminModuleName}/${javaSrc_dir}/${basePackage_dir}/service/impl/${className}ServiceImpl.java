@@ -8,6 +8,7 @@ package ${basePackage}.service.impl;
 import ${baseCommonPackage}.model.SearchPage;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
+import ${basePackage}.mapper.BaseMapper;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.mapper.${className}Mapper;
 import ${basePackage}.service.${className}Service;
