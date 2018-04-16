@@ -2,13 +2,12 @@ package ${basePackage}.service.impl;
 
 import ${baseCommonPackage}.model.SearchPage;
 import ${basePackage}.condition.order.OrderCondition;
-import ${basePackage}.service.BaseService;
 import ${basePackage}.mapper.BaseMapper;
+import ${basePackage}.service.BaseService;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
