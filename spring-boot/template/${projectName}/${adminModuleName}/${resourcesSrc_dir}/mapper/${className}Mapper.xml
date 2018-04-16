@@ -99,7 +99,7 @@
         </set>
     </sql>
 
-    <insert id="insert" parameterMap="BaseParameterMap"<#if table.hasPrimaryKey><#if primaryKey[0].autoIncrement> useGeneratedKeys="true" keyProperty="${primaryKey[0].columnFieldNameFirstLower}"</#if></#if>>
+    <insert id="insert" parameterMap="BaseParameterMap"<#if table.hasPrimaryKey><#if primaryKey[0].autoIncrement> useGeneratedKeys="true" keyProperty="model.${primaryKey[0].columnFieldNameFirstLower}"</#if></#if>>
         insert into `${table.tableName}`
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list table.columns as column>
