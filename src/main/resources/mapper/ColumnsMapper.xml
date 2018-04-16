@@ -66,36 +66,41 @@
 
     <select id="getColumnsWithIndex" resultMap="column" parameterType="java.lang.String">
         SELECT
-        A.`TABLE_CATALOG`,
-        A.`TABLE_SCHEMA`,
-        A.`TABLE_NAME`,
-        A.`COLUMN_NAME`,
-        A.`ORDINAL_POSITION`,
-        A.`COLUMN_DEFAULT`,
-        A.`IS_NULLABLE`,
-        A.`DATA_TYPE`,
-        A.`CHARACTER_MAXIMUM_LENGTH`,
-        A.`CHARACTER_OCTET_LENGTH`,
-        A.`NUMERIC_PRECISION`,
-        A.`NUMERIC_SCALE`,
-        A.`DATETIME_PRECISION`,
-        A.`CHARACTER_SET_NAME`,
-        A.`COLLATION_NAME`,
-        A.`COLUMN_TYPE`,
-        A.`COLUMN_KEY`,
-        A.`EXTRA`,
-        A.`PRIVILEGES`,
-        A.`COLUMN_COMMENT`,
-        A.`GENERATION_EXPRESSION`,
-        (CASE COUNT(B.`COLUMN_NAME`) WHEN COUNT(B.`COLUMN_NAME`)>0 THEN TRUE ELSE FALSE END) AS `INDEX`
+            A.`TABLE_CATALOG`,
+            A.`TABLE_SCHEMA`,
+            A.`TABLE_NAME`,
+            A.`COLUMN_NAME`,
+            A.`ORDINAL_POSITION`,
+            A.`COLUMN_DEFAULT`,
+            A.`IS_NULLABLE`,
+            A.`DATA_TYPE`,
+            A.`CHARACTER_MAXIMUM_LENGTH`,
+            A.`CHARACTER_OCTET_LENGTH`,
+            A.`NUMERIC_PRECISION`,
+            A.`NUMERIC_SCALE`,
+            A.`DATETIME_PRECISION`,
+            A.`CHARACTER_SET_NAME`,
+            A.`COLLATION_NAME`,
+            A.`COLUMN_TYPE`,
+            A.`COLUMN_KEY`,
+            A.`EXTRA`,
+            A.`PRIVILEGES`,
+            A.`COLUMN_COMMENT`,
+            A.`GENERATION_EXPRESSION`,
+            (CASE WHEN B.`COLUMN_NAME` IS NULL THEN FALSE ELSE TRUE END) AS `INDEX`
         FROM
-        (SELECT * FROM `information_schema`.`COLUMNS`
-        WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}) AS A
-        LEFT JOIN
-        (SELECT `COLUMN_NAME` FROM `information_schema`.`STATISTICS`
-        WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}) AS B
-        ON A.`COLUMN_NAME`=B.`COLUMN_NAME`
-        GROUP BY `COLUMN_NAME`
+            (
+                SELECT * FROM `information_schema`.`COLUMNS`
+                WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}
+            ) AS A
+            LEFT JOIN
+            (
+                SELECT DISTINCT `COLUMN_NAME`
+                FROM `information_schema`.`STATISTICS`
+                WHERE `TABLE_SCHEMA`=#{databaseName} AND `TABLE_NAME`=#{tableName}
+                GROUP BY `COLUMN_NAME`
+            ) AS B
+            ON A.`COLUMN_NAME`=B.`COLUMN_NAME`
         ORDER BY `ORDINAL_POSITION`
     </select>
 </mapper>
