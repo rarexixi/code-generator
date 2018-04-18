@@ -26,11 +26,13 @@ dubbo:
   provider:
     group: ${dubboServiceGroup}
     version: ${dubboServiceVersion}
+    timeout: 3000
   registry:
     id: ${dubboServiceProtocol}
     protocol: ${dubboServiceProtocol}
     address: ${dubboRegistryAddress}
     group: ${dubboServiceGroup}
     version: ${dubboServiceVersion}
+    client: curator
   scan:
     base-packages: ${basePackage}.api

@@ -8,12 +8,12 @@
 
     <dubbo:application name="${adminApiModuleName}" id="${adminApiModuleName}"></dubbo:application>
     <dubbo:protocol name="dubbo" port="-1"/>
-    <dubbo:registry id="zookeeper" protocol="zookeeper" address="${r'${zk.address.list}'}" timeout="10000"/>
+    <dubbo:registry id="zookeeper" protocol="zookeeper" address="${r'${dubbo.registry.address}'}" timeout="10000"/>
     <#list tableModels as model>
 
     <!-- ${model.tableComment} -->
     <dubbo:reference interface="${basePackage}.api.${model.tableClassName}Api"
-                   id="${model.tableClassName?uncap_first}Api" group="${'${' + projectShortName + '.group}'}" version="${'${' + projectShortName + '.version}'}" />
+                   id="${model.tableClassName?uncap_first}Api" group="${r'${dubbo.consumer.group}'}" version="${r'${dubbo.consumer.version}'}" />
     </#list>
 
 </beans>

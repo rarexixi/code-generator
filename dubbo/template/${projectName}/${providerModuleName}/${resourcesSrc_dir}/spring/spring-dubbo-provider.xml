@@ -7,14 +7,14 @@
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <dubbo:application name="${providerModuleName}" id="${providerModuleName}" owner="${providerModuleName}"/>
-    <dubbo:registry address="${r'${zk.address.list}'}" protocol="zookeeper" id="zookeeper"/>
-    <dubbo:protocol name="dubbo" port="${r'${dubbo.port}'}" threadpool="fixed" threads="1024"/>
+    <dubbo:registry address="${r'${dubbo.registry.address}'}" protocol="zookeeper" id="zookeeper"/>
+    <dubbo:protocol name="dubbo" port="-1" threadpool="fixed" threads="1024"/>
     <!--<dubbo:provider filter="dubboFilter"/>-->
     <#list tableModels as model>
 
     <!-- ${model.tableComment} -->
     <dubbo:service interface="${basePackage}.api.${model.tableClassName}Api"
-                   ref="${model.tableClassName?uncap_first}Api" group="${'${' + projectShortName + '.group}'}" version="${'${' + projectShortName + '.version}'}"
+                   ref="${model.tableClassName?uncap_first}Api" group="${r'${dubbo.provider.group}'}" version="${r'${dubbo.provider.version}'}"
                    timeout="6000" registry="zookeeper"/>
     </#list>
 
