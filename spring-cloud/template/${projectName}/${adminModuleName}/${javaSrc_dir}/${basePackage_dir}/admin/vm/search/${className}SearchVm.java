@@ -16,11 +16,10 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
 <#list table.columns as column>
 <#if column.ignoreSearch>
 <#else>
-    <#assign sortCount = sortCount + 2>
+    <#if (column.columnName != table.validStatusField.fieldName)><#assign sortCount = sortCount + 2></#if>
 
     //region ${column.columnComment}
     <#if (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
-    <#assign sortCount = sortCount - 2>
 
     /**
     * ${column.columnComment}
