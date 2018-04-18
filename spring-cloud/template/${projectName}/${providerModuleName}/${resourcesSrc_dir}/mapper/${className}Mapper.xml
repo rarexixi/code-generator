@@ -97,16 +97,20 @@
     </sql>
 
     <sql id="where">
-        <where>
-            <include refid="selectCondition"/>
-        </where>
+        <if test="condition != null">
+            <where>
+                <include refid="selectCondition"/>
+            </where>
+        </if>
     </sql>
     <sql id="listWhere">
-        <where>
-            <foreach collection="conditionList" item="condition" open="(" close=")" separator=" OR ">
-                <include refid="selectCondition"/>
-            </foreach>
-        </where>
+        <if test="conditionList != null and conditionList.size() > 0">
+            <where>
+                <foreach collection="conditionList" item="condition" open="(" close=")" separator=" OR ">
+                    <include refid="selectCondition"/>
+                </foreach>
+            </where>
+        </if>
     </sql>
     <sql id="selectColumnList">
         <#list table.columns as column>

@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 public abstract class BaseServiceImpl<T extends Serializable, C extends Serializable> implements BaseService<T, C> {
 
-    protected abstract BaseMapper<T, C> getMapper();
+    protected BaseMapper<T, C> mapper;
 
     /**
      * 添加
@@ -26,7 +26,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Override
     public int insert(T model) {
-        BaseMapper<T, C> mapper = getMapper();
         return mapper.insert(model);
     }
 
@@ -38,7 +37,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Override
     public int insertList(List<T> models) {
-        BaseMapper<T, C> mapper = getMapper();
         return mapper.insertList(models);
     }
 
@@ -50,7 +48,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Override
     public int deleteByCondition(C condition) {
-        BaseMapper<T, C> mapper = getMapper();
         return mapper.deleteByCondition(condition);
     }
 
@@ -62,7 +59,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Override
     public int deleteByConditionList(List<C> conditionList) {
-        BaseMapper<T, C> mapper = getMapper();
         return mapper.deleteByConditionList(conditionList);
     }
 
@@ -75,7 +71,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Override
     public int updateByCondition(T model, C condition) {
-        BaseMapper<T, C> mapper = getMapper();
         return mapper.updateByCondition(model, condition);
     }
 
@@ -88,7 +83,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Override
     public int updateByConditionList(T model, List<C> conditionList) {
-        BaseMapper<T, C> mapper = getMapper();
         return mapper.updateByConditionList(model, conditionList);
     }
 
@@ -101,12 +95,82 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
     @Transactional(readOnly = true)
     @Override
     public T getByCondition(C condition) {
-        BaseMapper<T, C> mapper = getMapper();
         return mapper.getByCondition(condition);
     }
 
     /**
-     * 查询
+     * 查询符合条件的列表
+     *
+     * @param condition
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<T> findByCondition(C condition) {
+
+        return mapper.findByCondition(condition, null);
+    }
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param condition
+     * @param order
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<T> findByCondition(C condition, OrderCondition order) {
+
+        List<T> list = mapper.findByCondition(condition, order);
+        return list;
+    }
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param conditionList
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<T> findByConditionList(List<C> conditionList) {
+
+        List<T> list = mapper.findByConditionList(conditionList, null);
+        return list;
+    }
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param conditionList
+     * @param order
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<T> findByConditionList(List<C> conditionList, OrderCondition order) {
+
+        List<T> list = mapper.findByConditionList(conditionList, order);
+        return list;
+    }
+
+    /**
+     * 分页查询符合条件的列表
+     *
+     * @param condition
+     * @param page
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo<T> findByCondition(C condition, SearchPage page) {
+
+        return findByCondition(condition, null, page);
+    }
+
+    /**
+     * 分页查询符合条件的列表
      *
      * @param condition
      * @param order
@@ -117,7 +181,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
     @Override
     public PageInfo<T> findByCondition(C condition, OrderCondition order, SearchPage page) {
 
-        BaseMapper<T, C> mapper = getMapper();
         if (page == null) {
             PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
         } else {
@@ -129,7 +192,21 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
     }
 
     /**
-     * 查询
+     * 分页查询符合条件的列表
+     *
+     * @param conditionList
+     * @param page
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo<T> findByConditionList(List<C> conditionList, SearchPage page) {
+
+        return findByConditionList(conditionList, null, page);
+    }
+
+    /**
+     * 分页查询符合条件的列表
      *
      * @param conditionList
      * @param order
@@ -140,7 +217,6 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
     @Override
     public PageInfo<T> findByConditionList(List<C> conditionList, OrderCondition order, SearchPage page) {
 
-        BaseMapper<T, C> mapper = getMapper();
         if (page == null) {
             PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
         } else {

@@ -29,6 +29,11 @@ import java.util.List;
 public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity, ${className}Condition> implements ${className}Service {
 
     @Autowired
+    public ${className}ServiceImpl(${className}Mapper ${classNameLower}Mapper) {
+        this.${classNameLower}Mapper = ${classNameLower}Mapper;
+        super.mapper = ${classNameLower}Mapper;
+    }
+
     private ${className}Mapper ${classNameLower}Mapper;
 
     <#if table.hasPrimaryKey>
@@ -69,11 +74,6 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
         List<${className}Vo> list = ${classNameLower}Mapper.findList(parameter);
         PageInfo<${className}Vo> pageInfo = new PageInfo<>(list);
         return pageInfo;
-    }
-
-    @Override
-    protected BaseMapper<${className}Entity, ${className}Condition> getMapper() {
-        return ${classNameLower}Mapper;
     }
 
 }

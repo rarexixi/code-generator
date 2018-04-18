@@ -69,7 +69,50 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
     T getByCondition(C condition);
 
     /**
-     * 查询
+     * 查询符合条件的列表
+     *
+     * @param condition
+     * @return
+     */
+    List<T> findByCondition(C condition);
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param condition
+     * @param order
+     * @return
+     */
+    List<T> findByCondition(C condition, OrderCondition order);
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param conditionList
+     * @return
+     */
+    List<T> findByConditionList(List<C> conditionList);
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param conditionList
+     * @param order
+     * @return
+     */
+    List<T> findByConditionList(List<C> conditionList, OrderCondition order);
+
+    /**
+     * 分页查询符合条件的列表
+     *
+     * @param condition
+     * @param page
+     * @return
+     */
+    PageInfo<T> findByCondition(C condition, SearchPage page);
+
+    /**
+     * 分页查询符合条件的列表
      *
      * @param condition
      * @param order
@@ -79,7 +122,16 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
     PageInfo<T> findByCondition(C condition, OrderCondition order, SearchPage page);
 
     /**
-     * 查询
+     * 分页查询符合条件的列表
+     *
+     * @param conditionList
+     * @param page
+     * @return
+     */
+    PageInfo<T> findByConditionList(List<C> conditionList, SearchPage page);
+
+    /**
+     * 分页查询符合条件的列表
      *
      * @param conditionList
      * @param order
