@@ -1,32 +1,21 @@
 server:
-  port: 8810
+  port: 8820
 
 spring:
   application:
-    name: ${providerModuleName}
-  datasource:
-    url: ${dbUrl}
-    username: ${dbUsername}
-    password: ${dbPassword}
-    driver-class-name: com.mysql.jdbc.Driver
-
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  config-location: classpath:mybatis-config.xml
-  type-aliases-package: ${basePackage}.mapper
+    name: ${adminApiModuleName}
 
 dubbo:
   application:
-    id: ${providerModuleName}
-    name: ${providerModuleName}
+    id: ${adminApiModuleName}
+    name: ${adminApiModuleName}
     owner:
   protocol:
     id: dubbo
     name: dubbo
-  provider:
+  consumer:
     group: ${dubboServiceGroup}
     version: ${dubboServiceVersion}
-    timeout: 3000
   registry:
     id: ${dubboServiceProtocol}
     protocol: ${dubboServiceProtocol}
@@ -35,4 +24,4 @@ dubbo:
     version: ${dubboServiceVersion}
     client: curator
   scan:
-    base-packages: ${basePackage}.api
+    base-packages: ${basePackage}.admin.service

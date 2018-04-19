@@ -26,7 +26,6 @@ dubbo:
   provider:
     group: ${dubboServiceGroup}
     version: ${dubboServiceVersion}
-    timeout: 3000
   registry:
     id: ${dubboServiceProtocol}
     protocol: ${dubboServiceProtocol}

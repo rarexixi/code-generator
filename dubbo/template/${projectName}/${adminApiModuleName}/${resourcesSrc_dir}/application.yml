@@ -21,7 +21,7 @@ dubbo:
     id: ${dubboServiceProtocol}
     protocol: ${dubboServiceProtocol}
     address: ${dubboRegistryAddress}
-    group: ${dubboServiceGroup}
+    group: dubbo # 对应dubbo-admin的dubbo.properties中的dubbo.registry.group=dubbo，默认是dubbo，不一致的话dubbo-admin上不会显示注册的服务
     version: ${dubboServiceVersion}
     client: curator
   scan:

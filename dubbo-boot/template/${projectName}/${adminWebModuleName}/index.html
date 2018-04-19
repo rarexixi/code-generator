@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/resources/css/bootstrap-override.css" />
+    <link rel="stylesheet" href="/resources/css/common.css" />
+</head>
+<body>
+<header class="navbar bg-dark">
+    <span class="navbar-brand text-light">${projectShortName}</span>
+</header>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-3 col-xl-2 bg-light" id="sideNav">
+            <nav class="row navbar navbar-expand-lg navbar-light">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sideNavBar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <nav class="flex-column collapse navbar-collapse" id="sideNavBar">
+                    <#list tableModels as model>
+                    <a class="nav-link text-muted" href="${model.tableClassName?lower_case}/index.html" target="mainFrame">${(model.tableComment?split("[（ ,，(]", "r"))[0]}</a>
+                    </#list>
+                    <!--<a class="nav-link text-dark" href="javascript:;" data-toggle="collapse" data-target="#configNav">配置中心</a>-->
+                    <!--<nav class="flex-column collapse" id="configNav">-->
+                    <!--<a class="nav-link text-dark" href="/dubbo/index.html">电商Dubbo服务调用</a>-->
+                    <!--</nav>-->
+                </nav>
+            </nav>
+        </div>
+        <main class="col-12 col-lg-9 col-xl-10">
+            <div class="row">
+                <iframe id="mainFrame" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+    $('#sideNav .nav-link').click(function () {
+        $('#sideNav .nav-link.text-info').removeClass('text-info').addClass('text-muted');
+        $(this).removeClass('text-muted').addClass('text-info');
+        var targetSrc = $(this).attr('href');
+        if (targetSrc == '' || targetSrc.startsWith('javascript')) return;
+        var target = $(this).attr('target');
+        $('#' + target).attr('src', targetSrc);
+        return false;
+    });
+    $('#sideNav .nav-link:first-child').click();
+</script>
+</body>
+</html>

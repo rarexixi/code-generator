@@ -1,0 +1,83 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassName?uncap_first>
+<#assign classNameLower = table.tableClassName?lower_case>
+<#assign tableShortComment = (table.tableComment?split("[（ ,，(]", "r"))[0]>
+<#assign primaryKey = table.primaryKey>
+<#assign primaryKeyParameters = table.primaryKeyParameters>
+<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#macro mapperEl value>${r"${"}${value}}</#macro>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>${tableShortComment}详情</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/resources/bootstrap/plugins/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="/resources/css/common.css" />
+</head>
+
+<body>
+    <div class="container-fluid" id="app">
+        <div class="row">
+            <div class="col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/"></a></li>
+                    <li class="breadcrumb-item">${tableShortComment}列表</li>
+                    <li class="breadcrumb-item active" aria-current="page">${tableShortComment}详情</li>
+                </ol>
+            </div>
+        </div>
+        <div class="">
+            <#list table.columns as column>
+            <#if column.columnName == table.validStatusField.fieldName>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-xs-9 col-md-8"><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" style="color: #42b983;">有效</span><span v-if="detail.${column.columnFieldNameFirstLower}==${table.validStatusField.invalidValue}" style="color: #e96900;">无效</span></div>
+                </div>
+            </div>
+            <#elseif column.imgUrl>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-xs-9 col-md-8"><img :src="detail.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}"></div>
+                </div>
+            </div>
+            <#elseif column.columnFieldType == "Date">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-xs-9 col-md-8"><span>{{detail.${column.columnFieldNameFirstLower} | formatDate}}</span></div>
+                </div>
+            </div>
+            <#else>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-3 col-md-4"><label>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-xs-9 col-md-8"><span>{{detail.${column.columnFieldNameFirstLower}}}</span></div>
+                </div>
+            </div>
+            </#if>
+            </#list>
+            <div class="form-group">
+                <input type="button" value="删除" @click="del" class="btn btn-danger" />
+                <input type="button" value="返回" @click="goback" class="btn" />
+            </div>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/resources/bootstrap/plugins/js/jquery.bootstrap-growl.min.js"></script>
+    <script src="/resources/bootstrap/plugins/js/bootbox.min.js"></script>
+    <script src="/resources/bootstrap/plugins/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/resources/js/common.js"></script>
+    <script src="/resources/js/${classNameLower}/detail.js"></script>
+</body>
+
+</html>
