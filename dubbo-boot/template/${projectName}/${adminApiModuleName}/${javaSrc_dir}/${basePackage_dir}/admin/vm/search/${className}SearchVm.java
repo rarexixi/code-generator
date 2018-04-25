@@ -106,7 +106,7 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
     <#elseif (column.columnFieldType == "String")>
 
     /**
-    * ${column.columnComment} (完全匹配）
+    * ${column.columnComment} (开始匹配）
     */
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith;
 
