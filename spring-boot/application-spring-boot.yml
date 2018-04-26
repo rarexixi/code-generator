@@ -75,6 +75,7 @@ generator:
     character: Character
     varchar: String
     char: String
+    text: String
     date: Date
     datetime: Date
     timestamp: Date
