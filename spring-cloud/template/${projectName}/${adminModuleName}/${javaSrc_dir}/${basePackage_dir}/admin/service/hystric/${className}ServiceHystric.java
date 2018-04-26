@@ -5,8 +5,8 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.admin.service.hystric;
 
-import org.xi.common.constant.OperationConstants;
-import org.xi.common.model.Result;
+import ${baseCommonPackage}.constant.OperationConstants;
+import ${baseCommonPackage}.model.Result;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.vo.${className}Vo;
