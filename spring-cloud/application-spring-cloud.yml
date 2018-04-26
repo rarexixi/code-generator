@@ -32,7 +32,16 @@ generator:
       valueField: user_type_name                            # 对应的关联表外键值
   field:
     not-required: create_time, update_time
-    #select:
+    select:
+      - nameSet: status
+        tableName: multi_pk
+        options:
+          - value: 1
+            text: 正常
+          - value: 2
+            text: 提高
+          - value: 3
+            text: 起飞
     img-url: photo
     video-url:
     doc-url:

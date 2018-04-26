@@ -22,7 +22,8 @@ CREATE TABLE `user`
   COMMENT '是否删除',
   `create_time` TIMESTAMP    NOT NULL DEFAULT current_timestamp
   COMMENT '创建时间',
-  `update_time` TIMESTAMP    NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+  `update_time` TIMESTAMP    NOT NULL DEFAULT current_timestamp
+  ON UPDATE current_timestamp
   COMMENT '更新时间',
 
   PRIMARY KEY (`id`),
@@ -53,7 +54,8 @@ CREATE TABLE `user_info`
   COMMENT '简介',
   `create_time`  TIMESTAMP     NOT NULL DEFAULT current_timestamp
   COMMENT '创建时间',
-  `update_time`  TIMESTAMP     NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+  `update_time`  TIMESTAMP     NOT NULL DEFAULT current_timestamp
+  ON UPDATE current_timestamp
   COMMENT '更新时间',
 
   PRIMARY KEY (`id`),
@@ -77,7 +79,8 @@ CREATE TABLE `user_type`
   COMMENT '是否删除',
   `create_time`    TIMESTAMP    NOT NULL DEFAULT current_timestamp
   COMMENT '创建时间',
-  `update_time`    TIMESTAMP    NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+  `update_time`    TIMESTAMP    NOT NULL DEFAULT current_timestamp
+  ON UPDATE current_timestamp
   COMMENT '更新时间',
 
   PRIMARY KEY (`id`),
@@ -98,11 +101,14 @@ CREATE TABLE `user_type_relation`
   COMMENT '用户ID',
   `user_type_id` INT       NOT NULL
   COMMENT '类型ID',
+  `status`      INT         NOT NULL DEFAULT 0
+  COMMENT '状态',
   `is_deleted`   TINYINT   NOT NULL DEFAULT 0
   COMMENT '是否删除',
   `create_time`  TIMESTAMP NOT NULL DEFAULT current_timestamp
   COMMENT '创建时间',
-  `update_time`  TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+  `update_time`  TIMESTAMP NOT NULL DEFAULT current_timestamp
+  ON UPDATE current_timestamp
   COMMENT '更新时间',
 
   PRIMARY KEY (`id`),
@@ -123,11 +129,14 @@ CREATE TABLE `multi_pk`
   COMMENT '主键2',
   `value`       VARCHAR(50) NOT NULL
   COMMENT '值',
+  `status`      INT         NOT NULL DEFAULT 0
+  COMMENT '状态：1，正常 2，提高 3，起飞',
   `is_deleted`  TINYINT     NOT NULL DEFAULT 0
   COMMENT '是否删除',
   `create_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp
   COMMENT '创建时间',
-  `update_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
+  `update_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp
+  ON UPDATE current_timestamp
   COMMENT '更新时间',
 
   PRIMARY KEY (`key1`, `key2`),
@@ -201,7 +210,7 @@ INSERT INTO user (username, email, password, nick_name) VALUES
   ('user30', 'user30@example.com', '123456', 'user30');
 
 INSERT INTO user_info (id, true_name, age, sex) VALUES
-  (1, 'root', 30, 0),(2, 'admin1', 25, 1),(3, 'admin2', 43, 1),(4, 'admin3', 23, 0),(5, 'admin4', 24, 0);
+  (1, 'root', 30, 0), (2, 'admin1', 25, 1), (3, 'admin2', 43, 1), (4, 'admin3', 23, 0), (5, 'admin4', 24, 0);
 
 INSERT INTO user_type_relation (user_id, user_type_id) VALUES
   (1, 1), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2),
@@ -210,4 +219,4 @@ INSERT INTO user_type_relation (user_id, user_type_id) VALUES
   (27, 3), (28, 3), (29, 3), (30, 3), (31, 3), (32, 3), (33, 3), (34, 3), (35, 3), (36, 3);
 
 INSERT INTO multi_pk (key1, key2, `value`) VALUES
-  (1, 30, 'root'),(2, 25, 'admin1'),(1, 43, 'admin2'),(4, 23, 'admin3'),(5, 24, 'admin4');
+  (1, 30, 'root'), (2, 25, 'admin1'), (1, 43, 'admin2'), (4, 23, 'admin3'), (5, 24, 'admin4');
