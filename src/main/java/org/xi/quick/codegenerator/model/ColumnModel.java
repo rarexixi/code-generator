@@ -184,6 +184,7 @@ public class ColumnModel {
         primaryKey = columnKey.equals("PRI");
         validStatus = StaticConfigData.VALID_STATUS_FIELD.getFieldName().equals(this.columnName);
 
+        // 判断是否是逻辑外键选择项字段
         fkSelect = false;
         for (FkSelectField field : StaticConfigData.FK_SELECT_FIELDS) {
             if (field.getNameSet() != null && field.getNameSet().contains(columnName)) {
@@ -193,17 +194,16 @@ public class ColumnModel {
             }
         }
 
-        select = StaticConfigData.SELECT_FIELD_NAME_SET.contains(columnName);
-        if (select) {
-            for (SelectField selectField : StaticConfigData.SELECT_FIELD_ARRAY) {
-                if (selectField.getNameSet().contains(columnName)
-                        && (StringUtil.isNullOrEmpty(selectField.getTableName()) || selectField.getTableName().equals(tableName))) {
-                    selectOptions = selectField.getOptions();
-                }
+        // 判断是否是选择字段
+        select = false;
+        for (SelectField selectField : StaticConfigData.SELECT_FIELD_ARRAY) {
+            if (selectField.getNameSet().contains(columnName)
+                    && (StringUtil.isNullOrEmpty(selectField.getTableName()) || selectField.getTableName().equals(tableName))) {
+                select = true;
+                selectOptions = selectField.getOptions();
             }
-        } else {
-            selectOptions = new SelectOption[0];
         }
+
         notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(columnName);
 
         imgUrl = StaticConfigData.IMG_URL_FIELD_SET.contains(columnName);
