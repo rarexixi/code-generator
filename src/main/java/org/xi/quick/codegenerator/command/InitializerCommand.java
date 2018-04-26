@@ -56,7 +56,6 @@ public class InitializerCommand implements CommandLineRunner {
         StaticConfigData.CONTENT_FIELD_SET = generatorField.getContent();
         StaticConfigData.IGNORE_SEARCH_FIELD_SET = getIgnoreSearchFieldSet();
         StaticConfigData.SELECT_FIELD_ARRAY = generatorField.getSelect();
-        StaticConfigData.SELECT_FIELD_NAME_SET = getSelectFieldNameSet(generatorField.getSelect());
 
         StaticConfigData.CODE_ENCODING = generator.getEncoding();
 

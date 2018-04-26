@@ -27,7 +27,6 @@ public class StaticConfigData {
         IGNORE_SEARCH_FIELD_SET = new HashSet<>();
 
         SELECT_FIELD_ARRAY = new SelectField[0];
-        SELECT_FIELD_NAME_SET = new HashSet<>();
 
         CODE_ENCODING = "UTF-8";
 
@@ -49,7 +48,6 @@ public class StaticConfigData {
     public static Set<String> IGNORE_SEARCH_FIELD_SET;      //获取忽略查询的字段集合
 
     public static SelectField[] SELECT_FIELD_ARRAY;         //获取是选择项的字段集合
-    public static Set<String> SELECT_FIELD_NAME_SET;        //获取是选择项的字段名集合
 
     //endregion
 
