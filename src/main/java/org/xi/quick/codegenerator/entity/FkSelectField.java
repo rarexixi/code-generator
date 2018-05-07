@@ -1,6 +1,6 @@
 package org.xi.quick.codegenerator.entity;
 
-import org.xi.quick.codegenerator.utils.StringUtil;
+import org.xi.quick.codegenerator.utils.StringUtils;
 
 import java.util.Set;
 
@@ -40,11 +40,11 @@ public class FkSelectField {
     }
 
     public String getForeignClass() {
-        return StringUtil.getCamelCaseName(foreignTable);
+        return StringUtils.getCamelCaseName(foreignTable);
     }
 
     public String getKeyField() {
-        return StringUtil.getCamelCaseName(keyField);
+        return StringUtils.getCamelCaseName(keyField);
     }
 
     public void setKeyField(String keyField) {
@@ -52,7 +52,7 @@ public class FkSelectField {
     }
 
     public String getValueField() {
-        return StringUtil.getCamelCaseName(valueField);
+        return StringUtils.getCamelCaseName(valueField);
     }
 
     public void setValueField(String valueField) {

@@ -10,7 +10,7 @@ import java.util.Properties;
  * @author 郗世豪（xish@cloud-young.com）
  * @date 2018/01/05 22:46
  */
-public class PropertiesUtil {
+public class PropertiesUtils {
 
     /**
      * 获取配置Map

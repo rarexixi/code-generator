@@ -3,7 +3,7 @@ package org.xi.quick.codegenerator.model;
 import org.xi.quick.codegenerator.entity.Table;
 import org.xi.quick.codegenerator.entity.ValidStatusField;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
-import org.xi.quick.codegenerator.utils.StringUtil;
+import org.xi.quick.codegenerator.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,9 @@ public class TableModel {
 
         databaseName = table.getTableSchema();
         tableName = table.getTableName();
-        tableClassName = StringUtil.getCamelCaseName(tableName);
+        tableClassName = StringUtils.getCamelCaseName(tableName);
         String comment = table.getTableComment();
-        tableComment = StringUtil.isNullOrEmpty(comment) ? tableClassName : comment;
+        tableComment = StringUtils.isEmpty(comment) ? tableClassName : comment;
         this.columns = columns;
         this.statistics = statistics;
 

@@ -33,8 +33,8 @@ generator:
       keyField: id                                          # 对应的关联表外键字段
       valueField: user_type_name                            # 对应的关联表外键值
   field:
-    not-required: create_time, update_time                   # 不需要赋值的字段
-#    select:
+    not-required: create_time, update_time
+    #select:
     img-url: photo
     video-url:
     doc-url:
@@ -44,6 +44,7 @@ generator:
 
   # 公共自定义属性
   common-properties:
+
     projectName: quick-dubbo-auto
     projectShortName: quick
     projectGroup: org.xi

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Xi on 5/17/2017.
  */
-public class FileUtil {
+public class FileUtils {
 
     //region 删除
 
@@ -121,7 +121,7 @@ public class FileUtil {
 
         try (FileWriter writer = new FileWriter(filePath, append)) {
             for (String line : lines) {
-                writer.write(line + SystemUtil.NEW_LINE);
+                writer.write(line + SystemUtils.NEW_LINE);
             }
         }
     }

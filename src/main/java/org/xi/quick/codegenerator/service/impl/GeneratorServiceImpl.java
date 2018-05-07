@@ -13,10 +13,10 @@ import org.xi.quick.codegenerator.properties.PathProperties;
 import org.xi.quick.codegenerator.service.GeneratorService;
 import org.xi.quick.codegenerator.service.TableService;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
-import org.xi.quick.codegenerator.utils.DirectoryUtil;
-import org.xi.quick.codegenerator.utils.FileUtil;
-import org.xi.quick.codegenerator.utils.StringUtil;
-import org.xi.quick.codegenerator.utils.SystemUtil;
+import org.xi.quick.codegenerator.utils.DirectoryUtils;
+import org.xi.quick.codegenerator.utils.FileUtils;
+import org.xi.quick.codegenerator.utils.StringUtils;
+import org.xi.quick.codegenerator.utils.SystemUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -188,8 +188,8 @@ public class GeneratorServiceImpl implements GeneratorService {
             logger.info("正在生成" + targetPath);
             try {
                 //创建文件路径
-                DirectoryUtil.createIfNotExists(getAbsoluteDirectory(targetPath));
-                FileUtil.deleteIfExists(new File(targetPath));
+                DirectoryUtils.createIfNotExists(getAbsoluteDirectory(targetPath));
+                FileUtils.deleteIfExists(new File(targetPath));
                 Files.copy(new File(sourcePath).toPath(), new File(targetPath).toPath());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -270,7 +270,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         logger.info("正在生成" + absolutePath);
 
         //创建文件路径
-        DirectoryUtil.createIfNotExists(getAbsoluteDirectory(absolutePath));
+        DirectoryUtils.createIfNotExists(getAbsoluteDirectory(absolutePath));
 
         try (OutputStream stream = new FileOutputStream(absolutePath);
              Writer out = new OutputStreamWriter(stream, generator.getEncoding())) {
@@ -292,18 +292,18 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         logger.info("正在删除" + absolutePath);
 
-        FileUtil.delete(absolutePath);
+        FileUtils.delete(absolutePath);
     }
 
 
     private String getFilePath(FreemarkerModel model, Map<Object, Object> dataModel) {
 
         File directory = new File(generatorPath.getOut());
-        return directory.getAbsolutePath() + SystemUtil.SYSTEM_SLASH + getActualPath(model.getRelativePath(), dataModel);
+        return directory.getAbsolutePath() + SystemUtils.SYSTEM_SLASH + getActualPath(model.getRelativePath(), dataModel);
     }
 
     private String getAbsoluteDirectory(String absolutePath) {
-        return absolutePath.substring(0, absolutePath.lastIndexOf(SystemUtil.SYSTEM_SLASH));
+        return absolutePath.substring(0, absolutePath.lastIndexOf(SystemUtils.SYSTEM_SLASH));
     }
 
 
@@ -340,15 +340,15 @@ public class GeneratorServiceImpl implements GeneratorService {
             if (value != null) {
                 String s = (String) value;
                 if (isDir) {
-                    path = path.replace(group, s.replaceAll("\\.", SystemUtil.REGEX_SYSTEM_SLASH));
+                    path = path.replace(group, s.replaceAll("\\.", SystemUtils.REGEX_SYSTEM_SLASH));
                 } else if (isLower) {
                     path = path.replace(group, s.toLowerCase());
                 } else if (isUpper) {
                     path = path.replace(group, s.toUpperCase());
                 } else if (isFirstLower) {
-                    path = path.replace(group, StringUtil.getFirstLower(s));
+                    path = path.replace(group, StringUtils.getFirstLower(s));
                 } else if (isFirstUpper) {
-                    path = path.replace(group, StringUtil.getFirstUpper(s));
+                    path = path.replace(group, StringUtils.getFirstUpper(s));
                 } else {
                     path = path.replace(group, s);
                 }

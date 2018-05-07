@@ -6,7 +6,7 @@ import org.xi.quick.codegenerator.entity.SelectField;
 import org.xi.quick.codegenerator.entity.SelectOption;
 import org.xi.quick.codegenerator.staticdata.DataTypeMapping;
 import org.xi.quick.codegenerator.staticdata.StaticConfigData;
-import org.xi.quick.codegenerator.utils.StringUtil;
+import org.xi.quick.codegenerator.utils.StringUtils;
 
 import java.util.Arrays;
 
@@ -141,7 +141,7 @@ public class ColumnModel {
     }
 
     public String getColumnComment() {
-        return StringUtil.isNullOrEmpty(columnComment) ? columnFieldName : columnComment;
+        return StringUtils.isEmpty(columnComment) ? columnFieldName : columnComment;
     }
 
     public boolean isIndex() {
@@ -177,8 +177,8 @@ public class ColumnModel {
     private boolean ignoreSearch;
 
     public void initExtends() {
-        columnFieldName = StringUtil.getCamelCaseName(this.columnName);
-        columnFieldNameFirstLower = StringUtil.getFirstLower(columnFieldName);
+        columnFieldName = StringUtils.getCamelCaseName(this.columnName);
+        columnFieldNameFirstLower = StringUtils.getFirstLower(columnFieldName);
         columnFieldType = DataTypeMapping.getFieldType(this.dataType);
         autoIncrement = extra.toLowerCase().equals("auto_increment");
         primaryKey = columnKey.equals("PRI");
@@ -198,7 +198,7 @@ public class ColumnModel {
         select = false;
         for (SelectField selectField : StaticConfigData.SELECT_FIELD_ARRAY) {
             if (selectField.getNameSet().contains(columnName)
-                    && (StringUtil.isNullOrEmpty(selectField.getTableName()) || selectField.getTableName().equals(tableName))) {
+                    && (StringUtils.isEmpty(selectField.getTableName()) || selectField.getTableName().equals(tableName))) {
                 select = true;
                 selectOptions = selectField.getOptions();
             }

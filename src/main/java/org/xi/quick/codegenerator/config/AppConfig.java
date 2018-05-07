@@ -10,8 +10,8 @@ import org.xi.quick.codegenerator.properties.FieldProperties;
 import org.xi.quick.codegenerator.properties.FileProperties;
 import org.xi.quick.codegenerator.properties.PathProperties;
 import org.xi.quick.codegenerator.properties.GeneratorProperties;
-import org.xi.quick.codegenerator.utils.DirectoryUtil;
-import org.xi.quick.codegenerator.utils.SystemUtil;
+import org.xi.quick.codegenerator.utils.DirectoryUtils;
+import org.xi.quick.codegenerator.utils.SystemUtils;
 
 import java.io.*;
 import java.util.*;
@@ -125,7 +125,7 @@ public class AppConfig {
         File directory = new File(generatorPath.getTemplate());
         String dirAbsolutePath = directory.getAbsolutePath();
 
-        List<File> files = DirectoryUtil.getAllFiles(generatorPath.getTemplate());
+        List<File> files = DirectoryUtils.getAllFiles(generatorPath.getTemplate());
         List<FreemarkerModel> result = new ArrayList<>();
 
         for (File file : files) {
@@ -154,7 +154,7 @@ public class AppConfig {
     private boolean isMatchingFile(String templateRelativePath, Set<String> files) {
 
         for (String file : files) {
-            if (templateRelativePath.startsWith(file) || templateRelativePath.contains(SystemUtil.SYSTEM_SLASH + file))
+            if (templateRelativePath.startsWith(file) || templateRelativePath.contains(SystemUtils.SYSTEM_SLASH + file))
                 return true;
         }
 

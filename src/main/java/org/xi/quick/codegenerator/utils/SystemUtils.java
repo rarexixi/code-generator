@@ -1,6 +1,6 @@
 package org.xi.quick.codegenerator.utils;
 
-public class SystemUtil {
+public class SystemUtils {
 
     static {
         if (System.getProperty("os.name").toLowerCase().startsWith("win")) {

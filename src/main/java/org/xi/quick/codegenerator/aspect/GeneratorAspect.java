@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.xi.quick.codegenerator.utils.StringUtil;
+import org.xi.quick.codegenerator.utils.StringUtils;
 
 /**
  * @author 郗世豪（xish@cloud-young.com）
@@ -123,7 +123,7 @@ public class GeneratorAspect {
     public Object deleteAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         Object[] args = proceedingJoinPoint.getArgs();
-        String tables = StringUtil.join(",", (Object[])args[0]);
+        String tables = StringUtils.join(",", (Object[])args[0]);
 
         logger.info("正在删除" + tables + "相关的类...");
         Object object = proceedingJoinPoint.proceed();
@@ -142,7 +142,7 @@ public class GeneratorAspect {
     public Object generateAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         Object[] args = proceedingJoinPoint.getArgs();
-        String tables = StringUtil.join(",", (Object[])args[0]);
+        String tables = StringUtils.join(",", (Object[])args[0]);
 
         logger.info("正在生成" + tables + "相关的类...");
         Object object = proceedingJoinPoint.proceed();

@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
  * @author 郗世豪（xish@cloud-young.com）
  * @date 2017/11/27 17:46
  */
-public class StringUtil {
+public class StringUtils {
 
-    public static boolean isNullOrEmpty(String s) {
+    public static boolean isEmpty(String s) {
         return s == null || s.trim().isEmpty();
     }
 
