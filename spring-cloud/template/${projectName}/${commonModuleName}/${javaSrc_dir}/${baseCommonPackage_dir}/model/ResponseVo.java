@@ -2,10 +2,7 @@ package ${baseCommonPackage}.model;
 
 import java.io.Serializable;
 
-/**
- * @author 郗世豪（xish@cloud-young.com）
- * @date 2017/11/28 17:53
- */
+<#include "/include/java_copyright.ftl">
 public class ResponseVo<T> implements Serializable {
 
     public ResponseVo() {

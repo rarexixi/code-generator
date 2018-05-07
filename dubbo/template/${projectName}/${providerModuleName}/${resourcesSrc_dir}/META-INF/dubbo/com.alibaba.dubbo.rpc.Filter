@@ -1,0 +1,1 @@
+dubboFilter=${basePackage}.filter.DubboFilter

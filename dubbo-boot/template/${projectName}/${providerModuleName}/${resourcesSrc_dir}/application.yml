@@ -26,6 +26,7 @@ dubbo:
   provider:
     group: ${dubboServiceGroup}
     version: ${dubboServiceVersion}
+    filter: dubboFilter
   registry:
     id: ${dubboServiceProtocol}
     protocol: ${dubboServiceProtocol}

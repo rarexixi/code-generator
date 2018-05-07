@@ -8,9 +8,8 @@ package ${basePackage}.controller;
 import ${baseCommonPackage}.constant.OperationConstants;
 import ${baseCommonPackage}.model.Result;
 import ${baseCommonPackage}.model.SearchPage;
-import ${baseCommonPackage}.utils.LogUtil;
-import ${baseCommonPackage}.utils.StringUtil;
-import ${baseCommonPackage}.utils.database.OperationCheckUtil;
+import ${baseCommonPackage}.utils.LogUtils;
+import ${baseCommonPackage}.utils.database.OperationCheckUtils;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
@@ -19,6 +18,7 @@ import ${basePackage}.vo.${className}Vo;
 
 import com.github.pagehelper.PageInfo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 public class ${className}Controller {
 
-    private static LogUtil logger = LogUtil.build(${className}Controller.class);
+    private static LogUtils logger = LogUtils.build(${className}Controller.class);
 
     @Autowired
     private ${className}Service ${classNameLower}Service;
@@ -50,7 +50,7 @@ public class ${className}Controller {
     public Result<Integer> add(@RequestBody ${className}Entity entity, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         String fieldName = "";
-        if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(entity))) {
+        if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
             return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
@@ -82,7 +82,7 @@ public class ${className}Controller {
         }
         String fieldName;
         for (${className}Entity entity : list) {
-            if (!StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(entity))) {
+            if (!StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
                 return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
             }
         }
@@ -113,7 +113,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/deleteByPk", method = RequestMethod.GET)
     public Result<Integer> deleteByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -142,7 +142,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/deleteByPkList", method = RequestMethod.POST)
     public Result<Integer> deleteByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -174,7 +174,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/disableByPk", method = RequestMethod.GET)
     public Result<Integer> disableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -206,7 +206,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/enableByPk", method = RequestMethod.GET)
     public Result<Integer> enableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -237,7 +237,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/disableByPkList", method = RequestMethod.POST)
     public Result<Integer> disableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -267,7 +267,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/enableByPkList", method = RequestMethod.POST)
     public Result<Integer> enableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -300,7 +300,7 @@ public class ${className}Controller {
     public Result<Integer> updateByPk(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         String fieldName = "";
-        if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtil.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list>)</#if> || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(entity))) {
+        if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtils.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list>)</#if> || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkUpdate(entity))) {
             return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
@@ -334,7 +334,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/getByPk", method = RequestMethod.GET)
     public Result<${className}Vo> getByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 

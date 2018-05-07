@@ -4,10 +4,7 @@ import ${baseCommonPackage}.constant.OperationConstants;
 
 import java.io.Serializable;
 
-/**
- * @author 郗世豪（xish@cloud-young.com）
- * @date 2017/11/28 17:53
- */
+<#include "/include/java_copyright.ftl">
 public class Result<T> implements Serializable {
 
     public Result() {

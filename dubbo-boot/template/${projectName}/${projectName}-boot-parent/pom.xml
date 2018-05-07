@@ -26,6 +26,8 @@
         <fastjson.version>1.2.46</fastjson.version>
         <zookeeper.version>3.4.11</zookeeper.version>
         <curator.version>4.0.1</curator.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <httpclient.version>4.5.5</httpclient.version>
     </properties>
 
     <dependencyManagement>
@@ -92,6 +94,17 @@
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-framework</artifactId>
                 <version>${r'${curator.version}'}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${r'${commons-lang3.version}'}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${r'${httpclient.version}'}</version>
             </dependency>
 
             <dependency>

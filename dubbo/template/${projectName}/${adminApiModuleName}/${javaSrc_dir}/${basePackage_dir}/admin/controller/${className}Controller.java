@@ -6,7 +6,7 @@
 package ${basePackage}.admin.controller;
 
 import ${baseCommonPackage}.model.ResponseVo;
-import ${baseCommonPackage}.utils.LogUtil;
+import ${baseCommonPackage}.utils.LogUtils;
 import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/${table.tableClassName?lower_case}")
 public class ${className}Controller {
 
-    private static LogUtil logger = LogUtil.build(${className}Controller.class);
+    private static LogUtils logger = LogUtils.build(${className}Controller.class);
 
     @Autowired
     private ${className}Service ${classNameLower}Service;

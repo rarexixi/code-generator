@@ -9,7 +9,7 @@
     <dubbo:application name="${providerModuleName}" id="${providerModuleName}" owner="${providerModuleName}"/>
     <dubbo:registry address="${r'${dubbo.registry.address}'}" protocol="zookeeper" id="zookeeper"/>
     <dubbo:protocol name="dubbo" port="-1" threadpool="fixed" threads="1024"/>
-    <!--<dubbo:provider filter="dubboFilter"/>-->
+    <dubbo:provider filter="dubboFilter"/>
     <#list tableModels as model>
 
     <!-- ${model.tableComment} -->

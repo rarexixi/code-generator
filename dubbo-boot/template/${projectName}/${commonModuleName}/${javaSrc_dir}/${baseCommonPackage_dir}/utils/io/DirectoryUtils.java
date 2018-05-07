@@ -2,10 +2,8 @@ package ${baseCommonPackage}.utils.io;
 
 import java.io.File;
 
-/**
- * Created by Xi on 5/17/2017.
- */
-public class DirectoryUtil {
+<#include "/include/java_copyright.ftl">
+public class DirectoryUtils {
 
     /**
      * 判断文件夹是否存在

@@ -2,10 +2,7 @@ package ${baseCommonPackage}.model;
 
 import java.io.Serializable;
 
-/**
- * @author 郗世豪（xish@cloud-young.com）
- * @date 2017/12/06 15:39
- */
+<#include "/include/java_copyright.ftl">
 public class SearchPage implements Serializable {
 
     public static final int DEFAULT_PAGE_INDEX = 1;

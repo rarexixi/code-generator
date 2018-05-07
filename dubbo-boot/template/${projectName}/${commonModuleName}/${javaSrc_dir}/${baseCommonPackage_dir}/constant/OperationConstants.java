@@ -1,9 +1,6 @@
 package ${baseCommonPackage}.constant;
 
-/**
- * @author 郗世豪（xish@cloud-young.com）
- * @date 2017/12/05 10:32
- */
+<#include "/include/java_copyright.ftl">
 public enum OperationConstants {
 
     SYSTEM_ERROR(100000, "系统错误"),

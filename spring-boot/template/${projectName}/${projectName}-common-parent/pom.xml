@@ -13,7 +13,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
+        <pagehelper.version>5.1.2</pagehelper.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <httpclient.version>4.5.5</httpclient.version>
     </properties>
 
     <dependencyManagement>
@@ -22,6 +25,17 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${r'${slf4j.version}'}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${r'${commons-lang3.version}'}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${r'${httpclient.version}'}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

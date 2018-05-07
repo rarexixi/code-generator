@@ -8,9 +8,8 @@ package ${basePackage}.api.impl;
 import ${baseCommonPackage}.constant.OperationConstants;
 import ${baseCommonPackage}.model.Result;
 import ${baseCommonPackage}.model.SearchPage;
-import ${baseCommonPackage}.utils.LogUtil;
-import ${baseCommonPackage}.utils.StringUtil;
-import ${baseCommonPackage}.utils.database.OperationCheckUtil;
+import ${baseCommonPackage}.utils.LogUtils;
+import ${baseCommonPackage}.utils.database.OperationCheckUtils;
 import ${basePackage}.api.${className}Api;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
@@ -21,6 +20,7 @@ import ${basePackage}.vo.${className}Vo;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageInfo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.List;
 @Service
 public class ${className}ApiImpl implements ${className}Api {
 
-    private static LogUtil logger = LogUtil.build(${className}ApiImpl.class);
+    private static LogUtils logger = LogUtils.build(${className}ApiImpl.class);
 
     @Autowired
     private ${className}Service ${classNameLower}Service;
@@ -46,19 +46,12 @@ public class ${className}ApiImpl implements ${className}Api {
     public Result<Integer> add(${className}Entity entity, String sessionId) {
 
         String fieldName = "";
-        if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(entity))) {
+        if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
             return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
-        Result<Integer> result;
-        try {
-            int count = ${classNameLower}Service.insert(entity);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("add${className}", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        int count = ${classNameLower}Service.insert(entity);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -78,20 +71,13 @@ public class ${className}ApiImpl implements ${className}Api {
         }
         String fieldName;
         for (${className}Entity entity : list) {
-            if (!StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(entity))) {
+            if (!StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
                 return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
             }
         }
 
-        Result<Integer> result;
-        try {
-            int count = ${classNameLower}Service.insertList(list);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("addList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        int count = ${classNameLower}Service.insertList(list);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     <#if table.hasPrimaryKey>
@@ -109,20 +95,13 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<Integer> deleteByPk(${primaryKeyParameters}, String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
-            int count = ${classNameLower}Service.deleteByCondition(condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("deleteByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        int count = ${classNameLower}Service.deleteByCondition(condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     <#if (table.uniquePrimaryKey??)>
@@ -138,20 +117,13 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
-            int count = ${classNameLower}Service.deleteByCondition(condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("deleteByPkList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        int count = ${classNameLower}Service.deleteByCondition(condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     </#if>
@@ -170,22 +142,15 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<Integer> disableByPk(${primaryKeyParameters}, String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("disableByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -202,22 +167,15 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<Integer> enableByPk(${primaryKeyParameters}, String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("enableByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     <#if (table.uniquePrimaryKey??)>
@@ -233,22 +191,15 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("disableByPkList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -263,22 +214,15 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("enableByPkList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     </#if>
@@ -296,24 +240,17 @@ public class ${className}ApiImpl implements ${className}Api {
     public Result<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
 
         String fieldName = "";
-        if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtil.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list>)</#if> || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(entity))) {
+        if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtils.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list>)</#if> || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkUpdate(entity))) {
             return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
-        Result<Integer> result;
-        try {
-            <#if !table.hasAutoIncrementUniquePrimaryKey>
-            ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
-            <#else>
-            ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.columnFieldName}()</#list>);
-            </#if>
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("updateByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        <#if !table.hasAutoIncrementUniquePrimaryKey>
+        ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
+        <#else>
+        ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.columnFieldName}()</#list>);
+        </#if>
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -330,19 +267,12 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<${className}Vo> getByPk(${primaryKeyParameters}, String sessionId) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<${className}Vo> result;
-        try {
-            ${className}Vo vo = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
-            result = new Result<>(vo);
-        } catch (Exception e) {
-            logger.error("getByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Vo vo = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
+        Result<${className}Vo> result = new Result<>(vo);
         return result;
     }
     </#if>
@@ -358,15 +288,8 @@ public class ${className}ApiImpl implements ${className}Api {
     @Override
     public Result<PageInfo<${className}Vo>> findPageList(${className}SelectParameter parameter, String sessionId) {
 
-        Result<PageInfo<${className}Vo>> result;
-        try {
-            PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.findPageList(parameter);
-            result = new Result<>(paginationVo);
-        } catch (Exception e) {
-            logger.error("findPageList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.findPageList(parameter);
+        Result<PageInfo<${className}Vo>> result = new Result<>(paginationVo);
         return result;
     }
 

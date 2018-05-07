@@ -9,11 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author 郗世豪（xish@cloud-young.com）
- * @date 2017/11/28 18:28
- */
-public class OperationCheckUtil {
+<#include "/include/java_copyright.ftl">
+public class OperationCheckUtils {
 
     /**
      * 获取新增验证消息

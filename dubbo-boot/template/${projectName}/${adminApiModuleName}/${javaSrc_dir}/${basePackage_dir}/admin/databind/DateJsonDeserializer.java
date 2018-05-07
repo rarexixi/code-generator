@@ -1,7 +1,5 @@
 package ${basePackage}.admin.databind;
 
-import ${baseCommonPackage}.utils.StringUtil;
-
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -12,6 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DateJsonDeserializer extends JsonDeserializer<Date> {
 
     @Override
@@ -20,7 +20,7 @@ public class DateJsonDeserializer extends JsonDeserializer<Date> {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String text = jsonParser.getText();
         try {
-            return StringUtil.isNullOrEmpty(text) ? null : format.parse(text);
+            return StringUtils.isEmpty(text) ? null : format.parse(text);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

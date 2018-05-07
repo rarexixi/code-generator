@@ -4,10 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Xi on 5/17/2017.
- */
-public class FileUtil {
+<#include "/include/java_copyright.ftl">
+public class FileUtils {
 
     //region 删除
 

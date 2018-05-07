@@ -7,9 +7,8 @@ package ${basePackage}.controller;
 
 import ${baseCommonPackage}.constant.OperationConstants;
 import ${baseCommonPackage}.model.Result;
-import ${baseCommonPackage}.utils.LogUtil;
-import ${baseCommonPackage}.utils.StringUtil;
-import ${baseCommonPackage}.utils.database.OperationCheckUtil;
+import ${baseCommonPackage}.utils.LogUtils;
+import ${baseCommonPackage}.utils.database.OperationCheckUtils;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
@@ -18,6 +17,7 @@ import ${basePackage}.vo.${className}Vo;
 
 import com.github.pagehelper.PageInfo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/${table.tableClassName?lower_case}")
 public class ${className}Controller {
 
-    private static LogUtil logger = LogUtil.build(${className}Controller.class);
+    private static LogUtils logger = LogUtils.build(${className}Controller.class);
 
     @Autowired
     private ${className}Service ${classNameLower}Service;
@@ -48,7 +48,7 @@ public class ${className}Controller {
         }
         String fieldName = "";
         for (${className}Entity ${classNameLower} : list) {
-            if (!StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(${classNameLower}))) {
+            if (!StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(${classNameLower}))) {
                 return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
             }
         }
@@ -78,7 +78,7 @@ public class ${className}Controller {
      @RequestMapping(value = { "/delete" }, method = RequestMethod.GET)
      public Result<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
-         if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
              return new Result<>(OperationConstants.NOT_NULL);
          }
 
@@ -133,7 +133,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/disable", method = RequestMethod.GET)
     public Result<Integer> disable(${primaryKeyParameters}) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -164,7 +164,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/enable", method = RequestMethod.GET)
     public Result<Integer> enable(${primaryKeyParameters}) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -194,7 +194,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/disablelist", method = RequestMethod.POST)
     public Result<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -222,7 +222,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/enablelist", method = RequestMethod.POST)
     public Result<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
@@ -259,12 +259,12 @@ public class ${className}Controller {
         try {
             int count;
             if (<#list primaryKey as column><#if (column_index > 0)> || </#if><#if !table.hasAutoIncrementUniquePrimaryKey>old${column.columnFieldName}<#else>entity.get${column.columnFieldName}()</#if> == null</#list>) {
-                if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkInsert(entity))) {
+                if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
                     return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
                 }
                 count = ${classNameLower}Service.insert(entity);
             } else {
-                if (entity == null || !StringUtil.isNullOrEmpty(fieldName = OperationCheckUtil.checkUpdate(entity))) {
+                if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkUpdate(entity))) {
                     return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
                 }
                 <#if !table.hasAutoIncrementUniquePrimaryKey>
@@ -295,7 +295,7 @@ public class ${className}Controller {
     @RequestMapping(value = { "/getdetail" }, method = RequestMethod.GET)
     public Result<${className}Vo> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
-        if (OperationCheckUtil.isNullOrEmpty(${primaryKeyParameterValues})) {
+        if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
