@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
@@ -292,7 +293,7 @@ public class ${className}ServiceImpl implements ${className}Service {
         return responseVo;
     }
 
-    private String getSessionId()() {
-        return applicationName + "_" + UUID.randomUUID();
+    private String getSessionId() {
+        return applicationName + "-" + UUID.randomUUID();
     }
 }

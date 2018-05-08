@@ -27,12 +27,12 @@ public class AnnotationUtils {
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
-            for (Annotation annotation : parameter.getAnnotations()) {
-                Object annotationValue = getValue(annotation, annotationValueName);
-                if (annotationValue == null) continue;
-                if (annotation.annotationType() == annotationClass && annotationValue.equals(paramName)) {
-                    return args[i];
-                }
+            Annotation annotation = parameter.getAnnotation(annotationClass);
+            if(annotation == null) continue;
+            Object annotationValue = getValue(annotation, annotationValueName);
+            if (annotationValue == null) continue;
+            if (annotation.annotationType() == annotationClass && annotationValue.equals(paramName)) {
+                return args[i];
             }
         }
         return null;
@@ -109,13 +109,13 @@ public class AnnotationUtils {
         for (String paramName : paramNames) {
             for (int i = 0; i < parameters.length; i++) {
                 Parameter parameter = parameters[i];
-                for (Annotation annotation : parameter.getAnnotations()) {
-                    Object annotationValue = getValue(annotation, annotationValueName);
-                    if (annotationValue == null) continue;
-                    if (annotation.annotationType() == annotationClass && annotationValue.equals(paramName)) {
-                        result.put(paramName, args[i]);
-                        continue outerFor;
-                    }
+                Annotation annotation = parameter.getAnnotation(annotationClass);
+                if (annotation == null) continue;
+                Object annotationValue = getValue(annotation, annotationValueName);
+                if (annotationValue == null) continue;
+                if (annotation.annotationType() == annotationClass && annotationValue.equals(paramName)) {
+                    result.put(paramName, args[i]);
+                    continue outerFor;
                 }
             }
         }

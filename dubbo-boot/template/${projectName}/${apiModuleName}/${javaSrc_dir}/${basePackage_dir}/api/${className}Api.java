@@ -5,6 +5,7 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.api;
 
+import ${baseCommonPackage}.annotation.ParamName;
 import ${baseCommonPackage}.model.Result;
 import ${baseCommonPackage}.model.SearchPage;
 import ${basePackage}.entity.${className}Entity;
@@ -26,7 +27,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> add(${className}Entity entity, String sessionId);
+    Result<Integer> add(${className}Entity entity, @ParamName("sessionId") String sessionId);
 
     /**
      * 添加列表
@@ -36,7 +37,7 @@ public interface ${className}Api {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    Result<Integer> addList(List<${className}Entity> list, String sessionId);
+    Result<Integer> addList(List<${className}Entity> list, @ParamName("sessionId") String sessionId);
     <#if table.hasPrimaryKey>
 
     /**
@@ -49,7 +50,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> deleteByPk(${primaryKeyParameters}, String sessionId);
+    Result<Integer> deleteByPk(${primaryKeyParameters}, @ParamName("sessionId") String sessionId);
     <#if (table.uniquePrimaryKey??)>
 
     /**
@@ -60,7 +61,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId);
+    Result<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @ParamName("sessionId") String sessionId);
     </#if>
     <#if table.validStatusColumn??>
 
@@ -74,7 +75,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> disableByPk(${primaryKeyParameters}, String sessionId);
+    Result<Integer> disableByPk(${primaryKeyParameters}, @ParamName("sessionId") String sessionId);
 
     /**
      * 根据主键激活
@@ -86,7 +87,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> enableByPk(${primaryKeyParameters}, String sessionId);
+    Result<Integer> enableByPk(${primaryKeyParameters}, @ParamName("sessionId") String sessionId);
     <#if (table.uniquePrimaryKey??)>
 
     /**
@@ -97,7 +98,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId);
+    Result<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @ParamName("sessionId") String sessionId);
 
     /**
      * 根据主键列表激活
@@ -107,7 +108,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId);
+    Result<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @ParamName("sessionId") String sessionId);
     </#if>
     </#if>
 
@@ -119,7 +120,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId);
+    Result<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @ParamName("sessionId") String sessionId);
 
     /**
      * 根据主键获取
@@ -131,7 +132,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<${className}Vo> getByPk(${primaryKeyParameters}, String sessionId);
+    Result<${className}Vo> getByPk(${primaryKeyParameters}, @ParamName("sessionId") String sessionId);
     </#if>
 
     /**
@@ -142,5 +143,5 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    Result<PageInfo<${className}Vo>> findPageList(${className}SelectParameter parameter, String sessionId);
+    Result<PageInfo<${className}Vo>> findPageList(${className}SelectParameter parameter, @ParamName("sessionId") String sessionId);
 }

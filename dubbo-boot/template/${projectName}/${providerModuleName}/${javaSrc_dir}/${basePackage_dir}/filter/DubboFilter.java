@@ -10,11 +10,9 @@ import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.alibaba.dubbo.rpc.service.GenericService;
 import org.apache.commons.lang3.time.StopWatch;
-import com.google.common.collect.ImmutableMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,7 +50,7 @@ public class DubboFilter implements Filter {
                     Map<String, Object> args = new HashMap<>(8);
                     args.put("开始执行时间", stopWatch.getStartTime());
                     args.put("开始执行时间（用来展示）", new Date(stopWatch.getStartTime()).toString());
-                    args.put("入参", proceedingJoinPoint.getArgs());
+                    args.put("入参", invocation.getArguments());
                     args.put("出参", result);
                     args.put("方法执行时长(ms)", stopWatch.getTime());
                     logger.info(method, sessionId, "Dubbo 服务执行结束", args);
