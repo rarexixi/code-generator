@@ -1,5 +1,7 @@
 /**
  * <#if table??>${table.tableComment}</#if>
- * All Rights Reserved.
- * @version ${codeVersion} <#if now??>${now?string('yyyy/MM/dd HH:mm')}</#if> ${author}
+ *
+ * @author ${author} All Rights Reserved.
+ * @date <#if now??>${now?string('MM/dd/yyyy')}</#if>
+ * @version ${codeVersion}
  */

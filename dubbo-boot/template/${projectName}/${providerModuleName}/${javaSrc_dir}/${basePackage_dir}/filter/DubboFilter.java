@@ -1,7 +1,9 @@
 package ${basePackage}.filter;
 
+import ${baseCommonPackage}.annotation.ParamName;
 import ${baseCommonPackage}.constant.OperationConstants;
 import ${baseCommonPackage}.utils.AnnotationUtils;
+import ${baseCommonPackage}.utils.LogUtils;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
@@ -20,7 +22,7 @@ import java.util.UUID;
 @Activate(group = Constants.PROVIDER)
 public class DubboFilter implements Filter {
 
-    private final Logger logger = LoggerFactory.getLogger(DubboFilter.class);
+    private final LogUtils logger = LogUtils.build(DubboFilter.class);
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) {
@@ -47,13 +49,12 @@ public class DubboFilter implements Filter {
 
             if (!result.hasException()) {
                 if (logger.isInfoEnabled()) {
-                    Map<String, Object> args = ImmutableMap.<String, Object>builder()
-                            .put("开始执行时间", stopWatch.getStartTime())
-                            .put("开始执行时间（用来展示）", new Date(stopWatch.getStartTime()).toString())
-                            .put("入参", invocation.getArguments())
-                            .put("出参", result.getValue())
-                            .put("方法执行时长(ms)", stopWatch.getTime())
-                            .build();
+                    Map<String, Object> args = new HashMap<>(8);
+                    args.put("开始执行时间", stopWatch.getStartTime());
+                    args.put("开始执行时间（用来展示）", new Date(stopWatch.getStartTime()).toString());
+                    args.put("入参", proceedingJoinPoint.getArgs());
+                    args.put("出参", result);
+                    args.put("方法执行时长(ms)", stopWatch.getTime());
                     logger.info(method, sessionId, "Dubbo 服务执行结束", args);
                 }
                 return result;
@@ -69,7 +70,7 @@ public class DubboFilter implements Filter {
 
         Object sessionId = null;
         try {
-            sessionId = AnnotationUtils.getParam(invoker.getInterface(), invocation.getMethodName(), invocation.getParameterTypes(), invocation.getArguments(), "sessionId");
+            sessionId = AnnotationUtils.getParam(invoker.getInterface(), invocation.getMethodName(), invocation.getParameterTypes(), invocation.getArguments(), "sessionId", ParamName.class);
         } catch (NoSuchMethodException e) {
             logger.error("getSessionId", "获取 Session ID 异常", e);
         }
