@@ -19,7 +19,7 @@ generator:
     ignore: include/                                        # 要忽略的文件
     aggregate: static/index.html
                                                             # 聚合文件
-    just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js
+    just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js, .gitignore
                                                             # 仅复制文件
   valid-status-field:                                       # 是否删除字段
     fieldName: is_deleted                                   # 字段名
