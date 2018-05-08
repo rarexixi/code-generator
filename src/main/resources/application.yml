@@ -15,11 +15,11 @@ dollar: $
 generator:
   encoding: UTF-8
   path:
-    template: /Workspace/github.com/java/mysql-code-generator/dubbo/template/  # 模版路径
+    template: /Workspace/github.com/java/mysql-code-generator/spring-cloud/template/  # 模版路径
     out: /Workspace/gitee.com/            # 输出路径
   file:
     ignore: include/                                        # 要忽略的文件
-    aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, ${dollar}{adminWebModuleName}/index.html
+    aggregate: static/index.html
                                                             # 聚合文件
     just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js
                                                             # 仅复制文件
@@ -34,7 +34,16 @@ generator:
       valueField: user_type_name                            # 对应的关联表外键值
   field:
     not-required: create_time, update_time
-    #select:
+    select:
+      - nameSet: status
+        tableName: multi_pk
+        options:
+          - value: 1
+            text: 正常
+          - value: 2
+            text: 提高
+          - value: 3
+            text: 起飞
     img-url: photo
     video-url:
     doc-url:
@@ -44,8 +53,7 @@ generator:
 
   # 公共自定义属性
   common-properties:
-
-    projectName: quick-dubbo-auto
+    projectName: quick-cloud-auto
     projectShortName: quick
     projectGroup: org.xi
     projectVersion: 1.0-SNAPSHOT
@@ -54,20 +62,20 @@ generator:
     baseCommonPackage: org.xi.common
 
     commonModuleName: quick-common
-    apiModuleName: quick-api
+    modelModuleName: quick-model
     providerModuleName: quick-provider
-    adminApiModuleName: quick-admin-api
-    adminWebModuleName: quick-admin-web
+    adminModuleName: quick-admin
+    eurekaServerModuleName: quick-eureka-server
 
     providerModuleApplicationName: QuickProviderApplication
-    adminApiModuleApplicatioName: QuickAdminApplication
+    adminModuleApplicatioName: QuickAdminApplication
+    eurekaServerModuleApplicatioName: QuickEurekaServerApplication
 
-    dubboServiceGroup: quick
-    dubboServiceVersion: 1.0.0
-    dubboServiceProtocol: zookeeper
-    dubboRegistryAddress: 192.168.10.31:2181,192.168.10.32:2181,192.168.10.33:2181
+    eurekaServerPort: 8770
+    providerServicePort: 8810
+    adminServicePort: 8820
 
-    author: 郗世豪（rarexixi@outlook.com）
+    author: 郗世豪（xish@cloud-young.com）
     codeVersion: 1.0
     javaSrc: src.main.java
     javaTestSrc: src.test.java
@@ -87,7 +95,7 @@ generator:
     character: Character
     varchar: String
     char: String
+    text: String
     date: Date
     datetime: Date
     timestamp: Date
-

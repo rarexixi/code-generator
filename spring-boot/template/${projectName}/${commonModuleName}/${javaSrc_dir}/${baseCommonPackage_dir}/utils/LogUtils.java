@@ -1,6 +1,7 @@
 package ${baseCommonPackage}.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,13 +173,13 @@ public class LogUtils {
 
         JSONObject msgJson = new JSONObject(new LinkedHashMap());
 
-        if (!StringUtils.isNullOrWhiteSpace(sessionId)) {
+        if (!StringUtils.isEmpty(sessionId)) {
             msgJson.put("sessionId", sessionId);
         }
-        if (!StringUtils.isNullOrWhiteSpace(method)) {
+        if (!StringUtils.isEmpty(method)) {
             msgJson.put("method", method);
         }
-        if (!StringUtils.isNullOrWhiteSpace(message)) {
+        if (!StringUtils.isEmpty(message)) {
             msgJson.put("message", message);
         }
 

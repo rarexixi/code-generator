@@ -15,6 +15,7 @@
 
 		<pagehelper.version>5.1.2</pagehelper.version>
 		<slf4j.version>1.7.25</slf4j.version>
+        <fastjson.version>1.2.47</fastjson.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <httpclient.version>4.5.5</httpclient.version>
     </properties>
@@ -32,6 +33,12 @@
     			<artifactId>pagehelper</artifactId>
     			<version>${r'${pagehelper.version}'}</version>
     		</dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${r'${fastjson.version}'}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
