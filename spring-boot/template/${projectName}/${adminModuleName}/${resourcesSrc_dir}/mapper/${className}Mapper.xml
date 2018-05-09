@@ -178,7 +178,7 @@
         `${table.tableName}`
         <include refid="where"/>
         <if test="order != null and order.orderBy != null and order.orderBy != ''">
-            ORDER BY ${r"${corder.orderBy}"}
+            ORDER BY ${r"${order.orderBy}"}
         </if>
     </select>
 
@@ -189,7 +189,7 @@
         `${table.tableName}`
         <include refid="listWhere"/>
         <if test="order != null and order.orderBy != null and order.orderBy != ''">
-            ORDER BY ${r"${corder.orderBy}"}
+            ORDER BY ${r"${order.orderBy}"}
         </if>
     </select>
 </mapper>
