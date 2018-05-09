@@ -54,15 +54,8 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
-        Result<Integer> result;
-        try {
-            int count = ${classNameLower}Service.insert(entity);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("add${className}", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        int count = ${classNameLower}Service.insert(entity);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -87,15 +80,8 @@ public class ${className}Controller {
             }
         }
 
-        Result<Integer> result;
-        try {
-            int count = ${classNameLower}Service.insertList(list);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("addList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        int count = ${classNameLower}Service.insertList(list);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     <#if table.hasPrimaryKey>
@@ -117,16 +103,9 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
-            int count = ${classNameLower}Service.deleteByCondition(condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("deleteByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        int count = ${classNameLower}Service.deleteByCondition(condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     <#if (table.uniquePrimaryKey??)>
@@ -146,16 +125,9 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
-            int count = ${classNameLower}Service.deleteByCondition(condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("deleteByPkList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        int count = ${classNameLower}Service.deleteByCondition(condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     </#if>
@@ -178,18 +150,11 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("disableByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -210,18 +175,11 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("enableByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     <#if (table.uniquePrimaryKey??)>
@@ -241,18 +199,11 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("disableByPkList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -271,18 +222,11 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
-        try {
-            ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
-            ${className}Entity entity = new ${className}Entity();
-            entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("enableByPkList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Entity entity = new ${className}Entity();
+        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
     </#if>
@@ -304,20 +248,13 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
-        Result<Integer> result;
-        try {
-            <#if !table.hasAutoIncrementUniquePrimaryKey>
-            ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
-            <#else>
-            ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.columnFieldName}()</#list>);
-            </#if>
-            int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
-        } catch (Exception e) {
-            logger.error("updateByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        <#if !table.hasAutoIncrementUniquePrimaryKey>
+        ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
+        <#else>
+        ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.columnFieldName}()</#list>);
+        </#if>
+        int count = ${classNameLower}Service.updateByCondition(entity, condition);
+        Result<Integer> result = new Result<>(count);
         return result;
     }
 
@@ -338,15 +275,8 @@ public class ${className}Controller {
             return new Result<>(OperationConstants.NOT_NULL);
         }
 
-        Result<${className}Vo> result;
-        try {
-            ${className}Vo vo = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
-            result = new Result<>(vo);
-        } catch (Exception e) {
-            logger.error("getByPk", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        ${className}Vo vo = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
+        Result<${className}Vo> result = new Result<>(vo);
         return result;
     }
     </#if>
@@ -362,15 +292,8 @@ public class ${className}Controller {
     @RequestMapping(value = "/findPageList", method = RequestMethod.POST)
     public Result<PageInfo<${className}Vo>> findPageList(@RequestBody ${className}SelectParameter parameter, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        Result<PageInfo<${className}Vo>> result;
-        try {
-            PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.findPageList(parameter);
-            result = new Result<>(paginationVo);
-        } catch (Exception e) {
-            logger.error("findPageList", sessionId, e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
-        }
-
+        PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.findPageList(parameter);
+        Result<PageInfo<${className}Vo>> result = new Result<>(paginationVo);
         return result;
     }
 
