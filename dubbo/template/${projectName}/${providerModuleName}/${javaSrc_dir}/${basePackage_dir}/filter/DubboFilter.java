@@ -69,7 +69,7 @@ public class DubboFilter implements Filter {
         Object sessionId = null;
         try {
             sessionId = AnnotationUtils.getParam(ParamName.class, invoker.getInterface(), invocation.getMethodName(), invocation.getParameterTypes(), invocation.getArguments(), "sessionId");
-        } catch (NoSuchMethodException e) {
+        } catch (Exception e) {
             logger.error("getSessionId", "获取 Session ID 异常", e);
         }
 
