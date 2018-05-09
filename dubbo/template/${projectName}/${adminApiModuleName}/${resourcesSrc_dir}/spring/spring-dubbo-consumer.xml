@@ -13,7 +13,7 @@
 
     <!-- ${model.tableComment} -->
     <dubbo:reference interface="${basePackage}.api.${model.tableClassName}Api"
-                   id="${model.tableClassName?uncap_first}Api" group="${r'${dubbo.consumer.group}'}" version="${r'${dubbo.consumer.version}'}" />
+                     id="${model.tableClassName?uncap_first}Api" group="${r'${dubbo.consumer.group}'}" version="${r'${dubbo.consumer.version}'}" />
     </#list>
 
 </beans>
