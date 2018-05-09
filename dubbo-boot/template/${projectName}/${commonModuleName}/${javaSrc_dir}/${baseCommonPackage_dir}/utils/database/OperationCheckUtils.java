@@ -21,22 +21,13 @@ public class OperationCheckUtils {
      */
     public static <T> String checkInsert(T t) {
 
-        Class c = t.getClass();
+        Class clazz = t.getClass();
 
-        Field[] fields = c.getDeclaredFields();
+        Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             InsertNotNull annotation = field.getAnnotation(InsertNotNull.class);
-            if (annotation != null && annotation.required()) {
-                field.setAccessible(true);
-                Object obj = null;
-                try {
-                    obj = field.get(t);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                if (isNullOrEmpty(obj)) {
-                    return annotation.name();
-                }
+            if (annotation != null && annotation.required() && checkFieldNull(t, field)) {
+                return annotation.name();
             }
         }
 
@@ -52,22 +43,13 @@ public class OperationCheckUtils {
      */
     public static <T> String checkUpdate(T t) {
 
-        Class c = t.getClass();
+        Class clazz = t.getClass();
 
-        Field[] fields = c.getDeclaredFields();
+        Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             UpdateNotNull annotation = field.getAnnotation(UpdateNotNull.class);
-            if (annotation != null && annotation.required()) {
-                field.setAccessible(true);
-                Object obj = null;
-                try {
-                    obj = field.get(t);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                if (isNullOrEmpty(obj)) {
-                    return annotation.name();
-                }
+            if (annotation != null && annotation.required() && checkFieldNull(t, field)) {
+                return annotation.name();
             }
         }
 
@@ -85,22 +67,13 @@ public class OperationCheckUtils {
 
         List<String> messageList = new ArrayList<>();
 
-        Class c = t.getClass();
+        Class clazz = t.getClass();
 
-        Field[] fields = c.getDeclaredFields();
+        Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             InsertNotNull annotation = field.getAnnotation(InsertNotNull.class);
-            if (annotation != null && annotation.required()) {
-                field.setAccessible(true);
-                Object obj = null;
-                try {
-                    obj = field.get(t);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                if (isNullOrEmpty(obj)) {
-                    messageList.add(annotation.name());
-                }
+            if (annotation != null && annotation.required() && checkFieldNull(t, field)) {
+                messageList.add(annotation.name());
             }
         }
 
@@ -118,26 +91,33 @@ public class OperationCheckUtils {
 
         List<String> messageList = new ArrayList<>();
 
-        Class c = t.getClass();
+        Class clazz = t.getClass();
 
-        Field[] fields = c.getDeclaredFields();
+        Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             UpdateNotNull annotation = field.getAnnotation(UpdateNotNull.class);
-            if (annotation != null && annotation.required()) {
-                field.setAccessible(true);
-                Object obj = null;
-                try {
-                    obj = field.get(t);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                if (isNullOrEmpty(obj)) {
-                    messageList.add(annotation.name());
-                }
+            if (annotation != null && annotation.required() && checkFieldNull(t, field)) {
+                messageList.add(annotation.name());
             }
         }
 
         return messageList;
+    }
+
+    private static <T> boolean checkFieldNull(T t, Field field) {
+
+        field.setAccessible(true);
+
+        Object obj = null;
+        try {
+            obj = field.get(t);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if (isNullOrEmpty(obj)) {
+            return true;
+        }
+        return false;
     }
 
     public static boolean isNullOrEmpty(Object... objects) {
