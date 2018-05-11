@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class BaseSelectParameter extends SearchPage implements OrderCondition, Serializable {
 
     public BaseSelectParameter() {
-        orderByMap = new HashMap<>();
+        orderByMap = new LinkedHashMap<>();
     }
 
     protected Map<String, String> orderByMap;

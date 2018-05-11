@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class BaseOrderCondition implements OrderCondition {
 
     public BaseOrderCondition() {
-        orderByMap = new HashMap<>();
+        orderByMap = new LinkedHashMap<>();
     }
 
     protected Map<String, String> orderByMap;
