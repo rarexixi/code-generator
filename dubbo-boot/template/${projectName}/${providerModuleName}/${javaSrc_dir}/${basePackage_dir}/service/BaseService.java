@@ -140,4 +140,19 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      */
     PageInfo<T> findByConditionList(List<C> conditionList, OrderCondition order, SearchPage page);
 
+    /**
+     * 查询数量
+     *
+     * @param condition
+     * @return
+     */
+    int countByCondition(C condition);
+
+    /**
+     * 查询数量
+     *
+     * @param conditionList
+     * @return
+     */
+    int countByConditionList(List<C> conditionList);
 }

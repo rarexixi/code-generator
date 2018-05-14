@@ -227,4 +227,28 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
         return pageInfo;
     }
 
+    /**
+     * 查询数量
+     *
+     * @param condition
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public int countByCondition(C condition) {
+        return mapper.countByCondition(condition);
+    }
+
+    /**
+     * 查询数量
+     *
+     * @param conditionList
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public int countByConditionList(List<C> conditionList) {
+        return mapper.countByCondition(condition);
+    }
+
 }

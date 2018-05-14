@@ -26,10 +26,6 @@
             <if test="condition.${column.columnFieldNameFirstLower} != null">
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
             </if>
-            <#elseif column.columnFieldNameFirstLower == 'isActive'>
-            <if test="condition.${column.columnFieldNameFirstLower} != null">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
-            </if>
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
             <if test="condition.${column.columnFieldNameFirstLower} != null">
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
@@ -40,7 +36,31 @@
                     ${r"#{it}"}
                 </foreach>
             </if>
-            <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <if test="condition.${column.columnFieldNameFirstLower}Min != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
+                ]]>
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}Max != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Max'/>
+                ]]>
+            </if>
+            <#elseif (column.columnFieldType == "Date")>
+            <if test="condition.${column.columnFieldNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}Min != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
+                ]]>
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}Max != null">
+                <![CDATA[
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Max'/>
+                ]]>
+            </if>
+            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
             <if test="condition.${column.columnFieldNameFirstLower}Min != null">
                 <![CDATA[
                 <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
@@ -60,6 +80,12 @@
             </if>
             <if test="condition.${column.columnFieldNameFirstLower}Like != null and condition.${column.columnFieldNameFirstLower}Like != ''">
                 AND `${table.tableName}`.`${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Like'/>, '%')
+            </if>
+            <if test="condition.${column.columnFieldNameFirstLower}List != null and condition.${column.columnFieldNameFirstLower}List.size() > 0">
+                AND `${table.tableName}`.`${column.columnName}` in
+                <foreach collection="condition.${column.columnFieldNameFirstLower}List" item="it" open="(" close=")" separator=",">
+                    ${r"#{it}"}
+                </foreach>
             </if>
             <#else>
             <if test="condition.${column.columnFieldNameFirstLower} != null">
@@ -94,7 +120,8 @@
     <sql id="updateColumnSet">
         <set>
             <#list table.columns as column>
-            <#if (!column.primaryKey && !column.autoIncrement)>
+            <#if (column.primaryKey && column.autoIncrement)>
+            <#else>
             <if test="model.${column.columnFieldNameFirstLower} != null">
                 `${table.tableName}`.`${column.columnName}` = <@mapperEl 'model.' + column.columnFieldNameFirstLower/><#if column_has_next>,</#if>
             </if>
@@ -171,7 +198,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="findByCondition" resultMap="BaseModelMap" parameterMap="BaseConditionMap">
+    <select id="findByCondition" resultMap="BaseModelMap">
         SELECT
         <include refid="selectColumnList"/>
         FROM
@@ -182,7 +209,7 @@
         </if>
     </select>
 
-    <select id="findByConditionList" resultMap="BaseModelMap" parameterMap="BaseConditionMap">
+    <select id="findByConditionList" resultMap="BaseModelMap">
         SELECT
         <include refid="selectColumnList"/>
         FROM
@@ -191,5 +218,15 @@
         <if test="order != null and order.orderBy != null and order.orderBy != ''">
             ORDER BY ${r"${order.orderBy}"}
         </if>
+    </select>
+
+    <select id="countByCondition" parameterMap="BaseConditionMap">
+        SELECT COUNT(*) FROM `${table.tableName}`
+        <include refid="where"/>
+    </select>
+
+    <select id="countByConditionList" parameterMap="BaseConditionMap">
+        SELECT COUNT(*) FROM `${table.tableName}`
+        <include refid="listWhere"/>
     </select>
 </mapper>

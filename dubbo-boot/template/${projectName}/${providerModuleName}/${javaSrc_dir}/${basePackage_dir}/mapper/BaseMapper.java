@@ -84,4 +84,20 @@ public interface BaseMapper<T extends Serializable, C extends Serializable> {
      */
     List<T> findByConditionList(@Param("conditionList") List<C> conditionList, @Param("order") OrderCondition order);
 
+    /**
+     * 查询数量
+     *
+     * @param condition
+     * @return
+     */
+    int countByCondition(@Param("condition") C condition);
+
+    /**
+     * 查询数量
+     *
+     * @param conditionList
+     * @return
+     */
+    int countByConditionList(@Param("conditionList") List<C> conditionList);
+
 }

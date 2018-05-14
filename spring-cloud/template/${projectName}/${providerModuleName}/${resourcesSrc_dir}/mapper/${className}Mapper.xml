@@ -198,7 +198,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="findByCondition" resultMap="BaseModelMap" parameterMap="BaseConditionMap">
+    <select id="findByCondition" resultMap="BaseModelMap">
         SELECT
         <include refid="selectColumnList"/>
         FROM
@@ -209,7 +209,7 @@
         </if>
     </select>
 
-    <select id="findByConditionList" resultMap="BaseModelMap" parameterMap="BaseConditionMap">
+    <select id="findByConditionList" resultMap="BaseModelMap">
         SELECT
         <include refid="selectColumnList"/>
         FROM
@@ -218,5 +218,15 @@
         <if test="order != null and order.orderBy != null and order.orderBy != ''">
             ORDER BY ${r"${order.orderBy}"}
         </if>
+    </select>
+
+    <select id="countByCondition" parameterMap="BaseConditionMap">
+        SELECT COUNT(*) FROM `${table.tableName}`
+        <include refid="where"/>
+    </select>
+
+    <select id="countByConditionList" parameterMap="BaseConditionMap">
+        SELECT COUNT(*) FROM `${table.tableName}`
+        <include refid="listWhere"/>
     </select>
 </mapper>
