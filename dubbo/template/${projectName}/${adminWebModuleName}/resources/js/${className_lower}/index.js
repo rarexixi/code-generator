@@ -105,7 +105,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/find',
                 contentType : 'application/json',
                 data : JSON.stringify({
                     pageIndex: 1,
@@ -143,7 +143,7 @@ var app = new Vue({
             self.checkedList = [];
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/find',
+                url: appConfig.baseApiPath + '/${classNameLower}/find',
                 contentType : 'application/json',
                 data : JSON.stringify(self.searchParams),
                 dataType: 'json',
@@ -199,7 +199,7 @@ var app = new Vue({
             </#if>
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -219,7 +219,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
+                url: appConfig.baseApiPath + '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
                 contentType : 'application/json',
                 data : JSON.stringify(self.addOrEditParams),
                 dataType: 'json',
@@ -250,7 +250,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -292,7 +292,7 @@ var app = new Vue({
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'post',
-                    url: url,
+                    url: appConfig.baseApiPath + url,
                     contentType : 'application/json',
                     data : JSON.stringify(self.checkedList),
                     dataType: 'json',
@@ -327,7 +327,7 @@ var app = new Vue({
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'get',
-                    url: url,
+                    url: appConfig.baseApiPath + url,
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {

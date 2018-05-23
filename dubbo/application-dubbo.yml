@@ -62,6 +62,8 @@ generator:
     providerModuleApplicationName: QuickProviderApplication
     adminApiModuleApplicatioName: QuickAdminApplication
 
+    baseApiPath: http://localhost:8820
+
     dubboServiceGroup: quick
     dubboServiceVersion: 1.0.0
     dubboServiceProtocol: zookeeper

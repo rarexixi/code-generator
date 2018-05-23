@@ -26,3 +26,11 @@ dubbo:
     client: curator
   scan:
     base-packages: ${basePackage}.admin.service
+
+access:
+  control:
+    allow-origin: '*'
+    allow-headers: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
+    max-age: 3600
+    allow-methods: Origin, X-Requested-With, Content-Type, Accept
+    url-patterns: /*

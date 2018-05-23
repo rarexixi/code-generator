@@ -63,7 +63,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/find',
                 contentType : 'application/json',
                 data : JSON.stringify({
                     pageIndex: 1,
@@ -85,7 +85,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
+                url: appConfig.baseApiPath + '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
                 contentType : 'application/json',
                 data : JSON.stringify(self.addOrEditParams),
                 dataType: 'json',
@@ -102,7 +102,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getdetail' + window.location.search,
+                url: appConfig.baseApiPath + '/${classNameLower}/getdetail' + window.location.search,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {

@@ -74,6 +74,8 @@ generator:
     providerServicePort: 8810
     adminServicePort: 8820
 
+    baseApiPath: http://localhost:8820
+
     author: 郗世豪（xish@cloud-young.com）
     codeVersion: 1.0
     javaSrc: src.main.java
