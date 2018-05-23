@@ -62,7 +62,8 @@ generator:
     commonModuleName: quick-common
     modelModuleName: quick-model
     providerModuleName: quick-provider
-    adminModuleName: quick-admin
+    adminApiModuleName: quick-admin-api
+    adminWebModuleName: quick-admin-web
     eurekaServerModuleName: quick-eureka-server
 
     providerModuleApplicationName: QuickProviderApplication

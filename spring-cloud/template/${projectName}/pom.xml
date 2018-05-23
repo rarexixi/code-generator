@@ -15,7 +15,8 @@
         <module>${eurekaServerModuleName}</module>
         <module>${modelModuleName}</module>
         <module>${providerModuleName}</module>
-        <module>${adminModuleName}</module>
+        <module>${adminApiModuleName}</module>
+        <module>${adminWebModuleName}</module>
     </modules>
 
 </project>
