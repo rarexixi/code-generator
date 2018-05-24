@@ -3,58 +3,24 @@ package ${basePackage}.admin.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Component
-@ConfigurationProperties(prefix = "access.control")
+@ConfigurationProperties(prefix = "cors.response")
 public class CorsProperties {
 
-    private String allowOrigin;
-    private String allowMethods;
-    private String maxAge;
-    private String allowHeaders;
-    private Set<String> urlPatterns;
+    private Map<String, String> headers = new HashMap<>();
+    private Set<String> urlPatterns = new LinkedHashSet<>();
 
-    public CorsProperties() {
-        this.allowOrigin = "*";
-        this.allowMethods = "GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS";
-        this.maxAge = "3600";
-        this.allowHeaders = "Origin, X-Requested-With, Content-Type, Accept";
-        this.urlPatterns = new LinkedHashSet<>();
-        this.urlPatterns.add("/*");
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
-    public String getAllowOrigin() {
-        return allowOrigin;
-    }
-
-    public void setAllowOrigin(String allowOrigin) {
-        this.allowOrigin = allowOrigin;
-    }
-
-    public String getAllowMethods() {
-        return allowMethods;
-    }
-
-    public void setAllowMethods(String allowMethods) {
-        this.allowMethods = allowMethods;
-    }
-
-    public String getMaxAge() {
-        return maxAge;
-    }
-
-    public void setMaxAge(String maxAge) {
-        this.maxAge = maxAge;
-    }
-
-    public String getAllowHeaders() {
-        return allowHeaders;
-    }
-
-    public void setAllowHeaders(String allowHeaders) {
-        this.allowHeaders = allowHeaders;
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
     }
 
     public Set<String> getUrlPatterns() {

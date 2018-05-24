@@ -5,7 +5,7 @@ mybatis:
   type-aliases-package: org.xi.quick.codegenerator.mapper
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
@@ -13,7 +13,7 @@ spring:
 dollar: $
 
 generator:
-  encoding: UTF-8
+  encoding: UTF-8                # 代码字符集
   path:
     template: /Workspace/github.com/java/mysql-code-generator/dubbo/template/  # 模版路径
     out: /Workspace/gitee.com/            # 输出路径
@@ -34,7 +34,16 @@ generator:
       valueField: user_type_name                            # 对应的关联表外键值
   field:
     not-required: create_time, update_time
-    #select:
+    select:
+      - nameSet: status
+        tableName: multi_pk
+        options:
+          - value: 1
+            text: 正常
+          - value: 2
+            text: 提高
+          - value: 3
+            text: 起飞
     img-url: photo
     video-url:
     doc-url:
@@ -62,6 +71,8 @@ generator:
     providerModuleApplicationName: QuickProviderApplication
     adminApiModuleApplicatioName: QuickAdminApplication
 
+    baseApiPath: http://localhost:8820
+
     dubboServiceGroup: quick
     dubboServiceVersion: 1.0.0
     dubboServiceProtocol: zookeeper
@@ -87,6 +98,7 @@ generator:
     character: Character
     varchar: String
     char: String
+    text: String
     date: Date
     datetime: Date
     timestamp: Date

@@ -3,11 +3,11 @@ server:
 
 spring:
   application:
-    name: ${adminModuleName}
+    name: ${adminApiModuleName}
   cloud:
     service-registry:
       auto-registration:
-        enabled: false
+        enabled: true
 eureka:
   client:
     serviceUrl:
@@ -17,10 +17,11 @@ feign:
   hystrix:
     enabled: true
 
-access:
-  control:
-    allow-origin: '*'
-    allow-headers: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
-    max-age: 3600
-    allow-methods: Origin, X-Requested-With, Content-Type, Accept
+cors:
+  response:
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept
+      Access-Control-Allow-Methods: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
+      Access-Control-Max-Age: 3600
     url-patterns: /*

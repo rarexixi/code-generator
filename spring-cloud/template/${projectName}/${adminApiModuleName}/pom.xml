@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>${projectGroup}</groupId>
-    <artifactId>${adminModuleName}</artifactId>
+    <artifactId>${adminApiModuleName}</artifactId>
     <version>${projectVersion}</version>
     <packaging>jar</packaging>
 

@@ -22,10 +22,7 @@ public class CorsFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse rep = (HttpServletResponse) response;
-        rep.setHeader("Access-Control-Allow-Origin", corsProperties.getAllowOrigin());
-        rep.setHeader("Access-Control-Allow-Methods", corsProperties.getAllowMethods());
-        rep.setHeader("Access-Control-Max-Age", corsProperties.getMaxAge());
-        rep.setHeader("Access-Control-Allow-Headers", corsProperties.getAllowHeaders());
+        corsProperties.getHeaders().entrySet().forEach(entry -> rep.setHeader(entry.getKey(), entry.getValue()));
         chain.doFilter(request, response);
     }
 

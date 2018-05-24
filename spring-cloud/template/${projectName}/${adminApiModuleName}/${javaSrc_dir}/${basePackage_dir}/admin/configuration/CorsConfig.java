@@ -18,7 +18,9 @@ public class CorsConfig {
     public FilterRegistrationBean filterRegistrationBean(CorsFilter corsFilter) {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(corsFilter);
-        registrationBean.setUrlPatterns(corsProperties.getUrlPatterns());
+        if (corsProperties.getUrlPatterns() != null && !corsProperties.getUrlPatterns().isEmpty()) {
+            registrationBean.setUrlPatterns(corsProperties.getUrlPatterns());
+        }
         return registrationBean;
     }
 }

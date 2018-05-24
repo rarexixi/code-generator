@@ -248,7 +248,7 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
     @Transactional(readOnly = true)
     @Override
     public int countByConditionList(List<C> conditionList) {
-        return mapper.countByCondition(condition);
+        return mapper.countByConditionList(conditionList);
     }
 
 }
