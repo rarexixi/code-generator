@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/11/27 17:46
  */
 public class StringUtils {

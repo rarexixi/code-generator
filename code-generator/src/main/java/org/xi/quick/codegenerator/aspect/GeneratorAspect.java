@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.xi.quick.codegenerator.utils.StringUtils;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/11/29 16:08
  */
 @Aspect

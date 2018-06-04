@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2018/01/01 10:31
  */
 public class StaticConfigData {

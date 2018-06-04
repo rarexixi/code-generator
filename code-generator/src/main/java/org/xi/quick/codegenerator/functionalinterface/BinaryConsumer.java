@@ -1,7 +1,7 @@
 package org.xi.quick.codegenerator.functionalinterface;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/11/29 15:41
  */
 @FunctionalInterface

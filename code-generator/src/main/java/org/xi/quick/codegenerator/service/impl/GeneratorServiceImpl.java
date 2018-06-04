@@ -27,7 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/11/29 16:31
  */
 @Service("generatorService")

@@ -1,7 +1,7 @@
 package org.xi.quick.codegenerator.service;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/11/29 16:31
  */
 public interface GeneratorService {

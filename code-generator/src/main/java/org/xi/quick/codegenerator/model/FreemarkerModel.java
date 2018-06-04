@@ -3,7 +3,7 @@ package org.xi.quick.codegenerator.model;
 import freemarker.template.Template;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/11/27 12:16
  */
 public class FreemarkerModel {

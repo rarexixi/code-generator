@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2018/01/05 22:46
  */
 public class PropertiesUtils {

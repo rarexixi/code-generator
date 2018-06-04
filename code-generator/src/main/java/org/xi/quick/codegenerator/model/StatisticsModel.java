@@ -3,7 +3,7 @@ package org.xi.quick.codegenerator.model;
 import org.xi.quick.codegenerator.entity.Statistics;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/12/13 11:34
  */
 public class StatisticsModel {

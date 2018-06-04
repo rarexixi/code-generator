@@ -1,7 +1,7 @@
 package org.xi.quick.codegenerator.entity;
 
 /**
- * @author 郗世豪（xish@cloud-young.com）
+ * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/12/04 11:37
  */
 public class ValidStatusField {
