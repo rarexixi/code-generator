@@ -13,6 +13,7 @@
 
     <modules>
         <module>code-generator</module>
+        <module>code-generator-kt</module>
     </modules>
 
 </project>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.xi.quick.codegeneratorkt.mapper.TablesMapper">
+
+    <resultMap id="resultMap" type="org.xi.quick.codegeneratorkt.entity.Table">
+        <result column="TABLE_CATALOG" property="tableCatalog" jdbcType="VARCHAR"/>
+        <result column="TABLE_SCHEMA" property="tableSchema" jdbcType="VARCHAR"/>
+        <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR"/>
+        <result column="TABLE_TYPE" property="tableType" jdbcType="VARCHAR"/>
+        <result column="TABLE_ROWS" property="tableRows" jdbcType="BIGINT"/>
+        <result column="TABLE_COMMENT" property="tableComment" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getAllTableNameList" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+        `TABLE_NAME`
+        FROM
+        `information_schema`.`TABLES`
+        <where>
+            <if test="databaseName != null and databaseName != ''">
+                `TABLE_SCHEMA`=#{databaseName}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTable" resultMap="resultMap" parameterType="java.lang.String">
+        SELECT
+        `TABLE_CATALOG`,
+        `TABLE_SCHEMA`,
+        `TABLE_NAME`,
+        `TABLE_TYPE`,
+        `TABLE_ROWS`,
+        `TABLE_COMMENT`
+        FROM
+        `information_schema`.`TABLES`
+        <where>
+            <if test="databaseName != null and databaseName != ''">
+                `TABLE_SCHEMA`=#{databaseName}
+            </if>
+            <if test="tableName != null and tableName != ''">
+                AND `TABLE_NAME`=#{tableName}
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllTables" resultMap="resultMap" parameterType="java.lang.String">
+        SELECT
+        `TABLE_CATALOG`,
+        `TABLE_SCHEMA`,
+        `TABLE_NAME`,
+        `TABLE_TYPE`,
+        `TABLE_ROWS`,
+        `TABLE_COMMENT`
+        FROM
+        `information_schema`.`TABLES`
+        <where>
+            <if test="databaseName != null and databaseName != ''">
+                `TABLE_SCHEMA`=#{databaseName}
+            </if>
+        </where>
+    </select>
+
+</mapper>
