@@ -78,7 +78,7 @@ generator:
 
     baseApiPath: http://localhost:8820
 
-    author: 郗世豪（xish@cloud-young.com）
+    author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
     javaSrc: src.main.java
     javaTestSrc: src.test.java

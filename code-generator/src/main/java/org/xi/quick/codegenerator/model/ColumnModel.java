@@ -20,7 +20,7 @@ public class ColumnModel {
             columnName = column.getColumnName();
             columnPosition = column.getOrdinalPosition();
             columnDefault = column.getColumnDefault();
-            isNullable = column.getIsNullable();
+            nullable = column.getIsNullable() == null || column.getIsNullable().equalsIgnoreCase("NO");
             dataType = column.getDataType();
             charLength = column.getCharacterMaximumLength();
             byteLength = column.getCharacterOctetLength();
@@ -56,9 +56,9 @@ public class ColumnModel {
      */
     private String columnDefault;
     /**
-     * 是否为空
+     * 是否可空
      */
-    private String isNullable;
+    private boolean nullable;
     /**
      * 数据类型，int，varchar
      */
@@ -112,8 +112,8 @@ public class ColumnModel {
         return columnDefault;
     }
 
-    public String getIsNullable() {
-        return isNullable;
+    public boolean getNullable() {
+        return nullable;
     }
 
     public String getDataType() {

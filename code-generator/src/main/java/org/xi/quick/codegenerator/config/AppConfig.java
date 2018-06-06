@@ -36,7 +36,7 @@ public class AppConfig {
 
         File directory = new File(generatorPath.getTemplate());
 
-        freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_24);
+        freemarker.template.Configuration cfg = new freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_28);
         cfg.setDirectoryForTemplateLoading(directory);
         cfg.setDefaultEncoding(generator.getEncoding());
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);

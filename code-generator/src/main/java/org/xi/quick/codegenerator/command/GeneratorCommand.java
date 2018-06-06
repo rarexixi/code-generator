@@ -65,7 +65,7 @@ public class GeneratorCommand implements CommandLineRunner {
             case "ga":
                 generatorService.generateAll();
                 generatorService.generateAllOnce();
-                generatorService.generateAllOnce();
+                generatorService.generateAllAggregate();
                 return;
             case "da":
                 generatorService.deleteAll();

@@ -21,7 +21,7 @@ public class ${className}Entity implements Serializable {
     <#else>
     @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
     </#if>
-<#elseif (!column.notRequired && (column.isNullable == 'NO' && !(column.columnDefault??)))>
+<#elseif (!column.notRequired && (column.nullable && !(column.columnDefault??)))>
     @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
     @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
 </#if>
