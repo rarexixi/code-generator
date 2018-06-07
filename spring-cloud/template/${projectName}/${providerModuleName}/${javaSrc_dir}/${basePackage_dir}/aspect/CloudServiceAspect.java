@@ -93,7 +93,7 @@ public class CloudServiceAspect {
         try {
             sessionId = AnnotationUtils.getParam(RequestParam.class, method, args, "sessionId");
         } catch (Exception e) {
-            logger.error(methodFullName, "Cloud 服务出现异常", e);
+            logger.error(methodFullName, "获取 Session ID 异常", e);
         }
         if (null == sessionId) {
             sessionId = UUID.randomUUID();
