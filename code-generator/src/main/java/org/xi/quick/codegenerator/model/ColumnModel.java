@@ -20,7 +20,7 @@ public class ColumnModel {
             columnName = column.getColumnName();
             columnPosition = column.getOrdinalPosition();
             columnDefault = column.getColumnDefault();
-            nullable = column.getIsNullable() == null || column.getIsNullable().equalsIgnoreCase("NO");
+            nullable = column.getIsNullable() == null || column.getIsNullable().equalsIgnoreCase("YES");
             dataType = column.getDataType();
             charLength = column.getCharacterMaximumLength();
             byteLength = column.getCharacterOctetLength();

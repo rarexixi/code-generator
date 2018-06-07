@@ -35,7 +35,7 @@ class ColumnModel(column: Column) {
     /**
      * 是否为空
      */
-    var nullable: Boolean = column.isNullable == null || column.isNullable == "NO"
+    var nullable: Boolean = column.isNullable == null || column.isNullable.equals("YES", true)
     /**
      * 数据类型，int，varchar
      */
