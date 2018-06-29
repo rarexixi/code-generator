@@ -25,3 +25,13 @@ dubbo:
     client: curator
   scan:
     base-packages: ${basePackage}.admin.service
+
+cors:
+  cors-registrations:
+    - pathPattern: /**
+      allowedOrigins: '*'
+      allowedMethods: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
+      allowedHeaders: Origin, X-Requested-With, Content-Type, Accept
+      exposedHeaders:
+      allowCredentials: true
+      maxAge: 3600

@@ -54,7 +54,7 @@ generator:
   # 公共自定义属性
   common-properties:
 
-    projectName: quick-dubbo-auto
+    projectName: quick-dubbo-boot-auto
     projectShortName: quick
     projectGroup: org.xi
     projectVersion: 1.0-SNAPSHOT
