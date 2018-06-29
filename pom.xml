@@ -6,7 +6,7 @@
     <groupId>org.xi.quick</groupId>
     <artifactId>mysql-code-generator</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>mysql-code-generator</name>
     <description>mysql 代码生成器</description>
