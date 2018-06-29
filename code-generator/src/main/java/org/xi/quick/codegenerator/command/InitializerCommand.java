@@ -1,8 +1,8 @@
 package org.xi.quick.codegenerator.command;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.xi.quick.codegenerator.entity.SelectField;
@@ -25,12 +25,8 @@ import java.util.regex.Pattern;
 @Order(1)
 public class InitializerCommand implements CommandLineRunner {
 
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
-    @Value("${spring.datasource.username}")
-    private String dbUsername;
-    @Value("${spring.datasource.password}")
-    private String dbPassword;
+    @Autowired
+    DataSourceProperties dataSourceProperties;
 
     @Autowired
     GeneratorProperties generator;
@@ -41,7 +37,7 @@ public class InitializerCommand implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
 
-        StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(dbUrl);
+        StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(dataSourceProperties.getUrl());
 
         StaticConfigData.VALID_STATUS_FIELD = generator.getValidStatusField();
         StaticConfigData.FK_SELECT_FIELDS = generator.getFkSelectFields();
@@ -61,9 +57,9 @@ public class InitializerCommand implements CommandLineRunner {
 
         StaticConfigData.COMMON_PROPERTIES.putAll(generator.getCommonProperties());
         StaticConfigData.COMMON_PROPERTIES.put("now", new Date());
-        StaticConfigData.COMMON_PROPERTIES.put("dbUrl", dbUrl);
-        StaticConfigData.COMMON_PROPERTIES.put("dbUsername", dbUsername);
-        StaticConfigData.COMMON_PROPERTIES.put("dbPassword", dbPassword);
+        StaticConfigData.COMMON_PROPERTIES.put("dbUrl", dataSourceProperties.getUrl());
+        StaticConfigData.COMMON_PROPERTIES.put("dbUsername", dataSourceProperties.getUsername());
+        StaticConfigData.COMMON_PROPERTIES.put("dbPassword", dataSourceProperties.getPassword());
         StaticConfigData.COMMON_PROPERTIES.put("validStatusField", generator.getValidStatusField());
 
         DataTypeMapping.DATA_TYPE_MAP = generator.getDataTypeMap();

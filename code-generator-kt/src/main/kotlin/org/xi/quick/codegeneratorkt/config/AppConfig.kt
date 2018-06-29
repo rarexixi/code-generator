@@ -13,7 +13,6 @@ import org.xi.quick.codegeneratorkt.utils.SystemUtils
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList
-import java.util.regex.Pattern
 
 @Configuration
 class AppConfig {
@@ -125,20 +124,18 @@ class AppConfig {
         val files = DirectoryUtils.getAllFiles(generatorPath.template)
         val result = ArrayList<FreemarkerModel>()
 
-        if (files != null) {
-            for (file in files) {
+        for (file in files) {
 
-                if (file.isHidden) continue
+            if (file.isHidden) continue
 
-                val templateRelativePath = file.absolutePath.substring(dirAbsolutePath.length + 1)
-                if (!predicate(templateRelativePath)) continue
+            val templateRelativePath = file.absolutePath.substring(dirAbsolutePath.length + 1)
+            if (!predicate(templateRelativePath)) continue
 
-                val template = freeMarkerConfiguration.getTemplate(templateRelativePath, generator.encoding)
+            val template = freeMarkerConfiguration.getTemplate(templateRelativePath, generator.encoding)
 
-                val outModel = FreemarkerModel(templateRelativePath, template)
+            val outModel = FreemarkerModel(templateRelativePath, template)
 
-                result.add(outModel)
-            }
+            result.add(outModel)
         }
 
         return result
@@ -169,10 +166,7 @@ class AppConfig {
      * @return
      */
     private fun isClassFile(path: String): Boolean {
-
-        val pattern = Pattern.compile("\\$\\{className(_[^\\}]*)?\\}")
-        val matcher = pattern.matcher(path)
-        return matcher.find()
+        return Regex("""$\{className(_[^\}]*)?\}""").matches(path)
     }
 
 }

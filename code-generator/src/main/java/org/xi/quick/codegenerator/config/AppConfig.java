@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
-import org.xi.quick.codegenerator.properties.FieldProperties;
 import org.xi.quick.codegenerator.properties.FileProperties;
 import org.xi.quick.codegenerator.properties.PathProperties;
 import org.xi.quick.codegenerator.properties.GeneratorProperties;

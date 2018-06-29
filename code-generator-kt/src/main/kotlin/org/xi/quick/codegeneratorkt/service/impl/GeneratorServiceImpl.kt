@@ -22,7 +22,6 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.file.Files
 import java.util.HashMap
-import java.util.regex.Pattern
 
 
 @Service("generatorService")
@@ -290,44 +289,26 @@ class GeneratorServiceImpl : GeneratorService {
      * @return
      */
     private fun getActualPath(path: String, properties: Map<Any, Any>): String {
-        var actualPath = path
 
-        val pattern = Pattern.compile("\\$\\{[^\\}]*\\}")
-        val matcher = pattern.matcher(actualPath)
+        return Regex("""\$\{[^\}]*\}""").replace(path) {
 
-        Regex("""${'$'}\{[^\}]*\}""").findAll(actualPath).forEach {
             var group = it?.value
-            var key = group.substring(2, group.length - 1)
-
-            val isDir = key.endsWith("_dir")
-            val isLower = key.endsWith("_lower")
-            val isUpper = key.endsWith("_upper")
-            val isFirstLower = key.endsWith("_firstLower")
-            val isFirstUpper = key.endsWith("_firstUpper")
-            if (isDir) {
-                key = key.substring(0, key.length - 4)
-            } else if (isLower || isUpper) {
-                key = key.substring(0, key.length - 6)
-            } else if (isFirstLower || isFirstUpper) {
-                key = key.substring(0, key.length - 11)
-            }
+            var tmp = group.substring(2, group.length - 1)
+            var index = tmp.indexOf('_')
+            var key = if (index > -1) tmp.substring(0, index) else tmp
 
             val value = properties[key]
+            var s = if (value != null) value as String else group
 
-            if (value != null) {
-                val s = value as String
-                actualPath = when {
-                    isDir -> actualPath.replace(group, s.replace("\\.".toRegex(), SystemUtils.REGEX_SYSTEM_SLASH))
-                    isLower -> actualPath.replace(group, s.toLowerCase())
-                    isUpper -> actualPath.replace(group, s.toUpperCase())
-                    isFirstLower -> actualPath.replace(group, s.getFirstLower())
-                    isFirstUpper -> actualPath.replace(group, s.getFirstUpper())
-                    else -> actualPath.replace(group, s)
-                }
+            when {
+                tmp.endsWith("_dir") -> s.replace("""\.""".toRegex(), SystemUtils.REGEX_SYSTEM_SLASH)
+                tmp.endsWith("_lower") -> s.toLowerCase()
+                tmp.endsWith("_upper") -> s.toUpperCase()
+                tmp.endsWith("_firstLower") -> s.getFirstLower()
+                tmp.endsWith("_firstUpper") -> s.getFirstUpper()
+                else -> s
             }
         }
-
-        return actualPath
     }
 
     //endregion

@@ -1,29 +1,22 @@
 package org.xi.quick.codegeneratorkt.command
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.xi.quick.codegeneratorkt.DataTypeMapping
 import org.xi.quick.codegeneratorkt.StaticConfigData
-import org.xi.quick.codegeneratorkt.model.SelectField
 import org.xi.quick.codegeneratorkt.properties.FieldProperties
 import org.xi.quick.codegeneratorkt.properties.GeneratorProperties
 import java.util.*
-import java.util.regex.Pattern
-
 
 @Component
 @Order(1)
 class InitializerCommand : CommandLineRunner {
 
-    @Value("\${spring.datasource.url}")
-    private lateinit var dbUrl: String
-    @Value("\${spring.datasource.username}")
-    private lateinit var dbUsername: String
-    @Value("\${spring.datasource.password}")
-    private lateinit var dbPassword: String
+    @Autowired
+    lateinit var dataSourceProperties: DataSourceProperties
 
     @Autowired
     lateinit var generator: GeneratorProperties
@@ -63,7 +56,7 @@ class InitializerCommand : CommandLineRunner {
     @Throws(Exception::class)
     override fun run(vararg strings: String) {
 
-        StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(dbUrl)
+        StaticConfigData.DATABASE_NAME = getDatabaseNameFromJdbcUrl(dataSourceProperties.url)
 
         StaticConfigData.VALID_STATUS_FIELD = generator.validStatusField
         StaticConfigData.FK_SELECT_FIELDS = generator.fkSelectFields
@@ -83,9 +76,9 @@ class InitializerCommand : CommandLineRunner {
 
         StaticConfigData.COMMON_PROPERTIES.putAll(generator.commonProperties)
         StaticConfigData.COMMON_PROPERTIES["now"] = Date()
-        StaticConfigData.COMMON_PROPERTIES["dbUrl"] = dbUrl
-        StaticConfigData.COMMON_PROPERTIES["dbUsername"] = dbUsername
-        StaticConfigData.COMMON_PROPERTIES["dbPassword"] = dbPassword
+        StaticConfigData.COMMON_PROPERTIES["dbUrl"] = dataSourceProperties.url
+        StaticConfigData.COMMON_PROPERTIES["dbUsername"] = dataSourceProperties.username
+        StaticConfigData.COMMON_PROPERTIES["dbPassword"] = dataSourceProperties.password
 
         if (generator.validStatusField != null)
             StaticConfigData.COMMON_PROPERTIES["validStatusField"] = generator.validStatusField!!
@@ -100,22 +93,8 @@ class InitializerCommand : CommandLineRunner {
      * @return
      */
     private fun getDatabaseNameFromJdbcUrl(url: String?): String {
-
-        val pattern = Pattern.compile("/[^(/|\\?)]*\\?")
-        val matcher = pattern.matcher(url!!)
-        if (matcher.find()) {
-            val group = matcher.group()
-            return group.substring(1, group.length - 1)
-        }
-
-        return ""
-    }
-
-    fun getSelectFieldNameSet(select: Array<SelectField>): Set<String> {
-        val nameSet = HashSet<String>()
-        for (selectField in select) {
-            nameSet.addAll(selectField.nameSet)
-        }
-        return nameSet
+        if (url == null) return ""
+        var matchResult = Regex("""(?<=/)[^(/|\?)]*(?=\?)""").find(url)
+        return if (matchResult == null) "" else matchResult.value
     }
 }
