@@ -62,10 +62,10 @@ class TableModel(table: Table,
         if (isHasPrimaryKey) {
             uniquePrimaryKey = if (primaryKey.size == 1) primaryKey[0] else null
             isHasAutoIncrementUniquePrimaryKey = uniquePrimaryKey != null && uniquePrimaryKey!!.autoIncrement
-            primaryKeyParameters = primaryKey.joinToString(" ") { column ->
+            primaryKeyParameters = primaryKey.joinToString(", ") { column ->
                 column.columnFieldType + " " + column.columnFieldNameFirstLower
             }
-            primaryKeyParameterValues = primaryKey.joinToString(" ") { column ->
+            primaryKeyParameterValues = primaryKey.joinToString(", ") { column ->
                 column.columnFieldNameFirstLower + ""
             }
             primaryKeyOldParameters = primaryKey.joinToString(", ") { column ->

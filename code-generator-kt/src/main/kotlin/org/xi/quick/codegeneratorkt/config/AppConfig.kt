@@ -166,7 +166,7 @@ class AppConfig {
      * @return
      */
     private fun isClassFile(path: String): Boolean {
-        return Regex("""$\{className(_[^\}]*)?\}""").matches(path)
+        return Regex("""\$\{className(_[^\}]*)?\}""").containsMatchIn(path)
     }
 
 }
