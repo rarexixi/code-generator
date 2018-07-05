@@ -5,25 +5,25 @@ import ${baseCommonPackage}.constant.OperationConstants;
 import java.io.Serializable;
 
 <#include "/include/java_copyright.ftl">
-public class Result<T> implements Serializable {
+public class ResultVo<T> implements Serializable {
 
-    public Result() {
+    public ResultVo() {
 
     }
 
-    public Result(T result) {
+    public ResultVo(T result) {
         this(true, 0, null, result);
     }
 
-    public Result(OperationConstants constants) {
+    public ResultVo(OperationConstants constants) {
         this(false, constants.getCode(), constants.getMessage(), null);
     }
 
-    public Result(int code, String message) {
+    public ResultVo(int code, String message) {
         this(false, code, message, null);
     }
 
-    public Result(boolean success, int code, String message, T result) {
+    public ResultVo(boolean success, int code, String message, T result) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -81,7 +81,7 @@ public class Result<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "Result{" +
+        return "ResultVo{" +
                 "success=" + success +
                 ", code=" + code +
                 ", message='" + message + '\'' +

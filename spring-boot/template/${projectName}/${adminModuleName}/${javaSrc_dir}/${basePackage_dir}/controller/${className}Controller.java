@@ -6,7 +6,7 @@
 package ${basePackage}.controller;
 
 import ${baseCommonPackage}.constant.OperationConstants;
-import ${baseCommonPackage}.model.Result;
+import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.utils.LogUtils;
 import ${baseCommonPackage}.utils.database.OperationCheckUtils;
 import ${basePackage}.condition.${className}Condition;
@@ -41,25 +41,25 @@ public class ${className}Controller {
     <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/addList" }, method = RequestMethod.POST)
-    public Result<Integer> addList(@RequestBody List<${className}Entity> list) {
+    public ResultVo<Integer> addList(@RequestBody List<${className}Entity> list) {
 
         if (list == null || list.isEmpty()) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
         String fieldName = "";
         for (${className}Entity ${classNameLower} : list) {
             if (!StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(${classNameLower}))) {
-                return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+                return new ResultVo<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
             }
         }
 
-        Result<Integer> result;
+        ResultVo<Integer> result;
         try {
             int count = ${classNameLower}Service.insertList(list);
-            result = new Result<>(count);
+            result = new ResultVo<>(count);
         } catch (Exception e) {
             logger.error("addList", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;
@@ -76,20 +76,20 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
      @RequestMapping(value = { "/delete" }, method = RequestMethod.GET)
-     public Result<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
+     public ResultVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
          if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-             return new Result<>(OperationConstants.NOT_NULL);
+             return new ResultVo<>(OperationConstants.NOT_NULL);
          }
 
-        Result<Integer> result;
+        ResultVo<Integer> result;
         try {
             ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
             int count = ${classNameLower}Service.deleteByCondition(condition);
-            result = new Result<>(count);
+            result = new ResultVo<>(count);
         } catch (Exception e) {
             logger.error("delete", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;
@@ -104,16 +104,16 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
      @RequestMapping(value = { "/deletelist" }, method = RequestMethod.POST)
-     public Result<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+     public ResultVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
-         Result<Integer> result;
+         ResultVo<Integer> result;
          try {
              ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
              int count = ${classNameLower}Service.deleteByCondition(condition);
-             result = new Result<>(count);
+             result = new ResultVo<>(count);
          } catch (Exception e) {
              logger.error("delete", e);
-             result = new Result<>(OperationConstants.SYSTEM_ERROR);
+             result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
          }
 
          return result;
@@ -131,22 +131,22 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disable", method = RequestMethod.GET)
-    public Result<Integer> disable(${primaryKeyParameters}) {
+    public ResultVo<Integer> disable(${primaryKeyParameters}) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
+        ResultVo<Integer> result;
         try {
             ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
             ${className}Entity entity = new ${className}Entity();
             entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
             int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
+            result = new ResultVo<>(count);
         } catch (Exception e) {
             logger.error("disable", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;
@@ -162,22 +162,22 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enable", method = RequestMethod.GET)
-    public Result<Integer> enable(${primaryKeyParameters}) {
+    public ResultVo<Integer> enable(${primaryKeyParameters}) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
+        ResultVo<Integer> result;
         try {
             ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
             ${className}Entity entity = new ${className}Entity();
             entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
             int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
+            result = new ResultVo<>(count);
         } catch (Exception e) {
             logger.error("enable", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;
@@ -192,22 +192,22 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disablelist", method = RequestMethod.POST)
-    public Result<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+    public ResultVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
+        ResultVo<Integer> result;
         try {
             ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
             ${className}Entity entity = new ${className}Entity();
             entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
             int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
+            result = new ResultVo<>(count);
         } catch (Exception e) {
             logger.error("disable", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
         return result;
     }
@@ -220,22 +220,22 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enablelist", method = RequestMethod.POST)
-    public Result<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+    public ResultVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        Result<Integer> result;
+        ResultVo<Integer> result;
         try {
             ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
             ${className}Entity entity = new ${className}Entity();
             entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
             int count = ${classNameLower}Service.updateByCondition(entity, condition);
-            result = new Result<>(count);
+            result = new ResultVo<>(count);
         } catch (Exception e) {
             logger.error("enable", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;
@@ -251,21 +251,21 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/save" }, method = RequestMethod.POST)
-    public Result<Integer> save(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}", required = false) ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
+    public ResultVo<Integer> save(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}", required = false) ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         String fieldName = "";
 
-        Result<Integer> result;
+        ResultVo<Integer> result;
         try {
             int count;
             if (<#list primaryKey as column><#if (column_index > 0)> || </#if><#if !table.hasAutoIncrementUniquePrimaryKey>old${column.columnFieldName}<#else>entity.get${column.columnFieldName}()</#if> == null</#list>) {
                 if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
-                    return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+                    return new ResultVo<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
                 }
                 count = ${classNameLower}Service.insert(entity);
             } else {
                 if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkUpdate(entity))) {
-                    return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+                    return new ResultVo<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
                 }
                 <#if !table.hasAutoIncrementUniquePrimaryKey>
                 ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
@@ -274,10 +274,10 @@ public class ${className}Controller {
                 </#if>
                 count = ${classNameLower}Service.updateByCondition(entity, condition);
             }
-            result = new Result<>(count);
+            result = new ResultVo<>(count);
         } catch (Exception e) {
             logger.error("save", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;
@@ -293,19 +293,19 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/getdetail" }, method = RequestMethod.GET)
-    public Result<${className}Vo> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
+    public ResultVo<${className}Vo> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        Result<${className}Vo> result;
+        ResultVo<${className}Vo> result;
         try {
             ${className}Vo vo = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
-            result = new Result<>(vo);
+            result = new ResultVo<>(vo);
         } catch (Exception e) {
             logger.error("getDetail", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;
@@ -320,15 +320,15 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/find" }, method = RequestMethod.POST)
-    public Result<PageInfo<${className}Vo>> find(@RequestBody ${className}SelectParameter parameter) {
+    public ResultVo<PageInfo<${className}Vo>> find(@RequestBody ${className}SelectParameter parameter) {
 
-        Result<PageInfo<${className}Vo>> result;
+        ResultVo<PageInfo<${className}Vo>> result;
         try {
             PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.findPageList(parameter);
-            result = new Result<>(paginationVo);
+            result = new ResultVo<>(paginationVo);
         } catch (Exception e) {
             logger.error("find", e);
-            result = new Result<>(OperationConstants.SYSTEM_ERROR);
+            result = new ResultVo<>(OperationConstants.SYSTEM_ERROR);
         }
 
         return result;

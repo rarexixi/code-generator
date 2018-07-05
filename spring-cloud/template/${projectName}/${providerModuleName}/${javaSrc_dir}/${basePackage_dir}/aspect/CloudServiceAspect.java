@@ -1,7 +1,7 @@
 package ${basePackage}.aspect;
 
 import ${baseCommonPackage}.constant.OperationConstants;
-import ${baseCommonPackage}.model.Result;
+import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.utils.AnnotationUtils;
 import ${baseCommonPackage}.utils.LogUtils;
 
@@ -83,7 +83,7 @@ public class CloudServiceAspect {
             logger.error(methodName, sessionId, "Cloud 服务出现异常", e);
         }
 
-        return new Result<>(OperationConstants.SYSTEM_ERROR);
+        return new ResultVo<>(OperationConstants.SYSTEM_ERROR);
     }
 
 

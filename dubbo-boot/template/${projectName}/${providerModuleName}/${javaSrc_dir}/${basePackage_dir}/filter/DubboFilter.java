@@ -2,6 +2,7 @@ package ${basePackage}.filter;
 
 import ${baseCommonPackage}.annotation.ParamName;
 import ${baseCommonPackage}.constant.OperationConstants;
+import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.utils.AnnotationUtils;
 import ${baseCommonPackage}.utils.LogUtils;
 
@@ -61,7 +62,7 @@ public class DubboFilter implements Filter {
         } catch (RuntimeException e) {
             logger.error(method, sessionId, e);
         }
-        return new RpcResult(new org.xi.common.model.Result<>(OperationConstants.SYSTEM_ERROR));
+        return new RpcResult(new ResultVo<>(OperationConstants.SYSTEM_ERROR));
     }
 
     private String getSessionId(Invoker<?> invoker, Invocation invocation) {

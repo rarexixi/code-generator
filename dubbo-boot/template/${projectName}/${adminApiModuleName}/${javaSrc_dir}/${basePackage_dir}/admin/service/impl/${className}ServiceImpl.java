@@ -6,7 +6,7 @@
 package ${basePackage}.admin.service.impl;
 
 import ${baseCommonPackage}.model.ResponseVo;
-import ${baseCommonPackage}.model.Result;
+import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.model.SearchPage;
 import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
@@ -49,7 +49,7 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         ResponseVo<Integer> responseVo;
         ${className}Entity entity = vm.get${className}Entity();
-        Result<Integer> apiResult = ${classNameLower}Api.add(entity, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.add(entity, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -71,7 +71,7 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         ResponseVo<Integer> responseVo;
         List<${className}Entity> entityList = list.stream().map(o->o.get${className}Entity()).collect(Collectors.toList());
-        Result<Integer> apiResult = ${classNameLower}Api.addList(entityList, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.addList(entityList, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -95,7 +95,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<Integer> deleteByPk(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Api.deleteByPk(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.deleteByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -117,7 +117,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Api.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -142,7 +142,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<Integer> disableByPk(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Api.disableByPk(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.disableByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -165,7 +165,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<Integer> enableByPk(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Api.enableByPk(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.enableByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -187,7 +187,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Api.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -208,7 +208,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Api.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -231,7 +231,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<Integer> updateByPk(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Api.updateByPk(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Api.updateByPk(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -254,7 +254,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<${className}DetailVm> getByPk(${primaryKeyParameters}) {
 
         ResponseVo<${className}DetailVm> responseVo;
-        Result<${className}Vo> apiResult = ${classNameLower}Api.getByPk(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<${className}Vo> apiResult = ${classNameLower}Api.getByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(true);
             ${className}Vo vo;
@@ -282,7 +282,7 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         ResponseVo<PageInfo<${className}Vo>> responseVo;
         ${className}SelectParameter parameter = searchVm.get${className}SelectParameter();
-        Result<PageInfo<${className}Vo>> apiResult = ${classNameLower}Api.findPageList(parameter, getSessionId());
+        ResultVo<PageInfo<${className}Vo>> apiResult = ${classNameLower}Api.findPageList(parameter, getSessionId());
         if (apiResult.isSuccess()) {
             PageInfo<${className}Vo> pageInfo = apiResult.getResult();
             responseVo = new ResponseVo<>(pageInfo);

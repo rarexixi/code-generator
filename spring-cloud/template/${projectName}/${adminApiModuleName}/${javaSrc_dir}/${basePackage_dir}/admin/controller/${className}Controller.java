@@ -6,7 +6,7 @@
 package ${basePackage}.admin.controller;
 
 import ${baseCommonPackage}.model.ResponseVo;
-import ${baseCommonPackage}.model.Result;
+import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.utils.LogUtils;
 import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
@@ -50,7 +50,7 @@ public class ${className}Controller {
 
         ResponseVo<Integer> responseVo;
         List<${className}Entity> entityList = list.stream().map(o->o.get${className}Entity()).collect(Collectors.toList());
-        Result<Integer> apiResult = ${classNameLower}Service.addList(entityList, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.addList(entityList, sessionId);
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -74,7 +74,7 @@ public class ${className}Controller {
      public ResponseVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
          ResponseVo<Integer> responseVo;
-         Result<Integer> apiResult = ${classNameLower}Service.deleteByPk(${primaryKeyParameterValues}, sessionId);
+         ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPk(${primaryKeyParameterValues}, sessionId);
          if (apiResult.isSuccess()) {
              responseVo = new ResponseVo<>(apiResult.getResult());
          } else {
@@ -96,7 +96,7 @@ public class ${className}Controller {
      public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Service.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -121,7 +121,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> disable(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Service.disableByPk(${primaryKeyParameterValues}, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPk(${primaryKeyParameterValues}, sessionId);
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -144,7 +144,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> enable(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Service.enableByPk(${primaryKeyParameterValues}, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPk(${primaryKeyParameterValues}, sessionId);
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -166,7 +166,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Service.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -187,7 +187,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult = ${classNameLower}Service.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -211,7 +211,7 @@ public class ${className}Controller {
 
         ${className}Entity entity = vm.get${className}Entity();
         ResponseVo<Integer> responseVo;
-        Result<Integer> apiResult;
+        ResultVo<Integer> apiResult;
         if (<#list primaryKey as column><#if (column_index > 0)> || </#if><#if !table.hasAutoIncrementUniquePrimaryKey>old${column.columnFieldName}<#else>vm.get${column.columnFieldName}()</#if> == null</#list>) {
             apiResult = ${classNameLower}Service.add(entity, sessionId);
         } else {
@@ -240,7 +240,7 @@ public class ${className}Controller {
     public ResponseVo<${className}DetailVm> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
         ResponseVo<${className}DetailVm> responseVo;
-        Result<${className}Vo> apiResult = ${classNameLower}Service.getByPk(${primaryKeyParameterValues}, sessionId);
+        ResultVo<${className}Vo> apiResult = ${classNameLower}Service.getByPk(${primaryKeyParameterValues}, sessionId);
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(true);
             ${className}Vo vo;
@@ -268,7 +268,7 @@ public class ${className}Controller {
 
         ResponseVo<PageInfo<${className}Vo>> responseVo;
         ${className}SelectParameter parameter = searchVm.get${className}SelectParameter();
-        Result<PageInfo<${className}Vo>> apiResult = ${classNameLower}Service.findPageList(parameter, sessionId);
+        ResultVo<PageInfo<${className}Vo>> apiResult = ${classNameLower}Service.findPageList(parameter, sessionId);
         if (apiResult.isSuccess()) {
             PageInfo<${className}Vo> pageInfo = apiResult.getResult();
             responseVo = new ResponseVo<>(pageInfo);

@@ -6,7 +6,7 @@
 package ${basePackage}.controller;
 
 import ${baseCommonPackage}.constant.OperationConstants;
-import ${baseCommonPackage}.model.Result;
+import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.model.SearchPage;
 import ${baseCommonPackage}.utils.LogUtils;
 import ${baseCommonPackage}.utils.database.OperationCheckUtils;
@@ -47,15 +47,15 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Result<Integer> add(@RequestBody ${className}Entity entity, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> add(@RequestBody ${className}Entity entity, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         String fieldName = "";
         if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
-            return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+            return new ResultVo<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
         int count = ${classNameLower}Service.insert(entity);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
 
@@ -68,20 +68,20 @@ public class ${className}Controller {
     <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/addList", method = RequestMethod.POST)
-    public Result<Integer> addList(@RequestBody List<${className}Entity> list, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> addList(@RequestBody List<${className}Entity> list, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (list == null || list.isEmpty()) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
         String fieldName;
         for (${className}Entity entity : list) {
             if (!StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
-                return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+                return new ResultVo<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
             }
         }
 
         int count = ${classNameLower}Service.insertList(list);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
     <#if table.hasPrimaryKey>
@@ -97,15 +97,15 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/deleteByPk", method = RequestMethod.GET)
-    public Result<Integer> deleteByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> deleteByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
         ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
         int count = ${classNameLower}Service.deleteByCondition(condition);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
     <#if (table.uniquePrimaryKey??)>
@@ -119,15 +119,15 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/deleteByPkList", method = RequestMethod.POST)
-    public Result<Integer> deleteByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> deleteByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
         ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
         int count = ${classNameLower}Service.deleteByCondition(condition);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
     </#if>
@@ -144,17 +144,17 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disableByPk", method = RequestMethod.GET)
-    public Result<Integer> disableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> disableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
         ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
         ${className}Entity entity = new ${className}Entity();
         entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
 
@@ -169,17 +169,17 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enableByPk", method = RequestMethod.GET)
-    public Result<Integer> enableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> enableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
         ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
         ${className}Entity entity = new ${className}Entity();
         entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
     <#if (table.uniquePrimaryKey??)>
@@ -193,17 +193,17 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disableByPkList", method = RequestMethod.POST)
-    public Result<Integer> disableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> disableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
         ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
         entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
 
@@ -216,17 +216,17 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enableByPkList", method = RequestMethod.POST)
-    public Result<Integer> enableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> enableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
         ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
         entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
     </#if>
@@ -241,11 +241,11 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/updateByPk", method = RequestMethod.POST)
-    public Result<Integer> updateByPk(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> updateByPk(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         String fieldName = "";
         if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtils.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list>)</#if> || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkUpdate(entity))) {
-            return new Result<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
+            return new ResultVo<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
         <#if !table.hasAutoIncrementUniquePrimaryKey>
@@ -254,7 +254,7 @@ public class ${className}Controller {
         ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.columnFieldName}()</#list>);
         </#if>
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
-        Result<Integer> result = new Result<>(count);
+        ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
 
@@ -269,14 +269,14 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/getByPk", method = RequestMethod.GET)
-    public Result<${className}Vo> getByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<${className}Vo> getByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {
-            return new Result<>(OperationConstants.NOT_NULL);
+            return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
         ${className}Vo vo = ${classNameLower}Service.getByPk(${primaryKeyParameterValues});
-        Result<${className}Vo> result = new Result<>(vo);
+        ResultVo<${className}Vo> result = new ResultVo<>(vo);
         return result;
     }
     </#if>
@@ -290,10 +290,10 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/findPageList", method = RequestMethod.POST)
-    public Result<PageInfo<${className}Vo>> findPageList(@RequestBody ${className}SelectParameter parameter, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<PageInfo<${className}Vo>> findPageList(@RequestBody ${className}SelectParameter parameter, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         PageInfo<${className}Vo> paginationVo = ${classNameLower}Service.findPageList(parameter);
-        Result<PageInfo<${className}Vo>> result = new Result<>(paginationVo);
+        ResultVo<PageInfo<${className}Vo>> result = new ResultVo<>(paginationVo);
         return result;
     }
 
