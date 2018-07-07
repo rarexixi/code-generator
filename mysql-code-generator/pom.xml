@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.xi.quick</groupId>
-    <artifactId>code-generator</artifactId>
+    <artifactId>mysql-code-generator</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
