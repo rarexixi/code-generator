@@ -8,12 +8,12 @@
     <version>1.0</version>
     <packaging>pom</packaging>
 
-    <name>mysql-code-generator</name>
+    <name>code-generator</name>
     <description>mysql 代码生成器</description>
 
     <modules>
-        <module>code-generator</module>
-        <module>code-generator-kt</module>
+        <module>mysql-code-generator</module>
+        <module>mysql-code-generator-kt</module>
     </modules>
 
 </project>
