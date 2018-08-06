@@ -18,6 +18,7 @@ import ${basePackage}.vo.${className}Vo;
 import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/add" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> add(@Validated({DataAdd.class}) @RequestBody ${className}AddOrEditVm vm) {
+    public ResponseVo<Integer> add(@Validated({DataAdd.class}) @RequestBody ${className}AddOrEditVm vm, Errors errors) {
 
         ResponseVo<Integer> result = ${classNameLower}Service.add(vm);
         return result;
@@ -57,7 +58,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/edit" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> edit(@Validated({DataEdit.class}) @RequestBody ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @NotNull @RequestParam(value = "old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
+    public ResponseVo<Integer> edit(@Validated({DataEdit.class}) @RequestBody ${className}AddOrEditVm vm, Errors errors<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @NotNull @RequestParam(value = "old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         ResponseVo<Integer> result = ${classNameLower}Service.updateByPk(vm<#if !table.hasAutoIncrementUniquePrimaryKey>, ${table.primaryKeyOldParameterValues}</#if>);
         return result;
