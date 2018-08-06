@@ -256,7 +256,9 @@ public class ${className}ServiceImpl implements ${className}Service {
         ResponseVo<${className}DetailVm> responseVo;
         ResultVo<${className}Vo> apiResult = ${classNameLower}Api.getByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
-            responseVo = new ResponseVo<>(true);
+            responseVo = new ResponseVo<>();
+            responseVo.setSuccess(true);
+
             ${className}Vo vo;
             if ((vo = apiResult.getResult()) != null) {
                 ${className}DetailVm vm = new ${className}DetailVm(vo);

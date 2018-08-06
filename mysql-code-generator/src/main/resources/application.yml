@@ -15,7 +15,7 @@ dollar: $
 generator:
   encoding: UTF-8                # 代码字符集
   path:
-    template: /Workspace/github.com/java/mysql-code-generator/dubbo/template/  # 模版路径
+    template: /Workspace/github.com/java/code-generator/dubbo/template/  # 模版路径
     out: /Workspace/gitee.com/            # 输出路径
   file:
     ignore: include/                                        # 要忽略的文件

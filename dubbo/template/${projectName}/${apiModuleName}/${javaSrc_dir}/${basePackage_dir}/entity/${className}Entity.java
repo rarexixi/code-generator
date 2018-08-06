@@ -1,9 +1,9 @@
 <#assign className = table.tableClassName>
 package ${basePackage}.entity;
 
-import ${baseCommonPackage}.annotation.InsertNotNull;
-import ${baseCommonPackage}.annotation.UpdateNotNull;
+import ${baseCommonPackage}.validation.*;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.io.Serializable;
@@ -15,16 +15,11 @@ public class ${className}Entity implements Serializable {
     /**
      * ${column.columnComment}
      */
-<#if (column.primaryKey )>
-    <#if column.autoIncrement>
-    @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-    <#else>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
+    <#if (column.primaryKey)>
+    @NotNull(groups = {<#if column.autoIncrement>DataEdit.class<#else>DataAdd.class</#if>}, message = "${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
+    <#elseif (!column.notRequired && (!column.nullable && !(column.columnDefault??)))>
+    @NotNull(groups = {DataAdd.class, DataEdit.class}, message = "${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
     </#if>
-<#elseif (!column.notRequired && (!column.nullable && !(column.columnDefault??)))>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-    @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-</#if>
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     </#list>

@@ -18,6 +18,8 @@
         <fastjson.version>1.2.47</fastjson.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <httpclient.version>4.5.5</httpclient.version>
+        <spring.version>5.0.8.RELEASE</spring.version>
+        <hibernate-validator.version>6.0.11.Final</hibernate-validator.version>
     </properties>
 
     <dependencyManagement>
@@ -50,7 +52,17 @@
                 <artifactId>httpclient</artifactId>
                 <version>${r'${httpclient.version}'}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${r'${spring.version}'}</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${r'${hibernate-validator.version}'}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

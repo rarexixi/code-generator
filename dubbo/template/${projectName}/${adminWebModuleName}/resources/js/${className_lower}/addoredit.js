@@ -83,9 +83,23 @@ var app = new Vue({
         </#list>
         save: function () {
             var self = this;
+            var ajaxUrl;
+            <#if table.hasAutoIncrementUniquePrimaryKey>
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldNameFirstLower} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            } else {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit';
+            }
+            <#else>
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.old${column.columnFieldName} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            } else {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list primaryKey as column><#if (column_index > 0)> + '&'</#if> + 'old${column.columnFieldName}=' + self.old${column.columnFieldName}</#list>;
+            }
+            </#if>
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
+                url: ajaxUrl,
                 contentType : 'application/json',
                 data : JSON.stringify(self.addOrEditParams),
                 dataType: 'json',

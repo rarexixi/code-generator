@@ -13,6 +13,7 @@ dubbo:
   protocol:
     id: dubbo
     name: dubbo
+    port: 20990
   consumer:
     group: ${dubboServiceGroup}
     version: ${dubboServiceVersion}
@@ -36,3 +37,10 @@ cors:
       exposedHeaders:
       allowCredentials: true
       maxAge: 3600
+  filter:
+    pathPattern: /*
+    allowedOrigins: http://localhost:8080
+    allowedMethods: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
+    allowedHeaders: Origin, X-Requested-With, Content-Type, Accept
+    allowCredentials: true
+    maxAge: 3600

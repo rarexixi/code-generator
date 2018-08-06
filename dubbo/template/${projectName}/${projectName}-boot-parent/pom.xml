@@ -28,6 +28,7 @@
         <curator.version>4.0.1</curator.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <httpclient.version>4.5.5</httpclient.version>
+        <aspectj.version>1.9.1</aspectj.version>
     </properties>
 
     <dependencyManagement>
@@ -128,6 +129,11 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${r'${httpclient.version}'}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${r'${aspectj.version}'}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

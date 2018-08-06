@@ -23,6 +23,7 @@ dubbo:
   protocol:
     id: dubbo
     name: dubbo
+    port: 20990
   provider:
     group: ${dubboServiceGroup}
     version: ${dubboServiceVersion}
