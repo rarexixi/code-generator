@@ -89,8 +89,9 @@
                 </div>
                 <#else>
                 <div class="form-group">
-                <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                </div>
                 </#if>
                 </#list>
                 <input type="button" value="保存" @click="save" class="btn btn-primary" />

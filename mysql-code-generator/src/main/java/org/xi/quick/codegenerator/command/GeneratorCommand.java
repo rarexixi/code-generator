@@ -79,10 +79,16 @@ public class GeneratorCommand implements CommandLineRunner {
                 generatorService.deleteAllOnce();
                 return;
             case "gag":
-                generatorService.generateAllOnce();
+                generatorService.generateAllAggregate();
                 return;
             case "dag":
                 generatorService.deleteAllAggregate();
+                return;
+            case "gat":
+                generatorService.generateAll();
+                return;
+            case "dat":
+                generatorService.deleteAll();
                 return;
             case "gen":
                 operate(tableNameSet, getArgs(sc), OperateEnum.Generate);
