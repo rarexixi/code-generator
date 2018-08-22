@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
-public class BaseOrderCondition implements OrderCondition {
+public class BaseOrderCondition implements OrderCondition, Serializable {
 
     public BaseOrderCondition() {
         orderByMap = new LinkedHashMap<>();

@@ -1,12 +1,10 @@
 <#assign className = table.tableClassName>
 package ${basePackage}.condition.order;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.*;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}OrderCondition extends BaseOrderCondition implements Serializable {
+public class ${className}OrderCondition extends BaseOrderCondition {
 
     public ${className}OrderCondition() {
         super();

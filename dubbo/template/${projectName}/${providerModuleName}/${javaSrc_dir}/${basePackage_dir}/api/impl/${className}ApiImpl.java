@@ -44,10 +44,10 @@ public class ${className}ApiImpl implements ${className}Api {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> add(@Validated({DataAdd.class}) ${className}Entity entity, String sessionId) {
+    public ResultVo<${className}Entity> add(@Validated({DataAdd.class}) ${className}Entity entity, String sessionId) {
 
         int count = ${classNameLower}Service.insert(entity);
-        ResultVo<Integer> result = new ResultVo<>(count);
+        ResultVo<${className}Entity> result = new ResultVo<>(entity);
         return result;
     }
 

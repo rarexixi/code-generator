@@ -32,7 +32,7 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResultVo<Integer> add(@Validated({DataAdd.class}) ${className}Entity entity, @ParamName("sessionId") String sessionId);
+    ResultVo<${className}Entity> add(@Validated({DataAdd.class}) ${className}Entity entity, @ParamName("sessionId") String sessionId);
 
     /**
      * 添加列表
