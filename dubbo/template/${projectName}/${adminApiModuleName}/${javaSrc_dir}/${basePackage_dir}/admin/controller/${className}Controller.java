@@ -37,7 +37,7 @@ public class ${className}Controller {
     private ${className}Service ${classNameLower}Service;
 
     /**
-     * 保存
+     * 添加
      *
      * @param vm
      * @return
@@ -51,7 +51,7 @@ public class ${className}Controller {
     }
 
     /**
-     * 保存
+     * 编辑
      *
      * @param vm
      * @return
