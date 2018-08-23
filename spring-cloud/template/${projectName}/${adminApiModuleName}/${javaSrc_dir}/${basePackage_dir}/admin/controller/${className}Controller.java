@@ -33,10 +33,54 @@ public class ${className}Controller {
     private static LogUtils logger = LogUtils.build(${className}Controller.class);
 
     @Value("${r'${spring.application.name}'}")
-    private String sessionId;
+    private String applicationName;
 
     @Autowired
     private ${className}Service ${classNameLower}Service;
+
+    /**
+     * 添加
+     *
+     * @param vm
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @RequestMapping(value = { "/add" }, method = RequestMethod.POST)
+    public ResponseVo<${className}AddOrEditVm> add(${className}AddOrEditVm vm) {
+
+        ResponseVo<${className}AddOrEditVm> responseVo;
+        ${className}Entity entity = vm.get${className}Entity();
+        ResultVo<${className}Entity> apiResult = ${classNameLower}Api.add(entity, getSessionId());
+        if (apiResult.isSuccess()) {
+            vm.set${className}Entity(apiResult.getResult());
+            responseVo = new ResponseVo<>(vm);
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
+    }
+
+    /**
+     * 编辑
+     *
+     * @param vm
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @RequestMapping(value = { "/edit" }, method = RequestMethod.POST)
+    public ResponseVo<Integer> edit(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
+
+        ResponseVo<Integer> responseVo;
+        ResultVo<Integer> apiResult = ${classNameLower}Api.updateByPk(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, getSessionId());
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(apiResult.getMessage());
+        }
+
+        return responseVo;
+    }
 
     /**
      * 添加列表
@@ -50,7 +94,7 @@ public class ${className}Controller {
 
         ResponseVo<Integer> responseVo;
         List<${className}Entity> entityList = list.stream().map(o->o.get${className}Entity()).collect(Collectors.toList());
-        ResultVo<Integer> apiResult = ${classNameLower}Service.addList(entityList, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.addList(entityList, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -74,7 +118,7 @@ public class ${className}Controller {
      public ResponseVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
          ResponseVo<Integer> responseVo;
-         ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPk(${primaryKeyParameterValues}, sessionId);
+         ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPk(${primaryKeyParameterValues}, getSessionId());
          if (apiResult.isSuccess()) {
              responseVo = new ResponseVo<>(apiResult.getResult());
          } else {
@@ -92,11 +136,11 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-     @RequestMapping(value = { "/deletelist" }, method = RequestMethod.POST)
+     @RequestMapping(value = { "/deleteList" }, method = RequestMethod.POST)
      public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -109,7 +153,7 @@ public class ${className}Controller {
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键冻结
+     * 根据主键禁用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -121,7 +165,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> disable(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPk(${primaryKeyParameterValues}, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -132,7 +176,7 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据主键激活
+     * 根据主键启用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -144,7 +188,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> enable(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPk(${primaryKeyParameterValues}, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -156,17 +200,17 @@ public class ${className}Controller {
     <#if (table.uniquePrimaryKey??)>
 
     /**
-     * 根据主键列表冻结
+     * 根据主键列表禁用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/disablelist", method = RequestMethod.POST)
+    @RequestMapping(value = "/disableList", method = RequestMethod.POST)
     public ResponseVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -177,17 +221,17 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据主键列表激活
+     * 根据主键列表启用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/enablelist", method = RequestMethod.POST)
+    @RequestMapping(value = "/enableList", method = RequestMethod.POST)
     public ResponseVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, sessionId);
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -198,34 +242,6 @@ public class ${className}Controller {
     }
     </#if>
     </#if>
-
-    /**
-     * 保存
-     *
-     * @param vm
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @RequestMapping(value = { "/save" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> save(@RequestBody ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value = "old${column.columnFieldName}", required = false) ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
-
-        ${className}Entity entity = vm.get${className}Entity();
-        ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult;
-        if (<#list primaryKey as column><#if (column_index > 0)> || </#if><#if !table.hasAutoIncrementUniquePrimaryKey>old${column.columnFieldName}<#else>vm.get${column.columnFieldName}()</#if> == null</#list>) {
-            apiResult = ${classNameLower}Service.add(entity, sessionId);
-        } else {
-            apiResult = ${classNameLower}Service.updateByPk(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, sessionId);
-        }
-
-        if (apiResult.isSuccess()) {
-            responseVo = new ResponseVo<>(apiResult.getResult());
-        } else {
-            responseVo = new ResponseVo<>(apiResult.getMessage());
-        }
-
-        return responseVo;
-    }
 
     /**
      * 根据主键获取
@@ -236,11 +252,11 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/getdetail" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/getDetail" }, method = RequestMethod.GET)
     public ResponseVo<${className}DetailVm> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
         ResponseVo<${className}DetailVm> responseVo;
-        ResultVo<${className}Vo> apiResult = ${classNameLower}Service.getByPk(${primaryKeyParameterValues}, sessionId);
+        ResultVo<${className}Vo> apiResult = ${classNameLower}Service.getByPk(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(true);
             ${className}Vo vo;
@@ -268,7 +284,7 @@ public class ${className}Controller {
 
         ResponseVo<PageInfo<${className}Vo>> responseVo;
         ${className}SelectParameter parameter = searchVm.get${className}SelectParameter();
-        ResultVo<PageInfo<${className}Vo>> apiResult = ${classNameLower}Service.findPageList(parameter, sessionId);
+        ResultVo<PageInfo<${className}Vo>> apiResult = ${classNameLower}Service.findPageList(parameter, getSessionId());
         if (apiResult.isSuccess()) {
             PageInfo<${className}Vo> pageInfo = apiResult.getResult();
             responseVo = new ResponseVo<>(pageInfo);
@@ -277,6 +293,10 @@ public class ${className}Controller {
         }
 
         return responseVo;
+    }
+
+    private String getSessionId() {
+        return applicationName + "-" + UUID.randomUUID();
     }
 
 }

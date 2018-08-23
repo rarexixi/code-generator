@@ -103,7 +103,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-     @RequestMapping(value = { "/deletelist" }, method = RequestMethod.POST)
+     @RequestMapping(value = { "/deleteList" }, method = RequestMethod.POST)
      public ResultVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
          ResultVo<Integer> result;
@@ -122,7 +122,7 @@ public class ${className}Controller {
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键冻结
+     * 根据主键禁用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -153,7 +153,7 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据主键激活
+     * 根据主键启用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -185,13 +185,13 @@ public class ${className}Controller {
     <#if (table.uniquePrimaryKey??)>
 
     /**
-     * 根据主键列表冻结
+     * 根据主键列表禁用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/disablelist", method = RequestMethod.POST)
+    @RequestMapping(value = "/disableList", method = RequestMethod.POST)
     public ResultVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
@@ -213,13 +213,13 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据主键列表激活
+     * 根据主键列表启用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/enablelist", method = RequestMethod.POST)
+    @RequestMapping(value = "/enableList", method = RequestMethod.POST)
     public ResultVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
@@ -292,7 +292,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/getdetail" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/getDetail" }, method = RequestMethod.GET)
     public ResultVo<${className}Vo> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
         if (OperationCheckUtils.isNullOrEmpty(${primaryKeyParameterValues})) {

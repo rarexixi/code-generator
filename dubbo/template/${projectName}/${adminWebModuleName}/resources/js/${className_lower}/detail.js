@@ -31,7 +31,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: appConfig.baseApiPath + '/${classNameLower}/getdetail' + window.location.search,
+                url: appConfig.baseApiPath + '/${classNameLower}/getDetail' + window.location.search,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {

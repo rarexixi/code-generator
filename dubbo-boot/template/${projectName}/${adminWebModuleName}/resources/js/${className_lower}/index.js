@@ -199,7 +199,7 @@ var app = new Vue({
             </#if>
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: '/${classNameLower}/getDetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -250,7 +250,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getdetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: '/${classNameLower}/getDetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -278,14 +278,14 @@ var app = new Vue({
         },
         <#if table.validStatusColumn??>
         enableSelected: function () {
-            this.execSelected("确定激活吗？", '/${classNameLower}/enablelist', "激活成功！", "激活失败！");
+            this.execSelected("确定启用吗？", '/${classNameLower}/enableList', "启用成功！", "启用失败！");
         },
         disableSelected: function () {
-            this.execSelected("确定冻结吗？", '/${classNameLower}/disablelist', "冻结成功！", "冻结失败！");
+            this.execSelected("确定禁用吗？", '/${classNameLower}/disableList', "禁用成功！", "禁用失败！");
         },
         </#if>
         delSelected: function () {
-            this.execSelected("确定删除吗？", '/${classNameLower}/deletelist', "删除成功！", "删除失败！");
+            this.execSelected("确定删除吗？", '/${classNameLower}/deleteList', "删除成功！", "删除失败！");
         },
         execSelected: function (confirmMsg, url, successMsg, failMsg) {
             var self = this;
@@ -311,11 +311,11 @@ var app = new Vue({
         <#if table.validStatusColumn??>
         enable: function (${primaryKeyParameterValues}) {
             var url = '/${classNameLower}/enable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
-            this.exec("确定激活吗？", url, "激活成功！", "激活失败！");
+            this.exec("确定启用吗？", url, "启用成功！", "启用失败！");
         },
         disable: function (${primaryKeyParameterValues}) {
             var url = '/${classNameLower}/disable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
-            this.exec("确定冻结吗？", url, "冻结成功！", "冻结失败！");
+            this.exec("确定禁用吗？", url, "禁用成功！", "禁用失败！");
         },
         </#if>
         del: function (${primaryKeyParameterValues}) {

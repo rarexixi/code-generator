@@ -25,6 +25,9 @@ public class ${className}DetailVm implements Serializable {
     /**
      * ${column.columnComment}
      */
+    <#if (column.columnFieldType == "Date")>
+    @JsonSerialize(using = DateJsonSerializer.class)
+    </#if>
     private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
 
     </#list>

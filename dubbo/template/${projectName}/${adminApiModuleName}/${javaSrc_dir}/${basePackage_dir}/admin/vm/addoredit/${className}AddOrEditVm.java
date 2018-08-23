@@ -68,4 +68,14 @@ public class ${className}AddOrEditVm implements Serializable {
 
         return entity;
     }
+
+    public void set${className}Entity(${className}Entity entity) {
+
+        <#list table.columns as column>
+        <#if column.notRequired>
+        <#else>
+        this.set${column.columnFieldName}(entity.get${column.columnFieldName}());
+        </#if>
+        </#list>
+    }
 }

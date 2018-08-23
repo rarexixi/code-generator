@@ -102,7 +102,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getdetail' + window.location.search,
+                url: '/${classNameLower}/getDetail' + window.location.search,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {

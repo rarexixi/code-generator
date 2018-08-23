@@ -47,7 +47,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResultVo<Integer> add(@RequestBody ${className}Entity entity, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<${className}Entity> add(@RequestBody ${className}Entity entity, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         String fieldName = "";
         if (entity == null || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkInsert(entity))) {
@@ -55,7 +55,7 @@ public class ${className}Controller {
         }
 
         int count = ${classNameLower}Service.insert(entity);
-        ResultVo<Integer> result = new ResultVo<>(count);
+        ResultVo<${className}Entity> result = new ResultVo<>(entity);
         return result;
     }
 
@@ -134,7 +134,7 @@ public class ${className}Controller {
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键冻结
+     * 根据主键禁用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -159,7 +159,7 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据主键激活
+     * 根据主键启用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -185,7 +185,7 @@ public class ${className}Controller {
     <#if (table.uniquePrimaryKey??)>
 
     /**
-     * 根据主键列表冻结
+     * 根据主键列表禁用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId
@@ -208,7 +208,7 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据主键列表激活
+     * 根据主键列表启用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId

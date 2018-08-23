@@ -108,7 +108,7 @@ public class ${className}ApiImpl implements ${className}Api {
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键冻结
+     * 根据主键禁用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -129,7 +129,7 @@ public class ${className}ApiImpl implements ${className}Api {
     }
 
     /**
-     * 根据主键激活
+     * 根据主键启用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -151,7 +151,7 @@ public class ${className}ApiImpl implements ${className}Api {
     <#if (table.uniquePrimaryKey??)>
 
     /**
-     * 根据主键列表冻结
+     * 根据主键列表禁用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId
@@ -170,7 +170,7 @@ public class ${className}ApiImpl implements ${className}Api {
     }
 
     /**
-     * 根据主键列表激活
+     * 根据主键列表启用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId

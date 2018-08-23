@@ -34,7 +34,7 @@ public interface ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/${classNameLower}/add", method = RequestMethod.POST)
-    ResultVo<Integer> add(@RequestBody ${className}Entity entity, @RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<${className}Entity> add(@RequestBody ${className}Entity entity, @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 添加列表
@@ -76,7 +76,7 @@ public interface ${className}Service {
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键冻结
+     * 根据主键禁用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -89,7 +89,7 @@ public interface ${className}Service {
     ResultVo<Integer> disableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
-     * 根据主键激活
+     * 根据主键启用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -103,7 +103,7 @@ public interface ${className}Service {
     <#if (table.uniquePrimaryKey??)>
 
     /**
-     * 根据主键列表冻结
+     * 根据主键列表禁用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId
@@ -114,7 +114,7 @@ public interface ${className}Service {
     ResultVo<Integer> disableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
-     * 根据主键列表激活
+     * 根据主键列表启用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId

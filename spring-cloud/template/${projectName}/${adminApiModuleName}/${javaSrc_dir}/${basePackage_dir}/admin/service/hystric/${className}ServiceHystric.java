@@ -31,7 +31,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> add(${className}Entity entity, String sessionId) {
+    public ResultVo<${className}Entity> add(${className}Entity entity, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
@@ -81,7 +81,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键冻结
+     * 根据主键禁用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -96,7 +96,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     }
 
     /**
-     * 根据主键激活
+     * 根据主键启用
      *
      <#list primaryKey as column>
      * @param ${column.columnFieldNameFirstLower}
@@ -112,7 +112,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     <#if (table.uniquePrimaryKey??)>
 
     /**
-     * 根据主键列表冻结
+     * 根据主键列表禁用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId
@@ -125,7 +125,7 @@ public class ${className}ServiceHystric implements ${className}Service {
     }
 
     /**
-     * 根据主键列表激活
+     * 根据主键列表启用
      *
      * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
      * @param sessionId
