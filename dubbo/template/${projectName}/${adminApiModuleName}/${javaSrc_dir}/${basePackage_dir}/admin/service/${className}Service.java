@@ -26,7 +26,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> add(${className}AddOrEditVm vm);
+    ResponseVo<${className}AddOrEditVm> add(${className}AddOrEditVm vm);
 
     /**
      * 添加列表

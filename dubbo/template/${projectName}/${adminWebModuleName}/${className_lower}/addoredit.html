@@ -99,6 +99,26 @@
             </form>
         </div>
     </div>
+    <div id="crop-image-modal" class="modal fade" role="dialog" aria-labelledby="gridModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" @click="resetSave" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid ratio ratio-4by3">
+                        <div id="img-preview-container" class="content bg-dark"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="取消" @click="resetSave" data-dismiss="modal" class="btn"/>
+                    <input type="button" value="保存" @click="del(detail.id)" data-dismiss="modal" class="btn btn-danger"/>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -111,6 +131,25 @@
     <script src="/resources/js/common.js"></script>
     <script src="/resources/js/${classNameLower}/addoredit.js"></script>
     <script src="/resources/js/pageInit.js"></script>
+    <script>
+        $('#crop-image-modal').modal();
+        $('#crop-image-modal').on('shown.bs.modal', function () {
+            var cropApp;
+            $('#img-preview-container').html('<img id="img-preview" src="" alt="Image preview" style="display: none" />');
+            var imgPreview = document.getElementById('img-preview');
+            imgPreview.src = 'http://e.hiphotos.baidu.com/image/pic/item/b151f8198618367a2e8a46ee23738bd4b31ce586.jpg';
+            imgPreview.onload = function (ev) {
+                cropApp = new Croppie(document.getElementById('img-preview'), {
+                    viewport: {
+                        width: 600,
+                        height: 450
+                    },
+                    showZoomer: false,
+                    enableOrientation: true
+                });
+            }
+        })
+    </script>
 </body>
 
 </html>

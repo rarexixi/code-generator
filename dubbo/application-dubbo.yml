@@ -44,6 +44,13 @@ generator:
             text: 提高
           - value: 3
             text: 起飞
+      - nameSet: sex
+        tableName: user_info
+        options:
+          - value: 1
+            text: 男
+          - value: 2
+            text: 女
     img-url: photo
     video-url:
     doc-url:
@@ -67,9 +74,11 @@ generator:
     providerModuleName: quick-provider
     adminApiModuleName: quick-admin-api
     adminWebModuleName: quick-admin-web
+    commonWebApiModuleName: quick-common-web-api
 
     providerModuleApplicationName: QuickProviderApplication
     adminApiModuleApplicatioName: QuickAdminApplication
+    commonWebApiModuleApplicatioName: QuickCommonApiApplication
 
     baseApiPath: http://localhost:8820
 

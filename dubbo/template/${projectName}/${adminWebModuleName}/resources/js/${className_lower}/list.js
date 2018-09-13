@@ -38,15 +38,25 @@ var app = new Vue({
         },
         checkedList: [],
         allChecked: false,
-        pageInfo: {}
+        pageInfo: {},
+        pager: {}
     },
     mounted: function () {
-        this.search();
+        var self = this;
+        self.search();
         <#list table.columns as column>
         <#if column.fkSelect>
-        this.init${column.columnFieldName?replace('Id', '')}();
+        self.init${column.columnFieldName?replace('Id', '')}();
         </#if>
         </#list>
+        self.pager = new bootSelectPager('#pager', {
+            changePageSize: function (pageSize) {
+                self.changePageSize(pageSize)
+            },
+            changePageIndex: function (pageIndex) {
+                self.changePage(pageIndex);
+            }
+        });
     },
     watch: {
         'checkedList': {
@@ -118,6 +128,11 @@ var app = new Vue({
                 success: function (response) {
                     if (response.success == true) {
                         self.pageInfo = response.result;
+                        self.pager.refreshPageInfo({
+                            pageIndex: self.pageInfo.pageNum,
+                            pageSize: self.pageInfo.pageSize,
+                            total: self.pageInfo.total
+                        });
                     } else {
                         commonNotify.danger("获取列表！");
                     }
@@ -130,6 +145,7 @@ var app = new Vue({
             if (self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
                 return;
             }
+            self.resetSearch();
             self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
             self.search();
         },

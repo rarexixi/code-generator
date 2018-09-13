@@ -208,6 +208,17 @@
                             <!-- <td><span>{{item.${column.columnFieldNameFirstLower}}}</span></td> -->
                             <#elseif column.columnName == table.validStatusField.fieldName>
                             <td><span v-if="item.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-success">有效</span><span v-else class="text-danger">无效</span></td>
+                            <#elseif column.select>
+                            <td>
+                                <#list column.selectOptions as option>
+                                <#if (option_index > 0)>
+                                <span v-else-if="item.${column.columnFieldNameFirstLower}==${option.value}">${option.text}</span>
+                                <#else>
+                                <span v-if="item.${column.columnFieldNameFirstLower}==${option.value}">${option.text}</span>
+                                </#if>
+                                </#list>
+                                <span v-else>未知</span>
+                            </td>
                             <#elseif column.imgUrl>
                             <td>
                                 <div class="ratio ratio-4by3 table-img-container">
@@ -237,30 +248,7 @@
                 <div v-else class="alert alert-warning" role="alert">
                     暂无数据
                 </div>
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown" v-if="pageInfo && pageInfo.list && pageInfo.list.length > 0">
-                    <div class="btn btn-secondary" v-if="pageInfo.hasPreviousPage" @click="changePage(pageInfo.prePage)">上一页</div>
-                    <div class="btn btn-secondary" v-if="1 < pageInfo.navigateFirstPage" @click="changePage(1)">1</div>
-                    <div class="btn btn-secondary" v-if="2 < pageInfo.navigateFirstPage">...</div>
-                    <template v-for="(item, index) in pageInfo.navigatepageNums">
-                    <div class="btn btn-dark" v-if="item == pageInfo.pageNum">{{item}}</div>
-                    <div class="btn btn-secondary" v-else @click="changePage(item)">{{item}}</div>
-                    </template>
-                    <div class="btn btn-secondary" v-if="pageInfo.pages > pageInfo.navigateLastPage+1">...</div>
-                    <div class="btn btn-secondary" v-if="pageInfo.pages > pageInfo.navigateLastPage" @click="changePage(pageInfo.pages)">{{pageInfo.pages}}</div>
-                    <div class="btn btn-secondary" v-if="pageInfo.hasNextPage" @click="changePage(pageInfo.nextPage)">下一页</div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            每页 {{searchParams.pageSize}} 条
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(5)">5</a>
-                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(10)">10</a>
-                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(20)">20</a>
-                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(50)">50</a>
-                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(100)">100</a>
-                        </div>
-                    </div>
-                </div>
+                <div id="pager"></div>
             </div>
         </div>
     </div>
@@ -274,6 +262,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="/resources/js/config.js"></script>
     <script src="/resources/js/common.js"></script>
+    <script src="/resources/js/bootPager.js"></script>
     <script src="/resources/js/${classNameLower}/list.js"></script>
     <script src="/resources/js/pageInit.js"></script>
 </body>
