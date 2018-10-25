@@ -18,7 +18,5 @@ public class ${className}OrderCondition extends BaseOrderCondition {
     public void set${column.columnFieldName}Desc() {
         super.orderByMap.put("${column.tableName}.${column.columnName}", "DESC");
     }
-
-    //endregion
     </#list>
 }
