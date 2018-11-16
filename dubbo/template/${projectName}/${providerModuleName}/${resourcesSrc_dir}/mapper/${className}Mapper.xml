@@ -220,12 +220,12 @@
         </if>
     </select>
 
-    <select id="countByCondition" parameterMap="BaseConditionMap">
+    <select id="countByCondition" parameterMap="BaseConditionMap" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM `${table.tableName}`
         <include refid="where"/>
     </select>
 
-    <select id="countByConditionList" parameterMap="BaseConditionMap">
+    <select id="countByConditionList" parameterMap="BaseConditionMap" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM `${table.tableName}`
         <include refid="listWhere"/>
     </select>
