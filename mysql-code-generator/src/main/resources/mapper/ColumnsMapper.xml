@@ -23,7 +23,6 @@
         <result column="EXTRA" property="extra" jdbcType="VARCHAR"/>
         <result column="PRIVILEGES" property="privileges" jdbcType="VARCHAR"/>
         <result column="COLUMN_COMMENT" property="columnComment" jdbcType="VARCHAR"/>
-        <result column="GENERATION_EXPRESSION" property="generationExpression" jdbcType="VARCHAR"/>
 
         <result column="INDEX" property="index" jdbcType="BOOLEAN"/>
     </resultMap>
@@ -49,8 +48,7 @@
         `COLUMN_KEY`,
         `EXTRA`,
         `PRIVILEGES`,
-        `COLUMN_COMMENT`,
-        `GENERATION_EXPRESSION`
+        `COLUMN_COMMENT`
         FROM
         `information_schema`.`COLUMNS`
         <where>
@@ -86,7 +84,6 @@
             A.`EXTRA`,
             A.`PRIVILEGES`,
             A.`COLUMN_COMMENT`,
-            A.`GENERATION_EXPRESSION`,
             (CASE WHEN B.`COLUMN_NAME` IS NULL THEN FALSE ELSE TRUE END) AS `INDEX`
         FROM
             (

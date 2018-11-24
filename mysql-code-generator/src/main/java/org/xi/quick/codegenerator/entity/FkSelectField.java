@@ -11,6 +11,10 @@ public class FkSelectField {
      */
     private Set<String> nameSet;
     /**
+     * 当前表名
+     */
+    private String table;
+    /**
      * 关联表名
      */
     private String foreignTable;
@@ -29,6 +33,14 @@ public class FkSelectField {
 
     public void setNameSet(Set<String> nameSet) {
         this.nameSet = nameSet;
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
     }
 
     public void setForeignTable(String foreignTable) {

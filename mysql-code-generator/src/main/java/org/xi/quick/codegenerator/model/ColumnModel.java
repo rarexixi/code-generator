@@ -187,7 +187,8 @@ public class ColumnModel {
         // 判断是否是逻辑外键选择项字段
         fkSelect = false;
         for (FkSelectField field : StaticConfigData.FK_SELECT_FIELDS) {
-            if (field.getNameSet() != null && field.getNameSet().contains(columnName)) {
+            if (field.getNameSet() != null && field.getNameSet().contains(columnName)
+                    && (field.getTable() == null || field.getTable().equals(tableName))) {
                 fkSelectField = field;
                 fkSelect = true;
                 break;

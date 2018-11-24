@@ -22,7 +22,6 @@ public class Column {
     private String extra;
     private String privileges;
     private String columnComment;
-    private String generationExpression;
 
     private Boolean index;
 
@@ -184,14 +183,6 @@ public class Column {
 
     public void setColumnComment(String columnComment) {
         this.columnComment = columnComment;
-    }
-
-    public String getGenerationExpression() {
-        return generationExpression;
-    }
-
-    public void setGenerationExpression(String generationExpression) {
-        this.generationExpression = generationExpression;
     }
 
     public Boolean getIndex() {

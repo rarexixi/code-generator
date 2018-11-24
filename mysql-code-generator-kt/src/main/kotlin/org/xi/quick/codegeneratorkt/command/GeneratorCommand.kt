@@ -83,6 +83,14 @@ class GeneratorCommand : CommandLineRunner {
                 generatorService.deleteAllAggregate()
                 return
             }
+            "gat" -> {
+                generatorService.generateAll()
+                return
+            }
+            "dat" -> {
+                generatorService.deleteAll()
+                return
+            }
             "gen" -> {
                 operate(tableNameSet, getArgs(sc), OperateEnum.Generate)
                 return
