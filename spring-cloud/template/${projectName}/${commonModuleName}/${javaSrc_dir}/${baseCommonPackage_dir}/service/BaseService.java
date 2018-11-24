@@ -24,7 +24,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param models
      * @return
      */
-    int insertList(List<T> models);
+    int insert(List<T> models);
 
     /**
      * 根据条件删除
@@ -32,7 +32,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param condition
      * @return
      */
-    int deleteByCondition(C condition);
+    int delete(C condition);
 
     /**
      * 根据条件删除
@@ -40,7 +40,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param conditionList
      * @return
      */
-    int deleteByConditionList(List<C> conditionList);
+    int delete(List<C> conditionList);
 
     /**
      * 根据条件更新
@@ -49,7 +49,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param condition
      * @return
      */
-    int updateByCondition(T model, C condition);
+    int update(T model, C condition);
 
     /**
      * 根据条件更新
@@ -58,7 +58,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param conditionList
      * @return
      */
-    int updateByConditionList(T model, List<C> conditionList);
+    int update(T model, List<C> conditionList);
 
     /**
      * 查询
@@ -66,7 +66,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param condition
      * @return
      */
-    T getByCondition(C condition);
+    T get(C condition);
 
     /**
      * 查询符合条件的列表
@@ -74,7 +74,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param condition
      * @return
      */
-    List<T> findByCondition(C condition);
+    List<T> getList(C condition);
 
     /**
      * 查询符合条件的列表
@@ -83,7 +83,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param order
      * @return
      */
-    List<T> findByCondition(C condition, OrderCondition order);
+    List<T> getList(C condition, OrderCondition order);
 
     /**
      * 查询符合条件的列表
@@ -91,7 +91,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param conditionList
      * @return
      */
-    List<T> findByConditionList(List<C> conditionList);
+    List<T> getList(List<C> conditionList);
 
     /**
      * 查询符合条件的列表
@@ -100,7 +100,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param order
      * @return
      */
-    List<T> findByConditionList(List<C> conditionList, OrderCondition order);
+    List<T> getList(List<C> conditionList, OrderCondition order);
 
     /**
      * 分页查询符合条件的列表
@@ -109,7 +109,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param page
      * @return
      */
-    PageInfo<T> findByCondition(C condition, SearchPage page);
+    PageInfo<T> getPageInfo(C condition, SearchPage page);
 
     /**
      * 分页查询符合条件的列表
@@ -119,7 +119,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param page
      * @return
      */
-    PageInfo<T> findByCondition(C condition, OrderCondition order, SearchPage page);
+    PageInfo<T> getPageInfo(C condition, OrderCondition order, SearchPage page);
 
     /**
      * 分页查询符合条件的列表
@@ -128,7 +128,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param page
      * @return
      */
-    PageInfo<T> findByConditionList(List<C> conditionList, SearchPage page);
+    PageInfo<T> getPageInfo(List<C> conditionList, SearchPage page);
 
     /**
      * 分页查询符合条件的列表
@@ -138,7 +138,7 @@ public interface BaseService<T extends Serializable, C extends Serializable> {
      * @param page
      * @return
      */
-    PageInfo<T> findByConditionList(List<C> conditionList, OrderCondition order, SearchPage page);
+    PageInfo<T> getPageInfo(List<C> conditionList, OrderCondition order, SearchPage page);
 
     /**
      * 查询数量

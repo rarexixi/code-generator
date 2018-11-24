@@ -36,7 +36,7 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      * @return
      */
     @Override
-    public int insertList(List<T> models) {
+    public int insert(List<T> models) {
         return mapper.insertList(models);
     }
 
@@ -47,7 +47,7 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      * @return
      */
     @Override
-    public int deleteByCondition(C condition) {
+    public int delete(C condition) {
         return mapper.deleteByCondition(condition);
     }
 
@@ -58,7 +58,7 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      * @return
      */
     @Override
-    public int deleteByConditionList(List<C> conditionList) {
+    public int delete(List<C> conditionList) {
         return mapper.deleteByConditionList(conditionList);
     }
 
@@ -70,7 +70,7 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      * @return
      */
     @Override
-    public int updateByCondition(T model, C condition) {
+    public int update(T model, C condition) {
         return mapper.updateByCondition(model, condition);
     }
 
@@ -82,7 +82,7 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      * @return
      */
     @Override
-    public int updateByConditionList(T model, List<C> conditionList) {
+    public int update(T model, List<C> conditionList) {
         return mapper.updateByConditionList(model, conditionList);
     }
 
@@ -94,7 +94,7 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public T getByCondition(C condition) {
+    public T get(C condition) {
         return mapper.getByCondition(condition);
     }
 
@@ -106,9 +106,9 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> findByCondition(C condition) {
+    public List<T> getList(C condition) {
 
-        return mapper.findByCondition(condition, null);
+        return mapper.selectByCondition(condition, null);
     }
 
     /**
@@ -120,9 +120,9 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> findByCondition(C condition, OrderCondition order) {
+    public List<T> getList(C condition, OrderCondition order) {
 
-        List<T> list = mapper.findByCondition(condition, order);
+        List<T> list = mapper.selectByCondition(condition, order);
         return list;
     }
 
@@ -134,9 +134,9 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> findByConditionList(List<C> conditionList) {
+    public List<T> getList(List<C> conditionList) {
 
-        List<T> list = mapper.findByConditionList(conditionList, null);
+        List<T> list = mapper.selectByConditionList(conditionList, null);
         return list;
     }
 
@@ -149,9 +149,9 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> findByConditionList(List<C> conditionList, OrderCondition order) {
+    public List<T> getList(List<C> conditionList, OrderCondition order) {
 
-        List<T> list = mapper.findByConditionList(conditionList, order);
+        List<T> list = mapper.selectByConditionList(conditionList, order);
         return list;
     }
 
@@ -164,9 +164,9 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> findByCondition(C condition, SearchPage page) {
+    public PageInfo<T> getPageInfo(C condition, SearchPage page) {
 
-        return findByCondition(condition, null, page);
+        return getPageInfo(condition, null, page);
     }
 
     /**
@@ -179,14 +179,14 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> findByCondition(C condition, OrderCondition order, SearchPage page) {
+    public PageInfo<T> getPageInfo(C condition, OrderCondition order, SearchPage page) {
 
         if (page == null) {
             PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
         } else {
             PageHelper.startPage(page.getPageIndex(), page.getPageSize());
         }
-        List<T> list = mapper.findByCondition(condition, order);
+        List<T> list = mapper.selectByCondition(condition, order);
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
@@ -200,9 +200,9 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> findByConditionList(List<C> conditionList, SearchPage page) {
+    public PageInfo<T> getPageInfo(List<C> conditionList, SearchPage page) {
 
-        return findByConditionList(conditionList, null, page);
+        return getPageInfo(conditionList, null, page);
     }
 
     /**
@@ -215,14 +215,14 @@ public abstract class BaseServiceImpl<T extends Serializable, C extends Serializ
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> findByConditionList(List<C> conditionList, OrderCondition order, SearchPage page) {
+    public PageInfo<T> getPageInfo(List<C> conditionList, OrderCondition order, SearchPage page) {
 
         if (page == null) {
             PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
         } else {
             PageHelper.startPage(page.getPageIndex(), page.getPageSize());
         }
-        List<T> list = mapper.findByConditionList(conditionList, order);
+        List<T> list = mapper.selectByConditionList(conditionList, order);
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }

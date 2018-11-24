@@ -3,6 +3,7 @@
 <#assign primaryKey = table.primaryKey>
 package ${basePackage}.mapper;
 
+import ${baseCommonPackage}.mapper.BaseMapper;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
@@ -37,5 +38,5 @@ public interface ${className}Mapper extends BaseMapper<${className}Entity, ${cla
      * @return
     <#include "/include/author_info1.ftl">
      */
-    List<${className}Vo> findList(${className}SelectParameter parameter);
+    List<${className}Vo> getList(${className}SelectParameter parameter);
 }

@@ -29,7 +29,7 @@
     </select>
     </#if>
 
-    <select id="findList" resultMap="ResultMapVo" parameterMap="SelectParameterMap">
+    <select id="getList" resultMap="ResultMapVo" parameterMap="SelectParameterMap">
         SELECT DISTINCT
         <#list table.columns as column>
         `${table.tableName}`.`${column.columnName}`<#if column_has_next>,</#if>

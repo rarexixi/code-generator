@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
@@ -50,7 +51,7 @@ public class ${className}Controller {
 
         ResponseVo<${className}AddOrEditVm> responseVo;
         ${className}Entity entity = vm.get${className}Entity();
-        ResultVo<${className}Entity> apiResult = ${classNameLower}Api.add(entity, getSessionId());
+        ResultVo<${className}Entity> apiResult = ${classNameLower}Service.add(entity, getSessionId());
         if (apiResult.isSuccess()) {
             vm.set${className}Entity(apiResult.getResult());
             responseVo = new ResponseVo<>(vm);
@@ -72,7 +73,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> edit(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Api.updateByPk(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.update(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -118,7 +119,7 @@ public class ${className}Controller {
      public ResponseVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
          ResponseVo<Integer> responseVo;
-         ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPk(${primaryKeyParameterValues}, getSessionId());
+         ResultVo<Integer> apiResult = ${classNameLower}Service.delete(${primaryKeyParameterValues}, getSessionId());
          if (apiResult.isSuccess()) {
              responseVo = new ResponseVo<>(apiResult.getResult());
          } else {
@@ -140,7 +141,7 @@ public class ${className}Controller {
      public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.deleteByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.delete(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -165,7 +166,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> disable(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPk(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -188,7 +189,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> enable(${primaryKeyParameters}) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPk(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -210,7 +211,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -231,7 +232,7 @@ public class ${className}Controller {
     public ResponseVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enableByPkList(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -252,11 +253,11 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/getDetail" }, method = RequestMethod.GET)
-    public ResponseVo<${className}DetailVm> getDetail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
+    @RequestMapping(value = { "/detail" }, method = RequestMethod.GET)
+    public ResponseVo<${className}DetailVm> detail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
 
         ResponseVo<${className}DetailVm> responseVo;
-        ResultVo<${className}Vo> apiResult = ${classNameLower}Service.getByPk(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<${className}Vo> apiResult = ${classNameLower}Service.get(${primaryKeyParameterValues}, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(true);
             ${className}Vo vo;
@@ -279,12 +280,12 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/find" }, method = RequestMethod.POST)
-    public ResponseVo<PageInfo<${className}Vo>> find(@RequestBody ${className}SearchVm searchVm) {
+    @RequestMapping(value = { "/search" }, method = RequestMethod.POST)
+    public ResponseVo<PageInfo<${className}Vo>> search(@RequestBody ${className}SearchVm searchVm) {
 
         ResponseVo<PageInfo<${className}Vo>> responseVo;
         ${className}SelectParameter parameter = searchVm.get${className}SelectParameter();
-        ResultVo<PageInfo<${className}Vo>> apiResult = ${classNameLower}Service.findPageList(parameter, getSessionId());
+        ResultVo<PageInfo<${className}Vo>> apiResult = ${classNameLower}Service.getPageInfo(parameter, getSessionId());
         if (apiResult.isSuccess()) {
             PageInfo<${className}Vo> pageInfo = apiResult.getResult();
             responseVo = new ResponseVo<>(pageInfo);

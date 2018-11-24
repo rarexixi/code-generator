@@ -5,6 +5,7 @@
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
 package ${basePackage}.service;
 
+import ${baseCommonPackage}.service.BaseService;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
@@ -38,6 +39,6 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
      * @return
      <#include "/include/author_info1.ftl">
      */
-    PageInfo<${className}Vo> findPageList(${className}SelectParameter parameter);
+    PageInfo<${className}Vo> getPageList(${className}SelectParameter parameter);
 
 }

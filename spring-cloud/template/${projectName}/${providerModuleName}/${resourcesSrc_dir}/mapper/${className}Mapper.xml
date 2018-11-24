@@ -198,7 +198,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="findByCondition" resultMap="BaseModelMap">
+    <select id="selectByCondition" resultMap="BaseModelMap">
         SELECT
         <include refid="selectColumnList"/>
         FROM
@@ -209,7 +209,7 @@
         </if>
     </select>
 
-    <select id="findByConditionList" resultMap="BaseModelMap">
+    <select id="selectByConditionList" resultMap="BaseModelMap">
         SELECT
         <include refid="selectColumnList"/>
         FROM

@@ -58,8 +58,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/deleteByPk", method = RequestMethod.GET)
-    ResultVo<Integer> deleteByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/delete", method = RequestMethod.GET)
+    ResultVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
     <#if (table.uniquePrimaryKey??)>
 
     /**
@@ -70,8 +70,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/deleteByPkList", method = RequestMethod.POST)
-    ResultVo<Integer> deleteByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/delete", method = RequestMethod.POST)
+    ResultVo<Integer> delete(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId);
     </#if>
     <#if table.validStatusColumn??>
 
@@ -85,8 +85,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/disableByPk", method = RequestMethod.GET)
-    ResultVo<Integer> disableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/disable", method = RequestMethod.GET)
+    ResultVo<Integer> disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 根据主键启用
@@ -98,8 +98,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/enableByPk", method = RequestMethod.GET)
-    ResultVo<Integer> enableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/enable", method = RequestMethod.GET)
+    ResultVo<Integer> enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
     <#if (table.uniquePrimaryKey??)>
 
     /**
@@ -110,8 +110,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/disableByPkList", method = RequestMethod.POST)
-    ResultVo<Integer> disableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/disable", method = RequestMethod.POST)
+    ResultVo<Integer> disable(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 根据主键列表启用
@@ -121,8 +121,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/enableByPkList", method = RequestMethod.POST)
-    ResultVo<Integer> enableByPkList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/enable", method = RequestMethod.POST)
+    ResultVo<Integer> enable(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId);
     </#if>
     </#if>
 
@@ -134,8 +134,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/updateByPk", method = RequestMethod.POST)
-    ResultVo<Integer> updateByPk(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/update", method = RequestMethod.POST)
+    ResultVo<Integer> update(@RequestBody ${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 根据主键获取
@@ -147,8 +147,8 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/getByPk", method = RequestMethod.GET)
-    ResultVo<${className}Vo> getByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/get", method = RequestMethod.GET)
+    ResultVo<${className}Vo> get(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam(value="${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, @RequestParam(value = "sessionId", required = false) String sessionId);
     </#if>
 
     /**
@@ -159,7 +159,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/${classNameLower}/findPageList", method = RequestMethod.POST)
-    ResultVo<PageInfo<${className}Vo>> findPageList(@RequestBody ${className}SelectParameter parameter, @RequestParam(value = "sessionId", required = false) String sessionId);
+    @RequestMapping(value = "/${classNameLower}/getPageInfo", method = RequestMethod.POST)
+    ResultVo<PageInfo<${className}Vo>> getPageInfo(@RequestBody ${className}SelectParameter parameter, @RequestParam(value = "sessionId", required = false) String sessionId);
 
 }

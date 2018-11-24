@@ -6,6 +6,7 @@
 package ${basePackage}.service.impl;
 
 import ${baseCommonPackage}.model.SearchPage;
+import ${baseCommonPackage}.service.impl.BaseServiceImpl;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.mapper.BaseMapper;
@@ -64,14 +65,14 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<${className}Vo> findPageList(${className}SelectParameter parameter) {
+    public PageInfo<${className}Vo> getPageList(${className}SelectParameter parameter) {
 
         if (parameter == null) {
             PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
         } else {
             PageHelper.startPage(parameter.getPageIndex(), parameter.getPageSize());
         }
-        List<${className}Vo> list = ${classNameLower}Mapper.findList(parameter);
+        List<${className}Vo> list = ${classNameLower}Mapper.getList(parameter);
         PageInfo<${className}Vo> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }

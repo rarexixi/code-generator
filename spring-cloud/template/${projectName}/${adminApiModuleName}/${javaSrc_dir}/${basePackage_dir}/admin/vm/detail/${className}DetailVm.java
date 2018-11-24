@@ -2,7 +2,10 @@
 <#assign sortCount = 0>
 package ${basePackage}.admin.vm.detail;
 
+import ${basePackage}.admin.databind.DateJsonSerializer;
 import ${basePackage}.vo.${className}Vo;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

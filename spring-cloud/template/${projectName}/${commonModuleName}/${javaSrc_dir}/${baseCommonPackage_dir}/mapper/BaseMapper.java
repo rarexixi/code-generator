@@ -74,7 +74,7 @@ public interface BaseMapper<T extends Serializable, C extends Serializable> {
      * @param condition
      * @return
      */
-    List<T> findByCondition(@Param("condition") C condition, @Param("order") OrderCondition order);
+    List<T> selectByCondition(@Param("condition") C condition, @Param("order") OrderCondition order);
 
     /**
      * 查询
@@ -82,7 +82,7 @@ public interface BaseMapper<T extends Serializable, C extends Serializable> {
      * @param conditionList
      * @return
      */
-    List<T> findByConditionList(@Param("conditionList") List<C> conditionList, @Param("order") OrderCondition order);
+    List<T> selectByConditionList(@Param("conditionList") List<C> conditionList, @Param("order") OrderCondition order);
 
     /**
      * 查询数量

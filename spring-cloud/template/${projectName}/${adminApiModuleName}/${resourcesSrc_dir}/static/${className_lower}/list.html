@@ -1,0 +1,281 @@
+<#assign className = table.tableClassName>
+<#assign classNameFirstLower = table.tableClassName?uncap_first>
+<#assign classNameLower = table.tableClassName?lower_case>
+<#assign tableShortComment = (table.tableComment?split("[（ ,，(]", "r"))[0]>
+<#assign primaryKey = table.primaryKey>
+<#assign primaryKeyParameters = table.primaryKeyParameters>
+<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#macro mapperEl value>${r"${"}${value}}</#macro>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>${tableShortComment}列表</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/resources/bootstrap/plugins/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="/resources/css/common.css" />
+</head>
+
+<body>
+    <div class="container-fluid" id="app">
+        <div class="row">
+            <div class="col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/"></a></li>
+                    <li class="breadcrumb-item active" aria-current="page">${tableShortComment}列表</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <#list table.columns as column>
+            <#if column.ignoreSearch>
+            <#elseif column.columnName == table.validStatusField.fieldName>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                            <option value="">全部</option>
+                            <option value="${table.validStatusField.validValue}">有效</option>
+                            <option value="${table.validStatusField.invalidValue}">无效</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <#elseif column.fkSelect>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                            <option value="">全部</option>
+                            <option v-for="item in ${column.columnFieldName?uncap_first}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.valueField?uncap_first} }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <#elseif column.select>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                            <option value="">全部</option>
+                            <#list column.selectOptions as option>
+                            <option value="${option.value}">${option.text}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <#elseif column.primaryKey>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <#elseif column.columnFieldType == "Date">
+            <div class="col-12 col-lg-8 col-xl-8">
+                <div class="form-group row">
+                    <div class="col-12 col-md-2"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-10">
+                        <div class="form-row">
+                            <div class="col-12 col-sm-6">
+                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">最小${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">最大${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <#elseif (column.columnFieldType == "String")>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}StartWith" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <#else>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="form-group row">
+                    <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
+                    <div class="col-12 col-md-8">
+                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            </#if>
+            </#list>
+            <div class="col-12">
+                <div class="form-group">
+                    <input type="button" id="submit" value="搜索" @click="search" class="btn btn-primary" />
+                    <input type="reset" value="重置" @click="resetSearch" class="btn btn-warning" />
+                </div>
+            </div>
+        </div>
+
+        <#if table.validStatusColumn??>
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a @click="changeValidSearch('')" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === '' }" href="javascript:;">全部</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @click="changeValidSearch(${table.validStatusField.validValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.validValue} }" href="javascript:;">有效</a>
+                    </li>
+                    <li class="nav-item">
+                        <a @click="changeValidSearch(${table.validStatusField.invalidValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.invalidValue} }" href="javascript:;">无效</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </#if>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="navbar navbar-light">
+                    <form class="form-inline">
+                        <input type="button" value="添加" @click="add" class="btn btn-info mr-2" />
+                        <#if table.validStatusColumn??>
+                        <input type="button" value="启用" @click="enableSelected" class="btn btn-success mr-2" v-if="checkedList.length > 0" />
+                        <input type="button" value="禁用" @click="disableSelected" class="btn btn-warning mr-2" v-if="checkedList.length > 0" />
+                        </#if>
+                        <#if table.uniquePrimaryKey??>
+                        <input type="button" value="删除" @click="delSelected" class="btn btn-danger" v-if="checkedList.length > 0" />
+                        </#if>
+                    </form>
+                </div>
+                <table v-if="pageInfo && pageInfo.list && pageInfo.list.length > 0" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+                            <th><input type="checkbox" v-model="allChecked" @click="checkAll()"/></th>
+                            </#if>
+                            <#list table.columns as column>
+                            <#if column.content>
+                            <!-- <th>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</th> -->
+                            <#else>
+                            <th>${(column.columnComment?split("[（ ,，(]", "r"))[0]}</th>
+                            </#if>
+                            </#list>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in pageInfo.list">
+                            <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+                            <td><input type="checkbox" v-model="checkedList" :value="item.${table.uniquePrimaryKey.columnFieldName?uncap_first}" /></td>
+                            </#if>
+                            <#list table.columns as column>
+                            <#if column.content>
+                            <!-- <td><span>{{item.${column.columnFieldNameFirstLower}}}</span></td> -->
+                            <#elseif column.columnName == table.validStatusField.fieldName>
+                            <td><span v-if="item.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-success">有效</span><span v-else class="text-danger">无效</span></td>
+                            <#elseif column.imgUrl>
+                            <td>
+                                <div class="ratio ratio-4by3 table-img-container">
+                                    <div class="content center">
+                                        <img :src="item.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}" class="content" />
+                                    </div>
+                                </div>
+                            </td>
+                            <#elseif column.columnFieldType == "Date">
+                            <td><span>{{item.${column.columnFieldNameFirstLower} | formatDate}}</span></td>
+                            <#else>
+                            <td><span>{{item.${column.columnFieldNameFirstLower}}}</span></td>
+                            </#if>
+                            </#list>
+                            <td>
+                                <a href="javascript:;" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" class="text-info">编辑</a>
+                                <a href="javascript:;" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" class="text-secondary">详情</a>
+                                <#if table.validStatusColumn??>
+                                <a href="javascript:;" @click="disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" v-if="item.${table.validStatusColumn.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-warning">禁用</a>
+                                <a href="javascript:;" @click="enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" v-else class="text-success">启用</a>
+                                </#if>
+                                <a href="javascript:;" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" class="text-danger">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div v-else class="alert alert-warning" role="alert">
+                    暂无数据
+                </div>
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown" v-if="pageInfo && pageInfo.list && pageInfo.list.length > 0">
+                    <div class="btn btn-secondary" v-if="pageInfo.hasPreviousPage" @click="changePage(pageInfo.prePage)">上一页</div>
+                    <div class="btn btn-secondary" v-if="1 < pageInfo.navigateFirstPage" @click="changePage(1)">1</div>
+                    <div class="btn btn-secondary" v-if="2 < pageInfo.navigateFirstPage">...</div>
+                    <template v-for="(item, index) in pageInfo.navigatepageNums">
+                    <div class="btn btn-dark" v-if="item == pageInfo.pageNum">{{item}}</div>
+                    <div class="btn btn-secondary" v-else @click="changePage(item)">{{item}}</div>
+                    </template>
+                    <div class="btn btn-secondary" v-if="pageInfo.pages > pageInfo.navigateLastPage+1">...</div>
+                    <div class="btn btn-secondary" v-if="pageInfo.pages > pageInfo.navigateLastPage" @click="changePage(pageInfo.pages)">{{pageInfo.pages}}</div>
+                    <div class="btn btn-secondary" v-if="pageInfo.hasNextPage" @click="changePage(pageInfo.nextPage)">下一页</div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            每页 {{searchParams.pageSize}} 条
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(5)">5</a>
+                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(10)">10</a>
+                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(20)">20</a>
+                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(50)">50</a>
+                            <a class="dropdown-item" href="javascript:;" @click="changePageSize(100)">100</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/resources/bootstrap/plugins/js/jquery.bootstrap-growl.min.js"></script>
+    <script src="/resources/bootstrap/plugins/js/bootbox.min.js"></script>
+    <script src="/resources/bootstrap/plugins/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/resources/js/config.js"></script>
+    <script src="/resources/js/common.js"></script>
+    <script src="/resources/js/${classNameLower}/list.js"></script>
+    <script src="/resources/js/pageInit.js"></script>
+</body>
+
+</html>

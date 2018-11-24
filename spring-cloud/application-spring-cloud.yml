@@ -19,7 +19,7 @@ generator:
     out: ./out/                  # 输出路径
   file:
     ignore: include/                                        # 要忽略的文件
-    aggregate: ${dollar}{adminWebModuleName}/index.html
+    aggregate: ${dollar}{adminWebModuleName}/index.html, static/index.html
                                                             # 聚合文件
     just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js, .gitignore
                                                             # 仅复制文件

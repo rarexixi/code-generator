@@ -60,7 +60,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> deleteByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     <#if (table.uniquePrimaryKey??)>
@@ -74,7 +74,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> delete(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>
@@ -91,7 +91,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> disableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<Integer> disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
@@ -106,7 +106,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> enableByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<Integer> enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     <#if (table.uniquePrimaryKey??)>
@@ -120,7 +120,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> disable(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
@@ -133,7 +133,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> enable(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>
@@ -148,7 +148,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
+    public ResultVo<Integer> update(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
@@ -163,7 +163,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<${className}Vo> getByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<${className}Vo> get(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>
@@ -177,7 +177,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<PageInfo<${className}Vo>> findPageList(${className}SelectParameter parameter, String sessionId) {
+    public ResultVo<PageInfo<${className}Vo>> getPageInfo(${className}SelectParameter parameter, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
