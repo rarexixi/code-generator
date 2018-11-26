@@ -1,4 +1,4 @@
-package ${basePackage}.condition.order;
+package ${baseCommonPackage}.model;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
-public class BaseOrderCondition implements OrderCondition {
+public class BaseSelectParameter extends SearchPage implements OrderCondition, Serializable {
 
-    public BaseOrderCondition() {
+    public BaseSelectParameter() {
         orderByMap = new LinkedHashMap<>();
     }
 

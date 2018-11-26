@@ -1,11 +1,6 @@
-<#assign className = table.tableClassName>
-<#assign classNameLower = table.tableClassName?uncap_first>
-<#assign primaryKey = table.primaryKey>
-<#assign primaryKeyParameters = table.primaryKeyParameters>
-<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.service;
 
-import ${baseCommonPackage}.service.BaseService;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.parameter.${className}SelectParameter;
@@ -29,7 +24,7 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ${className}Vo getByPk(${primaryKeyParameters});
+    ${className}Vo getByPk(<#include "/include/table/primary_parameters.ftl">);
     </#if>
 
     /**

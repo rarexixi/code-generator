@@ -1,6 +1,7 @@
 <#assign className = table.tableClassName>
 <#assign classNameFirstLower = table.tableClassName?uncap_first>
 <#assign classNameLower = table.tableClassName?lower_case>
+<#assign tableShortComment = (table.tableComment?split("[（ ,，(]", "r"))[0]>
 <#assign primaryKey = table.primaryKey>
 <#assign primaryKeyParameters = table.primaryKeyParameters>
 <#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
@@ -21,40 +22,43 @@ var app = new Vue({
         </#if>
         searchParams: {
             <#list table.columns as column>
+            <#assign fieldName = column.columnFieldName?uncap_first>
             <#if column.ignoreSearch>
-            <#elseif (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
-            ${column.columnFieldNameFirstLower}: '',
+            <#elseif (column.columnName == table.validStatusField.fieldName)>
+            ${fieldName}: '${table.validStatusField.validValue}',
+            <#elseif (column.fkSelect || column.select)>
+            ${fieldName}: '',
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            ${column.columnFieldNameFirstLower}: '',
+            ${fieldName}: '',
             <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}Min: '',
-            ${column.columnFieldNameFirstLower}Max: '',
+            ${fieldName}Range: [],
             <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-            ${column.columnFieldNameFirstLower}Min: '',
-            ${column.columnFieldNameFirstLower}Max: '',
+            ${fieldName}Min: '',
+            ${fieldName}Max: '',
             <#elseif (column.columnFieldType == "String")>
-            ${column.columnFieldNameFirstLower}StartWith: '',
+            ${fieldName}StartWith: '',
             <#else>
-            ${column.columnFieldNameFirstLower}: '',
+            ${fieldName}: '',
             </#if>
             </#list>
+            sortEnums: [1],
             pageIndex: 1,
             pageSize: 10
         },
-        checkedList: [],
-        allChecked: false,
+        multipleSelection: [],
         pageInfo: {},
         addOrEditParams: {
             <#list table.columns as column>
+            <#assign fieldName = column.columnFieldName?uncap_first>
             <#if column.notRequired>
             <#elseif column.fkSelect>
-            ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column_has_next>,</#if>
             <#elseif column.columnName == table.validStatusField.fieldName>
-            ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+            ${fieldName}: '${table.validStatusField.validValue}'<#if column_has_next>,</#if>
             <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column_has_next>,</#if>
             <#else>
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column_has_next>,</#if>
             </#if>
             </#list>
         },
@@ -70,53 +74,44 @@ var app = new Vue({
             ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
             </#if>
             </#list>
-        }
+        },
+        addOrEditTitle: '',
+        detailDialogVisible: false,
+        addOrEditDialogVisible: false
     },
     mounted: function () {
-        this.search();
+        var self = this;
+        self.search();
         <#list table.columns as column>
         <#if column.fkSelect>
-        this.init${column.columnFieldName?replace('Id', '')}();
+        self.init${column.columnFieldName?replace('Id', '')}();
         </#if>
         </#list>
-    },
-    watch: {
-        'checkedList': {
-            handler: function (val, oldVal) {
-                var self = this;
-                var listLength = 0;
-                if (self.pageInfo.list) {
-                    listLength = self.pageInfo.list.length;
-                }
-
-                if (self.checkedList.length === listLength && listLength > 0) {
-                    self.allChecked = true;
-                } else {
-                    self.allChecked = false;
-                }
-            },
-            deep: true
-        }
     },
     methods: {
         <#list table.columns as column>
         <#if column.fkSelect>
+        <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
+        <#assign fieldName = column.columnFieldName?uncap_first>
         init${column.columnFieldName?replace('Id', '')}: function () {
             var self = this;
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
-                contentType : 'application/json',
-                data : JSON.stringify({
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/find',
+                contentType: 'application/json',
+                data: JSON.stringify({
                     pageIndex: 1,
                     pageSize: 1000
                 }),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        self.${column.columnFieldName?uncap_first}SelectList = response.result.list;
+                        self.${fieldName}SelectList = response.result.list;
                     } else {
-                        commonNotify.danger("获取列表失败！");
+                        self.$message({
+                            message: '获取${columnComment}列表失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });
@@ -143,15 +138,18 @@ var app = new Vue({
             self.checkedList = [];
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${classNameLower}/search',
-                contentType : 'application/json',
-                data : JSON.stringify(self.searchParams),
+                url: appConfig.baseApiPath + '/${classNameLower}/find',
+                contentType: 'application/json',
+                data: JSON.stringify(self.searchParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
                         self.pageInfo = response.result;
                     } else {
-                        commonNotify.danger("获取列表失败！");
+                        self.$message({
+                            type: 'error',
+                            message: '获取列表失败！'
+                        });
                     }
                 }
             });
@@ -162,55 +160,70 @@ var app = new Vue({
             if (self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
                 return;
             }
+            self.resetSearch();
             self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
             self.search();
         },
         </#if>
         resetSearch: function() {
             <#list table.columns as column>
+            <#assign fieldName = column.columnFieldName?uncap_first>
             <#if column.ignoreSearch>
-            <#elseif (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
-            this.searchParams.${column.columnFieldNameFirstLower} = '';
+            <#elseif (column.columnName == table.validStatusField.fieldName)>
+            this.searchParams.${fieldName} = '${table.validStatusField.validValue}';
+            <#elseif (column.fkSelect || column.select)>
+            this.searchParams.${fieldName} = '';
             <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            this.searchParams.${column.columnFieldNameFirstLower} = '';
+            this.searchParams.${fieldName} = '';
             <#elseif column.columnFieldType == "Date">
-            this.searchParams.${column.columnFieldNameFirstLower}Min = '';
-            this.searchParams.${column.columnFieldNameFirstLower}Max = '';
+            this.searchParams.${fieldName}Range = [];
             <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-            this.searchParams.${column.columnFieldNameFirstLower}Min = '';
-            this.searchParams.${column.columnFieldNameFirstLower}Max = '';
+            this.searchParams.${fieldName}Min = '';
+            this.searchParams.${fieldName}Max = '';
             <#elseif (column.columnFieldType == "String")>
-            this.searchParams.${column.columnFieldNameFirstLower}StartWith = '';
+            this.searchParams.${fieldName}StartWith = '';
             <#else>
-            this.searchParams.${column.columnFieldNameFirstLower} = '';
+            this.searchParams.${fieldName} = '';
             </#if>
             </#list>
             this.searchParams.pageIndex = 1;
             this.searchParams.pageSize = 10;
         },
         add: function() {
-            this.resetSave();
-        },
-        edit: function (${primaryKeyParameterValues}) {
-            this.resetSave();
             var self = this;
+            self.resetSave();
+            self.addOrEditDialogVisible = true;
+            self.addOrEditTitle = '添加${tableShortComment}';
+        },
+        edit: function (<#include "/include/table/primary_values.ftl">) {
+            var self = this;
+            self.resetSave();
+            self.addOrEditDialogVisible = true;
+            self.addOrEditTitle = '编辑${tableShortComment}';
             <#if !table.hasAutoIncrementUniquePrimaryKey>
-            <#list primaryKey as column>self.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
+            <#list primaryKey as column>
+            <#assign fieldName = column.columnFieldName?uncap_first>
+            self.old${column.columnFieldName} = ${fieldName};
+            </#list>
             </#if>
             $.ajax({
                 type: 'get',
-                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/getDetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
                         <#list table.columns as column>
                         <#if column.notRequired>
                         <#else>
-                        self.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                        <#assign fieldName = column.columnFieldName?uncap_first>
+                        self.addOrEditParams.${fieldName} = '' + response.result.${fieldName};
                         </#if>
                         </#list>
                     } else {
-                        commonNotify.danger("获取详情失败！");
+                        self.$message({
+                            message: '获取详情失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });
@@ -234,61 +247,69 @@ var app = new Vue({
             $.ajax({
                 type: 'post',
                 url: ajaxUrl,
-                contentType : 'application/json',
-                data : JSON.stringify(self.addOrEditParams),
+                contentType: 'application/json',
+                data: JSON.stringify(self.addOrEditParams),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        commonNotify.success("操作成功！", self.search);
+                        self.$message({
+                            message: '操作成功！',
+                            type: 'success'
+                        });
+                        self.resetSave();
+                        setTimeout(self.search, 1000);
                     } else {
-                        commonNotify.danger("操作失败！");
+                        self.$message({
+                            message: '操作失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });
         },
         resetSave: function() {
+            var self = this;
             <#list table.columns as column>
             <#if column.notRequired>
             <#elseif column.fkSelect>
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = 0;
+            self.addOrEditParams.${column.columnFieldNameFirstLower} = '';
             <#elseif column.columnName == table.validStatusField.fieldName>
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = ${table.validStatusField.validValue};
+            self.addOrEditParams.${column.columnFieldNameFirstLower} = '${table.validStatusField.validValue}';
             <#elseif column.columnFieldType == "Date">
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = '';
+            self.addOrEditParams.${column.columnFieldNameFirstLower} = '';
             <#else>
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = '';
+            self.addOrEditParams.${column.columnFieldNameFirstLower} = '';
             </#if>
             </#list>
+            self.closeDialog();
         },
-        get: function (${primaryKeyParameterValues}) {
+        get: function (<#include "/include/table/primary_values.ftl">) {
             var self = this;
+            self.detailDialogVisible = true;
             $.ajax({
                 type: 'get',
-                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/getDetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
                         self.detail = response.result;
                     } else {
-                        commonNotify.danger("获取详情失败！");
+                        self.$message({
+                            message: '获取详情失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });
         },
-        <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
-        checkAll: function (moduleName) {
+        closeDialog: function () {
             var self = this;
-
-            if (self.allChecked) {
-                self.checkedList = [];
-            } else {
-                self.checkedList = [];
-                if (self.pageInfo.list) {
-                    self.pageInfo.list.forEach(function (item) {
-                        self.checkedList.push(item.${table.uniquePrimaryKey.columnFieldName?uncap_first});
-                    });
-                }
-            }
+            self.detailDialogVisible = false;
+            self.addOrEditDialogVisible = false;
+        },
+        <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+        handleSelectionChange: function(val) {
+            this.multipleSelection = val;
         },
         <#if table.validStatusColumn??>
         enableSelected: function () {
@@ -303,51 +324,78 @@ var app = new Vue({
         },
         execSelected: function (confirmMsg, url, successMsg, failMsg) {
             var self = this;
-            commonNotify.confirm(confirmMsg, function() {
+            var checkedList = [];
+            for (var i = 0; i < self.multipleSelection.length; i++) {
+                var item = self.multipleSelection[i];
+                checkedList.push(item.<#include "/include/table/primary_values.ftl">);
+            }
+            self.$confirm(confirmMsg, '', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
                 $.ajax({
                     type: 'post',
                     url: appConfig.baseApiPath + url,
-                    contentType : 'application/json',
-                    data : JSON.stringify(self.checkedList),
+                    contentType: 'application/json',
+                    data: JSON.stringify(checkedList),
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success(successMsg, self.search);
+                            self.$message({
+                                type: 'success',
+                                message: successMsg
+                            });
+                            self.search();
                         } else {
-                            commonNotify.danger(failMsg);
+                            self.$message({
+                                type: 'error',
+                                message: failMsg
+                            });
                         }
-                        self.checkedList = [];
+                        self.multipleSelection = [];
                     }
                 });
             });
         },
         </#if>
         <#if table.validStatusColumn??>
-        enable: function (${primaryKeyParameterValues}) {
+        enable: function (<#include "/include/table/primary_values.ftl">) {
             var url = '/${classNameLower}/enable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
             this.exec("确定启用吗？", url, "启用成功！", "启用失败！");
         },
-        disable: function (${primaryKeyParameterValues}) {
+        disable: function (<#include "/include/table/primary_values.ftl">) {
             var url = '/${classNameLower}/disable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
             this.exec("确定禁用吗？", url, "禁用成功！", "禁用失败！");
         },
         </#if>
-        del: function (${primaryKeyParameterValues}) {
+        del: function (<#include "/include/table/primary_values.ftl">) {
             var url = '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
             this.exec("确定删除吗？", url, "删除成功！", "删除失败！");
         },
         exec: function (confirmMsg, url, successMsg, failMsg) {
             var self = this;
-            commonNotify.confirm(confirmMsg, function() {
+            self.$confirm(confirmMsg, '', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
                 $.ajax({
                     type: 'get',
                     url: appConfig.baseApiPath + url,
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success(successMsg, self.search);
+                            self.$message({
+                                type: 'success',
+                                message: successMsg
+                            });
+                            self.search();
                         } else {
-                            commonNotify.danger(failMsg);
+                            self.$message({
+                                type: 'error',
+                                message: failMsg
+                            });
                         }
                     }
                 })

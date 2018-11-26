@@ -1,4 +1,4 @@
-<#assign className = table.tableClassName>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.vo;
 
 import ${basePackage}.entity.${table.tableClassName}Entity;

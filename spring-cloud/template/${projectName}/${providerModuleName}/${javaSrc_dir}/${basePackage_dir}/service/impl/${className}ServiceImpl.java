@@ -1,15 +1,10 @@
-<#assign className = table.tableClassName>
-<#assign classNameLower = table.tableClassName?uncap_first>
-<#assign primaryKey = table.primaryKey>
-<#assign primaryKeyParameters = table.primaryKeyParameters>
-<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.service.impl;
 
+import ${baseCommonPackage}.mapper.BaseMapper;
 import ${baseCommonPackage}.model.SearchPage;
-import ${baseCommonPackage}.service.impl.BaseServiceImpl;
 import ${basePackage}.condition.${className}Condition;
 import ${basePackage}.entity.${className}Entity;
-import ${basePackage}.mapper.BaseMapper;
 import ${basePackage}.parameter.${className}SelectParameter;
 import ${basePackage}.mapper.${className}Mapper;
 import ${basePackage}.service.${className}Service;
@@ -50,8 +45,8 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     @Transactional(readOnly = true)
     @Override
-    public ${className}Vo getByPk(${primaryKeyParameters}) {
-        ${className}Vo vo = ${classNameLower}Mapper.getByPk(${primaryKeyParameterValues});
+    public ${className}Vo getByPk(<#include "/include/table/primary_parameters.ftl">) {
+        ${className}Vo vo = ${classNameLower}Mapper.getByPk(<#include "/include/table/primary_values.ftl">);
         return vo;
     }
     </#if>

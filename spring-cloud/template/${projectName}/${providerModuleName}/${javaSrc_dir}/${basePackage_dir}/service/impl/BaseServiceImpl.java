@@ -1,9 +1,9 @@
-package ${basePackage}.service.impl;
+package ${baseCommonPackage}.service.impl;
 
+import ${baseCommonPackage}.mapper.BaseMapper;
+import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.SearchPage;
-import ${basePackage}.condition.order.OrderCondition;
-import ${basePackage}.mapper.BaseMapper;
-import ${basePackage}.service.BaseService;
+import ${baseCommonPackage}.service.BaseService;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

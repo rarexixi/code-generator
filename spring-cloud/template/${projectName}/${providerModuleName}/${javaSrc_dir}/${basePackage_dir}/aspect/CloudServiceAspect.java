@@ -5,7 +5,6 @@ import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.utils.AnnotationUtils;
 import ${baseCommonPackage}.utils.LogUtils;
 
-import org.apache.commons.lang3.time.StopWatch;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -14,9 +13,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -52,37 +54,25 @@ public class CloudServiceAspect {
             return proceedingJoinPoint.proceed();
         }
 
-        String methodName = "";
-        String sessionId = "";
+        MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        String methodName = request.getRemoteHost() + method.getDeclaringClass().getName() + "." + method.getName();
+
         try {
-
-            MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
-            Method method = methodSignature.getMethod();
-            methodName = request.getRemoteHost() + " - " + method.getDeclaringClass().getName() + "." + method.getName();
-            sessionId = getSessionId(method, proceedingJoinPoint.getArgs(), methodName);
-
-            logger.info(methodName, sessionId, "Cloud 服务开始执行", proceedingJoinPoint.getArgs());
-
-            // StopWatch 计时
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
-            Object result = proceedingJoinPoint.proceed();
-            stopWatch.stop();
-
-            if (logger.isInfoEnabled()) {
-                Map<String, Object> args = new HashMap<>(8);
-                args.put("开始执行时间", stopWatch.getStartTime());
-                args.put("开始执行时间（用来展示）", new Date(stopWatch.getStartTime()).toString());
-                args.put("入参", proceedingJoinPoint.getArgs());
-                args.put("出参", result);
-                args.put("方法执行时长(ms)", stopWatch.getTime());
-                logger.info(methodName, sessionId, "Cloud 服务执行结束", args);
+            List<String> messages = getErrorMessage(proceedingJoinPoint.getArgs());
+            if (!messages.isEmpty()) {
+                logger.error(methodName, "参数验证失败", messages);
+                return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, messages);
             }
-            return result;
-        } catch (Exception e) {
-            logger.error(methodName, sessionId, "Cloud 服务出现异常", e);
-        }
 
+            Object result = proceedingJoinPoint.proceed();
+            return result;
+        } catch (ValidationException e) {
+            logger.error(methodName, "参数验证失败", e);
+            return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, e.getMessage());
+        } catch (Exception e) {
+            logger.error(methodName, "服务出现异常", e);
+        }
         return new ResultVo<>(OperationConstants.SYSTEM_ERROR);
     }
 
@@ -99,5 +89,38 @@ public class CloudServiceAspect {
             sessionId = UUID.randomUUID();
         }
         return sessionId.toString();
+    }
+
+    /**
+     * 获取非Errors类型参数，否则转json报错
+     *
+     * @param args
+     * @return
+     */
+    private List<Object> getParameters(Object[] args) {
+        List<Object> parameters = new LinkedList<>();
+        for (Object arg : args) {
+            if (arg instanceof Errors) continue;
+            parameters.add(arg);
+        }
+        return parameters;
+    }
+
+    /**
+     * 获取拦截的Errors信息
+     *
+     * @param args
+     * @return
+     */
+    private List<String> getErrorMessage(Object[] args) {
+        List<String> messages = new LinkedList<>();
+        for (Object arg : args) {
+            if (arg instanceof Errors && ((Errors) arg).hasErrors()) {
+                for (ObjectError objectError : ((Errors) arg).getAllErrors()) {
+                    messages.add(objectError.getDefaultMessage());
+                }
+            }
+        }
+        return messages;
     }
 }

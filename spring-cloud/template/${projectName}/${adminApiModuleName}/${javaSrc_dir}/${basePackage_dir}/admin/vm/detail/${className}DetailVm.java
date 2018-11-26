@@ -1,4 +1,4 @@
-<#assign className = table.tableClassName>
+<#include "/include/table/properties.ftl">
 <#assign sortCount = 0>
 package ${basePackage}.admin.vm.detail;
 

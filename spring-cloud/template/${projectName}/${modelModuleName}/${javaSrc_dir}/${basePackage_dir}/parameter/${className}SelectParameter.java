@@ -1,4 +1,4 @@
-<#assign className = table.tableClassName>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.parameter;
 
 import ${basePackage}.condition.order.BaseOrderCondition;

@@ -31,13 +31,16 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: appConfig.baseApiPath + '/${classNameLower}/detail' + window.location.search,
+                url: appConfig.baseApiPath + '/${classNameLower}/getDetail' + window.location.search,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
                         self.detail = response.result;
                     } else {
-                        commonNotify.danger("获取详情失败！");
+                        self.$message({
+                            message: '获取详情失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });
@@ -51,9 +54,15 @@ var app = new Vue({
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {
-                            commonNotify.success("删除成功！", self.goback);
+                            self.$message({
+                                message: '删除成功！',
+                                type: 'success'
+                            });
                         } else {
-                            commonNotify.danger("删除失败！");
+                            self.$message({
+                                message: '删除失败！',
+                                type: 'error'
+                            });
                         }
                     }
                 })

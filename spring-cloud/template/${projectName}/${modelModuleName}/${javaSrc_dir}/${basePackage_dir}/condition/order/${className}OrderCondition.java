@@ -1,4 +1,4 @@
-<#assign className = table.tableClassName>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.condition.order;
 
 import java.io.Serializable;

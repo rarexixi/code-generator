@@ -8,7 +8,6 @@ import java.io.Serializable;
 public class ResultVo<T> implements Serializable {
 
     public ResultVo() {
-
     }
 
     public ResultVo(T result) {
@@ -19,15 +18,24 @@ public class ResultVo<T> implements Serializable {
         this(false, constants.getCode(), constants.getMessage(), null);
     }
 
+    public ResultVo(OperationConstants constants, Object extData) {
+        this(false, constants.getCode(), constants.getMessage(), null, extData);
+    }
+
     public ResultVo(int code, String message) {
         this(false, code, message, null);
     }
 
     public ResultVo(boolean success, int code, String message, T result) {
+        this(success, code, message, result, null);
+    }
+
+    public ResultVo(boolean success, int code, String message, T result, Object extData) {
         this.success = success;
         this.code = code;
         this.message = message;
         this.result = result;
+        this.extData = extData;
     }
 
     /**
@@ -46,6 +54,10 @@ public class ResultVo<T> implements Serializable {
      * 返回数据
      */
     private T result;
+    /**
+     * 额外数据
+     */
+    private Object extData;
 
     public boolean isSuccess() {
         return success;
@@ -77,6 +89,14 @@ public class ResultVo<T> implements Serializable {
 
     public void setResult(T result) {
         this.result = result;
+    }
+
+    public Object getExtData() {
+        return extData;
+    }
+
+    public void setExtData(Object extData) {
+        this.extData = extData;
     }
 
     @Override

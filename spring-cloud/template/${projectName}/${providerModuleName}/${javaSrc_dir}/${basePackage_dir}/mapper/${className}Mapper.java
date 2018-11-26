@@ -1,6 +1,4 @@
-<#assign className = table.tableClassName>
-<#assign classNameLower = table.tableClassName?uncap_first>
-<#assign primaryKey = table.primaryKey>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.mapper;
 
 import ${baseCommonPackage}.mapper.BaseMapper;

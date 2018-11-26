@@ -22,15 +22,16 @@ var app = new Vue({
         addOrEditTitle: '',
         addOrEditParams: {
             <#list table.columns as column>
+            <#assign fieldName = column.columnFieldName?uncap_first>
             <#if column.notRequired>
             <#elseif column.fkSelect>
-            ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column_has_next>,</#if>
             <#elseif column.columnName == table.validStatusField.fieldName>
-            ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+            ${fieldName}: '${table.validStatusField.validValue}'<#if column_has_next>,</#if>
             <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column_has_next>,</#if>
             <#else>
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column_has_next>,</#if>
             </#if>
             </#list>
         }
@@ -42,14 +43,16 @@ var app = new Vue({
         </#if>
         </#list>
         <#list primaryKey as column>
-        var ${column.columnFieldNameFirstLower} = commonFun.getParam('${column.columnFieldNameFirstLower}');
+        <#assign fieldName = column.columnFieldName?uncap_first>
+        var ${fieldName} = commonFun.getParam('${fieldName}');
         </#list>
         <#if !table.hasAutoIncrementUniquePrimaryKey>
         <#list primaryKey as column>
-        this.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};
+        <#assign fieldName = column.columnFieldName?uncap_first>
+        this.old${column.columnFieldName} = ${fieldName};
         </#list>
         </#if>
-        if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.columnFieldNameFirstLower} != null && ${column.columnFieldNameFirstLower} != ''</#list>) {
+        if (<#list primaryKey as column><#assign fieldName = column.columnFieldName?uncap_first><#if (column_index > 0)> && </#if>${fieldName} != null && ${fieldName} != ''</#list>) {
             this.getEditDetail();
         }
 
@@ -59,11 +62,13 @@ var app = new Vue({
     methods: {
         <#list table.columns as column>
         <#if column.fkSelect>
+        <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
+        <#assign fieldName = column.columnFieldName?uncap_first>
         init${column.columnFieldName?replace('Id', '')}: function () {
             var self = this;
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/find',
                 contentType : 'application/json',
                 data : JSON.stringify({
                     pageIndex: 1,
@@ -72,9 +77,12 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        self.${column.columnFieldName?uncap_first}SelectList = response.result.list;
+                        self.${fieldName}SelectList = response.result.list;
                     } else {
-                        commonNotify.danger("获取列表失败！");
+                        self.$message({
+                            message: '获取${columnComment}列表失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });
@@ -85,7 +93,7 @@ var app = new Vue({
             var self = this;
             var ajaxUrl;
             <#if table.hasAutoIncrementUniquePrimaryKey>
-            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldNameFirstLower} == ''</#list>) {
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldName?uncap_first} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
             } else {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit';
@@ -105,9 +113,16 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        commonNotify.success("操作成功！", self.cancelSave);
+                        self.$message({
+                            message: '操作成功！',
+                            type: 'success'
+                        });
+                        setTimeout(self.cancelSave, 1000);
                     } else {
-                        commonNotify.danger("操作失败！");
+                        self.$message({
+                            message: '操作失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });
@@ -123,11 +138,15 @@ var app = new Vue({
                         <#list table.columns as column>
                         <#if column.notRequired>
                         <#else>
-                        self.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                        <#assign fieldName = column.columnFieldName?uncap_first>
+                        self.addOrEditParams.${fieldName} = '' + response.result.${fieldName};
                         </#if>
                         </#list>
                     } else {
-                        commonNotify.danger("获取详情失败！");
+                        self.$message({
+                            message: '获取详情失败！',
+                            type: 'error'
+                        });
                     }
                 }
             });

@@ -10,7 +10,7 @@
 
     <parent>
         <groupId>${projectGroup}</groupId>
-        <artifactId>${projectName}-common-parent</artifactId>
+        <artifactId>${projectName}-boot-parent</artifactId>
         <version>${projectVersion}</version>
         <relativePath/>
     </parent>
@@ -24,6 +24,11 @@
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

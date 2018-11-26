@@ -1,7 +1,7 @@
-package ${basePackage}.service;
+package ${baseCommonPackage}.service;
 
+import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.SearchPage;
-import ${basePackage}.condition.order.OrderCondition;
 
 import com.github.pagehelper.PageInfo;
 

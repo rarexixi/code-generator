@@ -1,4 +1,4 @@
-<#assign className = table.tableClassName>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.admin.vm.addoredit;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

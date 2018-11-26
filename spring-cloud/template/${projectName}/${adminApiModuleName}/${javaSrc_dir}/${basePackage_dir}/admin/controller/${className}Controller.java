@@ -1,13 +1,10 @@
-<#assign className = table.tableClassName>
-<#assign classNameLower = table.tableClassName?uncap_first>
-<#assign primaryKey = table.primaryKey>
-<#assign primaryKeyParameters = table.primaryKeyParameters>
-<#assign primaryKeyParameterValues = table.primaryKeyParameterValues>
+<#include "/include/table/properties.ftl">
 package ${basePackage}.admin.controller;
 
 import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.utils.LogUtils;
+import ${baseCommonPackage}.validation.*;
 import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
@@ -21,7 +18,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.*;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +28,7 @@ import java.util.stream.Collectors;
 <#include "/include/java_copyright.ftl">
 @RestController
 @RequestMapping("/${table.tableClassName?lower_case}")
+@Validated
 public class ${className}Controller {
 
     private static LogUtils logger = LogUtils.build(${className}Controller.class);
@@ -47,7 +47,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/add" }, method = RequestMethod.POST)
-    public ResponseVo<${className}AddOrEditVm> add(${className}AddOrEditVm vm) {
+    public ResponseVo<${className}AddOrEditVm> add(@Validated({DataAdd.class}) ${className}AddOrEditVm vm) {
 
         ResponseVo<${className}AddOrEditVm> responseVo;
         ${className}Entity entity = vm.get${className}Entity();
@@ -70,7 +70,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/edit" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> edit(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
+    public ResponseVo<Integer> edit(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
 
         ResponseVo<Integer> responseVo;
         ResultVo<Integer> apiResult = ${classNameLower}Service.update(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, getSessionId());
@@ -116,10 +116,10 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
      @RequestMapping(value = { "/delete" }, method = RequestMethod.GET)
-     public ResponseVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
+     public ResponseVo<Integer> delete(<#include "/include/table/validate_primary_parameters.ftl">) {
 
          ResponseVo<Integer> responseVo;
-         ResultVo<Integer> apiResult = ${classNameLower}Service.delete(${primaryKeyParameterValues}, getSessionId());
+         ResultVo<Integer> apiResult = ${classNameLower}Service.delete(<#include "/include/table/primary_values.ftl">, getSessionId());
          if (apiResult.isSuccess()) {
              responseVo = new ResponseVo<>(apiResult.getResult());
          } else {
@@ -163,10 +163,10 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disable", method = RequestMethod.GET)
-    public ResponseVo<Integer> disable(${primaryKeyParameters}) {
+    public ResponseVo<Integer> disable(<#include "/include/table/validate_primary_parameters.ftl">) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(<#include "/include/table/primary_values.ftl">, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -186,10 +186,10 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enable", method = RequestMethod.GET)
-    public ResponseVo<Integer> enable(${primaryKeyParameters}) {
+    public ResponseVo<Integer> enable(<#include "/include/table/validate_primary_parameters.ftl">) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(<#include "/include/table/primary_values.ftl">, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -254,12 +254,13 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/detail" }, method = RequestMethod.GET)
-    public ResponseVo<${className}DetailVm> detail(<#list primaryKey as column><#if (column_index > 0)>, </#if>@RequestParam("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>) {
+    public ResponseVo<${className}DetailVm> detail(<#include "/include/table/validate_primary_parameters.ftl">) {
 
         ResponseVo<${className}DetailVm> responseVo;
-        ResultVo<${className}Vo> apiResult = ${classNameLower}Service.get(${primaryKeyParameterValues}, getSessionId());
+        ResultVo<${className}Vo> apiResult = ${classNameLower}Service.get(<#include "/include/table/primary_values.ftl">, getSessionId());
         if (apiResult.isSuccess()) {
-            responseVo = new ResponseVo<>(true);
+            responseVo = new ResponseVo<>();
+            responseVo.setSuccess(true);
             ${className}Vo vo;
             if ((vo = apiResult.getResult()) != null) {
                 ${className}DetailVm vm = new ${className}DetailVm(vo);

@@ -1,6 +1,6 @@
-package ${basePackage}.mapper;
+package ${baseCommonPackage}.mapper;
 
-import ${basePackage}.condition.order.OrderCondition;
+import ${baseCommonPackage}.model.OrderCondition;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

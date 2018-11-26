@@ -4,9 +4,9 @@ package ${baseCommonPackage}.constant;
 public enum OperationConstants {
 
     SYSTEM_ERROR(100000, "系统错误"),
-    NOT_NULL(100001, "不能为空"),
-    VALIDATION_NOT_PASS(100002, "验证不通过"),
-    SERVICE_NOT_AVAILABLE(100100, "服务提供方不存在");
+    SERVICE_NOT_AVAILABLE(100100, "服务提供方不存在"),
+    NOT_NULL(200101, "不能为空"),
+    PARAMETER_VALIDATION_FAILED(200102, "参数验证不通过");
 
     private String message;
     private int code;
