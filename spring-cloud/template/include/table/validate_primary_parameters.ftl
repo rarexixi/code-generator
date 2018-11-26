@@ -1,0 +1,1 @@
+<#list primaryKey as column><#if (column_index > 0)>, </#if>@NotNull ${column.columnFieldType} ${column.columnFieldName?uncap_first}</#list>
