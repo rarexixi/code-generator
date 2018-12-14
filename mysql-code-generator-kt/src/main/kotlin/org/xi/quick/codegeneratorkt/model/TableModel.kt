@@ -3,6 +3,7 @@ package org.xi.quick.codegeneratorkt.model
 import org.xi.quick.codegeneratorkt.entity.Table
 import org.xi.quick.codegeneratorkt.StaticConfigData
 import org.xi.quick.codegeneratorkt.extensions.getCamelCaseName
+import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
 import java.util.ArrayList
 
 class TableModel(table: Table,
@@ -15,7 +16,9 @@ class TableModel(table: Table,
 
     val tableName: String? = table.tableName            // 表名
 
-    val tableClassName: String? = table.tableName.getCamelCaseName()    // 表对应的JAVA类名
+    val targetTableName: String =table.tableName.getTargetTableName()!! // 获取目标表名
+
+    val tableClassName: String? = table.tableName.getTargetTableName().getCamelCaseName()    // 表对应的JAVA类名
 
     val tableComment: String? = if (table.tableComment.isNullOrBlank()) tableClassName else table.tableComment  // 表说明
 

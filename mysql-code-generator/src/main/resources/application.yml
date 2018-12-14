@@ -1,12 +1,13 @@
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   config-location: classpath:mybatis-config.xml
   type-aliases-package: org.xi.quick.codegenerator.mapper
 spring:
   datasource:
-    url: jdbc:mysql://192.168.46.141:30111/business_data?
-    username: business_data_rw
-    password: zelMM2bh62RtFgJ9
+    url: jdbc:mysql://127.0.0.1:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
 dollar: $
@@ -14,72 +15,69 @@ dollar: $
 generator:
   encoding: UTF-8                # 代码字符集
   path:
-    template: /Workspace/github.com/java/code-generator/company/template/  # 模版路径
+    template: /Workspace/github.com/java/code-generator/spring-cloud/template/  # 模版路径
     out: /Workspace/gitee.com/            # 输出路径
   file:
     ignore: include/                                        # 要忽略的文件
-    aggregate: ${dollar}{adminWebModuleName}/index.html
+    aggregate: ${dollar}{adminWebModuleName}/index.html, static/index.html
     # 聚合文件
     just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js, .gitignore
     # 仅复制文件
   valid-status-field:                                       # 是否删除字段
-    fieldName: is_delete                                   # 字段名
+    fieldName: is_deleted                                   # 字段名
     validValue: 0                                           # 有效值
     invalidValue: 1                                         # 无效值
   fk-select-fields:                                         # 逻辑外键字段，用于前台select生成
-  - nameSet: source_terminal_code, region_code, page_type_code, event_type_code, sub_event_type_code, parent_enum_id
-    foreignTable: dim_uba_enum
-    keyField: enum_id                                          # 对应的关联表外键字段
-    valueField: enum_name                            # 对应的关联表外键值
-  - nameSet: app_key                                 # 当前表字段名
-    table: dim_uba_eventgen
-    foreignTable: dim_app                               # 对应的关联表
-    keyField: app_key                                          # 对应的关联表外键字段
-    valueField: app_name                            # 对应的关联表外键值
-  - nameSet: page_id                                 # 当前表字段名
-    table: dim_uba_event
-    foreignTable: dim_uba_event                               # 对应的关联表
-    keyField: page_id                                          # 对应的关联表外键字段
-    valueField: page_name                            # 对应的关联表外键值
-  - nameSet: app_key                                 # 当前表字段名
-    table: dim_uba_page
-    foreignTable: dim_app                               # 对应的关联表
-    keyField: app_key                                          # 对应的关联表外键字段
-    valueField: app_name                            # 对应的关联表外键值
+  - nameSet: user_type_id                                 # 当前表字段名
+    foreignTable: user_type                               # 对应的关联表
+    keyField: id                                          # 对应的关联表外键字段
+    valueField: user_type_name                            # 对应的关联表外键值
   field:
     not-required: create_time, update_time
     select:
-    - nameSet: is_internal_use
+    - nameSet: status
+      tableName: multi_pk
       options:
-      - value: 0
-        text: 否
       - value: 1
-        text: 是
-    img-url: help_img
+        text: 正常
+      - value: 2
+        text: 提高
+      - value: 3
+        text: 起飞
+    img-url: photo
     video-url:
     doc-url:
     page-url:
     other-url:
-    content: data_json, sdk_code, remark
+    content: introduction, remark
 
   # 公共自定义属性
   common-properties:
+    projectName: quick-cloud-auto1
+    projectShortName: quick
+    projectGroup: org.xi
+    projectVersion: 1.0-SNAPSHOT
 
-    projectName: ampmind-data-webserver-auto
-    projectShortName: 流量监控系统
-    projectGroup: com.chehejia.data
-    projectVersion: 0.0.0.2-SNAPSHOT
+    basePackage: org.xi.quick
+    baseCommonPackage: org.xi.common
 
-    basePackage: com.chehejia.data.webanalysis
+    commonModuleName: quick-common
+    modelModuleName: quick-model
+    providerModuleName: quick-provider
+    adminApiModuleName: quick-admin-api
+    eurekaServerModuleName: quick-eureka-server
 
-    adminApiModuleName: ampmind-data-admin-api
-    adminWebModuleName: ampmind-data-admin-web
+    providerModuleApplicationName: QuickProviderApplication
+    adminModuleApplicatioName: QuickAdminApplication
+    eurekaServerModuleApplicatioName: QuickEurekaServerApplication
 
-    adminModuleApplicationName: WebAnalysisAdminApplication
+    eurekaServerPort: 8770
+    providerServicePort: 8810
+    adminServicePort: 8820
 
     baseApiPath: http://localhost:8820
 
-    author: 郗世豪（xishihao@chehejia.com）
+    author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
     javaSrc: src.main.java
     javaTestSrc: src.test.java

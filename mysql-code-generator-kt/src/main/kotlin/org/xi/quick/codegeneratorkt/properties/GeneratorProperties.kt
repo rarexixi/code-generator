@@ -22,6 +22,11 @@ class GeneratorProperties {
     var validStatusField: ValidStatusField? = null
 
     /**
+     * 获取目标表名正则
+     */
+    var tableNameMatchRegex: String? = null
+
+    /**
      * 外键选择字段
      */
     var fkSelectFields: Array<FkSelectField> = arrayOf()

@@ -1,7 +1,11 @@
 package org.xi.quick.codegenerator.utils;
 
+import org.xi.quick.codegenerator.staticdata.StaticConfigData;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +69,24 @@ public class StringUtils {
                 .collect(Collectors.joining(""));
 
         return camelCaseName;
+    }
+
+    /**
+     * 获取目标表名
+     *
+     * @param s
+     * @return
+     */
+    public static String getTargetTableName(String s) {
+
+        if (s == null || s.trim().isEmpty()) return s;
+
+        Pattern pattern = Pattern.compile(StaticConfigData.TABLE_NAME_MATCH_REGEX);
+        Matcher matcher = pattern.matcher(s);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return s;
     }
 
 

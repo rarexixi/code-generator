@@ -31,6 +31,7 @@ object StaticConfigData {
     var FK_SELECT_FIELDS: Array<FkSelectField> = arrayOf()
 
     var CODE_ENCODING: String = "UTF-8"
+    var TABLE_NAME_MATCH_REGEX: String? = null
 
     var COMMON_PROPERTIES: MutableMap<String, Any> = HashMap()
 }

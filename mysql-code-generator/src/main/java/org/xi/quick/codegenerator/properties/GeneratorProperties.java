@@ -23,9 +23,15 @@ public class GeneratorProperties {
     private String encoding;
 
     /**
+     * 获取目标表名正则
+     */
+    private String tableNameMatchRegex;
+
+    /**
      * 有效性字段
      */
     private ValidStatusField validStatusField;
+
     /**
      * 外键选择字段
      */
@@ -46,6 +52,14 @@ public class GeneratorProperties {
 
     public void setEncoding(String encoding) {
         this.encoding = encoding;
+    }
+
+    public String getTableNameMatchRegex() {
+        return tableNameMatchRegex;
+    }
+
+    public void setTableNameMatchRegex(String tableNameMatchRegex) {
+        this.tableNameMatchRegex = tableNameMatchRegex;
     }
 
     public ValidStatusField getValidStatusField() {

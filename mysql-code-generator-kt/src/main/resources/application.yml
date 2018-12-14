@@ -14,6 +14,7 @@ dollar: $
 
 generator:
   encoding: UTF-8                # 代码字符集
+  table-name-match-regex: '(?<=dm_uba_).*(?=_tmp)'    # 获取目标表名正则
   path:
     template: /Workspace/github.com/java/mysql-code-generator/dubbo/template/  # 模版路径
     out: /Workspace/gitee.com/            # 输出路径

@@ -1,5 +1,8 @@
 package org.xi.quick.codegeneratorkt.extensions
 
+import org.xi.quick.codegeneratorkt.StaticConfigData
+import java.util.regex.Pattern
+
 /**
  * 获取首字母小写
  *
@@ -43,4 +46,19 @@ fun String?.getCamelCaseNameBy(delimiter: String): String? {
     return this!!.replace("$delimiter+[a-z]".toRegex()) {
         it.value[1].toUpperCase() + ""
     }
+}
+
+/**
+ * 获取目标表名
+ */
+fun String?.getTargetTableName(): String? {
+
+    if (this.isNullOrBlank()) return this
+
+    val pattern = Pattern.compile(StaticConfigData.TABLE_NAME_MATCH_REGEX)
+    val matcher = pattern.matcher(this)
+    if (matcher.find()) {
+        return matcher.group()
+    }
+    return this
 }

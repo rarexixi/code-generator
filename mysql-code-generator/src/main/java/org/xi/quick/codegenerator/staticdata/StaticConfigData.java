@@ -55,6 +55,7 @@ public class StaticConfigData {
     public static FkSelectField[] FK_SELECT_FIELDS;
 
     public static String CODE_ENCODING;
+    public static String TABLE_NAME_MATCH_REGEX;
 
     public static Map<String, Object> COMMON_PROPERTIES;
 }

@@ -17,7 +17,8 @@ public class TableModel {
 
         databaseName = table.getTableSchema();
         tableName = table.getTableName();
-        tableClassName = StringUtils.getCamelCaseName(tableName);
+        targetTableName = StringUtils.getTargetTableName(tableName);
+        tableClassName = StringUtils.getCamelCaseName(targetTableName);
         String comment = table.getTableComment();
         tableComment = StringUtils.isEmpty(comment) ? tableClassName : comment;
         this.columns = columns;
@@ -36,6 +37,10 @@ public class TableModel {
      * 表名
      */
     private String tableName;
+    /**
+     * 目标表名
+     */
+    private String targetTableName;
     /**
      * 表对应的JAVA类名
      */
