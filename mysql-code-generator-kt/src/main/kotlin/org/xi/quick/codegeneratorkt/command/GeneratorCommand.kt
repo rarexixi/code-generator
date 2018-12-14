@@ -92,15 +92,15 @@ class GeneratorCommand : CommandLineRunner {
                 return
             }
             "gen" -> {
-                operate(tableNameSet, getArgs(sc), OperateEnum.Generate)
+                generate(tableNameSet, getArgs(sc))
                 return
             }
             "del" -> {
-                operate(tableNameSet, getArgs(sc), OperateEnum.Delete)
+                delete(tableNameSet, getArgs(sc))
                 return
             }
             "show", "s" -> {
-                println(tableNameSet.joinToString(" "))
+                showTables(tableNameSet)
                 return
             }
             "quit", "q" -> {
@@ -114,29 +114,62 @@ class GeneratorCommand : CommandLineRunner {
         }
     }
 
-    private fun operate(tableNameSet: Set<String>, tables: Array<String>, operateEnum: OperateEnum) {
+    private fun generate(tableNameSet: Set<String>, tables: Array<String>) {
 
         if (tables.isEmpty()) return
 
-        val tableListNotExist = ArrayList<String>()
-        if (operateEnum == OperateEnum.Generate) {
-            for (table in tables) {
-                if (!tableNameSet.contains(table)) {
-                    tableListNotExist.add(table)
-                    continue
+        invoke(tableNameSet, tables) { tablesToGen, tablesNotExist ->
+            run {
+                tablesToGen.forEach { generatorService.generate(it) }
+                if (!tablesNotExist.isEmpty()) {
+                    logger.warn("表" + tablesNotExist.joinToString(",") + "不存在或者没有配置")
                 }
-                generatorService.generate(table)
             }
-            if (!tableListNotExist.isEmpty()) {
-                logger.warn("表" + tableListNotExist.joinToString(",") + "不存在")
+        }
+    }
+
+    private fun delete(tableNameSet: Set<String>, tables: Array<String>) {
+
+        if (tables.isEmpty()) return
+        invoke(tableNameSet, tables) { tablesToGen, tablesNotExist ->
+            run {
+                tablesToGen.forEach { generatorService.delete(it) }
             }
-        } else {
-            for (table in tables) {
-                if (!tableNameSet.contains(table)) {
-                    tableListNotExist.add(table)
-                    continue
+        }
+    }
+
+    private fun invoke(tableNameSet: Set<String>, tables: Array<String>, consume: (Set<String>, Set<String>) -> Unit) {
+
+        var tablesToGen = HashSet<String>()
+        val tablesNotExist = HashSet<String>()
+
+        for (table in tables) {
+            if (tableNameSet.contains(table)) {
+                tablesToGen.add(table)
+            } else if (table.contains("*")) {
+                var tableRegex = ('^' + table.replace("*", ".*") + '$').toRegex()
+                tableNameSet.forEach {
+                    if (tableRegex.matches(it)) {
+                        tablesToGen.add(it)
+                    }
                 }
-                generatorService.delete(table)
+            } else {
+                tablesNotExist.add(table)
+                continue
+            }
+        }
+
+        consume(tablesToGen, tablesNotExist)
+    }
+
+    private fun showTables(tableNameSet: Set<String>) {
+        var maxLength = tableNameSet.map { it.length }.max()?.plus(4)
+        var formatString = "%-" + maxLength + "s"
+        var index = 0
+        tableNameSet.forEach {
+            print(String.format(formatString, it))
+            if (++index % 4 == 0) {
+                println()
             }
         }
     }
@@ -151,10 +184,5 @@ class GeneratorCommand : CommandLineRunner {
             result.add(s.toString())
         }
         return result.toTypedArray()
-    }
-
-    internal enum class OperateEnum {
-        Generate,
-        Delete
     }
 }

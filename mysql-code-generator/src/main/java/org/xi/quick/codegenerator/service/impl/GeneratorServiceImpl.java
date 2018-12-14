@@ -1,12 +1,16 @@
 package org.xi.quick.codegenerator.service.impl;
 
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.ext.beans.BeansWrapperBuilder;
+import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xi.quick.codegenerator.properties.GeneratorProperties;
-import org.xi.quick.codegenerator.functionalinterface.BinaryConsumer;
 import org.xi.quick.codegenerator.model.FreemarkerModel;
 import org.xi.quick.codegenerator.model.TableModel;
 import org.xi.quick.codegenerator.properties.PathProperties;
@@ -23,6 +27,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,8 +68,8 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void generateAll() {
-
-        loopAll((template, table) -> generate(template, table));
+        List<TableModel> tables = tableService.getAllTables();
+        tables.forEach(table -> allTemplates.forEach(template -> generate(template, table)));
     }
 
     /**
@@ -75,7 +80,28 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public void generate(String... tableNames) {
 
-        loop((template, table) -> generate(template, table), tableNames);
+        for (String tableName : tableNames) {
+            TableModel table = tableService.getTable(tableName);
+            if (table != null) {
+                allTemplates.forEach(template -> generate(template, table));
+            }
+        }
+    }
+
+    /**
+     * 生成数据类
+     *
+     * @param tableNames
+     */
+    @Override
+    public void generateSet(Set<String> tableNames) {
+
+        tableNames.forEach(tableName -> {
+            TableModel table = tableService.getTable(tableName);
+            if (table != null) {
+                allTemplates.forEach(template -> generate(template, table));
+            }
+        });
     }
 
     /**
@@ -110,8 +136,8 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void deleteAll() {
-
-        loopAll((template, table) -> delete(template, table));
+        Set<String> tableNames = tableService.getAllTableNameList();
+        tableNames.forEach(tableName -> allTemplates.forEach(template -> delete(template, tableName)));
     }
 
     /**
@@ -121,8 +147,19 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void delete(String... tableNames) {
+        for (String tableName : tableNames) {
+            allTemplates.forEach(template -> delete(template, tableName));
+        }
+    }
 
-        loop((template, table) -> delete(template, table), tableNames);
+    /**
+     * 删除数据类
+     *
+     * @param tableNames
+     */
+    @Override
+    public void deleteSet(Set<String> tableNames) {
+        tableNames.forEach(tableName -> allTemplates.forEach(template -> delete(template, tableName)));
     }
 
     /**
@@ -130,7 +167,6 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void deleteAllOnce() {
-
         deleteOnce(allOnceTemplates);
         deleteOnce(allJustCopyTemplates);
     }
@@ -140,7 +176,6 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     @Override
     public void deleteAllAggregate() {
-
         deleteOnce(allAggregateTemplates);
     }
 
@@ -152,7 +187,18 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         Map<Object, Object> dataModel = new HashMap<>();
         dataModel.put("table", table);
+        dataModel.put("tableName", table.getTableName());
+        dataModel.put("targetTableName", table.getTargetTableName());
         dataModel.put("className", table.getTableClassName());
+
+        BeansWrapper wrapper = new BeansWrapperBuilder(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS).build();
+        TemplateHashModel staticModels = wrapper.getStaticModels();
+        try {
+            TemplateHashModel templateHashModel = (TemplateHashModel) staticModels.get("java.lang.String");
+            dataModel.put("String", templateHashModel);
+        } catch (TemplateModelException e) {
+            e.printStackTrace();
+        }
 
         try {
             generate(template, dataModel);
@@ -197,60 +243,21 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
     }
 
-    private void delete(FreemarkerModel template, TableModel table) {
+    private void delete(FreemarkerModel template, String tableName) {
 
+        String targetTableName = StringUtils.getTargetTableName(tableName);
         Map<Object, Object> dataModel = new HashMap<>();
-        dataModel.put("className", table.getTableClassName());
+        dataModel.put("tableName", tableName);
+        dataModel.put("targetTableName", targetTableName);
+        dataModel.put("className", StringUtils.getCamelCaseName(targetTableName));
         delete(template, dataModel);
     }
 
     private void deleteOnce(List<FreemarkerModel> templates) {
 
         for (FreemarkerModel template : templates) {
-            delete(template);
+            delete(template, new HashMap<>());
         }
-    }
-
-    /**
-     * 执行操作
-     *
-     * @param consumer   消费方法
-     * @param tableNames 要操作的表名
-     */
-    private void loop(BinaryConsumer<FreemarkerModel, TableModel> consumer, String... tableNames) {
-
-        for (String tableName : tableNames) {
-            TableModel table = tableService.getTable(tableName);
-            if (table != null) {
-                allTemplates.forEach(template -> consumer.accept(template, table));
-            }
-        }
-    }
-
-    /**
-     * 执行操作
-     *
-     * @param consumer 消费方法
-     */
-    private void loopAll(BinaryConsumer<FreemarkerModel, TableModel> consumer) {
-
-        List<TableModel> tables = tableService.getAllTables();
-
-        for (TableModel table : tables) {
-            allTemplates.forEach(template -> consumer.accept(template, table));
-        }
-    }
-
-    /**
-     * 生成输出
-     *
-     * @param outModel
-     * @throws IOException
-     * @throws TemplateException
-     */
-    private void generate(FreemarkerModel outModel) throws IOException, TemplateException {
-
-        generate(outModel, new HashMap<>());
     }
 
     /**
@@ -277,11 +284,6 @@ public class GeneratorServiceImpl implements GeneratorService {
 
             outModel.getTemplate().process(dataModel, out);
         }
-    }
-
-    private void delete(FreemarkerModel outModel) {
-
-        delete(outModel, new HashMap<>());
     }
 
     private void delete(FreemarkerModel outModel, Map<Object, Object> dataModel) {

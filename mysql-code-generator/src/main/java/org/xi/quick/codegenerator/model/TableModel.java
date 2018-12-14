@@ -7,7 +7,6 @@ import org.xi.quick.codegenerator.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,6 +65,10 @@ public class TableModel {
 
     public String getTableName() {
         return tableName;
+    }
+
+    public String getTargetTableName() {
+        return targetTableName;
     }
 
     public String getTableClassName() {

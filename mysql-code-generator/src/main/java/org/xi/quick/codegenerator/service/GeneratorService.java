@@ -1,5 +1,7 @@
 package org.xi.quick.codegenerator.service;
 
+import java.util.Set;
+
 /**
  * @author 郗世豪（rarexixi@outlook.com）
  * @date 2017/11/29 16:31
@@ -17,6 +19,13 @@ public interface GeneratorService {
      * @param tableNames
      */
     void generate(String... tableNames);
+
+    /**
+     * 生成数据类
+     *
+     * @param tableNames
+     */
+    void generateSet(Set<String> tableNames);
 
     /**
      * 生成所有生成一次的类
@@ -39,6 +48,13 @@ public interface GeneratorService {
      * @param tableNames
      */
     void delete(String... tableNames);
+
+    /**
+     * 删除数据类
+     *
+     * @param tableNames
+     */
+    void deleteSet(Set<String> tableNames);
 
     /**
      * 删除所有生成一次的类

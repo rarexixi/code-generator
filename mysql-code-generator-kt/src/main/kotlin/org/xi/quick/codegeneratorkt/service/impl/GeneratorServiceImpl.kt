@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.xi.quick.codegeneratorkt.StaticConfigData
+import org.xi.quick.codegeneratorkt.extensions.getCamelCaseName
 import org.xi.quick.codegeneratorkt.extensions.getFirstLower
 import org.xi.quick.codegeneratorkt.extensions.getFirstUpper
+import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
 import org.xi.quick.codegeneratorkt.model.FreemarkerModel
 import org.xi.quick.codegeneratorkt.model.TableModel
 import org.xi.quick.codegeneratorkt.properties.GeneratorProperties
@@ -56,8 +58,8 @@ class GeneratorServiceImpl : GeneratorService {
      * 生成所有数据类
      */
     override fun generateAll() {
-
-        loopAll({ template, table -> generate(template, table) })
+        val tables = tableService.getAllTables()
+        tables.forEach { table -> allTemplates.forEach { template -> generate(template, table) } }
     }
 
     /**
@@ -67,7 +69,14 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun generate(vararg tableNames: String) {
 
-        loop({ template, table -> generate(template, table) }, *tableNames)
+        tableNames.forEach { tableName ->
+            run {
+                val table = tableService.getTable(tableName)
+                if (table != null) {
+                    allTemplates.forEach { template -> generate(template, table) }
+                }
+            }
+        }
     }
 
     /**
@@ -99,8 +108,8 @@ class GeneratorServiceImpl : GeneratorService {
      * 删除所有数据类
      */
     override fun deleteAll() {
-
-        loopAll({ template, table -> delete(template, table) })
+        val tables = tableService.getAllTableNameList()
+        tables.forEach { table -> allTemplates.forEach { template -> delete(template, table) } }
     }
 
     /**
@@ -109,8 +118,7 @@ class GeneratorServiceImpl : GeneratorService {
      * @param tableNames
      */
     override fun delete(vararg tableNames: String) {
-
-        loop({ template, table -> delete(template, table) }, *tableNames)
+        tableNames.forEach { tableName -> allTemplates.forEach { template -> delete(template, tableName) } }
     }
 
     /**
@@ -138,6 +146,8 @@ class GeneratorServiceImpl : GeneratorService {
 
         val dataModel = HashMap<Any, Any>()
         dataModel["table"] = table
+        dataModel["tableName"] = table.tableName!!
+        dataModel["targetTableName"] = table.targetTableName
         dataModel["className"] = table.tableClassName!!
 
         try {
@@ -186,10 +196,13 @@ class GeneratorServiceImpl : GeneratorService {
         }
     }
 
-    private fun delete(template: FreemarkerModel, table: TableModel) {
+    private fun delete(template: FreemarkerModel, tableName: String) {
 
+        val targetTableName = tableName.getTargetTableName()!!
         val dataModel = HashMap<Any, Any>()
-        dataModel["className"] = table.tableClassName!!
+        dataModel["tableName"] = tableName
+        dataModel["targetTableName"] = targetTableName
+        dataModel["className"] = targetTableName.getCamelCaseName()!!
         delete(template, dataModel)
     }
 
@@ -197,36 +210,6 @@ class GeneratorServiceImpl : GeneratorService {
 
         for (template in templates) {
             delete(template)
-        }
-    }
-
-    /**
-     * 执行操作
-     *
-     * @param consume   消费方法
-     * @param tableNames 要操作的表名
-     */
-    private fun loop(consume: (FreemarkerModel, TableModel) -> Unit, vararg tableNames: String) {
-
-        for (tableName in tableNames) {
-            val table = tableService.getTable(tableName)
-            if (table != null) {
-                allTemplates.forEach { consume(it, table) }
-            }
-        }
-    }
-
-    /**
-     * 执行操作
-     *
-     * @param consume 消费方法
-     */
-    private fun loopAll(consume: (FreemarkerModel, TableModel) -> Unit) {
-
-        val tables = tableService.getAllTables()
-
-        for (table in tables) {
-            allTemplates.forEach { template -> consume(template, table) }
         }
     }
 
@@ -251,10 +234,9 @@ class GeneratorServiceImpl : GeneratorService {
         DirectoryUtils.createIfNotExists(getAbsoluteDirectory(absolutePath))
 
         FileOutputStream(absolutePath).use { stream ->
-            OutputStreamWriter(stream, generator.encoding).use({ out ->
-
+            OutputStreamWriter(stream, generator.encoding).use { out ->
                 outModel.template.process(dataModel, out)
-            })
+            }
         }
     }
 

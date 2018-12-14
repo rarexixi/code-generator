@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.xi.quick.codegenerator.functionalinterface.BinaryConsumer;
 import org.xi.quick.codegenerator.service.GeneratorService;
 import org.xi.quick.codegenerator.service.TableService;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 
 /**
  * @author 郗世豪（rarexixi@outlook.com）
@@ -91,14 +94,14 @@ public class GeneratorCommand implements CommandLineRunner {
                 generatorService.deleteAll();
                 return;
             case "gen":
-                operate(tableNameSet, getArgs(sc), OperateEnum.Generate);
+                generate(tableNameSet, getArgs(sc));
                 return;
             case "del":
-                operate(tableNameSet, getArgs(sc), OperateEnum.Delete);
+                delete(tableNameSet, getArgs(sc));
                 return;
             case "show":
             case "s":
-                System.out.println(String.join(" ", tableNameSet));
+                showTables(tableNameSet);
                 return;
             case "quit":
             case "q":
@@ -110,31 +113,63 @@ public class GeneratorCommand implements CommandLineRunner {
         }
     }
 
-    private void operate(Set<String> tableNameSet, String[] tables, OperateEnum operateEnum) {
+    private void generate(Set<String> tableNameSet, String[] tables) {
+
+        invoke(tableNameSet, tables, (tablesToGen, tablesNotExist) -> {
+
+            generatorService.generateSet(tablesToGen);
+
+            if (!tablesNotExist.isEmpty()) {
+                logger.warn("表" + String.join(",", tablesNotExist) + "不存在");
+            }
+        });
+    }
+
+    private void delete(Set<String> tableNameSet, String[] tables) {
+
+        invoke(tableNameSet, tables, (tablesToGen, tablesNotExist) -> generatorService.deleteSet(tablesToGen));
+    }
+
+    private void invoke(Set<String> tableNameSet, String[] tables, BinaryConsumer<Set<String>, Set<String>> consumer) {
 
         if (tables.length == 0) return;
 
-        List<String> tableListNotExist = new ArrayList<>();
-        if (operateEnum.equals(OperateEnum.Generate)) {
-            for (String table : tables) {
-                if (!tableNameSet.contains(table)) {
-                    tableListNotExist.add(table);
-                    continue;
-                }
-                generatorService.generate(table);
-            }
-            if (!tableListNotExist.isEmpty()) {
-                logger.warn("表" + String.join(",", tableListNotExist) + "不存在");
-            }
-        } else {
-            for (String table : tables) {
-                if (!tableNameSet.contains(table)) {
-                    tableListNotExist.add(table);
-                    continue;
-                }
-                generatorService.delete(table);
+        Set<String> tablesToGen = new HashSet<>();
+        Set<String> tablesNotExist = new HashSet<>();
+
+        for (String table : tables) {
+            if (tableNameSet.contains(table)) {
+                tablesToGen.add(table);
+            } else if (table.contains("*")) {
+                String tableRegex = '^' + table.replace("*", ".*") + '$';
+                tableNameSet.forEach(it -> {
+                    if (Pattern.matches(tableRegex, it)) {
+                        tablesToGen.add(it);
+                    }
+                });
+            } else {
+                tablesNotExist.add(table);
+                continue;
             }
         }
+
+        consumer.accept(tablesToGen, tablesNotExist);
+    }
+
+    private void showTables(Set<String> tableNameSet) {
+        int maxLength = 0;
+        for (String s : tableNameSet) {
+            if (s.length() > maxLength) maxLength = s.length();
+        }
+        String formatString = "%-" + (maxLength + 4) + "s";
+        AtomicReference<Integer> index = new AtomicReference<>(0);
+        tableNameSet.forEach(it -> {
+            System.out.printf(formatString, it);
+            index.set(index.get() + 1);
+            if (index.get() % 4 == 0) {
+                System.out.println();
+            }
+        });
     }
 
     String[] getArgs(Scanner sc) {
@@ -148,10 +183,5 @@ public class GeneratorCommand implements CommandLineRunner {
             result.add(s);
         }
         return (String[]) result.toArray(new String[result.size()]);
-    }
-
-    enum OperateEnum {
-        Generate,
-        Delete
     }
 }
