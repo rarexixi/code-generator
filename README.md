@@ -68,10 +68,6 @@ commonProperties配置的map
 |primaryKey                           |主键列表                   |List<ColumnModel>     |
 |hasAutoIncrementUniquePrimaryKey     |是否有唯一自增主键         |Boolean               |
 |uniquePrimaryKey                     |获取唯一主键               |ColumnModel           |
-|primaryKeyParameters                 |主键对应的JAVA参数         |String                |单个(Integer id)，多个(Integer userId, Integer userTypeId)
-|primaryKeyParameterValues            |主键对应的JAVA参数值       |String                |单个(id) ，多个(userId, userTypeId)
-|primaryKeyParameters                 |旧主键对应的JAVA参数       |String                |单个(Integer oldId)，多个(Integer oldUserId, Integer oldUserTypeId)
-|primaryKeyParameterValues            |旧主键对应的JAVA参数值     |String                |单个(oldId) ，多个(oldUserId, oldUserTypeId)
 |validStatusColumn                    |有效性字段                 |ColumnModel           |
 
 ### ColumnModel
