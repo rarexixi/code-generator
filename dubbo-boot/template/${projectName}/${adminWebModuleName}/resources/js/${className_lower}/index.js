@@ -105,7 +105,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
                 contentType : 'application/json',
                 data : JSON.stringify({
                     pageIndex: 1,
@@ -143,7 +143,7 @@ var app = new Vue({
             self.checkedList = [];
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/find',
+                url: appConfig.baseApiPath + '/${classNameLower}/search',
                 contentType : 'application/json',
                 data : JSON.stringify(self.searchParams),
                 dataType: 'json',
@@ -199,7 +199,7 @@ var app = new Vue({
             </#if>
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getDetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -217,9 +217,23 @@ var app = new Vue({
         },
         save: function () {
             var self = this;
+            var ajaxUrl;
+            <#if table.hasAutoIncrementUniquePrimaryKey>
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldNameFirstLower} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            } else {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit';
+            }
+            <#else>
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.old${column.columnFieldName} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            } else {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list primaryKey as column><#if (column_index > 0)> + '&'</#if> + 'old${column.columnFieldName}=' + self.old${column.columnFieldName}</#list>;
+            }
+            </#if>
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
+                url: ajaxUrl,
                 contentType : 'application/json',
                 data : JSON.stringify(self.addOrEditParams),
                 dataType: 'json',
@@ -250,7 +264,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getDetail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -292,7 +306,7 @@ var app = new Vue({
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'post',
-                    url: url,
+                    url: appConfig.baseApiPath + url,
                     contentType : 'application/json',
                     data : JSON.stringify(self.checkedList),
                     dataType: 'json',
@@ -327,7 +341,7 @@ var app = new Vue({
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'get',
-                    url: url,
+                    url: appConfig.baseApiPath + url,
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {

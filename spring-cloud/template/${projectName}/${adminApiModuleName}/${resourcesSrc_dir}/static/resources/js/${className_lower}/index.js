@@ -97,7 +97,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     pageIndex: 1,
@@ -138,7 +138,7 @@ var app = new Vue({
             self.checkedList = [];
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${classNameLower}/find',
+                url: appConfig.baseApiPath + '/${classNameLower}/search',
                 contentType: 'application/json',
                 data: JSON.stringify(self.searchParams),
                 dataType: 'json',

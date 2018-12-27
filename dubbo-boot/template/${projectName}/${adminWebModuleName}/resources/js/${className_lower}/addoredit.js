@@ -63,7 +63,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
                 contentType : 'application/json',
                 data : JSON.stringify({
                     pageIndex: 1,
@@ -83,9 +83,23 @@ var app = new Vue({
         </#list>
         save: function () {
             var self = this;
+            var ajaxUrl;
+            <#if table.hasAutoIncrementUniquePrimaryKey>
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldNameFirstLower} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            } else {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit';
+            }
+            <#else>
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.old${column.columnFieldName} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            } else {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list primaryKey as column><#if (column_index > 0)> + '&'</#if> + 'old${column.columnFieldName}=' + self.old${column.columnFieldName}</#list>;
+            }
+            </#if>
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/save'<#if !table.hasAutoIncrementUniquePrimaryKey> + "?"<#list primaryKey as column><#if (column_index > 0)> + "&"</#if> + "old${column.columnFieldName}=" + self.old${column.columnFieldName}</#list></#if>,
+                url: ajaxUrl,
                 contentType : 'application/json',
                 data : JSON.stringify(self.addOrEditParams),
                 dataType: 'json',
@@ -102,7 +116,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getDetail' + window.location.search,
+                url: appConfig.baseApiPath + '/${classNameLower}/getDetail' + window.location.search,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
