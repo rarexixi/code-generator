@@ -115,9 +115,9 @@ public class GeneratorCommand implements CommandLineRunner {
 
     private void generate(Set<String> tableNameSet, String[] tables) {
 
-        invoke(tableNameSet, tables, (tablesToGen, tablesNotExist) -> {
+        invoke(tableNameSet, tables, false, (tablesToInvoke, tablesNotExist) -> {
 
-            generatorService.generateSet(tablesToGen);
+            generatorService.generateSet(tablesToInvoke);
 
             if (!tablesNotExist.isEmpty()) {
                 logger.warn("表" + String.join(",", tablesNotExist) + "不存在");
@@ -127,33 +127,35 @@ public class GeneratorCommand implements CommandLineRunner {
 
     private void delete(Set<String> tableNameSet, String[] tables) {
 
-        invoke(tableNameSet, tables, (tablesToGen, tablesNotExist) -> generatorService.deleteSet(tablesToGen));
+        invoke(tableNameSet, tables, true, (tablesToInvoke, tablesNotExist) -> generatorService.deleteSet(tablesToInvoke));
     }
 
-    private void invoke(Set<String> tableNameSet, String[] tables, BinaryConsumer<Set<String>, Set<String>> consumer) {
+    private void invoke(Set<String> tableNameSet, String[] tables, boolean isDelete, BinaryConsumer<Set<String>, Set<String>> consumer) {
 
         if (tables.length == 0) return;
 
-        Set<String> tablesToGen = new HashSet<>();
+        Set<String> tablesToInvoke = new HashSet<>();
         Set<String> tablesNotExist = new HashSet<>();
 
         for (String table : tables) {
             if (tableNameSet.contains(table)) {
-                tablesToGen.add(table);
+                tablesToInvoke.add(table);
             } else if (table.contains("*")) {
                 String tableRegex = '^' + table.replace("*", ".*") + '$';
                 tableNameSet.forEach(it -> {
                     if (Pattern.matches(tableRegex, it)) {
-                        tablesToGen.add(it);
+                        tablesToInvoke.add(it);
                     }
                 });
-            } else {
+            } else if (isDelete) {
+                tablesToInvoke.add(table);
+            }  else {
                 tablesNotExist.add(table);
                 continue;
             }
         }
 
-        consumer.accept(tablesToGen, tablesNotExist);
+        consumer.accept(tablesToInvoke, tablesNotExist);
     }
 
     private void showTables(Set<String> tableNameSet) {

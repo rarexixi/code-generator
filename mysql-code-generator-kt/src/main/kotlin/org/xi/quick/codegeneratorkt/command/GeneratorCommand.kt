@@ -118,9 +118,9 @@ class GeneratorCommand : CommandLineRunner {
 
         if (tables.isEmpty()) return
 
-        invoke(tableNameSet, tables) { tablesToGen, tablesNotExist ->
+        invoke(tableNameSet, tables, false) { tablesToInvoke, tablesNotExist ->
             run {
-                tablesToGen.forEach { generatorService.generate(it) }
+                tablesToInvoke.forEach { generatorService.generate(it) }
                 if (!tablesNotExist.isEmpty()) {
                     logger.warn("表" + tablesNotExist.joinToString(",") + "不存在或者没有配置")
                 }
@@ -131,35 +131,37 @@ class GeneratorCommand : CommandLineRunner {
     private fun delete(tableNameSet: Set<String>, tables: Array<String>) {
 
         if (tables.isEmpty()) return
-        invoke(tableNameSet, tables) { tablesToGen, tablesNotExist ->
+        invoke(tableNameSet, tables, true) { tablesToInvoke, tablesNotExist ->
             run {
-                tablesToGen.forEach { generatorService.delete(it) }
+                tablesToInvoke.forEach { generatorService.delete(it) }
             }
         }
     }
 
-    private fun invoke(tableNameSet: Set<String>, tables: Array<String>, consume: (Set<String>, Set<String>) -> Unit) {
+    private fun invoke(tableNameSet: Set<String>, tables: Array<String>, isDelete: Boolean, consume: (Set<String>, Set<String>) -> Unit) {
 
-        var tablesToGen = HashSet<String>()
+        var tablesToInvoke = HashSet<String>()
         val tablesNotExist = HashSet<String>()
 
         for (table in tables) {
             if (tableNameSet.contains(table)) {
-                tablesToGen.add(table)
+                tablesToInvoke.add(table)
             } else if (table.contains("*")) {
                 var tableRegex = ('^' + table.replace("*", ".*") + '$').toRegex()
                 tableNameSet.forEach {
                     if (tableRegex.matches(it)) {
-                        tablesToGen.add(it)
+                        tablesToInvoke.add(it)
                     }
                 }
+            } else if (isDelete) {
+                tablesToInvoke.add(table)
             } else {
                 tablesNotExist.add(table)
                 continue
             }
         }
 
-        consume(tablesToGen, tablesNotExist)
+        consume(tablesToInvoke, tablesNotExist)
     }
 
     private fun showTables(tableNameSet: Set<String>) {
