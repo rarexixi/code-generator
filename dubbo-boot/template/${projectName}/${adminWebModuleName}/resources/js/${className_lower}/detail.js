@@ -31,7 +31,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: '/${classNameLower}/getDetail' + window.location.search,
+                url: appConfig.baseApiPath + '/${classNameLower}/detail' + window.location.search,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -47,7 +47,7 @@ var app = new Vue({
             commonNotify.confirm("确定删除吗？", function() {
                 $.ajax({
                     type: 'get',
-                    url: '/${classNameLower}/delete' + window.location.search,
+                    url: appConfig.baseApiPath + '/${classNameLower}/delete' + window.location.search,
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {

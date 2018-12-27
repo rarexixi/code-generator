@@ -73,7 +73,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
                 contentType : 'application/json',
                 data : JSON.stringify({
                     pageIndex: 1,
@@ -111,7 +111,7 @@ var app = new Vue({
             self.checkedList = [];
             $.ajax({
                 type: 'post',
-                url: '/${classNameLower}/find',
+                url: appConfig.baseApiPath + '/${classNameLower}/search',
                 contentType : 'application/json',
                 data : JSON.stringify(self.searchParams),
                 dataType: 'json',
@@ -199,7 +199,7 @@ var app = new Vue({
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'post',
-                    url: url,
+                    url: appConfig.baseApiPath + url,
                     contentType : 'application/json',
                     data : JSON.stringify(self.checkedList),
                     dataType: 'json',
@@ -234,7 +234,7 @@ var app = new Vue({
             commonNotify.confirm(confirmMsg, function() {
                 $.ajax({
                     type: 'get',
-                    url: url,
+                    url: appConfig.baseApiPath + url,
                     dataType: 'json',
                     success: function (response) {
                         if (response.success == true) {

@@ -1,4 +1,4 @@
-package ${baseCommonPackage}.service;
+package ${basePackage}.service;
 
 import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.SearchPage;

@@ -60,7 +60,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     pageIndex: 1,
@@ -101,7 +101,7 @@ var app = new Vue({
             self.checkedList = [];
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${classNameLower}/find',
+                url: appConfig.baseApiPath + '/${classNameLower}/search',
                 contentType: 'application/json',
                 data: JSON.stringify(self.searchParams),
                 dataType: 'json',
@@ -153,11 +153,11 @@ var app = new Vue({
             this.searchParams.pageSize = 10;
         },
         add: function() {
-            var url = 'addoredit.html';
+            var url = 'add.html';
             window.location.href = url;
         },
         edit: function (<#include "/include/table/primary_values.ftl">) {
-            var url = 'addoredit.html?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = 'edit.html?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
             window.location.href = url;
         },
         get: function (<#include "/include/table/primary_values.ftl">) {

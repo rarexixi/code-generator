@@ -89,8 +89,9 @@
                 </div>
                 <#else>
                 <div class="form-group">
-                <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
+                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                </div>
                 </#if>
                 </#list>
                 <input type="button" value="保存" @click="save" class="btn btn-primary" />
@@ -106,6 +107,7 @@
     <script src="/resources/bootstrap/plugins/js/bootbox.min.js"></script>
     <script src="/resources/bootstrap/plugins/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/resources/js/config.js"></script>
     <script src="/resources/js/common.js"></script>
     <script src="/resources/js/${classNameLower}/addoredit.js"></script>
     <script src="/resources/js/pageInit.js"></script>

@@ -68,7 +68,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'post',
-                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/find',
+                url: appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/search',
                 contentType : 'application/json',
                 data : JSON.stringify({
                     pageIndex: 1,
