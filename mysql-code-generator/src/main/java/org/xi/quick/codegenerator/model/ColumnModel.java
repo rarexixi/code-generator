@@ -141,7 +141,7 @@ public class ColumnModel {
     }
 
     public String getColumnComment() {
-        return StringUtils.isEmpty(columnComment) ? columnFieldName : columnComment;
+        return StringUtils.isEmpty(columnComment) ? targetColumnName : columnComment;
     }
 
     public boolean isIndex() {
@@ -152,9 +152,9 @@ public class ColumnModel {
 
     //region 扩展
 
-    private String columnFieldName;
-    private String columnFieldNameFirstLower;
-    private String columnFieldType;
+    private String targetColumnName;
+    private String targetColumnNameFirstLower;
+    private String targetDataType;
 
     private FkSelectField fkSelectField;
     private boolean fkSelect;
@@ -177,9 +177,9 @@ public class ColumnModel {
     private boolean ignoreSearch;
 
     public void initExtends() {
-        columnFieldName = StringUtils.getCamelCaseName(this.columnName);
-        columnFieldNameFirstLower = StringUtils.getFirstLower(columnFieldName);
-        columnFieldType = DataTypeMapping.getFieldType(this.dataType);
+        targetColumnName = StringUtils.getCamelCaseName(this.columnName);
+        targetColumnNameFirstLower = StringUtils.getFirstLower(targetColumnName);
+        targetDataType = DataTypeMapping.getFieldType(this.dataType);
         autoIncrement = extra.toLowerCase().equals("auto_increment");
         primaryKey = columnKey.equals("PRI");
         validStatus = StaticConfigData.VALID_STATUS_FIELD.getFieldName().equals(this.columnName);
@@ -222,8 +222,8 @@ public class ColumnModel {
      *
      * @return
      */
-    public String getColumnFieldName() {
-        return columnFieldName;
+    public String gettargetColumnName() {
+        return targetColumnName;
     }
 
     /**
@@ -231,8 +231,8 @@ public class ColumnModel {
      *
      * @return
      */
-    public String getColumnFieldNameFirstLower() {
-        return columnFieldNameFirstLower;
+    public String gettargetColumnNameFirstLower() {
+        return targetColumnNameFirstLower;
     }
 
     /**
@@ -240,8 +240,8 @@ public class ColumnModel {
      *
      * @return
      */
-    public String getColumnFieldType() {
-        return columnFieldType;
+    public String gettargetDataType() {
+        return targetDataType;
     }
 
     public FkSelectField getFkSelectField() {

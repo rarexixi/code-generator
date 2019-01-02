@@ -44,7 +44,7 @@ public interface ${className}Api {
      * 根据主键物理删除
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -56,12 +56,12 @@ public interface ${className}Api {
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResultVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @ParamName("sessionId") String sessionId);
+    ResultVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @ParamName("sessionId") String sessionId);
     </#if>
     <#if table.validStatusColumn??>
 
@@ -69,7 +69,7 @@ public interface ${className}Api {
      * 根据主键禁用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -81,7 +81,7 @@ public interface ${className}Api {
      * 根据主键启用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -93,22 +93,22 @@ public interface ${className}Api {
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResultVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @ParamName("sessionId") String sessionId);
+    ResultVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @ParamName("sessionId") String sessionId);
 
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResultVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @ParamName("sessionId") String sessionId);
+    ResultVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @ParamName("sessionId") String sessionId);
     </#if>
     </#if>
 
@@ -120,13 +120,13 @@ public interface ${className}Api {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResultVo<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @ParamName("sessionId") String sessionId);
+    ResultVo<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.targetDataType} old${column.targetColumnName}</#list></#if>, @ParamName("sessionId") String sessionId);
 
     /**
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return

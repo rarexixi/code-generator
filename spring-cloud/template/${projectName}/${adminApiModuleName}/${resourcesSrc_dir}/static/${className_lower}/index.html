@@ -25,7 +25,7 @@
             <el-row :gutter="10">
                 <#list table.columns as column>
                 <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-                <#assign fieldName = column.columnFieldName?uncap_first>
+                <#assign fieldName = column.targetColumnName?uncap_first>
                 <#if column.ignoreSearch>
                 <#elseif column.columnName == table.validStatusField.fieldName>
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
@@ -62,13 +62,13 @@
                         <el-input v-model="searchParams.${fieldName}" type="text"></el-input>
                     </el-form-item>
                 </el-col>
-                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
                     <el-form-item label="${columnComment}">
                         <el-input v-model="searchParams.${fieldName}" type="text"></el-input>
                     </el-form-item>
                 </el-col>
-                <#elseif column.columnFieldType == "Date">
+                <#elseif column.targetDataType == "Date">
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
                     <el-form-item label="${columnComment}">
                         <el-date-picker
@@ -81,14 +81,14 @@
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
-                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
                     <el-form-item label="${columnComment}">
                         <el-input v-model="searchParams.${fieldName}Min"></el-input>
                         <el-input v-model="searchParams.${fieldName}Max"></el-input>
                     </el-form-item>
                 </el-col>
-                <#elseif (column.columnFieldType == "String")>
+                <#elseif (column.targetDataType == "String")>
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
                     <el-form-item label="${columnComment}">
                         <el-input v-model="searchParams.${fieldName}StartWith"></el-input>
@@ -112,7 +112,7 @@
         </el-form>
 
         <#if table.validStatusColumn??>
-        <el-tabs v-model="searchParams.${table.validStatusColumn.columnFieldNameFirstLower}">
+        <el-tabs v-model="searchParams.${table.validStatusColumn.targetColumnNameFirstLower}">
             <el-tab-pane label="有效" name="${table.validStatusField.validValue}"></el-tab-pane>
             <el-tab-pane label="无效" name="${table.validStatusField.invalidValue}"></el-tab-pane>
         </el-tabs>
@@ -133,7 +133,7 @@
             </#if>
             <#list table.columns as column>
             <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#assign fieldName = column.targetColumnName?uncap_first>
             <#if column.content>
             <#elseif column.columnName == table.validStatusField.fieldName>
             <el-table-column label="${columnComment}">
@@ -165,7 +165,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <#elseif column.columnFieldType == "Date">
+            <#elseif column.targetDataType == "Date">
             <el-table-column label="${columnComment}">
                 <template slot-scope="scope">{{scope.row.${fieldName} | formatDate}}</template>
             </el-table-column>
@@ -178,13 +178,13 @@
             <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>180<#else>140</#if>">
                 <template slot-scope="scope">
                     <el-button-group>
-                        <el-button type="primary" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" size="mini">编辑</el-button>
-                        <el-button type="info" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" size="mini">详情</el-button>
+                        <el-button type="primary" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.targetColumnNameFirstLower}</#list>)" size="mini">编辑</el-button>
+                        <el-button type="info" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.targetColumnNameFirstLower}</#list>)" size="mini">详情</el-button>
                         <#if table.validStatusColumn??>
-                        <el-button type="warning" @click="disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" v-if="scope.row.${table.validStatusColumn.columnFieldNameFirstLower}==${table.validStatusField.validValue}" size="mini">禁用</el-button>
-                        <el-button type="success" @click="enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" v-else size="mini">启用</el-button>
+                        <el-button type="warning" @click="disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.targetColumnNameFirstLower}</#list>)" v-if="scope.row.${table.validStatusColumn.targetColumnNameFirstLower}==${table.validStatusField.validValue}" size="mini">禁用</el-button>
+                        <el-button type="success" @click="enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.targetColumnNameFirstLower}</#list>)" v-else size="mini">启用</el-button>
                         </#if>
-                        <el-button type="danger" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" size="mini">删除</el-button>
+                        <el-button type="danger" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>scope.row.${column.targetColumnNameFirstLower}</#list>)" size="mini">删除</el-button>
                     </el-button-group>
                 </template>
             </el-table-column>
@@ -204,7 +204,7 @@
         <el-dialog title="${tableShortComment}详情" :visible.sync="detailDialogVisible">
             <#list table.columns as column>
             <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#assign fieldName = column.targetColumnName?uncap_first>
             <#if column.columnName == table.validStatusField.fieldName>
             <el-row :gutter="20">
                 <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
@@ -223,7 +223,7 @@
                     <img :src="detail.${fieldName}" alt="${columnComment}">
                 </el-col>
             </el-row>
-            <#elseif column.columnFieldType == "Date">
+            <#elseif column.targetDataType == "Date">
             <el-row :gutter="20">
                 <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
                     <label>${columnComment}</label>
@@ -245,15 +245,15 @@
             </#list>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="closeDialog">关闭</el-button>
-                <el-button type="primary" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)">编辑</el-button>
-                <el-button type="danger" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)">删除</el-button>
+                <el-button type="primary" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.targetColumnNameFirstLower}</#list>)">编辑</el-button>
+                <el-button type="danger" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>detail.${column.targetColumnNameFirstLower}</#list>)">删除</el-button>
             </div>
         </el-dialog>
         <el-dialog :title="addOrEditTitle" :visible.sync="addOrEditDialogVisible">
             <el-form ref="addOrEditParams" :model="addOrEditParams" :label-position="'left'" label-width="80px">
                 <#list table.columns as column>
                 <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-                <#assign fieldName = column.columnFieldName?uncap_first>
+                <#assign fieldName = column.targetColumnName?uncap_first>
                 <#if column.notRequired>
                 <#elseif column.autoIncrement>
                 <el-input v-model="addOrEditParams.${fieldName}" type="hidden"></el-input>
@@ -278,16 +278,16 @@
                         </#list>
                     </el-select>
                 </el-form-item>
-                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
                 <el-form-item label="${columnComment}">
                     <el-input type="number" v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>
-                <#elseif column.columnFieldType == "Date">
+                <#elseif column.targetDataType == "Date">
                 <el-form-item label="${columnComment}">
                     <el-date-picker v-model="addOrEditParams.${fieldName}" type="datetime" placeholder="选择日期时间">
                     </el-date-picker>
                 </el-form-item>
-                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
                 <el-form-item label="${columnComment}">
                     <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>
@@ -295,7 +295,7 @@
                 <el-form-item label="${columnComment}">
                     <el-input type="textarea" v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>
-                <#elseif (column.columnFieldType == "String")>
+                <#elseif (column.targetDataType == "String")>
                 <el-form-item label="${columnComment}">
                     <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>

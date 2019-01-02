@@ -23,15 +23,15 @@ public class ${className}AddOrEditVm implements Serializable {
     /**
      * ${column.columnComment}
      */
-    <#if (column.columnFieldType == "Date")>
+    <#if (column.targetDataType == "Date")>
     @JsonDeserialize(using = DateJsonDeserializer.class)
     </#if>
     <#if (column.primaryKey)>
-    @NotNull(groups = {<#if column.autoIncrement>DataEdit.class<#else>DataAdd.class, DataEdit.class</#if>}, message = "${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
+    @NotNull(groups = {<#if column.autoIncrement>DataEdit.class<#else>DataAdd.class, DataEdit.class</#if>}, message = "${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
     <#elseif (!column.notRequired && (!column.nullable && !(column.columnDefault??)))>
-    @NotNull(groups = {DataAdd.class}, message = "${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
+    @NotNull(groups = {DataAdd.class}, message = "${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
     </#if>
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
     </#if>
     </#list>
@@ -42,15 +42,15 @@ public class ${className}AddOrEditVm implements Serializable {
     /**
     * 获取${column.columnComment}
     */
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
 
     /**
     * 设置${column.columnComment}
     */
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
     </#if>
@@ -62,7 +62,7 @@ public class ${className}AddOrEditVm implements Serializable {
         <#list table.columns as column>
         <#if column.notRequired>
         <#else>
-        entity.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        entity.set${column.targetColumnName}(${column.targetColumnNameFirstLower});
         </#if>
         </#list>
 
@@ -74,7 +74,7 @@ public class ${className}AddOrEditVm implements Serializable {
         <#list table.columns as column>
         <#if column.notRequired>
         <#else>
-        this.set${column.columnFieldName}(entity.get${column.columnFieldName}());
+        this.set${column.targetColumnName}(entity.get${column.targetColumnName}());
         </#if>
         </#list>
     }

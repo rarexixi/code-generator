@@ -25,7 +25,7 @@
         <el-form ref="addOrEditParams" :model="addOrEditParams" :label-position="'left'" label-width="80px">
             <#list table.columns as column>
             <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#assign fieldName = column.targetColumnName?uncap_first>
             <#if column.notRequired>
             <#elseif column.autoIncrement>
             <el-input v-model="addOrEditParams.${fieldName}" type="hidden"></el-input>
@@ -50,16 +50,16 @@
                     </#list>
                 </el-select>
             </el-form-item>
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+            <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
             <el-form-item label="${columnComment}">
                 <el-input type="number" v-model="addOrEditParams.${fieldName}"></el-input>
             </el-form-item>
-            <#elseif column.columnFieldType == "Date">
+            <#elseif column.targetDataType == "Date">
             <el-form-item label="${columnComment}">
                 <el-date-picker v-model="addOrEditParams.${fieldName}" type="datetime" placeholder="选择日期时间">
                 </el-date-picker>
             </el-form-item>
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
             <el-form-item label="${columnComment}">
                 <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
             </el-form-item>
@@ -67,7 +67,7 @@
             <el-form-item label="${columnComment}">
                 <el-input type="textarea" v-model="addOrEditParams.${fieldName}"></el-input>
             </el-form-item>
-            <#elseif (column.columnFieldType == "String")>
+            <#elseif (column.targetDataType == "String")>
             <el-form-item label="${columnComment}">
                 <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
             </el-form-item>

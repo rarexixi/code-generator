@@ -70,10 +70,10 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/edit" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> edit(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>) {
+    public ResponseVo<Integer> edit(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.targetDataType} old${column.targetColumnName}</#list></#if>) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.update(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.columnFieldName}</#list></#if>, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.update(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, old${column.targetColumnName}</#list></#if>, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -110,7 +110,7 @@ public class ${className}Controller {
      * 根据主键物理删除
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
@@ -133,15 +133,15 @@ public class ${className}Controller {
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
      @RequestMapping(value = { "/deleteList" }, method = RequestMethod.POST)
-     public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+     public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.delete(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.delete(${table.uniquePrimaryKey.targetColumnName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -157,7 +157,7 @@ public class ${className}Controller {
      * 根据主键禁用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
@@ -180,7 +180,7 @@ public class ${className}Controller {
      * 根据主键启用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
@@ -203,15 +203,15 @@ public class ${className}Controller {
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disableList", method = RequestMethod.POST)
-    public ResponseVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+    public ResponseVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(${table.uniquePrimaryKey.targetColumnName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -224,15 +224,15 @@ public class ${className}Controller {
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enableList", method = RequestMethod.POST)
-    public ResponseVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+    public ResponseVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(${table.uniquePrimaryKey.columnFieldName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(${table.uniquePrimaryKey.targetColumnName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -248,7 +248,7 @@ public class ${className}Controller {
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">

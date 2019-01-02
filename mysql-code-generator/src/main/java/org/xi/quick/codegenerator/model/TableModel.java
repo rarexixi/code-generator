@@ -120,19 +120,19 @@ public class TableModel {
             hasAutoIncrementUniquePrimaryKey = uniquePrimaryKey != null && uniquePrimaryKey.isAutoIncrement();
             primaryKeyParameters = primaryKey
                     .stream()
-                    .map(column -> column.getColumnFieldType() + " " + column.getColumnFieldNameFirstLower())
+                    .map(column -> column.gettargetDataType() + " " + column.gettargetColumnNameFirstLower())
                     .collect(Collectors.joining(", "));
             primaryKeyParameterValues = primaryKey
                     .stream()
-                    .map(column -> column.getColumnFieldNameFirstLower())
+                    .map(column -> column.gettargetColumnNameFirstLower())
                     .collect(Collectors.joining(", "));
             primaryKeyOldParameters = primaryKey
                     .stream()
-                    .map(column -> column.getColumnFieldType() + " old" + column.getColumnFieldName())
+                    .map(column -> column.gettargetDataType() + " old" + column.gettargetColumnName())
                     .collect(Collectors.joining(", "));
             primaryKeyOldParameterValues = primaryKey
                     .stream()
-                    .map(column -> "old" + column.getColumnFieldName())
+                    .map(column -> "old" + column.gettargetColumnName())
                     .collect(Collectors.joining(", "));
         }
         Optional<ColumnModel> columnOptional =

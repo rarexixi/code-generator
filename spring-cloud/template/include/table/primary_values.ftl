@@ -1,1 +1,1 @@
-<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldNameFirstLower}</#list>
+<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.targetColumnNameFirstLower}</#list>

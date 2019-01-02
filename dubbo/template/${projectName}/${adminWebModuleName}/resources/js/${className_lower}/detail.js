@@ -12,13 +12,13 @@ var app = new Vue({
         detail: {
             <#list table.columns as column>
             <#if column.fkSelect>
-            ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: 0<#if column_has_next>,</#if>
             <#elseif column.columnName == table.validStatusField.fieldName>
-            ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
-            <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+            <#elseif column.targetDataType == "Date">
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             <#else>
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             </#if>
             </#list>
         }

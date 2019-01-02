@@ -38,3 +38,55 @@ Vue.filter('formatDate', function (timestamp) {
     }
     return fmt;
 });
+
+
+Vue.prototype.ajaxPost = function (url, params, failMsg, callback) {
+
+    var self = this;
+    axios.post(url, params).then(function (res) {
+        var response = res.data;
+        getResponse(self, response, failMsg, callback);
+    }).catch(function (error) {
+        self.$notify({
+            message: error,
+            type: 'error'
+        });
+    });
+};
+Vue.prototype.ajaxGet = function (url, params, failMsg, callback) {
+
+    var self = this;
+    axios.get(url, {
+        params: params
+    }).then(function (res) {
+        var response = res.data;
+        getResponse(self, response, failMsg, callback);
+    }).catch(function (error) {
+        self.$notify({
+            message: error,
+            type: 'error'
+        });
+    });
+};
+
+function getResponse(self, response, failMsg, callback) {
+
+    if (response.success == true) {
+        if (callback) callback(response);
+    } else {
+        if (response.extData) {
+            if (response.extData instanceof Array) {
+                failMsg += '<br/>' + response.extData.join('<br/>');
+            } else {
+                failMsg += '<br/>' + response.extData;
+            }
+        } else if (response.message) {
+            failMsg += '<br/>' + response.message;
+        }
+        self.$notify({
+            message: failMsg,
+            type: 'error',
+            dangerouslyUseHTMLString: true
+        });
+    }
+}

@@ -17,7 +17,7 @@ public class ${className}DetailVm implements Serializable {
     public ${className}DetailVm(${className}Vo vo) {
 
         <#list table.columns as column>
-        ${column.columnFieldNameFirstLower} = vo.get${column.columnFieldName}();
+        ${column.targetColumnNameFirstLower} = vo.get${column.targetColumnName}();
         </#list>
     }
 
@@ -25,7 +25,7 @@ public class ${className}DetailVm implements Serializable {
     /**
      * ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
     </#list>
 
@@ -33,15 +33,15 @@ public class ${className}DetailVm implements Serializable {
     /**
     * 获取${column.columnComment}
     */
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
 
     /**
     * 设置${column.columnComment}
     */
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
     </#list>

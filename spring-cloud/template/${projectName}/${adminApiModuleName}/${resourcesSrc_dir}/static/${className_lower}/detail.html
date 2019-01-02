@@ -24,7 +24,7 @@
         </el-breadcrumb>
         <#list table.columns as column>
         <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-        <#assign fieldName = column.columnFieldName?uncap_first>
+        <#assign fieldName = column.targetColumnName?uncap_first>
         <#if column.columnName == table.validStatusField.fieldName>
         <el-row :gutter="20">
             <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
@@ -43,7 +43,7 @@
                 <img :src="detail.${fieldName}" alt="${columnComment}">
             </el-col>
         </el-row>
-        <#elseif column.columnFieldType == "Date">
+        <#elseif column.targetDataType == "Date">
         <el-row :gutter="20">
             <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
                 <label>${columnComment}</label>

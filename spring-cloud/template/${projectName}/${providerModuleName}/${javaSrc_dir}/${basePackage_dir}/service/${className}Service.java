@@ -19,7 +19,7 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">

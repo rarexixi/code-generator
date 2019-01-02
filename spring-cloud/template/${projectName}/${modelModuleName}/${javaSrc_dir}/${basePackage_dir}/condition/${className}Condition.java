@@ -17,219 +17,219 @@ public class ${className}Condition implements Serializable {
     /**
      * ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
-    <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+    <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
 
     /**
      * ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
     /**
      * ${column.columnComment} 列表
      */
-    private List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List;
+    private List<${column.targetDataType}> ${column.targetColumnNameFirstLower}List;
 
     /**
      * 最小 ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Min;
 
     /**
      * 最大 ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Max;
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
 
-    public void set${column.columnFieldName}List(List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List) {
-        this.${column.columnFieldNameFirstLower}List = ${column.columnFieldNameFirstLower}List;
+    public void set${column.targetColumnName}List(List<${column.targetDataType}> ${column.targetColumnNameFirstLower}List) {
+        this.${column.targetColumnNameFirstLower}List = ${column.targetColumnNameFirstLower}List;
     }
 
-    public List<${column.columnFieldType}> get${column.columnFieldName}List() {
-        return ${column.columnFieldNameFirstLower}List;
+    public List<${column.targetDataType}> get${column.targetColumnName}List() {
+        return ${column.targetColumnNameFirstLower}List;
     }
 
-    public void set${column.columnFieldName}In(${column.columnFieldType}... ${column.columnFieldNameFirstLower}List) {
-        if (this.${column.columnFieldNameFirstLower}List == null) {
-            this.${column.columnFieldNameFirstLower}List = new ArrayList<${column.columnFieldType}>();
+    public void set${column.targetColumnName}In(${column.targetDataType}... ${column.targetColumnNameFirstLower}List) {
+        if (this.${column.targetColumnNameFirstLower}List == null) {
+            this.${column.targetColumnNameFirstLower}List = new ArrayList<${column.targetDataType}>();
         }
-        for (${column.columnFieldType} ${column.columnFieldNameFirstLower} : ${column.columnFieldNameFirstLower}List) {
-            this.${column.columnFieldNameFirstLower}List.add(${column.columnFieldNameFirstLower});
+        for (${column.targetDataType} ${column.targetColumnNameFirstLower} : ${column.targetColumnNameFirstLower}List) {
+            this.${column.targetColumnNameFirstLower}List.add(${column.targetColumnNameFirstLower});
         }
     }
 
-    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    public void set${column.targetColumnName}Min(${column.targetDataType} ${column.targetColumnNameFirstLower}Min) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Min() {
-        return ${column.columnFieldNameFirstLower}Min;
+    public ${column.targetDataType} get${column.targetColumnName}Min() {
+        return ${column.targetColumnNameFirstLower}Min;
     }
 
-    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Max(${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Max() {
-        return ${column.columnFieldNameFirstLower}Max;
+    public ${column.targetDataType} get${column.targetColumnName}Max() {
+        return ${column.targetColumnNameFirstLower}Max;
     }
 
-    public void set${column.columnFieldName}Between(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min, ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Between(${column.targetDataType} ${column.targetColumnNameFirstLower}Min, ${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
-    <#elseif (column.columnFieldType == "Date")>
+    <#elseif (column.targetDataType == "Date")>
 
     /**
      * ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
     /**
      * 开始 ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Min;
 
     /**
      * 结束 ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Max;
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
 
-    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    public void set${column.targetColumnName}Min(${column.targetDataType} ${column.targetColumnNameFirstLower}Min) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Min() {
-        return ${column.columnFieldNameFirstLower}Min;
+    public ${column.targetDataType} get${column.targetColumnName}Min() {
+        return ${column.targetColumnNameFirstLower}Min;
     }
 
-    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Max(${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Max() {
-        return ${column.columnFieldNameFirstLower}Max;
+    public ${column.targetDataType} get${column.targetColumnName}Max() {
+        return ${column.targetColumnNameFirstLower}Max;
     }
 
-    public void set${column.columnFieldName}Between(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min, ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Between(${column.targetDataType} ${column.targetColumnNameFirstLower}Min, ${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
-    <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+    <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
 
     /**
      * 最小 ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Min;
 
     /**
      * 最大 ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Max;
 
-    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    public void set${column.targetColumnName}Min(${column.targetDataType} ${column.targetColumnNameFirstLower}Min) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Min() {
-        return ${column.columnFieldNameFirstLower}Min;
+    public ${column.targetDataType} get${column.targetColumnName}Min() {
+        return ${column.targetColumnNameFirstLower}Min;
     }
 
-    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Max(${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Max() {
-        return ${column.columnFieldNameFirstLower}Max;
+    public ${column.targetDataType} get${column.targetColumnName}Max() {
+        return ${column.targetColumnNameFirstLower}Max;
     }
 
-    public void set${column.columnFieldName}Between(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min, ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Between(${column.targetDataType} ${column.targetColumnNameFirstLower}Min, ${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
-    <#elseif (column.columnFieldType == "String")>
+    <#elseif (column.targetDataType == "String")>
 
     /**
      * ${column.columnComment} (完全匹配）
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
     /**
      * ${column.columnComment} (开始匹配)
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}StartWith;
 
     /**
      * ${column.columnComment} (泛匹配)
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Like;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Like;
 
     /**
      * ${column.columnComment} 列表
      */
-    private List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List;
+    private List<${column.targetDataType}> ${column.targetColumnNameFirstLower}List;
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
 
-    public void set${column.columnFieldName}StartWith(${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith) {
-        this.${column.columnFieldNameFirstLower}StartWith = ${column.columnFieldNameFirstLower}StartWith;
+    public void set${column.targetColumnName}StartWith(${column.targetDataType} ${column.targetColumnNameFirstLower}StartWith) {
+        this.${column.targetColumnNameFirstLower}StartWith = ${column.targetColumnNameFirstLower}StartWith;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}StartWith() {
-        return ${column.columnFieldNameFirstLower}StartWith;
+    public ${column.targetDataType} get${column.targetColumnName}StartWith() {
+        return ${column.targetColumnNameFirstLower}StartWith;
     }
 
-    public void set${column.columnFieldName}Like(${column.columnFieldType} ${column.columnFieldNameFirstLower}Like) {
-        this.${column.columnFieldNameFirstLower}Like = ${column.columnFieldNameFirstLower}Like;
+    public void set${column.targetColumnName}Like(${column.targetDataType} ${column.targetColumnNameFirstLower}Like) {
+        this.${column.targetColumnNameFirstLower}Like = ${column.targetColumnNameFirstLower}Like;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Like() {
-        return ${column.columnFieldNameFirstLower}Like;
+    public ${column.targetDataType} get${column.targetColumnName}Like() {
+        return ${column.targetColumnNameFirstLower}Like;
     }
 
-    public void set${column.columnFieldName}List(List<${column.columnFieldType}> ${column.columnFieldNameFirstLower}List) {
-        this.${column.columnFieldNameFirstLower}List = ${column.columnFieldNameFirstLower}List;
+    public void set${column.targetColumnName}List(List<${column.targetDataType}> ${column.targetColumnNameFirstLower}List) {
+        this.${column.targetColumnNameFirstLower}List = ${column.targetColumnNameFirstLower}List;
     }
 
-    public List<${column.columnFieldType}> get${column.columnFieldName}List() {
-        return ${column.columnFieldNameFirstLower}List;
+    public List<${column.targetDataType}> get${column.targetColumnName}List() {
+        return ${column.targetColumnNameFirstLower}List;
     }
 
-    public void set${column.columnFieldName}In(${column.columnFieldType}... ${column.columnFieldNameFirstLower}List) {
-        if (this.${column.columnFieldNameFirstLower}List == null) {
-            this.${column.columnFieldNameFirstLower}List = new ArrayList<${column.columnFieldType}>();
+    public void set${column.targetColumnName}In(${column.targetDataType}... ${column.targetColumnNameFirstLower}List) {
+        if (this.${column.targetColumnNameFirstLower}List == null) {
+            this.${column.targetColumnNameFirstLower}List = new ArrayList<${column.targetDataType}>();
         }
-        for (${column.columnFieldType} ${column.columnFieldNameFirstLower} : ${column.columnFieldNameFirstLower}List) {
-            this.${column.columnFieldNameFirstLower}List.add(${column.columnFieldNameFirstLower});
+        for (${column.targetDataType} ${column.targetColumnNameFirstLower} : ${column.targetColumnNameFirstLower}List) {
+            this.${column.targetColumnNameFirstLower}List.add(${column.targetColumnNameFirstLower});
         }
     }
     <#else>
@@ -237,14 +237,14 @@ public class ${className}Condition implements Serializable {
     /**
      * ${column.columnComment}
      */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
     </#if>
 

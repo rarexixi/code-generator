@@ -11,31 +11,31 @@ var app = new Vue({
     data: {
         <#list table.columns as column>
         <#if column.fkSelect>
-        ${column.columnFieldName?uncap_first}SelectList: [],
+        ${column.targetColumnName?uncap_first}SelectList: [],
         </#if>
         </#list>
         <#if !table.hasAutoIncrementUniquePrimaryKey>
         <#list primaryKey as column>
-        old${column.columnFieldName}: '',
+        old${column.targetColumnName}: '',
         </#list>
         </#if>
         searchParams: {
             <#list table.columns as column>
             <#if column.ignoreSearch>
             <#elseif (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
-            ${column.columnFieldNameFirstLower}: '',
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            ${column.columnFieldNameFirstLower}: '',
-            <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}Min: '',
-            ${column.columnFieldNameFirstLower}Max: '',
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-            ${column.columnFieldNameFirstLower}Min: '',
-            ${column.columnFieldNameFirstLower}Max: '',
-            <#elseif (column.columnFieldType == "String")>
-            ${column.columnFieldNameFirstLower}StartWith: '',
+            ${column.targetColumnNameFirstLower}: '',
+            <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
+            ${column.targetColumnNameFirstLower}: '',
+            <#elseif column.targetDataType == "Date">
+            ${column.targetColumnNameFirstLower}Min: '',
+            ${column.targetColumnNameFirstLower}Max: '',
+            <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
+            ${column.targetColumnNameFirstLower}Min: '',
+            ${column.targetColumnNameFirstLower}Max: '',
+            <#elseif (column.targetDataType == "String")>
+            ${column.targetColumnNameFirstLower}StartWith: '',
             <#else>
-            ${column.columnFieldNameFirstLower}: '',
+            ${column.targetColumnNameFirstLower}: '',
             </#if>
             </#list>
             pageIndex: 1,
@@ -48,26 +48,26 @@ var app = new Vue({
             <#list table.columns as column>
             <#if column.notRequired>
             <#elseif column.fkSelect>
-            ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: 0<#if column_has_next>,</#if>
             <#elseif column.columnName == table.validStatusField.fieldName>
-            ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
-            <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+            <#elseif column.targetDataType == "Date">
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             <#else>
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             </#if>
             </#list>
         },
         detail: {
             <#list table.columns as column>
             <#if column.fkSelect>
-            ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: 0<#if column_has_next>,</#if>
             <#elseif column.columnName == table.validStatusField.fieldName>
-            ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
-            <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+            <#elseif column.targetDataType == "Date">
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             <#else>
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             </#if>
             </#list>
         }
@@ -76,7 +76,7 @@ var app = new Vue({
         this.search();
         <#list table.columns as column>
         <#if column.fkSelect>
-        this.init${column.columnFieldName?replace('Id', '')}();
+        this.init${column.targetColumnName?replace('Id', '')}();
         </#if>
         </#list>
     },
@@ -101,7 +101,7 @@ var app = new Vue({
     methods: {
         <#list table.columns as column>
         <#if column.fkSelect>
-        init${column.columnFieldName?replace('Id', '')}: function () {
+        init${column.targetColumnName?replace('Id', '')}: function () {
             var self = this;
             $.ajax({
                 type: 'post',
@@ -114,7 +114,7 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        self.${column.columnFieldName?uncap_first}SelectList = response.result.list;
+                        self.${column.targetColumnName?uncap_first}SelectList = response.result.list;
                     } else {
                         commonNotify.danger("获取列表失败！");
                     }
@@ -159,10 +159,10 @@ var app = new Vue({
         <#if table.validStatusColumn??>
         changeValidSearch: function(valid) {
             var self = this;
-            if (self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
+            if (self.searchParams.${table.validStatusColumn.targetColumnNameFirstLower} === valid) {
                 return;
             }
-            self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
+            self.searchParams.${table.validStatusColumn.targetColumnNameFirstLower} = valid;
             self.search();
         },
         </#if>
@@ -170,19 +170,19 @@ var app = new Vue({
             <#list table.columns as column>
             <#if column.ignoreSearch>
             <#elseif (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
-            this.searchParams.${column.columnFieldNameFirstLower} = '';
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            this.searchParams.${column.columnFieldNameFirstLower} = '';
-            <#elseif column.columnFieldType == "Date">
-            this.searchParams.${column.columnFieldNameFirstLower}Min = '';
-            this.searchParams.${column.columnFieldNameFirstLower}Max = '';
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-            this.searchParams.${column.columnFieldNameFirstLower}Min = '';
-            this.searchParams.${column.columnFieldNameFirstLower}Max = '';
-            <#elseif (column.columnFieldType == "String")>
-            this.searchParams.${column.columnFieldNameFirstLower}StartWith = '';
+            this.searchParams.${column.targetColumnNameFirstLower} = '';
+            <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
+            this.searchParams.${column.targetColumnNameFirstLower} = '';
+            <#elseif column.targetDataType == "Date">
+            this.searchParams.${column.targetColumnNameFirstLower}Min = '';
+            this.searchParams.${column.targetColumnNameFirstLower}Max = '';
+            <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
+            this.searchParams.${column.targetColumnNameFirstLower}Min = '';
+            this.searchParams.${column.targetColumnNameFirstLower}Max = '';
+            <#elseif (column.targetDataType == "String")>
+            this.searchParams.${column.targetColumnNameFirstLower}StartWith = '';
             <#else>
-            this.searchParams.${column.columnFieldNameFirstLower} = '';
+            this.searchParams.${column.targetColumnNameFirstLower} = '';
             </#if>
             </#list>
             this.searchParams.pageIndex = 1;
@@ -195,18 +195,18 @@ var app = new Vue({
             this.resetSave();
             var self = this;
             <#if !table.hasAutoIncrementUniquePrimaryKey>
-            <#list primaryKey as column>self.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};</#list>
+            <#list primaryKey as column>self.old${column.targetColumnName} = ${column.targetColumnNameFirstLower};</#list>
             </#if>
             $.ajax({
                 type: 'get',
-                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
                         <#list table.columns as column>
                         <#if column.notRequired>
                         <#else>
-                        self.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                        self.addOrEditParams.${column.targetColumnNameFirstLower} = response.result.${column.targetColumnNameFirstLower};
                         </#if>
                         </#list>
                     } else {
@@ -219,16 +219,16 @@ var app = new Vue({
             var self = this;
             var ajaxUrl;
             <#if table.hasAutoIncrementUniquePrimaryKey>
-            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldNameFirstLower} == ''</#list>) {
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.targetColumnNameFirstLower} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
             } else {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit';
             }
             <#else>
-            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.old${column.columnFieldName} == ''</#list>) {
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.old${column.targetColumnName} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list primaryKey as column><#if (column_index > 0)> + '&'</#if> + 'old${column.columnFieldName}=' + self.old${column.columnFieldName}</#list>;
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list primaryKey as column><#if (column_index > 0)> + '&'</#if> + 'old${column.targetColumnName}=' + self.old${column.targetColumnName}</#list>;
             }
             </#if>
             $.ajax({
@@ -250,13 +250,13 @@ var app = new Vue({
             <#list table.columns as column>
             <#if column.notRequired>
             <#elseif column.fkSelect>
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = 0;
+            this.addOrEditParams.${column.targetColumnNameFirstLower} = 0;
             <#elseif column.columnName == table.validStatusField.fieldName>
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = ${table.validStatusField.validValue};
-            <#elseif column.columnFieldType == "Date">
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = '';
+            this.addOrEditParams.${column.targetColumnNameFirstLower} = ${table.validStatusField.validValue};
+            <#elseif column.targetDataType == "Date">
+            this.addOrEditParams.${column.targetColumnNameFirstLower} = '';
             <#else>
-            this.addOrEditParams.${column.columnFieldNameFirstLower} = '';
+            this.addOrEditParams.${column.targetColumnNameFirstLower} = '';
             </#if>
             </#list>
         },
@@ -264,7 +264,7 @@ var app = new Vue({
             var self = this;
             $.ajax({
                 type: 'get',
-                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>,
+                url: appConfig.baseApiPath + '/${classNameLower}/detail?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>,
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
@@ -285,7 +285,7 @@ var app = new Vue({
                 self.checkedList = [];
                 if (self.pageInfo.list) {
                     self.pageInfo.list.forEach(function (item) {
-                        self.checkedList.push(item.${table.uniquePrimaryKey.columnFieldName?uncap_first});
+                        self.checkedList.push(item.${table.uniquePrimaryKey.targetColumnName?uncap_first});
                     });
                 }
             }
@@ -324,16 +324,16 @@ var app = new Vue({
         </#if>
         <#if table.validStatusColumn??>
         enable: function (${primaryKeyParameterValues}) {
-            var url = '/${classNameLower}/enable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = '/${classNameLower}/enable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             this.exec("确定启用吗？", url, "启用成功！", "启用失败！");
         },
         disable: function (${primaryKeyParameterValues}) {
-            var url = '/${classNameLower}/disable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = '/${classNameLower}/disable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             this.exec("确定禁用吗？", url, "禁用成功！", "禁用失败！");
         },
         </#if>
         del: function (${primaryKeyParameterValues}) {
-            var url = '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             this.exec("确定删除吗？", url, "删除成功！", "删除失败！");
         },
         exec: function (confirmMsg, url, successMsg, failMsg) {

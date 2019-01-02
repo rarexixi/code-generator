@@ -66,16 +66,16 @@ class TableModel(table: Table,
             uniquePrimaryKey = if (primaryKey.size == 1) primaryKey[0] else null
             isHasAutoIncrementUniquePrimaryKey = uniquePrimaryKey != null && uniquePrimaryKey!!.autoIncrement
             primaryKeyParameters = primaryKey.joinToString(", ") { column ->
-                column.columnFieldType + " " + column.columnFieldNameFirstLower
+                column.targetDataType + " " + column.targetColumnNameFirstLower
             }
             primaryKeyParameterValues = primaryKey.joinToString(", ") { column ->
-                column.columnFieldNameFirstLower + ""
+                column.targetColumnNameFirstLower + ""
             }
             primaryKeyOldParameters = primaryKey.joinToString(", ") { column ->
-                column.columnFieldType + " old" + column.columnFieldName
+                column.targetDataType + " old" + column.targetColumnName
             }
             primaryKeyOldParameterValues = primaryKey.joinToString(", ") { column ->
-                "old" + column.columnFieldName
+                "old" + column.targetColumnName
             }
         }
         val columnOptional = columns

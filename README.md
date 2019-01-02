@@ -88,8 +88,8 @@ commonProperties配置的map
 |extra                        |                          |String                |auto_increment
 |columnComment                |列说明                    |String                |用户ID
 |index                        |是否是索引                |Boolean               |
-|columnFieldName              |对应的JAVA字段名          |String                |UserId
-|columnFieldType              |对应的JAVA字段类型        |String                |Integer
+|targetColumnName              |对应的JAVA字段名          |String                |UserId
+|targetDataType              |对应的JAVA字段类型        |String                |Integer
 |fkSelectField                |逻辑外键选择项            |FkSelectField         |
 |fkSelect                     |是否是逻辑外键选择项      |Boolean               |
 |autoIncrement                |是否自增长                |Boolean               |

@@ -17,15 +17,15 @@ public class ${className}Entity implements Serializable {
      */
 <#if (column.primaryKey )>
     <#if column.autoIncrement>
-    @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
+    @UpdateNotNull(name="${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
     <#else>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
+    @InsertNotNull(name="${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
     </#if>
 <#elseif (!column.notRequired && (!column.nullable && !(column.columnDefault??)))>
-    @InsertNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
-    @UpdateNotNull(name="${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
+    @InsertNotNull(name="${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
+    @UpdateNotNull(name="${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})")
 </#if>
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
     </#list>
 
@@ -33,15 +33,15 @@ public class ${className}Entity implements Serializable {
     /**
      * 设置${column.columnComment}
      */
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
     /**
      * 获取${column.columnComment}
      */
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
 
     </#list>

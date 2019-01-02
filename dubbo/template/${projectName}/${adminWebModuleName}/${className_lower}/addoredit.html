@@ -35,19 +35,19 @@
                 <#list table.columns as column>
                 <#if column.notRequired>
                 <#elseif column.autoIncrement>
-                <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="hidden" />
+                <input v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" type="hidden" />
                 <#elseif column.fkSelect>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                    <select v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" class="form-control custom-select">
                         <option value="">请选择</option>
-                        <option v-for="item in ${column.columnFieldName?uncap_first}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.valueField?uncap_first} }}</option>
+                        <option v-for="item in ${column.targetColumnName?uncap_first}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.valueField?uncap_first} }}</option>
                     </select>
                 </div>
                 <#elseif column.select>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                    <select v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" class="form-control custom-select">
                         <option value="">请选择</option>
                         <#list column.selectOptions as option>
                         <option value="${option.value}">${option.text}</option>
@@ -57,40 +57,40 @@
                 <#elseif column.columnName == table.validStatusField.fieldName>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <select v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                    <select v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" class="form-control custom-select">
                         <option value="${table.validStatusField.validValue}">有效</option>
                         <option value="${table.validStatusField.invalidValue}">无效</option>
                     </select>
                 </div>
-                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                    <input v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" type="number" class="form-control" />
                 </div>
-                <#elseif column.columnFieldType == "Date">
+                <#elseif column.targetDataType == "Date">
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower} | formatDate" type="datetime" class="form-control" />
+                    <input v-model="addOrEditParams.${column.targetColumnNameFirstLower} | formatDate" type="datetime" class="form-control" />
                 </div>
-                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    <input v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" type="text" class="form-control" />
                 </div>
                 <#elseif (column.content)>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <textarea v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" class="form-control"></textarea>
+                    <textarea v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" class="form-control"></textarea>
                 </div>
-                <#elseif (column.columnFieldType == "String")>
+                <#elseif (column.targetDataType == "String")>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    <input v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" type="text" class="form-control" />
                 </div>
                 <#else>
                 <div class="form-group">
                     <label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label>
-                    <input v-model="addOrEditParams.${column.columnFieldNameFirstLower}" data-v-model="addOrEditParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                    <input v-model="addOrEditParams.${column.targetColumnNameFirstLower}" data-v-model="addOrEditParams.${column.targetColumnNameFirstLower}" type="text" class="form-control" />
                 </div>
                 </#if>
                 </#list>

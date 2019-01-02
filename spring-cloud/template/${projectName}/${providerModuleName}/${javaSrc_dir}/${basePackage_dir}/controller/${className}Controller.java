@@ -64,7 +64,7 @@ public class ${className}Controller {
      * 根据主键物理删除
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -83,15 +83,15 @@ public class ${className}Controller {
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResultVo<Integer> delete(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> delete(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         int count = ${classNameLower}Service.delete(condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -103,7 +103,7 @@ public class ${className}Controller {
      * 根据主键禁用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -114,7 +114,7 @@ public class ${className}Controller {
 
         ${className}Condition condition = getPkCondition(<#include "/include/table/primary_values.ftl">);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.invalidValue});
         int count = ${classNameLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -124,7 +124,7 @@ public class ${className}Controller {
      * 根据主键启用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -135,7 +135,7 @@ public class ${className}Controller {
 
         ${className}Condition condition = getPkCondition(<#include "/include/table/primary_values.ftl">);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.validValue});
         int count = ${classNameLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -145,17 +145,17 @@ public class ${className}Controller {
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disable", method = RequestMethod.POST)
-    public ResultVo<Integer> disable(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> disable(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.invalidValue});
         int count = ${classNameLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -164,17 +164,17 @@ public class ${className}Controller {
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enable", method = RequestMethod.POST)
-    public ResultVo<Integer> enable(@RequestBody List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> enable(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.validValue});
         int count = ${classNameLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -191,12 +191,12 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}Entity entity, Errors errors<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.columnFieldName}") ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}Entity entity, Errors errors<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, @RequestParam(value="old${column.targetColumnName}") ${column.targetDataType} old${column.targetColumnName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         <#if !table.hasAutoIncrementUniquePrimaryKey>
-        ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
+        ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.targetColumnName}</#list></#if>);
         <#else>
-        ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.columnFieldName}()</#list>);
+        ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.targetColumnName}()</#list>);
         </#if>
         int count = ${classNameLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
@@ -207,7 +207,7 @@ public class ${className}Controller {
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -242,16 +242,16 @@ public class ${className}Controller {
 
         ${className}Condition condition = new ${className}Condition();
         <#list primaryKey as column>
-        condition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        condition.set${column.targetColumnName}(${column.targetColumnNameFirstLower});
         </#list>
         return condition;
     }
     <#if (table.uniquePrimaryKey??)>
 
-    private ${className}Condition getPkListCondition(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+    private ${className}Condition getPkListCondition(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
 
         ${className}Condition condition = new ${className}Condition();
-        condition.set${table.uniquePrimaryKey.columnFieldName}List(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        condition.set${table.uniquePrimaryKey.targetColumnName}List(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         return condition;
     }
     </#if>

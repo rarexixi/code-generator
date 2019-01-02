@@ -18,6 +18,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -67,6 +69,10 @@ public class CloudServiceAspect {
 
             Object result = proceedingJoinPoint.proceed();
             return result;
+        } catch (ConstraintViolationException e) {
+            logger.error(methodName, "参数验证失败", e);
+            List<String> messages = getErrorMessage(e);
+            return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, messages);
         } catch (ValidationException e) {
             logger.error(methodName, "参数验证失败", e);
             return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, e.getMessage());
@@ -104,6 +110,21 @@ public class CloudServiceAspect {
             parameters.add(arg);
         }
         return parameters;
+    }
+
+    /**
+     * 获取拦截的验证失败信息
+     *
+     * @param exception
+     * @return
+     */
+    private List<String> getErrorMessage(ConstraintViolationException exception) {
+        List<String> messages = new LinkedList<>();
+        Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
+        for (ConstraintViolation violation : violations) {
+            messages.add(violation.getMessage());
+        }
+        return messages;
     }
 
     /**

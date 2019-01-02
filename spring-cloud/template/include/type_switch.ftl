@@ -1,8 +1,8 @@
 <#if column.ignoreSearch>
 <#elseif column.columnName == table.validStatusField.fieldName>
-<#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-<#elseif (column.columnFieldType == "Date")>
-<#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-<#elseif (column.columnFieldType == "String")>
+<#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
+<#elseif (column.targetDataType == "Date")>
+<#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
+<#elseif (column.targetDataType == "String")>
 <#else>
 </#if>

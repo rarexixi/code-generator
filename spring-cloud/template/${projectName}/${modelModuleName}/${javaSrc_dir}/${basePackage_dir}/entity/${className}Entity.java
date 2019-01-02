@@ -12,16 +12,16 @@ import java.io.Serializable;
 public class ${className}Entity implements Serializable {
 
     <#list table.columns as column>
-    <#assign annotationName = ((column.columnFieldType == 'String') ? string('NotBlank', 'NotNull'))>
+    <#assign annotationName = ((column.targetDataType == 'String') ? string('NotBlank', 'NotNull'))>
     /**
      * ${column.columnComment}
      */
     <#if (column.primaryKey)>
-    @${annotationName}(groups = {<#if column.autoIncrement>DataEdit.class<#else>DataAdd.class</#if>}, message = "${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
+    @${annotationName}(groups = {<#if column.autoIncrement>DataEdit.class<#else>DataAdd.class</#if>}, message = "${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
     <#elseif (!column.notRequired && (!column.nullable && !(column.columnDefault??)))>
-    @${annotationName}(groups = {DataAdd.class, DataEdit.class}, message = "${column.columnFieldNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
+    @${annotationName}(groups = {DataAdd.class, DataEdit.class}, message = "${column.targetColumnNameFirstLower} (${(column.columnComment?split("[（ ,，(]", "r"))[0]})不能为空")
     </#if>
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
     </#list>
 
@@ -29,15 +29,15 @@ public class ${className}Entity implements Serializable {
     /**
      * 设置${column.columnComment}
      */
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
     /**
      * 获取${column.columnComment}
      */
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
 
     </#list>

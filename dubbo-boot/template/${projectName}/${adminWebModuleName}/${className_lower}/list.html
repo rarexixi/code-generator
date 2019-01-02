@@ -37,7 +37,7 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                        <select v-model="searchParams.${column.targetColumnNameFirstLower}" data-v-model="searchParams.${column.targetColumnNameFirstLower}" class="form-control custom-select">
                             <option value="">全部</option>
                             <option value="${table.validStatusField.validValue}">有效</option>
                             <option value="${table.validStatusField.invalidValue}">无效</option>
@@ -50,9 +50,9 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                        <select v-model="searchParams.${column.targetColumnNameFirstLower}" data-v-model="searchParams.${column.targetColumnNameFirstLower}" class="form-control custom-select">
                             <option value="">全部</option>
-                            <option v-for="item in ${column.columnFieldName?uncap_first}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.valueField?uncap_first} }}</option>
+                            <option v-for="item in ${column.targetColumnName?uncap_first}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}">{{ item.${column.fkSelectField.valueField?uncap_first} }}</option>
                         </select>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <select v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" class="form-control custom-select">
+                        <select v-model="searchParams.${column.targetColumnNameFirstLower}" data-v-model="searchParams.${column.targetColumnNameFirstLower}" class="form-control custom-select">
                             <option value="">全部</option>
                             <#list column.selectOptions as option>
                             <option value="${option.value}">${option.text}</option>
@@ -76,41 +76,41 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.targetColumnNameFirstLower}" data-v-model="searchParams.${column.targetColumnNameFirstLower}" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+            <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
             <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="number" class="form-control" />
+                        <input v-model="searchParams.${column.targetColumnNameFirstLower}" data-v-model="searchParams.${column.targetColumnNameFirstLower}" type="number" class="form-control" />
                     </div>
                 </div>
             </div>
-            <#elseif column.columnFieldType == "Date">
+            <#elseif column.targetDataType == "Date">
             <div class="col-12 col-lg-8 col-xl-8">
                 <div class="form-group row">
                     <div class="col-12 col-md-2"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-10">
                         <div class="form-row">
                             <div class="col-12 col-sm-6">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="datetime" class="form-control" />
+                                <input v-model="searchParams.${column.targetColumnNameFirstLower}Min" data-v-model="searchParams.${column.targetColumnNameFirstLower}Min" type="datetime" class="form-control" />
                             </div>
                             <div class="col-12 col-sm-6">
-                                <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="datetime" class="form-control" />
+                                <input v-model="searchParams.${column.targetColumnNameFirstLower}Max" data-v-model="searchParams.${column.targetColumnNameFirstLower}Max" type="datetime" class="form-control" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
             <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">最小${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Min" data-v-model="searchParams.${column.columnFieldNameFirstLower}Min" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.targetColumnNameFirstLower}Min" data-v-model="searchParams.${column.targetColumnNameFirstLower}Min" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -118,16 +118,16 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">最大${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}Max" data-v-model="searchParams.${column.columnFieldNameFirstLower}Max" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.targetColumnNameFirstLower}Max" data-v-model="searchParams.${column.targetColumnNameFirstLower}Max" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
-            <#elseif (column.columnFieldType == "String")>
+            <#elseif (column.targetDataType == "String")>
             <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}StartWith" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.targetColumnNameFirstLower}StartWith" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                 <div class="form-group row">
                     <div class="col-12 col-md-4"><label class="col-form-label">${(column.columnComment?split("[（ ,，(]", "r"))[0]}</label></div>
                     <div class="col-12 col-md-8">
-                        <input v-model="searchParams.${column.columnFieldNameFirstLower}" data-v-model="searchParams.${column.columnFieldNameFirstLower}" type="text" class="form-control" />
+                        <input v-model="searchParams.${column.targetColumnNameFirstLower}" data-v-model="searchParams.${column.targetColumnNameFirstLower}" type="text" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -155,13 +155,13 @@
             <div class="col-12">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a @click="changeValidSearch('')" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === '' }" href="javascript:;">全部</a>
+                        <a @click="changeValidSearch('')" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.targetColumnNameFirstLower} === '' }" href="javascript:;">全部</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="changeValidSearch(${table.validStatusField.validValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.validValue} }" href="javascript:;">有效</a>
+                        <a @click="changeValidSearch(${table.validStatusField.validValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.targetColumnNameFirstLower} === ${table.validStatusField.validValue} }" href="javascript:;">有效</a>
                     </li>
                     <li class="nav-item">
-                        <a @click="changeValidSearch(${table.validStatusField.invalidValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === ${table.validStatusField.invalidValue} }" href="javascript:;">无效</a>
+                        <a @click="changeValidSearch(${table.validStatusField.invalidValue})" class="nav-link" :class="{ active: searchParams.${table.validStatusColumn.targetColumnNameFirstLower} === ${table.validStatusField.invalidValue} }" href="javascript:;">无效</a>
                     </li>
                 </ul>
             </div>
@@ -201,35 +201,35 @@
                     <tbody>
                         <tr v-for="item in pageInfo.list">
                             <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
-                            <td><input type="checkbox" v-model="checkedList" :value="item.${table.uniquePrimaryKey.columnFieldName?uncap_first}" /></td>
+                            <td><input type="checkbox" v-model="checkedList" :value="item.${table.uniquePrimaryKey.targetColumnName?uncap_first}" /></td>
                             </#if>
                             <#list table.columns as column>
                             <#if column.content>
-                            <!-- <td><span>{{item.${column.columnFieldNameFirstLower}}}</span></td> -->
+                            <!-- <td><span>{{item.${column.targetColumnNameFirstLower}}}</span></td> -->
                             <#elseif column.columnName == table.validStatusField.fieldName>
-                            <td><span v-if="item.${column.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-success">有效</span><span v-else class="text-danger">无效</span></td>
+                            <td><span v-if="item.${column.targetColumnNameFirstLower}==${table.validStatusField.validValue}" class="text-success">有效</span><span v-else class="text-danger">无效</span></td>
                             <#elseif column.imgUrl>
                             <td>
                                 <div class="ratio ratio-4by3 table-img-container">
                                     <div class="content center">
-                                        <img :src="item.${column.columnFieldNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}" class="content" />
+                                        <img :src="item.${column.targetColumnNameFirstLower}" alt="${(column.columnComment?split("[（ ,，(]", "r"))[0]}" class="content" />
                                     </div>
                                 </div>
                             </td>
-                            <#elseif column.columnFieldType == "Date">
-                            <td><span>{{item.${column.columnFieldNameFirstLower} | formatDate}}</span></td>
+                            <#elseif column.targetDataType == "Date">
+                            <td><span>{{item.${column.targetColumnNameFirstLower} | formatDate}}</span></td>
                             <#else>
-                            <td><span>{{item.${column.columnFieldNameFirstLower}}}</span></td>
+                            <td><span>{{item.${column.targetColumnNameFirstLower}}}</span></td>
                             </#if>
                             </#list>
                             <td>
-                                <a href="javascript:;" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" class="text-info">编辑</a>
-                                <a href="javascript:;" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" class="text-secondary">详情</a>
+                                <a href="javascript:;" @click="edit(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.targetColumnNameFirstLower}</#list>)" class="text-info">编辑</a>
+                                <a href="javascript:;" @click="get(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.targetColumnNameFirstLower}</#list>)" class="text-secondary">详情</a>
                                 <#if table.validStatusColumn??>
-                                <a href="javascript:;" @click="disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" v-if="item.${table.validStatusColumn.columnFieldNameFirstLower}==${table.validStatusField.validValue}" class="text-warning">禁用</a>
-                                <a href="javascript:;" @click="enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" v-else class="text-success">启用</a>
+                                <a href="javascript:;" @click="disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.targetColumnNameFirstLower}</#list>)" v-if="item.${table.validStatusColumn.targetColumnNameFirstLower}==${table.validStatusField.validValue}" class="text-warning">禁用</a>
+                                <a href="javascript:;" @click="enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.targetColumnNameFirstLower}</#list>)" v-else class="text-success">启用</a>
                                 </#if>
-                                <a href="javascript:;" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.columnFieldNameFirstLower}</#list>)" class="text-danger">删除</a>
+                                <a href="javascript:;" @click="del(<#list primaryKey as column><#if (column_index > 0)>, </#if>item.${column.targetColumnNameFirstLower}</#list>)" class="text-danger">删除</a>
                             </td>
                         </tr>
                     </tbody>

@@ -13,11 +13,11 @@ public class ${className}OrderCondition extends BaseOrderCondition implements Se
     }
     <#list table.columns as column>
 
-    public void set${column.columnFieldName}Asc() {
+    public void set${column.targetColumnName}Asc() {
         super.orderByMap.put("${column.tableName}.${column.columnName}", "ASC");
     }
 
-    public void set${column.columnFieldName}Desc() {
+    public void set${column.targetColumnName}Desc() {
         super.orderByMap.put("${column.tableName}.${column.columnName}", "DESC");
     }
 

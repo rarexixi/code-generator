@@ -11,7 +11,7 @@
 
     <resultMap id="BaseModelMap" type="${basePackage}.entity.${className}Entity">
         <#list table.columns as column>
-        <result property="${column.columnFieldNameFirstLower}" column="${column.columnName}"/>
+        <result property="${column.targetColumnNameFirstLower}" column="${column.columnName}"/>
         </#list>
     </resultMap>
 
@@ -23,73 +23,73 @@
         <#list table.columns as column>
             <#if column.ignoreSearch>
             <#elseif column.columnName == table.validStatusField.fieldName>
-            <if test="condition.${column.columnFieldNameFirstLower} != null">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            <if test="condition.${column.targetColumnNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.targetColumnNameFirstLower/>
             </if>
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            <if test="condition.${column.columnFieldNameFirstLower} != null">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
+            <if test="condition.${column.targetColumnNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.targetColumnNameFirstLower/>
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}List != null and condition.${column.columnFieldNameFirstLower}List.size() > 0">
+            <if test="condition.${column.targetColumnNameFirstLower}List != null and condition.${column.targetColumnNameFirstLower}List.size() > 0">
                 AND `${table.tableName}`.`${column.columnName}` in
-                <foreach collection="condition.${column.columnFieldNameFirstLower}List" item="it" open="(" close=")" separator=",">
+                <foreach collection="condition.${column.targetColumnNameFirstLower}List" item="it" open="(" close=")" separator=",">
                     ${r"#{it}"}
                 </foreach>
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}Min != null">
+            <if test="condition.${column.targetColumnNameFirstLower}Min != null">
                 <![CDATA[
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.targetColumnNameFirstLower +'Min'/>
                 ]]>
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}Max != null">
+            <if test="condition.${column.targetColumnNameFirstLower}Max != null">
                 <![CDATA[
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Max'/>
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.targetColumnNameFirstLower +'Max'/>
                 ]]>
             </if>
-            <#elseif (column.columnFieldType == "Date")>
-            <if test="condition.${column.columnFieldNameFirstLower} != null">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            <#elseif (column.targetDataType == "Date")>
+            <if test="condition.${column.targetColumnNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.targetColumnNameFirstLower/>
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}Min != null">
+            <if test="condition.${column.targetColumnNameFirstLower}Min != null">
                 <![CDATA[
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.targetColumnNameFirstLower +'Min'/>
                 ]]>
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}Max != null">
+            <if test="condition.${column.targetColumnNameFirstLower}Max != null">
                 <![CDATA[
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Max'/>
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.targetColumnNameFirstLower +'Max'/>
                 ]]>
             </if>
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-            <if test="condition.${column.columnFieldNameFirstLower}Min != null">
+            <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
+            <if test="condition.${column.targetColumnNameFirstLower}Min != null">
                 <![CDATA[
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Min'/>
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` >= <@mapperEl 'condition.' + column.targetColumnNameFirstLower +'Min'/>
                 ]]>
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}Max != null">
+            <if test="condition.${column.targetColumnNameFirstLower}Max != null">
                 <![CDATA[
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Max'/>
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` <= <@mapperEl 'condition.' + column.targetColumnNameFirstLower +'Max'/>
                 ]]>
             </if>
-            <#elseif (column.columnFieldType == "String")>
-            <if test="condition.${column.columnFieldNameFirstLower} != null and condition.${column.columnFieldNameFirstLower} != ''">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            <#elseif (column.targetDataType == "String")>
+            <if test="condition.${column.targetColumnNameFirstLower} != null and condition.${column.targetColumnNameFirstLower} != ''">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.targetColumnNameFirstLower/>
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}StartWith != null and condition.${column.columnFieldNameFirstLower}StartWith != ''">
-                AND `${table.tableName}`.`${column.columnName}` LIKE concat(<@mapperEl 'condition.' + column.columnFieldNameFirstLower +'StartWith'/>, '%')
+            <if test="condition.${column.targetColumnNameFirstLower}StartWith != null and condition.${column.targetColumnNameFirstLower}StartWith != ''">
+                AND `${table.tableName}`.`${column.columnName}` LIKE concat(<@mapperEl 'condition.' + column.targetColumnNameFirstLower +'StartWith'/>, '%')
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}Like != null and condition.${column.columnFieldNameFirstLower}Like != ''">
-                AND `${table.tableName}`.`${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + column.columnFieldNameFirstLower +'Like'/>, '%')
+            <if test="condition.${column.targetColumnNameFirstLower}Like != null and condition.${column.targetColumnNameFirstLower}Like != ''">
+                AND `${table.tableName}`.`${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + column.targetColumnNameFirstLower +'Like'/>, '%')
             </if>
-            <if test="condition.${column.columnFieldNameFirstLower}List != null and condition.${column.columnFieldNameFirstLower}List.size() > 0">
+            <if test="condition.${column.targetColumnNameFirstLower}List != null and condition.${column.targetColumnNameFirstLower}List.size() > 0">
                 AND `${table.tableName}`.`${column.columnName}` in
-                <foreach collection="condition.${column.columnFieldNameFirstLower}List" item="it" open="(" close=")" separator=",">
+                <foreach collection="condition.${column.targetColumnNameFirstLower}List" item="it" open="(" close=")" separator=",">
                     ${r"#{it}"}
                 </foreach>
             </if>
             <#else>
-            <if test="condition.${column.columnFieldNameFirstLower} != null">
-                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.columnFieldNameFirstLower/>
+            <if test="condition.${column.targetColumnNameFirstLower} != null">
+                <#if (column_index > 0)>AND </#if>`${table.tableName}`.`${column.columnName}` = <@mapperEl 'condition.' + column.targetColumnNameFirstLower/>
             </if>
             </#if>
         </#list>
@@ -122,27 +122,27 @@
             <#list table.columns as column>
             <#if (column.primaryKey && column.autoIncrement)>
             <#else>
-            <if test="model.${column.columnFieldNameFirstLower} != null">
-                `${table.tableName}`.`${column.columnName}` = <@mapperEl 'model.' + column.columnFieldNameFirstLower/><#if column_has_next>,</#if>
+            <if test="model.${column.targetColumnNameFirstLower} != null">
+                `${table.tableName}`.`${column.columnName}` = <@mapperEl 'model.' + column.targetColumnNameFirstLower/><#if column_has_next>,</#if>
             </if>
             </#if>
             </#list>
         </set>
     </sql>
 
-    <insert id="insert" parameterMap="BaseParameterMap"<#if table.hasPrimaryKey><#if primaryKey[0].autoIncrement> useGeneratedKeys="true" keyProperty="model.${primaryKey[0].columnFieldNameFirstLower}"</#if></#if>>
+    <insert id="insert" parameterMap="BaseParameterMap"<#if table.hasPrimaryKey><#if primaryKey[0].autoIncrement> useGeneratedKeys="true" keyProperty="model.${primaryKey[0].targetColumnNameFirstLower}"</#if></#if>>
         insert into `${table.tableName}`
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list table.columns as column>
             <#if !column.autoIncrement>
-            <if test="model.${column.columnFieldNameFirstLower} != null">`${column.columnName}`,</if>
+            <if test="model.${column.targetColumnNameFirstLower} != null">`${column.columnName}`,</if>
             </#if>
         </#list>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
         <#list table.columns as column>
             <#if !column.autoIncrement>
-            <if test="model.${column.columnFieldNameFirstLower} != null"><@mapperEl 'model.' + column.columnFieldNameFirstLower/>,</if>
+            <if test="model.${column.targetColumnNameFirstLower} != null"><@mapperEl 'model.' + column.targetColumnNameFirstLower/>,</if>
             </#if>
         </#list>
         </trim>
@@ -154,14 +154,14 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
             <#list table.columns as column>
                 <#if !column.autoIncrement>
-                <if test="item.${column.columnFieldNameFirstLower} != null">`${column.columnName}`,</if>
+                <if test="item.${column.targetColumnNameFirstLower} != null">`${column.columnName}`,</if>
                 </#if>
             </#list>
             </trim>
             <trim prefix="values (" suffix=")" suffixOverrides=",">
             <#list table.columns as column>
                 <#if !column.autoIncrement>
-                <if test="item.${column.columnFieldNameFirstLower} != null"><@mapperEl 'item.' + column.columnFieldNameFirstLower/>,</if>
+                <if test="item.${column.targetColumnNameFirstLower} != null"><@mapperEl 'item.' + column.targetColumnNameFirstLower/>,</if>
                 </#if>
             </#list>
             </trim>

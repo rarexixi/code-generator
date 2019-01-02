@@ -42,7 +42,7 @@ public interface ${className}Service {
      * 根据主键物理删除
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
@@ -53,11 +53,11 @@ public interface ${className}Service {
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+    ResponseVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
     </#if>
     <#if table.validStatusColumn??>
 
@@ -65,7 +65,7 @@ public interface ${className}Service {
      * 根据主键禁用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
@@ -76,7 +76,7 @@ public interface ${className}Service {
      * 根据主键启用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
@@ -87,20 +87,20 @@ public interface ${className}Service {
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+    ResponseVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
 
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+    ResponseVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
     </#if>
     </#if>
 
@@ -111,13 +111,13 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> updateByPk(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>);
+    ResponseVo<Integer> updateByPk(${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.targetDataType} old${column.targetColumnName}</#list></#if>);
 
     /**
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">

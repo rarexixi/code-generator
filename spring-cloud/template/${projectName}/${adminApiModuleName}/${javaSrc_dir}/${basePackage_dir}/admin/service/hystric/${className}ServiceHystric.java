@@ -49,14 +49,14 @@ public class ${className}ServiceHystric implements ${className}Service {
      * 根据主键物理删除
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<Integer> delete(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.targetDataType} ${column.targetColumnNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     <#if (table.uniquePrimaryKey??)>
@@ -64,13 +64,13 @@ public class ${className}ServiceHystric implements ${className}Service {
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> delete(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> delete(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>
@@ -80,14 +80,14 @@ public class ${className}ServiceHystric implements ${className}Service {
      * 根据主键禁用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<Integer> disable(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.targetDataType} ${column.targetColumnNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
@@ -95,14 +95,14 @@ public class ${className}ServiceHystric implements ${className}Service {
      * 根据主键启用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<Integer> enable(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.targetDataType} ${column.targetColumnNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     <#if (table.uniquePrimaryKey??)>
@@ -110,26 +110,26 @@ public class ${className}ServiceHystric implements ${className}Service {
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> disable(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> disable(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> enable(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> enable(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>
@@ -144,7 +144,7 @@ public class ${className}ServiceHystric implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> update(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
+    public ResultVo<Integer> update(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.targetDataType} old${column.targetColumnName}</#list></#if>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
@@ -152,14 +152,14 @@ public class ${className}ServiceHystric implements ${className}Service {
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<${className}Vo> get(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>, String sessionId) {
+    public ResultVo<${className}Vo> get(<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.targetDataType} ${column.targetColumnNameFirstLower}</#list>, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>

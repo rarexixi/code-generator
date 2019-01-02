@@ -24,112 +24,112 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
     /**
     * ${column.columnComment}
     */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
-    <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+    <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
 
     /**
     * ${column.columnComment}
     */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
-    <#elseif (column.columnFieldType == "Date")>
+    <#elseif (column.targetDataType == "Date")>
 
     /**
     * 开始 ${column.columnComment}
     */
     @JsonDeserialize(using = DateJsonDeserializer.class)
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Min;
 
     /**
     * 结束 ${column.columnComment}
     */
     @JsonDeserialize(using = DateJsonDeserializer.class)
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Max;
 
-    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    public void set${column.targetColumnName}Min(${column.targetDataType} ${column.targetColumnNameFirstLower}Min) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Min() {
-        return ${column.columnFieldNameFirstLower}Min;
+    public ${column.targetDataType} get${column.targetColumnName}Min() {
+        return ${column.targetColumnNameFirstLower}Min;
     }
 
-    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Max(${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Max() {
-        return ${column.columnFieldNameFirstLower}Max;
+    public ${column.targetDataType} get${column.targetColumnName}Max() {
+        return ${column.targetColumnNameFirstLower}Max;
     }
-    <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+    <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
 
     /**
     * 最小 ${column.columnComment}
     */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Min;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Min;
 
     /**
     * 最大 ${column.columnComment}
     */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}Max;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}Max;
 
-    public void set${column.columnFieldName}Min(${column.columnFieldType} ${column.columnFieldNameFirstLower}Min) {
-        this.${column.columnFieldNameFirstLower}Min = ${column.columnFieldNameFirstLower}Min;
+    public void set${column.targetColumnName}Min(${column.targetDataType} ${column.targetColumnNameFirstLower}Min) {
+        this.${column.targetColumnNameFirstLower}Min = ${column.targetColumnNameFirstLower}Min;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Min() {
-        return ${column.columnFieldNameFirstLower}Min;
+    public ${column.targetDataType} get${column.targetColumnName}Min() {
+        return ${column.targetColumnNameFirstLower}Min;
     }
 
-    public void set${column.columnFieldName}Max(${column.columnFieldType} ${column.columnFieldNameFirstLower}Max) {
-        this.${column.columnFieldNameFirstLower}Max = ${column.columnFieldNameFirstLower}Max;
+    public void set${column.targetColumnName}Max(${column.targetDataType} ${column.targetColumnNameFirstLower}Max) {
+        this.${column.targetColumnNameFirstLower}Max = ${column.targetColumnNameFirstLower}Max;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}Max() {
-        return ${column.columnFieldNameFirstLower}Max;
+    public ${column.targetDataType} get${column.targetColumnName}Max() {
+        return ${column.targetColumnNameFirstLower}Max;
     }
-    <#elseif (column.columnFieldType == "String")>
+    <#elseif (column.targetDataType == "String")>
 
     /**
     * ${column.columnComment} (完全匹配）
     */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith;
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower}StartWith;
 
-    public void set${column.columnFieldName}StartWith(${column.columnFieldType} ${column.columnFieldNameFirstLower}StartWith) {
-        this.${column.columnFieldNameFirstLower}StartWith = ${column.columnFieldNameFirstLower}StartWith;
+    public void set${column.targetColumnName}StartWith(${column.targetDataType} ${column.targetColumnNameFirstLower}StartWith) {
+        this.${column.targetColumnNameFirstLower}StartWith = ${column.targetColumnNameFirstLower}StartWith;
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}StartWith() {
-        return ${column.columnFieldNameFirstLower}StartWith;
+    public ${column.targetDataType} get${column.targetColumnName}StartWith() {
+        return ${column.targetColumnNameFirstLower}StartWith;
     }
     <#else>
 
     /**
     * ${column.columnComment}
     */
-    private ${column.columnFieldType} ${column.columnFieldNameFirstLower};
+    private ${column.targetDataType} ${column.targetColumnNameFirstLower};
 
-    public void set${column.columnFieldName}(${column.columnFieldType} ${column.columnFieldNameFirstLower}) {
-        this.${column.columnFieldNameFirstLower} = ${column.columnFieldNameFirstLower};
+    public void set${column.targetColumnName}(${column.targetDataType} ${column.targetColumnNameFirstLower}) {
+        this.${column.targetColumnNameFirstLower} = ${column.targetColumnNameFirstLower};
     }
 
-    public ${column.columnFieldType} get${column.columnFieldName}() {
-        return ${column.columnFieldNameFirstLower};
+    public ${column.targetDataType} get${column.targetColumnName}() {
+        return ${column.targetColumnNameFirstLower};
     }
     </#if>
 
@@ -154,16 +154,16 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
     <#if column.ignoreSearch>
     <#else>
         <#if (column.columnName == table.validStatusField.fieldName || column.fkSelect || column.select)>
-        parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-        parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
-        <#elseif (column.columnFieldType == "Date" || column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
-        parameter.set${column.columnFieldName}Min(${column.columnFieldNameFirstLower}Min);
-        parameter.set${column.columnFieldName}Max(${column.columnFieldNameFirstLower}Max);
-        <#elseif (column.columnFieldType == "String")>
-        parameter.set${column.columnFieldName}StartWith(${column.columnFieldNameFirstLower}StartWith);
+        parameter.set${column.targetColumnName}(${column.targetColumnNameFirstLower});
+        <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
+        parameter.set${column.targetColumnName}(${column.targetColumnNameFirstLower});
+        <#elseif (column.targetDataType == "Date" || column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
+        parameter.set${column.targetColumnName}Min(${column.targetColumnNameFirstLower}Min);
+        parameter.set${column.targetColumnName}Max(${column.targetColumnNameFirstLower}Max);
+        <#elseif (column.targetDataType == "String")>
+        parameter.set${column.targetColumnName}StartWith(${column.targetColumnNameFirstLower}StartWith);
         <#else>
-        parameter.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        parameter.set${column.targetColumnName}(${column.targetColumnNameFirstLower});
         </#if>
     </#if>
     </#list>
@@ -184,11 +184,11 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
         <#list table.columns as column>
         <#if (column.ignoreSearch || column.columnName == table.validStatusField.fieldName)>
         <#else>
-            case ${column.columnFieldName}Asc:
-                parameter.set${column.columnFieldName}Asc();
+            case ${column.targetColumnName}Asc:
+                parameter.set${column.targetColumnName}Asc();
                 break;
-            case ${column.columnFieldName}Desc:
-                parameter.set${column.columnFieldName}Desc();
+            case ${column.targetColumnName}Desc:
+                parameter.set${column.targetColumnName}Desc();
                 break;
         </#if>
         </#list>
@@ -203,8 +203,8 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
     <#list table.columns as column>
     <#if (column.ignoreSearch || column.columnName == table.validStatusField.fieldName)>
     <#else>
-        ${column.columnFieldName}Asc(${count + 1}),
-        ${column.columnFieldName}Desc(${count + 2})<#if ((count + 2) == sortCount)>;<#else>,</#if>
+        ${column.targetColumnName}Asc(${count + 1}),
+        ${column.targetColumnName}Desc(${count + 2})<#if ((count + 2) == sortCount)>;<#else>,</#if>
         <#assign count = count + 2>
     </#if>
     </#list>
@@ -224,9 +224,9 @@ public class ${className}SearchVm extends SearchPage implements Serializable {
             <#if (column.ignoreSearch || column.columnName == table.validStatusField.fieldName)>
             <#else>
                 case ${count + 1}:
-                    return ${column.columnFieldName}Asc;
+                    return ${column.targetColumnName}Asc;
                 case ${count + 2}:
-                    return ${column.columnFieldName}Desc;
+                    return ${column.targetColumnName}Desc;
                 <#assign count = count + 2>
             </#if>
             </#list>

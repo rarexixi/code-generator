@@ -22,12 +22,12 @@ public interface ${className}Mapper extends BaseMapper<${className}Entity, ${cla
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @return
     <#include "/include/author_info1.ftl">
      */
-    ${className}Vo getByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@Param("${column.columnFieldNameFirstLower}") ${column.columnFieldType} ${column.columnFieldNameFirstLower}</#list>);
+    ${className}Vo getByPk(<#list primaryKey as column><#if (column_index > 0)>, </#if>@Param("${column.targetColumnNameFirstLower}") ${column.targetDataType} ${column.targetColumnNameFirstLower}</#list>);
     </#if>
 
     /**

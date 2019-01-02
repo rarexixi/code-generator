@@ -78,21 +78,21 @@ class ColumnModel(column: Column) {
      *
      * @return
      */
-    var columnFieldName: String? = null
+    var targetColumnName: String? = null
         private set
     /**
      * 获取列对应的JAVA字段名首字母小写
      *
      * @return
      */
-    var columnFieldNameFirstLower: String? = null
+    var targetColumnNameFirstLower: String? = null
         private set
     /**
      * 获取列对应的JAVA字段类型
      *
      * @return
      */
-    var columnFieldType: String? = null
+    var targetDataType: String? = null
         private set
 
     var fkSelectField: FkSelectField? = null
@@ -202,9 +202,9 @@ class ColumnModel(column: Column) {
         private set
 
     init {
-        columnFieldName = columnName.getCamelCaseName()
-        columnFieldNameFirstLower = columnFieldName?.getFirstLower()
-        columnFieldType = DataTypeMapping.getFieldType(this.dataType)
+        targetColumnName = columnName.getCamelCaseName()
+        targetColumnNameFirstLower = targetColumnName?.getFirstLower()
+        targetDataType = DataTypeMapping.getFieldType(this.dataType)
         autoIncrement = extra!!.toLowerCase() == "auto_increment"
         primaryKey = columnKey == "PRI"
         validStatus = this.columnName.equals(StaticConfigData.VALID_STATUS_FIELD?.fieldName)

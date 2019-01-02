@@ -11,31 +11,31 @@ var app = new Vue({
     data: {
         <#list table.columns as column>
         <#if column.fkSelect>
-        ${column.columnFieldName?uncap_first}SelectList: [],
+        ${column.targetColumnName?uncap_first}SelectList: [],
         </#if>
         </#list>
         searchParams: {
             <#list table.columns as column>
-            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#assign fieldName = column.targetColumnName?uncap_first>
             <#if column.ignoreSearch>
             <#elseif (column.columnName == table.validStatusField.fieldName)>
             ${fieldName}: '${table.validStatusField.validValue}',
             <#elseif (column.fkSelect || column.select)>
             ${fieldName}: '',
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+            <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
             ${fieldName}: '',
-            <#elseif column.columnFieldType == "Date">
+            <#elseif column.targetDataType == "Date">
             ${fieldName}Range: [],
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
             ${fieldName}Min: '',
             ${fieldName}Max: '',
-            <#elseif (column.columnFieldType == "String")>
+            <#elseif (column.targetDataType == "String")>
             ${fieldName}StartWith: '',
             <#else>
             ${fieldName}: '',
             </#if>
             </#list>
-            sortEnums: [1],
+            sortEnums: [2],
             pageIndex: 1,
             pageSize: 10
         },
@@ -47,7 +47,7 @@ var app = new Vue({
         self.search();
         <#list table.columns as column>
         <#if column.fkSelect>
-        self.init${column.columnFieldName?replace('Id', '')}();
+        self.init${column.targetColumnName?replace('Id', '')}();
         </#if>
         </#list>
     },
@@ -55,8 +55,8 @@ var app = new Vue({
         <#list table.columns as column>
         <#if column.fkSelect>
         <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-        <#assign fieldName = column.columnFieldName?uncap_first>
-        init${column.columnFieldName?replace('Id', '')}: function () {
+        <#assign fieldName = column.targetColumnName?uncap_first>
+        init${column.targetColumnName?replace('Id', '')}: function () {
             var self = this;
             $.ajax({
                 type: 'post',
@@ -120,30 +120,30 @@ var app = new Vue({
         <#if table.validStatusColumn??>
         changeValidSearch: function(valid) {
             var self = this;
-            if (self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
+            if (self.searchParams.${table.validStatusColumn.targetColumnNameFirstLower} === valid) {
                 return;
             }
             self.resetSearch();
-            self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
+            self.searchParams.${table.validStatusColumn.targetColumnNameFirstLower} = valid;
             self.search();
         },
         </#if>
         resetSearch: function() {
             <#list table.columns as column>
-            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#assign fieldName = column.targetColumnName?uncap_first>
             <#if column.ignoreSearch>
             <#elseif (column.columnName == table.validStatusField.fieldName)>
             this.searchParams.${fieldName} = '${table.validStatusField.validValue}';
             <#elseif (column.fkSelect || column.select)>
             this.searchParams.${fieldName} = '';
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+            <#elseif (column.targetDataType == "Integer" || column.targetDataType == "Long" || column.targetDataType == "Short" || column.targetDataType == "Byte")>
             this.searchParams.${fieldName} = '';
-            <#elseif column.columnFieldType == "Date">
+            <#elseif column.targetDataType == "Date">
             this.searchParams.${fieldName}Range = [];
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
             this.searchParams.${fieldName}Min = '';
             this.searchParams.${fieldName}Max = '';
-            <#elseif (column.columnFieldType == "String")>
+            <#elseif (column.targetDataType == "String")>
             this.searchParams.${fieldName}StartWith = '';
             <#else>
             this.searchParams.${fieldName} = '';
@@ -157,11 +157,11 @@ var app = new Vue({
             window.location.href = url;
         },
         edit: function (<#include "/include/table/primary_values.ftl">) {
-            var url = 'edit.html?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = 'edit.html?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             window.location.href = url;
         },
         get: function (<#include "/include/table/primary_values.ftl">) {
-            var url = 'detail.html?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = 'detail.html?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             window.location.href = url;
         },
         <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
@@ -218,16 +218,16 @@ var app = new Vue({
         </#if>
         <#if table.validStatusColumn??>
         enable: function (<#include "/include/table/primary_values.ftl">) {
-            var url = '/${classNameLower}/enable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = '/${classNameLower}/enable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             this.exec("确定启用吗？", url, "启用成功！", "启用失败！");
         },
         disable: function (<#include "/include/table/primary_values.ftl">) {
-            var url = '/${classNameLower}/disable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = '/${classNameLower}/disable?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             this.exec("确定禁用吗？", url, "禁用成功！", "禁用失败！");
         },
         </#if>
         del: function (<#include "/include/table/primary_values.ftl">) {
-            var url = '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
+            var url = '/${classNameLower}/delete?' + <#list primaryKey as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.targetColumnNameFirstLower}=' + ${column.targetColumnNameFirstLower}</#list>;
             this.exec("确定删除吗？", url, "删除成功！", "删除失败！");
         },
         exec: function (confirmMsg, url, successMsg, failMsg) {

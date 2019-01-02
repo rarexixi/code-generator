@@ -11,12 +11,12 @@ var app = new Vue({
     data: {
         <#list table.columns as column>
         <#if column.fkSelect>
-        ${column.columnFieldName?uncap_first}SelectList: [],
+        ${column.targetColumnName?uncap_first}SelectList: [],
         </#if>
         </#list>
         <#if !table.hasAutoIncrementUniquePrimaryKey>
         <#list primaryKey as column>
-        old${column.columnFieldName}: '',
+        old${column.targetColumnName}: '',
         </#list>
         </#if>
         addOrEditTitle: '',
@@ -24,13 +24,13 @@ var app = new Vue({
             <#list table.columns as column>
             <#if column.notRequired>
             <#elseif column.fkSelect>
-            ${column.columnFieldNameFirstLower}: 0<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: 0<#if column_has_next>,</#if>
             <#elseif column.columnName == table.validStatusField.fieldName>
-            ${column.columnFieldNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
-            <#elseif column.columnFieldType == "Date">
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
+            <#elseif column.targetDataType == "Date">
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             <#else>
-            ${column.columnFieldNameFirstLower}: ''<#if column_has_next>,</#if>
+            ${column.targetColumnNameFirstLower}: ''<#if column_has_next>,</#if>
             </#if>
             </#list>
         }
@@ -38,18 +38,18 @@ var app = new Vue({
     mounted: function () {
         <#list table.columns as column>
         <#if column.fkSelect>
-        this.init${column.columnFieldName?replace('Id', '')}();
+        this.init${column.targetColumnName?replace('Id', '')}();
         </#if>
         </#list>
         <#list primaryKey as column>
-        var ${column.columnFieldNameFirstLower} = commonFun.getParam('${column.columnFieldNameFirstLower}');
+        var ${column.targetColumnNameFirstLower} = commonFun.getParam('${column.targetColumnNameFirstLower}');
         </#list>
         <#if !table.hasAutoIncrementUniquePrimaryKey>
         <#list primaryKey as column>
-        this.old${column.columnFieldName} = ${column.columnFieldNameFirstLower};
+        this.old${column.targetColumnName} = ${column.targetColumnNameFirstLower};
         </#list>
         </#if>
-        if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.columnFieldNameFirstLower} != null && ${column.columnFieldNameFirstLower} != ''</#list>) {
+        if (<#list primaryKey as column><#if (column_index > 0)> && </#if>${column.targetColumnNameFirstLower} != null && ${column.targetColumnNameFirstLower} != ''</#list>) {
             this.getEditDetail();
         }
 
@@ -59,7 +59,7 @@ var app = new Vue({
     methods: {
         <#list table.columns as column>
         <#if column.fkSelect>
-        init${column.columnFieldName?replace('Id', '')}: function () {
+        init${column.targetColumnName?replace('Id', '')}: function () {
             var self = this;
             $.ajax({
                 type: 'post',
@@ -72,7 +72,7 @@ var app = new Vue({
                 dataType: 'json',
                 success: function (response) {
                     if (response.success == true) {
-                        self.${column.columnFieldName?uncap_first}SelectList = response.result.list;
+                        self.${column.targetColumnName?uncap_first}SelectList = response.result.list;
                     } else {
                         commonNotify.danger("获取列表失败！");
                     }
@@ -85,16 +85,16 @@ var app = new Vue({
             var self = this;
             var ajaxUrl;
             <#if table.hasAutoIncrementUniquePrimaryKey>
-            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldNameFirstLower} == ''</#list>) {
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.targetColumnNameFirstLower} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
             } else {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit';
             }
             <#else>
-            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.old${column.columnFieldName} == ''</#list>) {
+            if (<#list primaryKey as column><#if (column_index > 0)> && </#if>self.old${column.targetColumnName} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list primaryKey as column><#if (column_index > 0)> + '&'</#if> + 'old${column.columnFieldName}=' + self.old${column.columnFieldName}</#list>;
+                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list primaryKey as column><#if (column_index > 0)> + '&'</#if> + 'old${column.targetColumnName}=' + self.old${column.targetColumnName}</#list>;
             }
             </#if>
             $.ajax({
@@ -123,7 +123,7 @@ var app = new Vue({
                         <#list table.columns as column>
                         <#if column.notRequired>
                         <#else>
-                        self.addOrEditParams.${column.columnFieldNameFirstLower} = response.result.${column.columnFieldNameFirstLower};
+                        self.addOrEditParams.${column.targetColumnNameFirstLower} = response.result.${column.targetColumnNameFirstLower};
                         </#if>
                         </#list>
                     } else {

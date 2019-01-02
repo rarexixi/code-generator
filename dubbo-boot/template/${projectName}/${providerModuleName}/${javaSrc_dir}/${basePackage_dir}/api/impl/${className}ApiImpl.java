@@ -86,7 +86,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * 根据主键物理删除
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -109,19 +109,19 @@ public class ${className}ApiImpl implements ${className}Api {
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> deleteByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, String sessionId) {
 
-        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.targetColumnName?uncap_first}List)) {
             return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         int count = ${classNameLower}Service.deleteByCondition(condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -133,7 +133,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * 根据主键禁用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -148,7 +148,7 @@ public class ${className}ApiImpl implements ${className}Api {
 
         ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.invalidValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -158,7 +158,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * 根据主键启用
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -173,7 +173,7 @@ public class ${className}ApiImpl implements ${className}Api {
 
         ${className}Condition condition = getPkCondition(${primaryKeyParameterValues});
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.validValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -183,21 +183,21 @@ public class ${className}ApiImpl implements ${className}Api {
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> disableByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, String sessionId) {
 
-        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.targetColumnName?uncap_first}List)) {
             return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.invalidValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.invalidValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -206,21 +206,21 @@ public class ${className}ApiImpl implements ${className}Api {
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.columnFieldName?uncap_first}List
+     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List, String sessionId) {
+    public ResultVo<Integer> enableByPkList(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, String sessionId) {
 
-        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.columnFieldName?uncap_first}List)) {
+        if (OperationCheckUtils.isNullOrEmpty(${table.uniquePrimaryKey.targetColumnName?uncap_first}List)) {
             return new ResultVo<>(OperationConstants.NOT_NULL);
         }
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.columnFieldName}(${table.validStatusField.validValue});
+        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.validValue});
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
@@ -237,17 +237,17 @@ public class ${className}ApiImpl implements ${className}Api {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.columnFieldType} old${column.columnFieldName}</#list></#if>, String sessionId) {
+    public ResultVo<Integer> updateByPk(${className}Entity entity<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column>, ${column.targetDataType} old${column.targetColumnName}</#list></#if>, String sessionId) {
 
         String fieldName = "";
-        if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtils.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list>)</#if> || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkUpdate(entity))) {
+        if (entity == null<#if !table.hasAutoIncrementUniquePrimaryKey> || OperationCheckUtils.isNullOrEmpty(<#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.targetColumnName}</#list>)</#if> || !StringUtils.isEmpty(fieldName = OperationCheckUtils.checkUpdate(entity))) {
             return new ResultVo<>(OperationConstants.NOT_NULL.getCode(), fieldName + OperationConstants.NOT_NULL.getMessage());
         }
 
         <#if !table.hasAutoIncrementUniquePrimaryKey>
-        ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.columnFieldName}</#list></#if>);
+        ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list primaryKey as column><#if (column_index > 0)>, </#if>old${column.targetColumnName}</#list></#if>);
         <#else>
-        ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.columnFieldName}()</#list>);
+        ${className}Condition condition = getPkCondition(<#list primaryKey as column><#if (column_index > 0)>, </#if>entity.get${column.targetColumnName}()</#list>);
         </#if>
         int count = ${classNameLower}Service.updateByCondition(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
@@ -258,7 +258,7 @@ public class ${className}ApiImpl implements ${className}Api {
      * 根据主键获取
      *
      <#list primaryKey as column>
-     * @param ${column.columnFieldNameFirstLower}
+     * @param ${column.targetColumnNameFirstLower}
      </#list>
      * @param sessionId
      * @return
@@ -297,16 +297,16 @@ public class ${className}ApiImpl implements ${className}Api {
 
         ${className}Condition condition = new ${className}Condition();
         <#list primaryKey as column>
-        condition.set${column.columnFieldName}(${column.columnFieldNameFirstLower});
+        condition.set${column.targetColumnName}(${column.targetColumnNameFirstLower});
         </#list>
         return condition;
     }
     <#if (table.uniquePrimaryKey??)>
 
-    private ${className}Condition getPkListCondition(List<${table.uniquePrimaryKey.columnFieldType}> ${table.uniquePrimaryKey.columnFieldName?uncap_first}List) {
+    private ${className}Condition getPkListCondition(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
 
         ${className}Condition condition = new ${className}Condition();
-        condition.set${table.uniquePrimaryKey.columnFieldName}List(${table.uniquePrimaryKey.columnFieldName?uncap_first}List);
+        condition.set${table.uniquePrimaryKey.targetColumnName}List(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
         return condition;
     }
     </#if>
