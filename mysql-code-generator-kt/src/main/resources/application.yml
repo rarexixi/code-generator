@@ -54,8 +54,8 @@ generator:
     valid-status:
       - name-set: is_deleted
         status:
-          valid-value: 0
-          invalid-value: 1
+          valid: 0
+          invalid: 1
 
   # 公共自定义属性
   common-properties:
