@@ -1,6 +1,6 @@
 package org.xi.quick.codegeneratorkt.extensions
 
-import org.xi.quick.codegeneratorkt.StaticConfigData
+import org.xi.quick.codegeneratorkt.configuration.properties.GeneratorProperties
 import java.util.regex.Pattern
 
 /**
@@ -28,9 +28,9 @@ fun String.getFirstUpper(): String {
  *
  * @return
  */
-fun String?.getCamelCaseName(): String? {
+fun String.getCamelCaseName(): String {
 
-    return this.getCamelCaseNameBy("_")
+    return this.getCamelCaseNameBy("_").getFirstUpper()
 }
 
 /**
@@ -39,26 +39,57 @@ fun String?.getCamelCaseName(): String? {
  * @param delimiter
  * @return
  */
-fun String?.getCamelCaseNameBy(delimiter: String): String? {
+fun String.getCamelCaseNameBy(delimiter: String): String {
 
-    if (this.isNullOrBlank()) return this
+    if (this.isBlank()) return this
 
-    return this!!.replace("$delimiter+[a-z]".toRegex()) {
+    return this.replace("$delimiter+[a-z]".toRegex()) {
         it.value[1].toUpperCase() + ""
     }
+}
+
+
+
+/**
+ * 获取目标数据类型
+ *
+ * @param dataType
+ * @return
+ */
+fun String.getTargetDataType(): String {
+    var dataType = this
+    if (dataType.isBlank()) return dataType
+    var targetDataType = GeneratorProperties.dataTypeMap[dataType]
+    return targetDataType ?: dataType
 }
 
 /**
  * 获取目标表名
  */
-fun String?.getTargetTableName(): String? {
+fun String.getTargetTableName(): String {
+    var tableName = this
+    if (tableName.isBlank()) return tableName
 
-    if (this.isNullOrBlank()) return this
-
-    val pattern = Pattern.compile(StaticConfigData.TABLE_NAME_MATCH_REGEX)
-    val matcher = pattern.matcher(this)
+    val pattern = Pattern.compile(GeneratorProperties.tableNameMatchRegex)
+    val matcher = pattern.matcher(tableName)
     if (matcher.find()) {
         return matcher.group()
     }
-    return this
+    return tableName
+}
+
+/**
+ * 获取目标类名
+ */
+fun String.getClassName(): String {
+    var tableName = this
+    return tableName.getTargetTableName().getCamelCaseName()
+}
+
+/**
+ * 获取目标属性名
+ */
+fun String.getPropertyName(): String {
+    var columnName = this
+    return columnName.getCamelCaseName()
 }

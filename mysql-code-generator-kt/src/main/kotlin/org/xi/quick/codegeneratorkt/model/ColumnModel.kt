@@ -1,244 +1,213 @@
 package org.xi.quick.codegeneratorkt.model
 
+import org.xi.quick.codegeneratorkt.configuration.properties.GeneratorProperties
 import org.xi.quick.codegeneratorkt.entity.Column
-import org.xi.quick.codegeneratorkt.DataTypeMapping
-import org.xi.quick.codegeneratorkt.StaticConfigData
 import org.xi.quick.codegeneratorkt.extensions.getCamelCaseName
-import org.xi.quick.codegeneratorkt.extensions.getFirstLower
-import org.xi.quick.codegeneratorkt.model.FkSelectField
-import org.xi.quick.codegeneratorkt.model.SelectOption
+import org.xi.quick.codegeneratorkt.extensions.getTargetDataType
 
 class ColumnModel(column: Column) {
 
     //region 默认
 
-    /**
-     * 数据库名
-     */
-    var databaseName: String? = column.tableSchema
-    /**
-     * 表名
-     */
-    var tableName: String? = column.tableName
-    /**
-     * 列名
-     */
-    var columnName: String? = column.columnName
-    /**
-     * 列位置
-     */
-    var columnPosition: Long? = column.ordinalPosition
-    /**
-     * 默认值
-     */
-    var columnDefault: String? = column.columnDefault
-    /**
-     * 是否为空
-     */
-    var nullable: Boolean = column.isNullable == null || column.isNullable.equals("YES", true)
-    /**
-     * 数据类型，int，varchar
-     */
-    var dataType: String? = column.dataType
-    /**
-     * 字符长度
-     */
-    var charLength: Long? = column.characterMaximumLength
-    /**
-     * 字节长度
-     */
-    var byteLength: Long? = column.characterOctetLength
-    /**
-     * 列类型，int(11)，varchar(50)
-     */
-    var columnType: String? = column.columnType
-    /**
-     *
-     */
-    var columnKey: String? = column.columnKey
-    /**
-     *
-     */
-    var extra: String? = column.extra
-    /**
-     * 列说明
-     */
-    var columnComment: String? = if (column.columnComment.isNullOrBlank()) column.columnName.getCamelCaseName() else column.columnComment
-    /**
-     * 是否是索引
-     */
-    var index: Boolean = if (column.index == null) false else column.index!!
+    // 数据库名
+    var databaseName: String
+        private set
+    // 表名
+    var tableName: String
+        private set
+    // 列名
+    var columnName: String
+        private set
+    // 列位置
+    var columnPosition: Long
+        private set
+    // 默认值
+    var columnDefault: String
+        private set
+    // 是否为空
+    var nullable: Boolean
+        private set
+    // 数据类型，int，varchar
+    var dataType: String
+        private set
+    // 字符长度
+    var charLength: Long
+        private set
+    // 字节长度
+    var byteLength: Long
+        private set
+    // 列类型，int(11)，varchar(50)
+    var columnType: String
+        private set
+    //
+    var columnKey: String
+        private set
+    //
+    var extra: String
+        private set
+    // 列说明
+    var columnComment: String
+        private set
+    // 是否是索引
+    var index: Boolean
+        private set
 
     //endregion
 
     //region 扩展
 
-    /**
-     * 获取列对应的JAVA字段名
-     *
-     * @return
-     */
-    var targetColumnName: String? = null
+    // 获取列对应的JAVA字段名
+    var targetColumnName: String
         private set
-    /**
-     * 获取列对应的JAVA字段名首字母小写
-     *
-     * @return
-     */
-    var targetColumnNameFirstLower: String? = null
-        private set
-    /**
-     * 获取列对应的JAVA字段类型
-     *
-     * @return
-     */
-    var targetDataType: String? = null
+    // 获取列对应的JAVA字段类型
+    var targetDataType: String
         private set
 
-    var fkSelectField: FkSelectField? = null
-        private set
-    var fkSelect: Boolean = false
-        private set
-
-    /**
-     * 是自增长
-     *
-     * @return
-     */
+    // 是自增长
     var autoIncrement: Boolean = false
         private set
-    /**
-     * 是主键
-     *
-     * @return
-     */
+    // 是主键
     var primaryKey: Boolean = false
         private set
-    /**
-     * 有效性字段
-     *
-     * @return
-     */
-    var validStatus: Boolean = false
-        private set
 
-    /**
-     * 是选择项
-     *
-     * @return
-     */
+    // 是选择项列
     var select: Boolean = false
         private set
-    /**
-     * 选择项列表
-     *
-     * @return
-     */
+    // 选择项列表
     var selectOptions: Array<SelectOption>? = null
         private set
-    /**
-     * 不需要填写
-     *
-     * @return
-     */
+
+    // 是外键选择列
+    var fkSelect: Boolean = false
+        private set
+    // 外键选择列
+    var fkSelectColumn: FkSelectColumn? = null
+        private set
+
+    // 是有效性列
+    var validStatus: Boolean = false
+        private set
+    // 有效性列
+    var validStatusOption: ValidStatus? = null
+        private set
+
+    // 不需要填写
     var notRequired: Boolean = false
         private set
 
-    /**
-     * 是图片路径
-     *
-     * @return
-     */
+    // 是图片路径
     var imgUrl: Boolean = false
         private set
-    /**
-     * 是视频路径
-     *
-     * @return
-     */
+    // 是视频路径
     var videoUrl: Boolean = false
         private set
-    /**
-     * 是文档路径
-     *
-     * @return
-     */
+    // 是文档路径
     var docUrl: Boolean = false
         private set
-    /**
-     * 是页面路径
-     *
-     * @return
-     */
+    // 是页面路径
     var pageUrl: Boolean = false
         private set
-    /**
-     * 是其他路径
-     *
-     * @return
-     */
+    // 是其他路径
     var otherUrl: Boolean = false
         private set
-    /**
-     * 是路径
-     *
-     * @return
-     */
+    // 是路径
     var url: Boolean = false
         private set
-    /**
-     * 是内容
-     *
-     * @return
-     */
+    // 是内容
     var content: Boolean = false
         private set
-    /**
-     * 忽略查询
-     *
-     * @return
-     */
+    // 忽略查询
     var ignoreSearch: Boolean = false
         private set
 
-    init {
-        targetColumnName = columnName.getCamelCaseName()
-        targetColumnNameFirstLower = targetColumnName?.getFirstLower()
-        targetDataType = DataTypeMapping.getFieldType(this.dataType)
-        autoIncrement = extra!!.toLowerCase() == "auto_increment"
-        primaryKey = columnKey == "PRI"
-        validStatus = this.columnName.equals(StaticConfigData.VALID_STATUS_FIELD?.fieldName)
+    //endregion
 
-        // 判断是否是逻辑外键选择项字段
-        fkSelect = false
-        for (field in StaticConfigData.FK_SELECT_FIELDS!!) {
-            if (field.nameSet != null && field.nameSet.contains(columnName)) {
-                fkSelectField = field
-                fkSelect = true
-                break
+    private fun matchColumn(columnProperties: Array<ColumnProperty>): Boolean {
+
+        for (column in columnProperties) {
+            if (column.nameSet.contains(columnName) && (column.tableName.isNullOrBlank() || column.tableName == tableName)) {
+                return true
             }
         }
-
-        // 判断是否是选择字段
-        select = false
-        for (selectField in StaticConfigData.SELECT_FIELD_ARRAY!!) {
-            if (selectField.nameSet.contains(columnName) && (selectField.tableName.isNullOrBlank() || selectField.tableName == tableName)) {
-                select = true
-                selectOptions = selectField.options
-            }
-        }
-
-        notRequired = StaticConfigData.NOT_REQUIRED_FIELD_SET.contains(columnName)
-
-        imgUrl = StaticConfigData.IMG_URL_FIELD_SET.contains(columnName)
-        videoUrl = StaticConfigData.VIDEO_URL_FIELD_SET.contains(columnName)
-        docUrl = StaticConfigData.DOC_URL_FIELD_SET.contains(columnName)
-        pageUrl = StaticConfigData.PAGE_URL_FIELD_SET.contains(columnName)
-        otherUrl = StaticConfigData.OTHER_URL_FIELD_SET.contains(columnName)
-        url = StaticConfigData.ALL_URL_FIELD_SET.contains(columnName)
-        content = StaticConfigData.CONTENT_FIELD_SET.contains(columnName)
-        ignoreSearch = StaticConfigData.IGNORE_SEARCH_FIELD_SET.contains(columnName)
+        return false
     }
 
-    //endregion
+    init {
+        //region 默认
+
+        databaseName = column.tableSchema ?: ""
+        tableName = column.tableName ?: ""
+        columnName = column.columnName ?: ""
+        columnPosition = column.ordinalPosition ?: -1
+        columnDefault = column.columnDefault ?: ""
+        nullable = column.isNullable == null || column.isNullable.equals("YES", true)
+        dataType = column.dataType ?: ""
+        charLength = column.characterMaximumLength ?: -1
+        byteLength = column.characterOctetLength ?: -1
+        columnType = column.columnType ?: ""
+        columnKey = column.columnKey ?: ""
+        extra = column.extra ?: ""
+        columnComment =
+                if (column.columnComment.isNullOrBlank()) columnName.getCamelCaseName()
+                else (column.columnComment ?: "")
+        index = column.index ?: false
+
+        // endregion
+
+        //region 扩展
+
+        targetColumnName = columnName.getCamelCaseName()
+        targetDataType = this.dataType.getTargetDataType()
+        autoIncrement = extra.toLowerCase() == "auto_increment"
+        primaryKey = columnKey == "PRI"
+
+
+        var fieldProperties = GeneratorProperties.fields
+        if (fieldProperties != null) {
+
+            // 判断是否是有效性列
+            for (property in fieldProperties.validStatus) {
+                if (property.nameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
+                    validStatusOption = property.status
+                    validStatus = true
+                    break
+                }
+            }
+
+            // 判断是否是逻辑外键选择项
+            for (property in fieldProperties.fkSelect) {
+                if (property.nameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
+                    fkSelectColumn = property.fk
+                    fkSelect = true
+                    break
+                }
+            }
+
+            // 判断是否是选择字段
+            for (property in fieldProperties.select) {
+                if (property.nameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
+                    selectOptions = property.options
+                    select = true
+                    break
+                }
+            }
+
+
+            notRequired = matchColumn(fieldProperties.notRequired)
+
+            imgUrl = matchColumn(fieldProperties.imgUrl)
+            videoUrl = matchColumn(fieldProperties.videoUrl)
+            docUrl = matchColumn(fieldProperties.docUrl)
+            pageUrl = matchColumn(fieldProperties.pageUrl)
+            otherUrl = matchColumn(fieldProperties.otherUrl)
+
+            url = imgUrl || videoUrl || docUrl || pageUrl || otherUrl
+
+            content = matchColumn(fieldProperties.content)
+            ignoreSearch = url || content
+        }
+
+
+        // endregion
+    }
 }

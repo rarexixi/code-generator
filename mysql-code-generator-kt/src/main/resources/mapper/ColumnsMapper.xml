@@ -49,8 +49,7 @@
         `COLUMN_KEY`,
         `EXTRA`,
         `PRIVILEGES`,
-        `COLUMN_COMMENT`,
-        `GENERATION_EXPRESSION`
+        `COLUMN_COMMENT`
         FROM
         `information_schema`.`COLUMNS`
         <where>
@@ -62,7 +61,6 @@
             </if>
         </where>
     </select>
-
 
     <select id="getColumnsWithIndex" resultMap="column" parameterType="java.lang.String">
         SELECT
@@ -86,7 +84,6 @@
             A.`EXTRA`,
             A.`PRIVILEGES`,
             A.`COLUMN_COMMENT`,
-            A.`GENERATION_EXPRESSION`,
             (CASE WHEN B.`COLUMN_NAME` IS NULL THEN FALSE ELSE TRUE END) AS `INDEX`
         FROM
             (

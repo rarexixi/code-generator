@@ -1,8 +1,8 @@
 package org.xi.quick.codegeneratorkt.model
 
-import org.xi.quick.codegeneratorkt.entity.Statistics
+import org.xi.quick.codegeneratorkt.entity.Index
 
-class StatisticsModel(statistics: Statistics) {
+class IndexModel(statistics: Index) {
 
     var tableCatalog: String? = statistics.indexComment
     var tableSchema: String? = statistics.tableSchema

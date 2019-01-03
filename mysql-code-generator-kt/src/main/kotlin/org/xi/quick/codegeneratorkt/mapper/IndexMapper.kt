@@ -2,10 +2,10 @@ package org.xi.quick.codegeneratorkt.mapper
 
 import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
-import org.xi.quick.codegeneratorkt.entity.Statistics
+import org.xi.quick.codegeneratorkt.entity.Index
 
 @Mapper
-interface StatisticsMapper {
+interface IndexMapper {
 
     /**
      * 获取表的索引
@@ -14,5 +14,5 @@ interface StatisticsMapper {
      * @param tableName
      * @return
      */
-    fun getStatistics(@Param("databaseName") databaseName: String, @Param("tableName") tableName: String): List<Statistics>
+    fun getStatistics(@Param("databaseName") databaseName: String, @Param("tableName") tableName: String): List<Index>
 }

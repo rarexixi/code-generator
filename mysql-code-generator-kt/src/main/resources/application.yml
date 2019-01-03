@@ -1,43 +1,43 @@
-
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   config-location: classpath:mybatis-config.xml
   type-aliases-package: org.xi.quick.codegenerator.mapper
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
-    username: root
+    url: jdbc:mysql://192.168.77.114:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: rarexixi
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
 dollar: $
 
 generator:
-  encoding: UTF-8                # 代码字符集
-  table-name-match-regex: '(?<=dm_uba_).*(?=_tmp)'    # 获取目标表名正则
-  path:
-    template: /Workspace/github.com/java/mysql-code-generator/dubbo/template/  # 模版路径
-    out: /Workspace/gitee.com/            # 输出路径
-  file:
-    ignore: include/                                        # 要忽略的文件
+  database-name: quick
+  encoding: UTF-8
+  table-name-match-regex: '(?<=dm_uba_).*(?=_tmp)'
+  paths:
+    template: C:\Projects\github\code-generator\spring-cloud-kt\template2\
+    out: C:\Projects\tmp\
+  files:
+    ignore: include/
     aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, ${dollar}{adminWebModuleName}/index.html
-                                                            # 聚合文件
     just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js, .gitignore
-                                                            # 仅复制文件
-  valid-status-field:                                       # 是否删除字段
-    fieldName: is_deleted                                   # 字段名
-    validValue: 0                                           # 有效值
-    invalidValue: 1                                         # 无效值
-  fk-select-fields:                                         # 逻辑外键字段，用于前台select生成
-    - nameSet: user_type_id                                 # 当前表字段名
-      foreignTable: user_type                               # 对应的关联表
-      keyField: id                                          # 对应的关联表外键字段
-      valueField: user_type_name                            # 对应的关联表外键值
-  field:
-    not-required: create_time, update_time
+
+  fields:
+    not-required:
+      - name-set: create_time, update_time
+    img-url:
+      - name-set: photo
+#    video-url:
+#    doc-url:
+#    page-url:
+#    other-url:
+    content:
+      - name-set: introduction, remark
+
     select:
-      - nameSet: status
-        tableName: multi_pk
+      - name-set: status
+        table-name: multi_pk
         options:
           - value: 1
             text: 正常
@@ -45,17 +45,21 @@ generator:
             text: 提高
           - value: 3
             text: 起飞
-    img-url: photo
-    video-url:
-    doc-url:
-    page-url:
-    other-url:
-    content: introduction, remark
+    fk-select:
+      - name-set: user_type_id
+        fk:
+          foreign-table-name: user_type
+          value-field: id
+          text-field: user_type_name
+    valid-status:
+      - name-set: is_deleted
+        status:
+          valid-value: 0
+          invalid-value: 1
 
   # 公共自定义属性
   common-properties:
-
-    projectName: quick-dubbo-auto
+    projectName: quick-cloud-auto
     projectShortName: quick
     projectGroup: org.xi
     projectVersion: 1.0-SNAPSHOT
@@ -64,26 +68,26 @@ generator:
     baseCommonPackage: org.xi.common
 
     commonModuleName: quick-common
-    apiModuleName: quick-api
+    modelModuleName: quick-model
     providerModuleName: quick-provider
     adminApiModuleName: quick-admin-api
-    adminWebModuleName: quick-admin-web
+    eurekaServerModuleName: quick-eureka-server
 
     providerModuleApplicationName: QuickProviderApplication
-    adminApiModuleApplicatioName: QuickAdminApplication
+    adminModuleApplicatioName: QuickAdminApplication
+    eurekaServerModuleApplicatioName: QuickEurekaServerApplication
+
+    eurekaServerPort: 8770
+    providerServicePort: 8810
+    adminServicePort: 8820
 
     baseApiPath: http://localhost:8820
-
-    dubboServiceGroup: quick
-    dubboServiceVersion: 1.0.0
-    dubboServiceProtocol: zookeeper
-    dubboRegistryAddress: 192.168.10.31:2181,192.168.10.32:2181,192.168.10.33:2181
 
     author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
     javaSrc: src.main.java
     javaTestSrc: src.test.java
-    #resourcesSrc: 'src.main.resources'
+    resourcesSrc: src.main.resources
 
   # 获取数据映射关系
   data-type-map:

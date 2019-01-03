@@ -1,95 +1,84 @@
 package org.xi.quick.codegeneratorkt.model
 
 import org.xi.quick.codegeneratorkt.entity.Table
-import org.xi.quick.codegeneratorkt.StaticConfigData
-import org.xi.quick.codegeneratorkt.extensions.getCamelCaseName
+import org.xi.quick.codegeneratorkt.extensions.getClassName
 import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
 import java.util.ArrayList
 
 class TableModel(table: Table,
                  val columns: List<ColumnModel>,
-                 val statistics: List<StatisticsModel>) {
+                 val statistics: List<IndexModel>) {
 
     // region 默认
 
-    val databaseName: String? = table.tableSchema       // 数据库名
-
-    val tableName: String? = table.tableName            // 表名
-
-    val targetTableName: String =table.tableName.getTargetTableName()!! // 获取目标表名
-
-    val tableClassName: String? = table.tableName.getTargetTableName().getCamelCaseName()    // 表对应的JAVA类名
-
-    val tableComment: String? = if (table.tableComment.isNullOrBlank()) tableClassName else table.tableComment  // 表说明
-
-    val validStatusField: ValidStatusField?
-        get() = StaticConfigData.VALID_STATUS_FIELD
+    // 数据库名
+    var databaseName: String
+        private set
+    // 表名
+    var tableName: String
+        private set
+    // 获取目标表名
+    var targetTableName: String
+        private set
+    // 表对应的类名
+    var tableClassName: String
+        private set
+    // 表说明
+    var tableComment: String
+        private set
 
     // endregion
 
     // region 扩展
 
-    private var primaryKey: MutableList<ColumnModel> = ArrayList()
+    // 主键列表
+    var primaryKeys: List<ColumnModel> = ArrayList()
+        private set
     // 是否有主键
-    var isHasPrimaryKey: Boolean = false
+    var hasPrimaryKey: Boolean = false
         private set
     // 是否有唯一自增主键
-    var isHasAutoIncrementUniquePrimaryKey: Boolean = false
+    var hasAutoIncrementUniquePrimaryKey: Boolean = false
         private set
-    // 获取唯一主键
+    // 唯一主键
     var uniquePrimaryKey: ColumnModel? = null
         private set
-    // 主键对应的JAVA参数，单个(Integer id)，多个(Integer userId, Integer userTypeId)
-    var primaryKeyParameters: String? = null
+
+    // 索引
+    var indexes: List<ColumnModel> = ArrayList()
         private set
-    // 主键对应的JAVA参数值，单个(id) ，多个(userId, userTypeId)
-    var primaryKeyParameterValues: String? = null
+
+    // 选择项
+    var selectColumns: List<ColumnModel> = ArrayList()
         private set
-    var primaryKeyOldParameters: String? = null
+
+    // 外键选择项
+    var fkSelectColumns: List<ColumnModel> = ArrayList()
         private set
-    var primaryKeyOldParameterValues: String? = null
-        private set
+
     // 有效性字段列
     var validStatusColumn: ColumnModel? = null
         private set
 
     init {
 
-        for (column in columns) {
-            if (column.columnKey == "PRI") {
-                primaryKey.add(column)
-            }
+        databaseName = table.tableSchema ?: ""
+        tableName = table.tableName ?: ""
+        targetTableName  = tableName.getTargetTableName()
+        tableClassName = tableName.getClassName()
+        tableComment = table.tableComment ?: tableClassName
+
+        primaryKeys = columns.filter { column -> column.columnKey == "PRI" }
+        indexes = columns.filter { column -> column.index }
+        selectColumns = columns.filter { column -> column.select }
+        fkSelectColumns = columns.filter { column -> column.fkSelect }
+        validStatusColumn = columns.firstOrNull { column -> column.validStatus }
+
+        hasPrimaryKey = primaryKeys.isNotEmpty()
+        if (hasPrimaryKey) {
+            uniquePrimaryKey = if (primaryKeys.size == 1) primaryKeys[0] else null
+            hasAutoIncrementUniquePrimaryKey = uniquePrimaryKey != null && uniquePrimaryKey!!.autoIncrement
         }
-
-        isHasPrimaryKey = primaryKey != null && !primaryKey.isEmpty()
-        if (isHasPrimaryKey) {
-            uniquePrimaryKey = if (primaryKey.size == 1) primaryKey[0] else null
-            isHasAutoIncrementUniquePrimaryKey = uniquePrimaryKey != null && uniquePrimaryKey!!.autoIncrement
-            primaryKeyParameters = primaryKey.joinToString(", ") { column ->
-                column.targetDataType + " " + column.targetColumnNameFirstLower
-            }
-            primaryKeyParameterValues = primaryKey.joinToString(", ") { column ->
-                column.targetColumnNameFirstLower + ""
-            }
-            primaryKeyOldParameters = primaryKey.joinToString(", ") { column ->
-                column.targetDataType + " old" + column.targetColumnName
-            }
-            primaryKeyOldParameterValues = primaryKey.joinToString(", ") { column ->
-                "old" + column.targetColumnName
-            }
-        }
-        val columnOptional = columns
-                .stream()
-                .filter { column -> column.validStatus }
-                .findFirst()
-
-        validStatusColumn = if (columnOptional.isPresent) columnOptional.get() else null
-
-    }
-
-    // 获取主键列表
-    fun getPrimaryKey(): List<ColumnModel>? {
-        return primaryKey
     }
 
     // endregion

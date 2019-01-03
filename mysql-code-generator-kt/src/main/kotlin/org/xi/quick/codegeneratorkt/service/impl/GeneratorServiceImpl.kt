@@ -3,16 +3,16 @@ package org.xi.quick.codegeneratorkt.service.impl
 import freemarker.template.TemplateException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.stereotype.Service
-import org.xi.quick.codegeneratorkt.StaticConfigData
-import org.xi.quick.codegeneratorkt.extensions.getCamelCaseName
 import org.xi.quick.codegeneratorkt.extensions.getFirstLower
 import org.xi.quick.codegeneratorkt.extensions.getFirstUpper
-import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
 import org.xi.quick.codegeneratorkt.model.FreemarkerModel
 import org.xi.quick.codegeneratorkt.model.TableModel
-import org.xi.quick.codegeneratorkt.properties.GeneratorProperties
-import org.xi.quick.codegeneratorkt.properties.PathProperties
+import org.xi.quick.codegeneratorkt.configuration.properties.GeneratorProperties
+import org.xi.quick.codegeneratorkt.extensions.getClassName
+import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
+import org.xi.quick.codegeneratorkt.service.FreeMarkerService
 import org.xi.quick.codegeneratorkt.service.GeneratorService
 import org.xi.quick.codegeneratorkt.service.TableService
 import org.xi.quick.codegeneratorkt.utils.DirectoryUtils
@@ -32,25 +32,13 @@ class GeneratorServiceImpl : GeneratorService {
     internal var logger = LoggerFactory.getLogger(GeneratorServiceImpl::class.java)
 
     @Autowired
-    lateinit var generator: GeneratorProperties
-
-    @Autowired
-    lateinit var generatorPath: PathProperties
-
-    @Autowired
-    lateinit var allTemplates: List<FreemarkerModel>
-
-    @Autowired
-    lateinit var allOnceTemplates: List<FreemarkerModel>
-
-    @Autowired
-    lateinit var allJustCopyTemplates: List<FreemarkerModel>
-
-    @Autowired
-    lateinit var allAggregateTemplates: List<FreemarkerModel>
-
-    @Autowired
     lateinit var tableService: TableService
+
+    @Autowired
+    lateinit var freeMarkerService: FreeMarkerService
+
+    @Autowired
+    lateinit var dataSourceProperties: DataSourceProperties
 
     //region 生成
 
@@ -58,6 +46,9 @@ class GeneratorServiceImpl : GeneratorService {
      * 生成所有数据类
      */
     override fun generateAll() {
+        
+        var allTemplates = freeMarkerService.getAllTemplates()
+
         val tables = tableService.getAllTables()
         tables.forEach { table -> allTemplates.forEach { template -> generate(template, table) } }
     }
@@ -68,6 +59,8 @@ class GeneratorServiceImpl : GeneratorService {
      * @param tableNames
      */
     override fun generate(vararg tableNames: String) {
+
+        var allTemplates = freeMarkerService.getAllTemplates()
 
         tableNames.forEach { tableName ->
             run {
@@ -84,6 +77,9 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun generateAllOnce() {
 
+        var allOnceTemplates = freeMarkerService.getAllOnceTemplates()
+        var allJustCopyTemplates = freeMarkerService.getAllJustCopyTemplates()
+
         val dataModel = HashMap<Any, Any>()
         generateOnce(allOnceTemplates, dataModel)
         generateCopy(allJustCopyTemplates, dataModel)
@@ -93,6 +89,8 @@ class GeneratorServiceImpl : GeneratorService {
      * 生成所有聚合类
      */
     override fun generateAllAggregate() {
+
+        var allAggregateTemplates = freeMarkerService.getAllAggregateTemplates()
 
         val tables = tableService.getAllTables()
         val dataModel = HashMap<Any, Any>()
@@ -108,6 +106,9 @@ class GeneratorServiceImpl : GeneratorService {
      * 删除所有数据类
      */
     override fun deleteAll() {
+
+        var allTemplates = freeMarkerService.getAllTemplates()
+
         val tables = tableService.getAllTableNameList()
         tables.forEach { table -> allTemplates.forEach { template -> delete(template, table) } }
     }
@@ -118,6 +119,9 @@ class GeneratorServiceImpl : GeneratorService {
      * @param tableNames
      */
     override fun delete(vararg tableNames: String) {
+
+        var allTemplates = freeMarkerService.getAllTemplates()
+
         tableNames.forEach { tableName -> allTemplates.forEach { template -> delete(template, tableName) } }
     }
 
@@ -125,6 +129,9 @@ class GeneratorServiceImpl : GeneratorService {
      * 删除所有生成一次的类
      */
     override fun deleteAllOnce() {
+
+        var allOnceTemplates = freeMarkerService.getAllOnceTemplates()
+        var allJustCopyTemplates = freeMarkerService.getAllJustCopyTemplates()
 
         deleteOnce(allOnceTemplates)
         deleteOnce(allJustCopyTemplates)
@@ -134,6 +141,8 @@ class GeneratorServiceImpl : GeneratorService {
      * 删除所有聚合类
      */
     override fun deleteAllAggregate() {
+
+        var allAggregateTemplates = freeMarkerService.getAllAggregateTemplates()
 
         deleteOnce(allAggregateTemplates)
     }
@@ -146,9 +155,9 @@ class GeneratorServiceImpl : GeneratorService {
 
         val dataModel = HashMap<Any, Any>()
         dataModel["table"] = table
-        dataModel["tableName"] = table.tableName!!
+        dataModel["tableName"] = table.tableName
         dataModel["targetTableName"] = table.targetTableName
-        dataModel["className"] = table.tableClassName!!
+        dataModel["className"] = table.tableClassName
 
         try {
             generate(template, dataModel)
@@ -178,10 +187,10 @@ class GeneratorServiceImpl : GeneratorService {
 
         for (outModel in templates) {
 
-            dataModel.putAll(StaticConfigData.COMMON_PROPERTIES)
+            putAllCommonProperties(dataModel)
 
             val targetPath = getFilePath(outModel, dataModel)
-            val sourcePath = generatorPath.template + outModel.relativePath
+            val sourcePath = GeneratorProperties.paths?.template + outModel.relativePath
 
             logger.info("正在生成$targetPath")
             try {
@@ -198,11 +207,10 @@ class GeneratorServiceImpl : GeneratorService {
 
     private fun delete(template: FreemarkerModel, tableName: String) {
 
-        val targetTableName = tableName.getTargetTableName()!!
         val dataModel = HashMap<Any, Any>()
         dataModel["tableName"] = tableName
-        dataModel["targetTableName"] = targetTableName
-        dataModel["className"] = targetTableName.getCamelCaseName()!!
+        dataModel["targetTableName"] = tableName.getTargetTableName()
+        dataModel["className"] = tableName.getClassName()
         delete(template, dataModel)
     }
 
@@ -224,7 +232,7 @@ class GeneratorServiceImpl : GeneratorService {
     @Throws(IOException::class, TemplateException::class)
     private fun generate(outModel: FreemarkerModel, dataModel: MutableMap<Any, Any> = HashMap()) {
 
-        dataModel.putAll(StaticConfigData.COMMON_PROPERTIES)
+        putAllCommonProperties(dataModel)
 
         val absolutePath = getFilePath(outModel, dataModel)
 
@@ -234,7 +242,7 @@ class GeneratorServiceImpl : GeneratorService {
         DirectoryUtils.createIfNotExists(getAbsoluteDirectory(absolutePath))
 
         FileOutputStream(absolutePath).use { stream ->
-            OutputStreamWriter(stream, generator.encoding).use { out ->
+            OutputStreamWriter(stream, GeneratorProperties.encoding).use { out ->
                 outModel.template.process(dataModel, out)
             }
         }
@@ -242,7 +250,7 @@ class GeneratorServiceImpl : GeneratorService {
 
     private fun delete(outModel: FreemarkerModel, dataModel: MutableMap<Any, Any> = HashMap()) {
 
-        dataModel.putAll(StaticConfigData.COMMON_PROPERTIES)
+        putAllCommonProperties(dataModel)
 
         val absolutePath = getFilePath(outModel, dataModel)
 
@@ -251,10 +259,22 @@ class GeneratorServiceImpl : GeneratorService {
         FileUtils.delete(absolutePath)
     }
 
+    /**
+     * 添加公共属性
+     */
+    private fun putAllCommonProperties(dataModel: MutableMap<Any, Any> = HashMap()) {
+        GeneratorProperties.commonProperties.forEach { key, value -> dataModel[key] = value }
+        dataModel["dbUrl"] = dataSourceProperties.url
+        dataModel["dbUsername"] = dataSourceProperties.username
+        dataModel["dbPassword"] = dataSourceProperties.password
+    }
 
+    /**
+     * 获取文件实际路径
+     */
     private fun getFilePath(model: FreemarkerModel, dataModel: Map<Any, Any>): String {
 
-        val directory = File(generatorPath.out)
+        val directory = File(GeneratorProperties.paths?.out)
         return directory.absolutePath + SystemUtils.SYSTEM_SLASH + getActualPath(model.relativePath, dataModel)
     }
 
