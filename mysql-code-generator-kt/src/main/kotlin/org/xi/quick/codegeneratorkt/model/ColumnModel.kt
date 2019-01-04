@@ -204,7 +204,7 @@ class ColumnModel(column: Column) {
             url = imgUrl || videoUrl || docUrl || pageUrl || otherUrl
 
             content = matchColumn(columnProperties.content)
-            ignoreSearch = url || content
+            ignoreSearch = url || content || dataType.contains("text")
         }
 
 
