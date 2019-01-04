@@ -32,10 +32,10 @@ class FileProperties {
     /**
      * 仅复制文件集合
      */
-    var justCopy: Set<String>? = HashSet()
+    var copy: Set<String>? = HashSet()
 }
 
-class FieldProperties {
+class ColumnProperties {
 
     /**
      * 不需要填写的字段集合
@@ -98,7 +98,7 @@ open class ColumnProperty {
     /**
      * 字段集
      */
-    var nameSet: Set<String> = HashSet()
+    var columnNameSet: Set<String> = HashSet()
 
     /**
      * 目标表名
@@ -143,9 +143,9 @@ class FkSelectColumn {
      */
     var foreignTableName: String = ""
 
-    var valueField: String = ""
+    var valueColumn: String = ""
         get() = field.getPropertyName()
-    var textField: String = ""
+    var textColumn: String = ""
         get() = field.getPropertyName()
 
     /**

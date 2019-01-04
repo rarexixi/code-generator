@@ -25,7 +25,6 @@ import java.io.OutputStreamWriter
 import java.nio.file.Files
 import java.util.HashMap
 
-
 @Service("generatorService")
 class GeneratorServiceImpl : GeneratorService {
 
@@ -43,59 +42,42 @@ class GeneratorServiceImpl : GeneratorService {
     //region 生成
 
     /**
-     * 生成所有数据类
-     */
-    override fun generateAll() {
-        
-        var allTemplates = freeMarkerService.getAllTemplates()
-
-        val tables = tableService.getAllTables()
-        tables.forEach { table -> allTemplates.forEach { template -> generate(template, table) } }
-    }
-
-    /**
      * 生成数据类
      *
      * @param tableNames
      */
-    override fun generate(vararg tableNames: String) {
+    override fun gen(vararg tableNames: String) {
 
-        var allTemplates = freeMarkerService.getAllTemplates()
+        var allTemplates = freeMarkerService.getTableTemplates()
 
-        tableNames.forEach { tableName ->
-            run {
-                val table = tableService.getTable(tableName)
-                if (table != null) {
-                    allTemplates.forEach { template -> generate(template, table) }
-                }
-            }
-        }
+        val tables = tableService.getTables(*tableNames)
+        tables.forEach { table -> allTemplates.forEach { template -> generate(template, table) } }
     }
 
     /**
      * 生成所有生成一次的类
      */
-    override fun generateAllOnce() {
+    override fun genBase() {
 
-        var allOnceTemplates = freeMarkerService.getAllOnceTemplates()
-        var allJustCopyTemplates = freeMarkerService.getAllJustCopyTemplates()
+        var onceTemplates = freeMarkerService.getOnceTemplates()
+        var copyTemplates = freeMarkerService.getCopyTemplates()
 
         val dataModel = HashMap<Any, Any>()
-        generateOnce(allOnceTemplates, dataModel)
-        generateCopy(allJustCopyTemplates, dataModel)
+        generateOnce(onceTemplates, dataModel)
+        generateCopy(copyTemplates, dataModel)
     }
 
     /**
      * 生成所有聚合类
      */
-    override fun generateAllAggregate() {
+    override fun genAggr(vararg tableNames: String) {
 
-        var allAggregateTemplates = freeMarkerService.getAllAggregateTemplates()
+        var aggrTemplates = freeMarkerService.getAggrTemplates()
 
-        val tables = tableService.getAllTables()
+        val tables = tableService.getTables(*tableNames)
         val dataModel = HashMap<Any, Any>()
         dataModel["tableModels"] = tables
-        generateOnce(allAggregateTemplates, dataModel)
+        generateOnce(aggrTemplates, dataModel)
     }
 
     //endregion
@@ -103,48 +85,39 @@ class GeneratorServiceImpl : GeneratorService {
     //region 删除
 
     /**
-     * 删除所有数据类
-     */
-    override fun deleteAll() {
-
-        var allTemplates = freeMarkerService.getAllTemplates()
-
-        val tables = tableService.getAllTableNameList()
-        tables.forEach { table -> allTemplates.forEach { template -> delete(template, table) } }
-    }
-
-    /**
      * 删除数据类
      *
      * @param tableNames
      */
-    override fun delete(vararg tableNames: String) {
+    override fun del(vararg tableNames: String) {
 
-        var allTemplates = freeMarkerService.getAllTemplates()
+        val tables = if (tableNames == null || tableNames.isEmpty()) tableService.getAllTableNameList().toTypedArray() else tableNames
 
-        tableNames.forEach { tableName -> allTemplates.forEach { template -> delete(template, tableName) } }
+        var tableTemplates = freeMarkerService.getTableTemplates()
+
+        tables.forEach { tableName -> tableTemplates.forEach { template -> delete(template, tableName) } }
     }
 
     /**
      * 删除所有生成一次的类
      */
-    override fun deleteAllOnce() {
+    override fun delBase() {
 
-        var allOnceTemplates = freeMarkerService.getAllOnceTemplates()
-        var allJustCopyTemplates = freeMarkerService.getAllJustCopyTemplates()
+        var onceTemplates = freeMarkerService.getOnceTemplates()
+        var copyTemplates = freeMarkerService.getCopyTemplates()
 
-        deleteOnce(allOnceTemplates)
-        deleteOnce(allJustCopyTemplates)
+        deleteOnce(onceTemplates)
+        deleteOnce(copyTemplates)
     }
 
     /**
      * 删除所有聚合类
      */
-    override fun deleteAllAggregate() {
+    override fun delAggr() {
 
-        var allAggregateTemplates = freeMarkerService.getAllAggregateTemplates()
+        var aggrTemplates = freeMarkerService.getAggrTemplates()
 
-        deleteOnce(allAggregateTemplates)
+        deleteOnce(aggrTemplates)
     }
 
     //endregion

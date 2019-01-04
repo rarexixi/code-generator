@@ -14,5 +14,5 @@ interface IndexMapper {
      * @param tableName
      * @return
      */
-    fun getStatistics(@Param("databaseName") databaseName: String, @Param("tableName") tableName: String): List<Index>
+    fun getIndexes(@Param("databaseName") databaseName: String, @Param("tableName") tableName: String): List<Index>
 }

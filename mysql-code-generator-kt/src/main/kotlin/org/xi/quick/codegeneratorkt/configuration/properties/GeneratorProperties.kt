@@ -3,12 +3,10 @@ package org.xi.quick.codegeneratorkt.configuration.properties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.NestedConfigurationProperty
 import org.springframework.stereotype.Component
-import org.xi.quick.codegeneratorkt.extensions.getCamelCaseName
-import org.xi.quick.codegeneratorkt.model.FieldProperties
+import org.xi.quick.codegeneratorkt.model.ColumnProperties
 import org.xi.quick.codegeneratorkt.model.FileProperties
 import org.xi.quick.codegeneratorkt.model.PathProperties
 import java.util.HashMap
-import java.util.regex.Pattern
 
 @Component
 @ConfigurationProperties(prefix = "generator")
@@ -45,7 +43,7 @@ object GeneratorProperties {
      * 字段配置
      */
     @NestedConfigurationProperty
-    var fields: FieldProperties? = null
+    var columns: ColumnProperties? = null
 
     /**
      * 其他公共属性，用于生成到页面和路径

@@ -23,7 +23,7 @@
         </where>
     </select>
 
-    <select id="getTable" resultMap="resultMap" parameterType="java.lang.String">
+    <select id="getTables" resultMap="resultMap" parameterType="java.lang.String">
         SELECT
         `TABLE_CATALOG`,
         `TABLE_SCHEMA`,
@@ -37,25 +37,9 @@
             <if test="databaseName != null and databaseName != ''">
                 `TABLE_SCHEMA`=#{databaseName}
             </if>
-            <if test="tableName != null and tableName != ''">
-                AND `TABLE_NAME`=#{tableName}
-            </if>
-        </where>
-    </select>
-
-    <select id="getAllTables" resultMap="resultMap" parameterType="java.lang.String">
-        SELECT
-        `TABLE_CATALOG`,
-        `TABLE_SCHEMA`,
-        `TABLE_NAME`,
-        `TABLE_TYPE`,
-        `TABLE_ROWS`,
-        `TABLE_COMMENT`
-        FROM
-        `information_schema`.`TABLES`
-        <where>
-            <if test="databaseName != null and databaseName != ''">
-                `TABLE_SCHEMA`=#{databaseName}
+            <if test="tableNames != null and tableNames.size() > 0">
+                AND `TABLE_NAME` in
+                <foreach collection="tableNames" item="it" open="(" close=")" separator=",">#{it}</foreach>
             </if>
         </where>
     </select>

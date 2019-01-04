@@ -21,7 +21,7 @@
         <result column="INDEX_COMMENT" property="indexComment" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="getStatistics" resultMap="resultMap" parameterType="java.lang.String">
+    <select id="getIndexes" resultMap="resultMap" parameterType="java.lang.String">
         SELECT
         `TABLE_CATALOG`,
         `TABLE_SCHEMA`,

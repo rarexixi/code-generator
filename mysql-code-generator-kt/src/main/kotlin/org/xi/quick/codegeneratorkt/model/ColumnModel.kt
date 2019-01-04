@@ -125,7 +125,7 @@ class ColumnModel(column: Column) {
     private fun matchColumn(columnProperties: Array<ColumnProperty>): Boolean {
 
         for (column in columnProperties) {
-            if (column.nameSet.contains(columnName) && (column.tableName.isNullOrBlank() || column.tableName == tableName)) {
+            if (column.columnNameSet.contains(columnName) && (column.tableName.isNullOrBlank() || column.tableName == tableName)) {
                 return true
             }
         }
@@ -162,12 +162,12 @@ class ColumnModel(column: Column) {
         primaryKey = columnKey == "PRI"
 
 
-        var fieldProperties = GeneratorProperties.fields
-        if (fieldProperties != null) {
+        var columnProperties = GeneratorProperties.columns
+        if (columnProperties != null) {
 
             // 判断是否是有效性列
-            for (property in fieldProperties.validStatus) {
-                if (property.nameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
+            for (property in columnProperties.validStatus) {
+                if (property.columnNameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
                     validStatusOption = property.status
                     validStatus = true
                     break
@@ -175,8 +175,8 @@ class ColumnModel(column: Column) {
             }
 
             // 判断是否是逻辑外键选择项
-            for (property in fieldProperties.fkSelect) {
-                if (property.nameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
+            for (property in columnProperties.fkSelect) {
+                if (property.columnNameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
                     fkSelectColumn = property.fk
                     fkSelect = true
                     break
@@ -184,8 +184,8 @@ class ColumnModel(column: Column) {
             }
 
             // 判断是否是选择字段
-            for (property in fieldProperties.select) {
-                if (property.nameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
+            for (property in columnProperties.select) {
+                if (property.columnNameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
                     selectOptions = property.options
                     select = true
                     break
@@ -193,17 +193,17 @@ class ColumnModel(column: Column) {
             }
 
 
-            notRequired = matchColumn(fieldProperties.notRequired)
+            notRequired = matchColumn(columnProperties.notRequired)
 
-            imgUrl = matchColumn(fieldProperties.imgUrl)
-            videoUrl = matchColumn(fieldProperties.videoUrl)
-            docUrl = matchColumn(fieldProperties.docUrl)
-            pageUrl = matchColumn(fieldProperties.pageUrl)
-            otherUrl = matchColumn(fieldProperties.otherUrl)
+            imgUrl = matchColumn(columnProperties.imgUrl)
+            videoUrl = matchColumn(columnProperties.videoUrl)
+            docUrl = matchColumn(columnProperties.docUrl)
+            pageUrl = matchColumn(columnProperties.pageUrl)
+            otherUrl = matchColumn(columnProperties.otherUrl)
 
             url = imgUrl || videoUrl || docUrl || pageUrl || otherUrl
 
-            content = matchColumn(fieldProperties.content)
+            content = matchColumn(columnProperties.content)
             ignoreSearch = url || content
         }
 

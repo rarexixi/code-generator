@@ -9,26 +9,26 @@ interface FreeMarkerService {
      *
      * @return
      */
-    fun getAllTemplates(): List<FreemarkerModel>
+    fun getTableTemplates(): List<FreemarkerModel>
 
     /**
      * 所有运行一次的模版
      *
      * @return
      */
-    fun getAllOnceTemplates(): List<FreemarkerModel>
+    fun getOnceTemplates(): List<FreemarkerModel>
 
     /**
      * 所有聚合的模版
      *
      * @return
      */
-    fun getAllAggregateTemplates(): List<FreemarkerModel>
+    fun getAggrTemplates(): List<FreemarkerModel>
 
     /**
      * 所有仅复制的文件
      *
      * @return
      */
-    fun getAllJustCopyTemplates(): List<FreemarkerModel>
+    fun getCopyTemplates(): List<FreemarkerModel>
 }

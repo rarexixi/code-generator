@@ -15,9 +15,9 @@ class GeneratorAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.deleteAllOnce(..))")
+    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.delBase(..))")
     @Throws(Throwable::class)
-    fun deleteAllOnceAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
+    fun delBaseAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         logger.info("正在删除所有需要的基本类...")
         val result = proceedingJoinPoint.proceed()
@@ -32,9 +32,9 @@ class GeneratorAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.generateAllOnce(..))")
+    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.genBase(..))")
     @Throws(Throwable::class)
-    fun generateAllOnceAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
+    fun genBaseAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         logger.info("正在生成需要的基本类...")
         val result = proceedingJoinPoint.proceed()
@@ -49,9 +49,9 @@ class GeneratorAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.deleteAllAggregate(..))")
+    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.delAggr(..))")
     @Throws(Throwable::class)
-    fun deleteAllAggregateAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
+    fun delAggrAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         logger.info("正在删除所有聚合类...")
         val result = proceedingJoinPoint.proceed()
@@ -66,9 +66,9 @@ class GeneratorAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.generateAllAggregate(..))")
+    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.genAggr(..))")
     @Throws(Throwable::class)
-    fun generateAllAggregateAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
+    fun genAggrAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         logger.info("正在生成聚合类...")
         val result = proceedingJoinPoint.proceed()

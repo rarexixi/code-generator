@@ -12,17 +12,9 @@ interface TableService {
     fun getAllTableNameList(): Set<String>
 
     /**
-     * 获取单表
-     *
-     * @param tableName
-     * @return
-     */
-    fun getTable(tableName: String): TableModel?
-
-    /**
      * 获取所有列表
      *
      * @return
      */
-    fun getAllTables(): List<TableModel>
+    fun getTables(vararg tableNames: String): List<TableModel>
 }

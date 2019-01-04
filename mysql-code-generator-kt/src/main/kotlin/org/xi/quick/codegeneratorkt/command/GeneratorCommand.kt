@@ -54,49 +54,50 @@ class GeneratorCommand : CommandLineRunner {
 
     private fun processLine(sc: Scanner, tableNameSet: Set<String>) {
         val cmd = sc.next().toLowerCase()
+        val args = getArgs(sc)
         when (cmd) {
             "ga" -> {
-                generatorService.generateAll()
-                generatorService.generateAllOnce()
-                generatorService.generateAllAggregate()
+                generatorService.gen()
+                generatorService.genBase()
+                generatorService.genAggr()
                 return
             }
             "da" -> {
-                generatorService.deleteAll()
-                generatorService.deleteAllOnce()
-                generatorService.deleteAllAggregate()
+                generatorService.del()
+                generatorService.delBase()
+                generatorService.delAggr()
                 return
             }
             "gb" -> {
-                generatorService.generateAllOnce()
+                generatorService.genBase()
                 return
             }
             "db" -> {
-                generatorService.deleteAllOnce()
+                generatorService.delBase()
                 return
             }
             "gag" -> {
-                generatorService.generateAllOnce()
+                generatorService.genAggr(*args)
                 return
             }
             "dag" -> {
-                generatorService.deleteAllAggregate()
+                generatorService.delAggr()
                 return
             }
             "gat" -> {
-                generatorService.generateAll()
+                generatorService.gen()
                 return
             }
             "dat" -> {
-                generatorService.deleteAll()
+                generatorService.del()
                 return
             }
             "gen" -> {
-                generate(tableNameSet, getArgs(sc))
+                gen(tableNameSet, args)
                 return
             }
             "del" -> {
-                delete(tableNameSet, getArgs(sc))
+                del(tableNameSet, args)
                 return
             }
             "show", "s" -> {
@@ -114,13 +115,13 @@ class GeneratorCommand : CommandLineRunner {
         }
     }
 
-    private fun generate(tableNameSet: Set<String>, tables: Array<String>) {
+    private fun gen(tableNameSet: Set<String>, tables: Array<String>) {
 
         if (tables.isEmpty()) return
 
         invoke(tableNameSet, tables, false) { tablesToInvoke, tablesNotExist ->
             run {
-                tablesToInvoke.forEach { generatorService.generate(it) }
+                generatorService.gen(*tablesToInvoke)
                 if (!tablesNotExist.isEmpty()) {
                     logger.warn("表" + tablesNotExist.joinToString(",") + "不存在或者没有配置")
                 }
@@ -128,17 +129,18 @@ class GeneratorCommand : CommandLineRunner {
         }
     }
 
-    private fun delete(tableNameSet: Set<String>, tables: Array<String>) {
+    private fun del(tableNameSet: Set<String>, tables: Array<String>) {
 
         if (tables.isEmpty()) return
+
         invoke(tableNameSet, tables, true) { tablesToInvoke, tablesNotExist ->
             run {
-                tablesToInvoke.forEach { generatorService.delete(it) }
+                generatorService.del(*tablesToInvoke)
             }
         }
     }
 
-    private fun invoke(tableNameSet: Set<String>, tables: Array<String>, isDelete: Boolean, consume: (Set<String>, Set<String>) -> Unit) {
+    private fun invoke(tableNameSet: Set<String>, tables: Array<String>, isDelete: Boolean, consume: (Array<String>, Array<String>) -> Unit) {
 
         var tablesToInvoke = HashSet<String>()
         val tablesNotExist = HashSet<String>()
@@ -161,7 +163,7 @@ class GeneratorCommand : CommandLineRunner {
             }
         }
 
-        consume(tablesToInvoke, tablesNotExist)
+        consume(tablesToInvoke.toTypedArray(), tablesNotExist.toTypedArray())
     }
 
     private fun showTables(tableNameSet: Set<String>) {

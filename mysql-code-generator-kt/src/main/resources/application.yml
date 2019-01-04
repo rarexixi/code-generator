@@ -31,22 +31,22 @@ generator:
   files:
     ignore: include/
     aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, ${dollar}{adminWebModuleName}/index.html
-    just-copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js, .gitignore
+    copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js, .gitignore
 
-  fields:
+  columns:
     not-required:
-      - name-set: create_time, update_time
+      - column-name-set: create_time, update_time
     img-url:
-      - name-set: photo
+      - column-name-set: photo
 #    video-url:
 #    doc-url:
 #    page-url:
 #    other-url:
     content:
-      - name-set: introduction, remark
+      - column-name-set: introduction, remark
 
     select:
-      - name-set: status
+      - column-name-set: status
         table-name: multi_pk
         options:
           - value: 1
@@ -56,13 +56,13 @@ generator:
           - value: 3
             text: 起飞
     fk-select:
-      - name-set: user_type_id
+      - column-name-set: user_type_id
         fk:
           foreign-table-name: user_type
-          value-field: id
-          text-field: user_type_name
+          value-column: id
+          text-column: user_type_name
     valid-status:
-      - name-set: is_deleted
+      - column-name-set: is_deleted
         status:
           valid: 0
           invalid: 1

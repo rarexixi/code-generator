@@ -36,39 +36,21 @@ class TableServiceImpl : TableService {
     }
 
     /**
-     * 获取单表
-     *
-     * @param tableName
-     * @return
-     */
-    override fun getTable(tableName: String): TableModel {
-
-        val table = tablesMapper.getTable(generator.databaseName, tableName)
-        val columnList = columnsMapper.getColumnsWithIndex(generator.databaseName, table.tableName!!)
-        val statisticsList = indexesMapper.getStatistics(generator.databaseName, table.tableName!!)
-
-        val columnModels = columnList.map { ColumnModel(it) }.toList()
-        val statisticModels = statisticsList.map { IndexModel(it) }.toList()
-
-        return TableModel(table, columnModels, statisticModels)
-    }
-
-    /**
-     * 获取所有列表
+     * 获取表
      *
      * @return
      */
-    override fun getAllTables(): List<TableModel> {
+    override fun getTables(vararg tableNames: String): List<TableModel> {
 
-        val tables = tablesMapper.getAllTables(generator.databaseName)
+        val tables = tablesMapper.getTables(generator.databaseName, *tableNames)
 
         val tableModels = tables.map { table ->
             let {
                 val columnList = columnsMapper.getColumnsWithIndex(generator.databaseName, table.tableName!!)
-                val statisticsList = indexesMapper.getStatistics(generator.databaseName, table.tableName!!)
+                val statisticsList = indexesMapper.getIndexes(generator.databaseName, table.tableName!!)
 
-                val columnModels = columnList.map { ColumnModel(it) }.toList()
-                val statisticModels = statisticsList.map { IndexModel(it) }.toList()
+                val columnModels = columnList.map { it -> ColumnModel(it) }.toList()
+                val statisticModels = statisticsList.map { it -> IndexModel(it) }.toList()
 
                 TableModel(table, columnModels, statisticModels)
             }

@@ -21,13 +21,13 @@ class FreeMarkerServiceImpl : FreeMarkerService {
      * @throws IOException
      */
     @Throws(IOException::class)
-    override fun getAllTemplates(): List<FreemarkerModel> {
+    override fun getTableTemplates(): List<FreemarkerModel> {
 
         return getMatchingTemplates { templateRelativePath ->
             isTableFile(templateRelativePath)
                     && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.ignore)
                     && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.aggregate)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.justCopy)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.copy)
         }
     }
 
@@ -38,13 +38,13 @@ class FreeMarkerServiceImpl : FreeMarkerService {
      * @throws IOException
      */
     @Throws(IOException::class)
-    override fun getAllOnceTemplates(): List<FreemarkerModel> {
+    override fun getOnceTemplates(): List<FreemarkerModel> {
 
         return getMatchingTemplates { templateRelativePath ->
             !isTableFile(templateRelativePath)
                     && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.ignore)
                     && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.aggregate)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.justCopy)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files!!.copy)
         }
     }
 
@@ -55,7 +55,7 @@ class FreeMarkerServiceImpl : FreeMarkerService {
      * @throws IOException
      */
     @Throws(IOException::class)
-    override fun getAllAggregateTemplates(): List<FreemarkerModel> {
+    override fun getAggrTemplates(): List<FreemarkerModel> {
 
         return getMatchingTemplates { templateRelativePath ->
             isMatchingFile(templateRelativePath, GeneratorProperties.files!!.aggregate)
@@ -69,10 +69,10 @@ class FreeMarkerServiceImpl : FreeMarkerService {
      * @throws IOException
      */
     @Throws(IOException::class)
-    override fun getAllJustCopyTemplates(): List<FreemarkerModel> {
+    override fun getCopyTemplates(): List<FreemarkerModel> {
 
         return getMatchingTemplates { templateRelativePath ->
-            isMatchingFile(templateRelativePath, GeneratorProperties.files!!.justCopy)
+            isMatchingFile(templateRelativePath, GeneratorProperties.files!!.copy)
         }
     }
 

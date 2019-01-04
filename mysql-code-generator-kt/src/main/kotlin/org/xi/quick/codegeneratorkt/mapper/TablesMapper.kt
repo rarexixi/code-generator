@@ -19,16 +19,8 @@ interface TablesMapper {
      * 获取单表
      *
      * @param databaseName
-     * @param tableName
+     * @param tableNames
      * @return
      */
-    fun getTable(@Param("databaseName") databaseName: String, @Param("tableName") tableName: String): Table
-
-    /**
-     * 获取所有列表
-     *
-     * @param databaseName
-     * @return
-     */
-    fun getAllTables(@Param("databaseName") databaseName: String): List<Table>
+    fun getTables(@Param("databaseName") databaseName: String, @Param("tableNames") vararg tableNames: String): List<Table>
 }
