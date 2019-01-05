@@ -56,10 +56,10 @@ class ColumnModel(column: Column) {
 
     //region 扩展
 
-    // 获取列对应的JAVA字段名
-    var targetColumnName: String
+    // 获取列对应的字段名
+    var targetName: String
         private set
-    // 获取列对应的JAVA字段类型
+    // 获取列对应的字段类型
     var targetDataType: String
         private set
 
@@ -67,7 +67,7 @@ class ColumnModel(column: Column) {
     var autoIncrement: Boolean = false
         private set
     // 是主键
-    var primaryKey: Boolean = false
+    var pk: Boolean = false
         private set
 
     // 是选择项列
@@ -156,10 +156,10 @@ class ColumnModel(column: Column) {
 
         //region 扩展
 
-        targetColumnName = columnName.getCamelCaseName()
+        targetName = columnName.getCamelCaseName()
         targetDataType = this.dataType.getTargetDataType()
         autoIncrement = extra.toLowerCase() == "auto_increment"
-        primaryKey = columnKey == "PRI"
+        pk = columnKey == "PRI"
 
 
         var columnProperties = GeneratorProperties.columns

@@ -3,7 +3,6 @@
 <mapper namespace="org.xi.quick.codegeneratorkt.mapper.ColumnsMapper">
 
     <resultMap id="column" type="org.xi.quick.codegeneratorkt.entity.Column">
-        <result column="TABLE_CATALOG" property="tableCatalog" jdbcType="VARCHAR"/>
         <result column="TABLE_SCHEMA" property="tableSchema" jdbcType="VARCHAR"/>
         <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR"/>
         <result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR"/>
@@ -30,7 +29,6 @@
 
     <select id="getColumns" resultMap="column" parameterType="java.lang.String">
         SELECT
-        `TABLE_CATALOG`,
         `TABLE_SCHEMA`,
         `TABLE_NAME`,
         `COLUMN_NAME`,
@@ -64,7 +62,6 @@
 
     <select id="getColumnsWithIndex" resultMap="column" parameterType="java.lang.String">
         SELECT
-            A.`TABLE_CATALOG`,
             A.`TABLE_SCHEMA`,
             A.`TABLE_NAME`,
             A.`COLUMN_NAME`,

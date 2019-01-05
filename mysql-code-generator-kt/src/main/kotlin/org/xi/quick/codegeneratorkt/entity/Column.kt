@@ -1,7 +1,6 @@
 package org.xi.quick.codegeneratorkt.entity
 
 data class Column(
-        var tableCatalog: String? = null,
         var tableSchema: String? = null,
         var tableName: String? = null,
         var columnName: String? = null,

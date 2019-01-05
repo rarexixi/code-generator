@@ -10,12 +10,12 @@ mybatis:
     default-executor-type: simple
     default-statement-timeout: 25000
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     call-setters-on-nulls: true
 spring:
   datasource:
-    url: jdbc:mysql://192.168.77.114:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
-    username: rarexixi
+    url: jdbc:mysql://127.0.0.1:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
@@ -26,12 +26,12 @@ generator:
   encoding: UTF-8
   table-name-match-regex: '(?<=dm_uba_).*(?=_tmp)'
   paths:
-    template: C:\Projects\github\code-generator\spring-cloud-kt\template2\
-    out: C:\Projects\tmp\
+    template: /Workspace/github.com/java/templates/spring-cloud-kt/
+    out: /Workspace/github.com/java/templates/out/
   files:
     ignore: include/
     aggregate: spring-dubbo-provider.xml, spring-dubbo-consumer.xml, ${dollar}{adminWebModuleName}/index.html
-    copy: resources/bootstrap/, resources/css/, mybatis-config.xml, common.js, .gitignore
+    copy: resources/css/, common.js, .gitignore
 
   columns:
     not-required:
@@ -95,9 +95,9 @@ generator:
 
     author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
-    javaSrc: src.main.java
-    javaTestSrc: src.test.java
-    resourcesSrc: src.main.resources
+    javaSrc: src/main/java
+    javaTestSrc: src/test/java
+    resourcesSrc: src/main/resources
 
   # 获取数据映射关系
   data-type-map:

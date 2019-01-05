@@ -1,7 +1,6 @@
 package org.xi.quick.codegeneratorkt.entity
 
 data class Index(
-        var tableCatalog: String? = null,
         var tableSchema: String? = null,
         var tableName: String? = null,
         var nonUnique: Int? = null,

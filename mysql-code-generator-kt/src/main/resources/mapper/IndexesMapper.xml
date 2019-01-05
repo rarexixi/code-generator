@@ -3,7 +3,6 @@
 <mapper namespace="org.xi.quick.codegeneratorkt.mapper.IndexMapper">
 
     <resultMap id="resultMap" type="org.xi.quick.codegeneratorkt.entity.Index">
-        <result column="TABLE_CATALOG" property="tableCatalog" jdbcType="VARCHAR"/>
         <result column="TABLE_SCHEMA" property="tableSchema" jdbcType="VARCHAR"/>
         <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR"/>
         <result column="NON_UNIQUE" property="nonUnique" jdbcType="INTEGER"/>
@@ -23,7 +22,6 @@
 
     <select id="getIndexes" resultMap="resultMap" parameterType="java.lang.String">
         SELECT
-        `TABLE_CATALOG`,
         `TABLE_SCHEMA`,
         `TABLE_NAME`,
         `NON_UNIQUE`,
@@ -50,6 +48,4 @@
             </if>
         </where>
     </select>
-
-
 </mapper>

@@ -143,13 +143,13 @@ class FkSelectColumn {
      */
     var foreignTableName: String = ""
 
-    var valueColumn: String = ""
+    var valueColumnName: String = ""
         get() = field.getPropertyName()
-    var textColumn: String = ""
+    var textColumnName: String = ""
         get() = field.getPropertyName()
 
     /**
-     * 外键表名
+     * 外键目标表名
      */
     val foreignTargetTableName: String
         get() = foreignTableName.getTargetTableName()

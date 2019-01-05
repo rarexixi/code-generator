@@ -130,7 +130,7 @@ class GeneratorServiceImpl : GeneratorService {
         dataModel["table"] = table
         dataModel["tableName"] = table.tableName
         dataModel["targetTableName"] = table.targetTableName
-        dataModel["className"] = table.tableClassName
+        dataModel["className"] = table.className
 
         try {
             generate(template, dataModel)

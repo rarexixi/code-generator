@@ -3,7 +3,6 @@
 <mapper namespace="org.xi.quick.codegeneratorkt.mapper.TablesMapper">
 
     <resultMap id="resultMap" type="org.xi.quick.codegeneratorkt.entity.Table">
-        <result column="TABLE_CATALOG" property="tableCatalog" jdbcType="VARCHAR"/>
         <result column="TABLE_SCHEMA" property="tableSchema" jdbcType="VARCHAR"/>
         <result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR"/>
         <result column="TABLE_TYPE" property="tableType" jdbcType="VARCHAR"/>
@@ -25,7 +24,6 @@
 
     <select id="getTables" resultMap="resultMap" parameterType="java.lang.String">
         SELECT
-        `TABLE_CATALOG`,
         `TABLE_SCHEMA`,
         `TABLE_NAME`,
         `TABLE_TYPE`,
@@ -37,11 +35,10 @@
             <if test="databaseName != null and databaseName != ''">
                 `TABLE_SCHEMA`=#{databaseName}
             </if>
-            <if test="tableNames != null and tableNames.size() > 0">
+            <if test="tableNames != null and tableNames.length > 0">
                 AND `TABLE_NAME` in
                 <foreach collection="tableNames" item="it" open="(" close=")" separator=",">#{it}</foreach>
             </if>
         </where>
     </select>
-
 </mapper>

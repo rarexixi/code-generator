@@ -21,27 +21,30 @@ class TableModel(table: Table,
     var targetTableName: String
         private set
     // 表对应的类名
-    var tableClassName: String
+    var className: String
         private set
     // 表说明
-    var tableComment: String
+    var comment: String
         private set
 
     // endregion
 
     // region 扩展
 
-    // 主键列表
-    var primaryKeys: List<ColumnModel> = ArrayList()
-        private set
     // 是否有主键
-    var hasPrimaryKey: Boolean = false
+    var hasPk: Boolean = false
         private set
-    // 是否有唯一自增主键
-    var hasAutoIncrementUniquePrimaryKey: Boolean = false
+    // 主键列表
+    var pks: List<ColumnModel> = ArrayList()
+        private set
+    // 是否有唯一主键
+    var hasUniPk: Boolean = false
         private set
     // 唯一主键
-    var uniquePrimaryKey: ColumnModel? = null
+    var uniPk: ColumnModel? = null
+        private set
+    // 唯一主键是否自增
+    var hasAutoIncUniPk: Boolean = false
         private set
 
     // 索引
@@ -64,20 +67,23 @@ class TableModel(table: Table,
 
         databaseName = table.tableSchema ?: ""
         tableName = table.tableName ?: ""
-        targetTableName  = tableName.getTargetTableName()
-        tableClassName = tableName.getClassName()
-        tableComment = table.tableComment ?: tableClassName
+        targetTableName = tableName.getTargetTableName()
+        className = tableName.getClassName()
+        comment = table.tableComment ?: className
 
-        primaryKeys = columns.filter { column -> column.columnKey == "PRI" }
+        pks = columns.filter { column -> column.columnKey == "PRI" }
         indexes = columns.filter { column -> column.index }
         selectColumns = columns.filter { column -> column.select }
         fkSelectColumns = columns.filter { column -> column.fkSelect }
         validStatusColumn = columns.firstOrNull { column -> column.validStatus }
 
-        hasPrimaryKey = primaryKeys.isNotEmpty()
-        if (hasPrimaryKey) {
-            uniquePrimaryKey = if (primaryKeys.size == 1) primaryKeys[0] else null
-            hasAutoIncrementUniquePrimaryKey = uniquePrimaryKey != null && uniquePrimaryKey!!.autoIncrement
+        hasPk = pks.isNotEmpty()
+        if (hasPk) {
+            hasUniPk = pks.size == 1
+            if (hasUniPk) {
+                uniPk = pks[0]
+                hasAutoIncUniPk = uniPk!!.autoIncrement
+            }
         }
     }
 
