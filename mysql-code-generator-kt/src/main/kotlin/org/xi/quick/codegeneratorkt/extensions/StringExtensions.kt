@@ -48,7 +48,7 @@ fun String.getCamelCaseNameBy(delimiter: String): String {
     }
 }
 
-
+// region 表/列相关
 
 /**
  * 获取目标数据类型
@@ -93,3 +93,15 @@ fun String.getPropertyName(): String {
     var columnName = this
     return columnName.getCamelCaseName()
 }
+
+fun String.isBaseColumn(): Boolean {
+    var columnName = this
+
+    var baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
+    var baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
+
+    if (baseTableName.isNullOrBlank() || baseColumns.isEmpty()) return false
+    return baseColumns.contains(columnName)
+}
+
+// endregion

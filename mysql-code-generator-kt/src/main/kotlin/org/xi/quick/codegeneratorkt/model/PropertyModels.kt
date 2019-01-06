@@ -38,6 +38,11 @@ class FileProperties {
 class ColumnProperties {
 
     /**
+     * 基本列（所有表都存在的公共列，必须选择表名）
+     */
+    var base: ColumnProperty? = null
+
+    /**
      * 不需要填写的字段集合
      */
     var notRequired: Array<ColumnProperty> = arrayOf()

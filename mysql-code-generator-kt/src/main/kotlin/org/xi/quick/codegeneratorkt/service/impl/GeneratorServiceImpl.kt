@@ -144,6 +144,9 @@ class GeneratorServiceImpl : GeneratorService {
 
     private fun generateOnce(templates: List<FreemarkerModel>, dataModel: MutableMap<Any, Any>) {
 
+        var baseColumns = tableService.getBaseColumns()
+        dataModel["baseColumns"] = baseColumns
+
         for (template in templates) {
             try {
                 generate(template, dataModel)

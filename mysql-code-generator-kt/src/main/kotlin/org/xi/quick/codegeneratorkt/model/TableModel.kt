@@ -1,9 +1,10 @@
 package org.xi.quick.codegeneratorkt.model
 
+import org.xi.quick.codegeneratorkt.configuration.properties.GeneratorProperties
 import org.xi.quick.codegeneratorkt.entity.Table
 import org.xi.quick.codegeneratorkt.extensions.getClassName
 import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
-import java.util.ArrayList
+import org.xi.quick.codegeneratorkt.extensions.isBaseColumn
 
 class TableModel(table: Table,
                  val columns: List<ColumnModel>,
@@ -35,7 +36,7 @@ class TableModel(table: Table,
     var hasPk: Boolean = false
         private set
     // 主键列表
-    var pks: List<ColumnModel> = ArrayList()
+    var pks: List<ColumnModel> = listOf()
         private set
     // 是否有唯一主键
     var hasUniPk: Boolean = false
@@ -48,15 +49,19 @@ class TableModel(table: Table,
         private set
 
     // 索引
-    var indexes: List<ColumnModel> = ArrayList()
+    var indexes: List<ColumnModel> = listOf()
+        private set
+
+    // 除了公共列以外的列
+    var columnsExceptBase: List<ColumnModel> = listOf()
         private set
 
     // 选择项
-    var selectColumns: List<ColumnModel> = ArrayList()
+    var selectColumns: List<ColumnModel> = listOf()
         private set
 
     // 外键选择项
-    var fkSelectColumns: List<ColumnModel> = ArrayList()
+    var fkSelectColumns: List<ColumnModel> = listOf()
         private set
 
     // 有效性字段列
@@ -73,6 +78,7 @@ class TableModel(table: Table,
 
         pks = columns.filter { column -> column.columnKey == "PRI" }
         indexes = columns.filter { column -> column.index }
+        columnsExceptBase = columns.filter { column -> !column.columnName.isBaseColumn() }
         selectColumns = columns.filter { column -> column.select }
         fkSelectColumns = columns.filter { column -> column.fkSelect }
         validStatusColumn = columns.firstOrNull { column -> column.validStatus }

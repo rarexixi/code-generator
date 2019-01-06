@@ -27,6 +27,22 @@ class TableServiceImpl : TableService {
     lateinit var generator: GeneratorProperties
 
     /**
+     * 获取所有表都存在的公共列
+     *
+     * @return
+     */
+    override fun getBaseColumns(): List<ColumnModel> {
+
+        var baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
+        var baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
+        if (baseTableName.isNullOrBlank() || baseColumns.isEmpty()) return listOf()
+
+        val columnList = columnsMapper.getColumnsWithIndex(generator.databaseName, baseTableName)
+        val columnModels = columnList.filter { baseColumns.contains(it.columnName) }.map { ColumnModel(it) }
+        return columnModels
+    }
+
+    /**
      * 获取所有表名
      *
      * @return
@@ -49,12 +65,12 @@ class TableServiceImpl : TableService {
                 val columnList = columnsMapper.getColumnsWithIndex(generator.databaseName, table.tableName!!)
                 val statisticsList = indexesMapper.getIndexes(generator.databaseName, table.tableName!!)
 
-                val columnModels = columnList.map { it -> ColumnModel(it) }.toList()
-                val statisticModels = statisticsList.map { it -> IndexModel(it) }.toList()
+                val columnModels = columnList.map { it -> ColumnModel(it) }
+                val statisticModels = statisticsList.map { it -> IndexModel(it) }
 
                 TableModel(table, columnModels, statisticModels)
             }
-        }.toList()
+        }
 
         return tableModels
     }
