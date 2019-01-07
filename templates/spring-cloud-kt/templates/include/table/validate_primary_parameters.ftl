@@ -1,0 +1,1 @@
+<#list pks as column><#assign annotationName = ((${column.targetDataType} == 'String') ? string('NotBlank', 'NotNull'))><#if (column_index > 0)>, </#if>@${annotationName} ${column.targetDataType} ${column.targetName?uncap_first}</#list>

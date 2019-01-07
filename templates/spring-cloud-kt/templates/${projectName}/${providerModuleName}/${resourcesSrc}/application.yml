@@ -1,0 +1,30 @@
+server:
+  port: ${providerServicePort}
+
+spring:
+  application:
+    name: ${providerModuleName}
+  datasource:
+    url: ${dbUrl}
+    username: ${dbUsername}
+    password: ${dbPassword}
+    driver-class-name: com.mysql.jdbc.Driver
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:${eurekaServerPort}/eureka/
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: ${basePackage}.mapper
+  configuration:
+    cache-enabled: false
+    lazy-loading-enabled: false
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    default-executor-type: simple
+    default-statement-timeout: 25000
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    call-setters-on-nulls: true

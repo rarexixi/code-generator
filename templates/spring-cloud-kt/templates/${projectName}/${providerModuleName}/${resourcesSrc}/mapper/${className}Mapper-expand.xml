@@ -1,0 +1,90 @@
+<#include "/include/table/properties.ftl">
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 存放手写的sql -->
+<mapper namespace="${basePackage}.mapper.${className}Mapper">
+
+    <resultMap id="ExtensionResultMap" extends="BaseModelMap" type="${basePackage}.entity.extension.${className}EntityExtension"></resultMap>
+
+    <parameterMap id="ConditionExtensionMap" type="${basePackage}.condition.extension.${className}ConditionExtension"></parameterMap>
+
+    <#if table.hasPrimaryKey>
+    <select id="getByPk" resultMap="ExtensionResultMap">
+        SELECT DISTINCT
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+        `${column.columnName}`<#if column_has_next>,</#if>
+        </#list>
+        FROM
+        <include refid="tableName"/>
+        <where>
+        <#list pks as column>
+        <#if (column_index > 0)>AND </#if>`${column.columnName}` = <@mapperEl fieldName/>
+        </#list>
+        <where>
+    </select>
+    </#if>
+
+    <select id="getList" resultMap="ExtensionResultMap" parameterMap="ConditionExtensionMap">
+        SELECT DISTINCT
+        <#list table.columns as column>
+        `${column.columnName}`<#if column_has_next>,</#if>
+        </#list>
+        FROM
+        <include refid="tableName"/>
+        <where>
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+        <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+        <#else>
+            <#if (canBeEqual)>
+            <if test="condition.${fieldName} != null">
+                AND `${column.columnName}` = <@mapperEl 'condition.' + fieldName/>
+            </if>
+            </#if>
+            <#if (canBeList)>
+            <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
+                AND `${column.columnName}` in
+                <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=",">
+                    <@mapperEl it/>
+                </foreach>
+            </if>
+            </#if>
+            <#if (canBeRange)>
+            <if test="condition.${fieldName}Min != null">
+                <![CDATA[
+                AND `${column.columnName}` >= <@mapperEl 'condition.' + fieldName + 'Min'/>
+                ]]>
+            </if>
+            <if test="condition.${fieldName}Max != null">
+                <![CDATA[
+                AND `${column.columnName}` <= <@mapperEl 'condition.' + fieldName + 'Max'/>
+                ]]>
+            </if>
+            </#if>
+            <#if (canBeNull)>
+            <if test="condition.${fieldName}IsNull != null">
+                AND `${column.columnName}` IS NULL
+            </if>
+            </#if>
+            <#if (column.dataType?ends_with("char"))>
+            <if test="condition.${fieldName}IsEmpty != null">
+                AND `${column.columnName}` = ''
+            </if>
+            <if test="condition.${fieldName}StartWith != null and condition.${fieldName}StartWith != ''">
+                AND `${column.columnName}` LIKE concat(<@mapperEl 'condition.' + fieldName + 'StartWith'/>, '%')
+            </if>
+            <if test="condition.${fieldName}Contains != null and condition.${fieldName}Contains != ''">
+                AND `${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + fieldName + 'Contains'/>, '%')
+            </if>
+            </#if>
+        </#if>
+        </#list>
+        </where>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${r"${orderBy}"}
+        </if>
+    </select>
+</mapper>
