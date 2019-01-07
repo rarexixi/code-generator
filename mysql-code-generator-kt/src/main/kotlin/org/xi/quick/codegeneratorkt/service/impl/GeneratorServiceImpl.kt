@@ -139,7 +139,6 @@ class GeneratorServiceImpl : GeneratorService {
         } catch (e: TemplateException) {
             e.printStackTrace()
         }
-
     }
 
     private fun generateOnce(templates: List<FreemarkerModel>, dataModel: MutableMap<Any, Any>) {
@@ -155,7 +154,6 @@ class GeneratorServiceImpl : GeneratorService {
             } catch (e: TemplateException) {
                 e.printStackTrace()
             }
-
         }
     }
 
