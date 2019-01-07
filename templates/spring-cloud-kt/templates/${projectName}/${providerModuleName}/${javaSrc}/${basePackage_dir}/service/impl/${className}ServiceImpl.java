@@ -3,12 +3,13 @@ package ${basePackage}.service.impl;
 
 import ${baseCommonPackage}.mapper.BaseMapper;
 import ${baseCommonPackage}.model.SearchPage;
+
 import ${basePackage}.condition.${className}Condition;
-import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.condition.extension.${className}ConditionExtension;
+import ${basePackage}.entity.${className}Entity;
+import ${basePackage}.entity.extension.${className}EntityExtension;
 import ${basePackage}.mapper.${className}Mapper;
 import ${basePackage}.service.${className}Service;
-import ${basePackage}.entity.extension.${className}EntityExtension;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -20,24 +21,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 <#include "/include/java_copyright.ftl">
-@Service("${classNameLower}Service")
+@Service("${classNameFirstLower}Service")
 @Transactional
 public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity, ${className}Condition> implements ${className}Service {
 
     @Autowired
-    public ${className}ServiceImpl(${className}Mapper ${classNameLower}Mapper) {
-        this.${classNameLower}Mapper = ${classNameLower}Mapper;
-        super.mapper = ${classNameLower}Mapper;
+    public ${className}ServiceImpl(${className}Mapper ${classNameFirstLower}Mapper) {
+        this.${classNameFirstLower}Mapper = ${classNameFirstLower}Mapper;
+        super.mapper = ${classNameFirstLower}Mapper;
     }
 
-    private ${className}Mapper ${classNameLower}Mapper;
+    private ${className}Mapper ${classNameFirstLower}Mapper;
 
-    <#if table.hasPrimaryKey>
+    <#if table.hasPk>
 
     /**
      * 根据主键获取
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @return
@@ -45,8 +47,8 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     @Transactional(readOnly = true)
     @Override
-    public ${className}EntityExtension getByPk(<#include "/include/table/primary_parameters.ftl">) {
-        ${className}EntityExtension vo = ${classNameLower}Mapper.getByPk(<#include "/include/table/primary_values.ftl">);
+    public ${className}EntityExtension getByPk(<#include "/include/table/pk_params.ftl">) {
+        ${className}EntityExtension vo = ${classNameFirstLower}Mapper.getByPk(<#include "/include/table/pk_values.ftl">);
         return vo;
     }
     </#if>
@@ -54,22 +56,34 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
     /**
      * 分页查询
      *
+     * @param searchPage
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo<${className}EntityExtension> getPageList(SearchPage<${className}ConditionExtension> searchPage) {
+
+        int pageIndex = searchPage == null || searchPage.getPageIndex() == null ? SearchPage.DEFAULT_PAGE_INDEX : searchPage.getPageIndex();
+        int pageSize = searchPage == null || searchPage.getPageSize() == null ? SearchPage.DEFAULT_PAGE_SIZE : searchPage.getPageSize();
+        PageHelper.startPage(pageIndex, pageSize);
+        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(searchPage.getCondition());
+        PageInfo<${className}EntityExtension> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
+    /**
+     * 获取列表（不分页）
+     *
      * @param parameter
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<${className}EntityExtension> getPageList(${className}ConditionExtension parameter) {
+    public List<${className}Vo> getList(${className}ConditionExtension condition) {
 
-        if (parameter == null) {
-            PageHelper.startPage(SearchPage.DEFAULT_PAGE_INDEX, SearchPage.DEFAULT_PAGE_SIZE);
-        } else {
-            PageHelper.startPage(parameter.getPageIndex(), parameter.getPageSize());
-        }
-        List<${className}EntityExtension> list = ${classNameLower}Mapper.getList(parameter);
-        PageInfo<${className}EntityExtension> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+        List<${className}Vo> list = ${classNameFirstLower}Mapper.getList(condition);
+        return list;
     }
-
 }

@@ -2,13 +2,16 @@ package ${baseCommonPackage}.mapper;
 
 import ${baseCommonPackage}.model.OrderCondition;
 
+import ${basePackage}.models.entity.BaseEntity;
+import ${basePackage}.models.condition.BaseCondition;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
 import java.util.List;
 
-public interface BaseMapper<T extends Serializable, C extends Serializable> {
+public interface BaseMapper<T extends BaseEntity, C extends BaseCondition> {
 
     /**
      * 添加

@@ -14,25 +14,24 @@ public class ${className}DetailVm implements Serializable {
     public ${className}DetailVm() {
     }
 
-    public ${className}DetailVm(${className}EntityExtension vo) {
+    public ${className}DetailVm(${className}EntityExtension entity) {
 
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
-        ${fieldName} = vo.get${propertyName}();
+        ${fieldName} = entity.get${propertyName}();
         </#list>
     }
-
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
+
     /**
      * ${column.columnComment}
      */
     private ${column.targetDataType} ${fieldName};
-
     </#list>
-
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
+
     /**
     * 获取${column.columnComment}
     */
@@ -46,6 +45,5 @@ public class ${className}DetailVm implements Serializable {
     public void set${propertyName}(${column.targetDataType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }
-
     </#list>
 }

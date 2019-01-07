@@ -3,8 +3,8 @@ package ${basePackage}.mapper;
 
 import ${baseCommonPackage}.mapper.BaseMapper;
 import ${basePackage}.condition.${className}Condition;
-import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.condition.extension.${className}ConditionExtension;
+import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.entity.extension.${className}EntityExtension;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -27,7 +27,7 @@ public interface ${className}Mapper extends BaseMapper<${className}Entity, ${cla
      * @return
     <#include "/include/author_info1.ftl">
      */
-    ${className}EntityExtension getByPk(<#include "/include/table/properties.ftl">);
+    ${className}EntityExtension getByPk(<#include "/include/table/pk_params_mapper.ftl">);
     </#if>
 
     /**

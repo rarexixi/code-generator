@@ -4,10 +4,10 @@ package ${basePackage}.controller;
 import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.validation.*;
 import ${basePackage}.condition.${className}Condition;
-import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.condition.extension.${className}ConditionExtension;
-import ${basePackage}.service.${className}Service;
+import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.entity.extension.${className}EntityExtension;
+import ${basePackage}.service.${className}Service;
 
 import com.github.pagehelper.PageInfo;
 
@@ -20,12 +20,12 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 <#include "/include/java_copyright.ftl">
-@RequestMapping("/${classNameLower}")
+@RequestMapping("/${classNameFirstLower}")
 @RestController
 public class ${className}Controller {
 
     @Autowired
-    private ${className}Service ${classNameLower}Service;
+    private ${className}Service ${classNameFirstLower}Service;
 
     /**
      * 添加
@@ -38,7 +38,7 @@ public class ${className}Controller {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResultVo<${className}Entity> add(@Validated({DataAdd.class}) @RequestBody ${className}Entity entity, Errors errors, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        int count = ${classNameLower}Service.insert(entity);
+        int count = ${classNameFirstLower}Service.insert(entity);
         ResultVo<${className}Entity> result = new ResultVo<>(entity);
         return result;
     }
@@ -54,16 +54,17 @@ public class ${className}Controller {
     @RequestMapping(value = "/addList", method = RequestMethod.POST)
     public ResultVo<Integer> addList(@Validated({DataAdd.class}) @RequestBody List<${className}Entity> list, Errors errors, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        int count = ${classNameLower}Service.insert(list);
+        int count = ${classNameFirstLower}Service.insert(list);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
-    <#if table.hasPrimaryKey>
+    <#if table.hasPk>
 
     /**
      * 根据主键物理删除
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @param sessionId
@@ -71,28 +72,28 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public ResultVo<Integer> delete(<#include "/include/table/validate_primary_parameters.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> delete(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkCondition(<#include "/include/table/primary_values.ftl">);
-        int count = ${classNameLower}Service.delete(condition);
+        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
+        int count = ${classNameFirstLower}Service.delete(condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
-    <#if (table.uniquePrimaryKey??)>
+    <#if (table.hasUniPk)>
 
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
+     * @param ${table.uniPk.targetName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResultVo<Integer> delete(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> delete(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
-        int count = ${classNameLower}Service.delete(condition);
+        ${className}Condition condition = getPkListCondition(${table.uniPk.targetName?uncap_first}List);
+        int count = ${classNameFirstLower}Service.delete(condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
@@ -103,6 +104,7 @@ public class ${className}Controller {
      * 根据主键禁用
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @param sessionId
@@ -110,12 +112,12 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disable", method = RequestMethod.GET)
-    public ResultVo<Integer> disable(<#include "/include/table/validate_primary_parameters.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> disable(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkCondition(<#include "/include/table/primary_values.ftl">);
+        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.invalidValue});
-        int count = ${classNameLower}Service.update(entity, condition);
+        entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.invalid});
+        int count = ${classNameFirstLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
@@ -124,6 +126,7 @@ public class ${className}Controller {
      * 根据主键启用
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @param sessionId
@@ -131,32 +134,32 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enable", method = RequestMethod.GET)
-    public ResultVo<Integer> enable(<#include "/include/table/validate_primary_parameters.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> enable(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkCondition(<#include "/include/table/primary_values.ftl">);
+        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.validValue});
-        int count = ${classNameLower}Service.update(entity, condition);
+        entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.valid});
+        int count = ${classNameFirstLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
-    <#if (table.uniquePrimaryKey??)>
+    <#if (table.hasUniPk)>
 
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
+     * @param ${table.uniPk.targetName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disable", method = RequestMethod.POST)
-    public ResultVo<Integer> disable(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> disable(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniPk.targetName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.invalidValue});
-        int count = ${classNameLower}Service.update(entity, condition);
+        entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.invalid});
+        int count = ${classNameFirstLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
@@ -164,18 +167,18 @@ public class ${className}Controller {
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
+     * @param ${table.uniPk.targetName?uncap_first}List
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enable", method = RequestMethod.POST)
-    public ResultVo<Integer> enable(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> enable(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkListCondition(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
+        ${className}Condition condition = getPkListCondition(${table.uniPk.targetName?uncap_first}List);
         ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.targetColumnName}(${table.validStatusField.validValue});
-        int count = ${classNameLower}Service.update(entity, condition);
+        entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.valid});
+        int count = ${classNameFirstLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
@@ -191,14 +194,14 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResultVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}Entity entity, Errors errors<#if !table.hasAutoIncrementUniquePrimaryKey><#list pks as column>, @RequestParam(value="old${propertyName}") ${column.targetDataType} old${propertyName}</#list></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}Entity entity, Errors errors<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_request_params_validate.ftl"></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        <#if !table.hasAutoIncrementUniquePrimaryKey>
-        ${className}Condition condition = getPkCondition(<#if !table.hasAutoIncrementUniquePrimaryKey><#list pks as column><#if (column_index > 0)>, </#if>old${propertyName}</#list></#if>);
+        <#if !table.hasAutoIncUniPk>
+        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
         <#else>
         ${className}Condition condition = getPkCondition(<#list pks as column><#if (column_index > 0)>, </#if>entity.get${propertyName}()</#list>);
         </#if>
-        int count = ${classNameLower}Service.update(entity, condition);
+        int count = ${classNameFirstLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
@@ -207,6 +210,7 @@ public class ${className}Controller {
      * 根据主键获取
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @param sessionId
@@ -214,9 +218,9 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public ResultVo<${className}EntityExtension> get(<#include "/include/table/validate_primary_parameters.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<${className}EntityExtension> get(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}EntityExtension vo = ${classNameLower}Service.getByPk(<#include "/include/table/primary_values.ftl">);
+        ${className}EntityExtension vo = ${classNameFirstLower}Service.getByPk(<#include "/include/table/pk_values.ftl">);
         ResultVo<${className}EntityExtension> result = new ResultVo<>(vo);
         return result;
     }
@@ -233,25 +237,26 @@ public class ${className}Controller {
     @RequestMapping(value = "/getPageInfo", method = RequestMethod.POST)
     public ResultVo<PageInfo<${className}EntityExtension>> getPageInfo(@RequestBody ${className}ConditionExtension parameter, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        PageInfo<${className}EntityExtension> paginationVo = ${classNameLower}Service.getPageList(parameter);
+        PageInfo<${className}EntityExtension> paginationVo = ${classNameFirstLower}Service.getPageList(parameter);
         ResultVo<PageInfo<${className}EntityExtension>> result = new ResultVo<>(paginationVo);
         return result;
     }
 
-    private ${className}Condition getPkCondition(<#include "/include/table/primary_parameters.ftl">) {
+    private ${className}Condition getPkCondition(<#include "/include/table/pk_params.ftl">) {
 
         ${className}Condition condition = new ${className}Condition();
         <#list pks as column>
+        <#include "/include/column/properties.ftl">
         condition.set${propertyName}(${fieldName});
         </#list>
         return condition;
     }
-    <#if (table.uniquePrimaryKey??)>
+    <#if (table.hasUniPk)>
 
-    private ${className}Condition getPkListCondition(List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
+    private ${className}Condition getPkListCondition(List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List) {
 
         ${className}Condition condition = new ${className}Condition();
-        condition.set${table.uniquePrimaryKey.targetColumnName}List(${table.uniquePrimaryKey.targetColumnName?uncap_first}List);
+        condition.set${table.uniPk.targetName}List(${table.uniPk.targetName?uncap_first}List);
         return condition;
     }
     </#if>

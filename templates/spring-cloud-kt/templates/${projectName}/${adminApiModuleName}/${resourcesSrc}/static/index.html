@@ -53,9 +53,10 @@
                         <span>GroupTitle</span>
                     </template>
                     <#assign menuIndex = 0>
-                    <#list tableModels as model>
+                    <#list tableModels as table>
+                    <#include "/include/table/properties.ftl">
                     <#assign menuIndex = menuIndex + 1>
-                    <el-menu-item index="1-${menuIndex}0" @click="openLink('/html/${model.tableClassName?lower_case}/index.html')">${(model.tableComment?split("[（ ,，(]", "r"))[0]}</el-menu-item>
+                    <el-menu-item index="1-${menuIndex}0" @click="openLink('/html/${className?lower_case}/index.html')">${tableComment}</el-menu-item>
                     </#list>
                 </el-submenu>
             </el-menu>
@@ -69,7 +70,6 @@
     </el-container>
 </div>
 <script src="//unpkg.com/vue/dist/vue.js"></script>
-<script src="//cdn.jsdelivr.net/npm/vue"></script>
 <script src="//unpkg.com/element-ui/lib/index.js"></script>
 <script src="/resources/js/config.js"></script>
 <script src="/resources/js/common.js"></script>

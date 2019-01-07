@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
 @RestController
-@RequestMapping("/${table.tableClassName?lower_case}")
+@RequestMapping("/${className?lower_case}")
 @Validated
 public class ${className}Controller {
 
@@ -37,7 +37,7 @@ public class ${className}Controller {
     private String applicationName;
 
     @Autowired
-    private ${className}Service ${classNameLower}Service;
+    private ${className}Service ${classNameFirstLower}Service;
 
     /**
      * 添加
@@ -51,7 +51,7 @@ public class ${className}Controller {
 
         ResponseVo<${className}AddOrEditVm> responseVo;
         ${className}Entity entity = vm.get${className}Entity();
-        ResultVo<${className}Entity> apiResult = ${classNameLower}Service.add(entity, getSessionId());
+        ResultVo<${className}Entity> apiResult = ${classNameFirstLower}Service.add(entity, getSessionId());
         if (apiResult.isSuccess()) {
             vm.set${className}Entity(apiResult.getResult());
             responseVo = new ResponseVo<>(vm);
@@ -70,10 +70,10 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/edit" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> edit(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncrementUniquePrimaryKey><#list pks as column>, ${column.targetDataType} old${propertyName}</#list></#if>) {
+    public ResponseVo<Integer> edit(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_params.ftl"></#if>) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.update(vm.get${className}Entity()<#if !table.hasAutoIncrementUniquePrimaryKey><#list pks as column>, old${propertyName}</#list></#if>, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameFirstLower}Service.update(vm.get${className}Entity()<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_values.ftl"></#if>, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -94,8 +94,8 @@ public class ${className}Controller {
     public ResponseVo<Integer> addList(@RequestBody List<${className}AddOrEditVm> list) {
 
         ResponseVo<Integer> responseVo;
-        List<${className}Entity> entityList = list.stream().map(o->o.get${className}Entity()).collect(Collectors.toList());
-        ResultVo<Integer> apiResult = ${classNameLower}Service.addList(entityList, getSessionId());
+        List<${className}Entity> entityList = list.stream().map(o -> o.get${className}Entity()).collect(Collectors.toList());
+        ResultVo<Integer> apiResult = ${classNameFirstLower}Service.addList(entityList, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -104,22 +104,23 @@ public class ${className}Controller {
 
         return responseVo;
     }
-    <#if table.hasPrimaryKey>
+    <#if table.hasPk>
 
     /**
      * 根据主键物理删除
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
      */
      @RequestMapping(value = { "/delete" }, method = RequestMethod.GET)
-     public ResponseVo<Integer> delete(<#include "/include/table/validate_primary_parameters.ftl">) {
+     public ResponseVo<Integer> delete(<#include "/include/table/pk_params_validate.ftl">) {
 
          ResponseVo<Integer> responseVo;
-         ResultVo<Integer> apiResult = ${classNameLower}Service.delete(<#include "/include/table/primary_values.ftl">, getSessionId());
+         ResultVo<Integer> apiResult = ${classNameFirstLower}Service.delete(<#include "/include/table/pk_values.ftl">, getSessionId());
          if (apiResult.isSuccess()) {
              responseVo = new ResponseVo<>(apiResult.getResult());
          } else {
@@ -128,20 +129,20 @@ public class ${className}Controller {
 
          return responseVo;
     }
-    <#if (table.uniquePrimaryKey??)>
+    <#if (table.hasUniPk)>
 
     /**
      * 根据主键列表物理删除
      *
-     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
+     * @param ${table.uniPk.targetName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
      @RequestMapping(value = { "/deleteList" }, method = RequestMethod.POST)
-     public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
+     public ResponseVo<Integer> deleteList(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.delete(${table.uniquePrimaryKey.targetColumnName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameFirstLower}Service.delete(${table.uniPk.targetName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -157,16 +158,17 @@ public class ${className}Controller {
      * 根据主键禁用
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disable", method = RequestMethod.GET)
-    public ResponseVo<Integer> disable(<#include "/include/table/validate_primary_parameters.ftl">) {
+    public ResponseVo<Integer> disable(<#include "/include/table/pk_params_validate.ftl">) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(<#include "/include/table/primary_values.ftl">, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameFirstLower}Service.disable(<#include "/include/table/pk_values.ftl">, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -180,16 +182,17 @@ public class ${className}Controller {
      * 根据主键启用
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enable", method = RequestMethod.GET)
-    public ResponseVo<Integer> enable(<#include "/include/table/validate_primary_parameters.ftl">) {
+    public ResponseVo<Integer> enable(<#include "/include/table/pk_params_validate.ftl">) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(<#include "/include/table/primary_values.ftl">, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameFirstLower}Service.enable(<#include "/include/table/pk_values.ftl">, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -198,20 +201,20 @@ public class ${className}Controller {
 
         return responseVo;
     }
-    <#if (table.uniquePrimaryKey??)>
+    <#if (table.hasUniPk)>
 
     /**
      * 根据主键列表禁用
      *
-     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
+     * @param ${table.uniPk.targetName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/disableList", method = RequestMethod.POST)
-    public ResponseVo<Integer> disableList(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
+    public ResponseVo<Integer> disableList(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.disable(${table.uniquePrimaryKey.targetColumnName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameFirstLower}Service.disable(${table.uniPk.targetName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -224,15 +227,15 @@ public class ${className}Controller {
     /**
      * 根据主键列表启用
      *
-     * @param ${table.uniquePrimaryKey.targetColumnName?uncap_first}List
+     * @param ${table.uniPk.targetName?uncap_first}List
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = "/enableList", method = RequestMethod.POST)
-    public ResponseVo<Integer> enableList(@RequestBody List<${table.uniquePrimaryKey.targetDataType}> ${table.uniquePrimaryKey.targetColumnName?uncap_first}List) {
+    public ResponseVo<Integer> enableList(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameLower}Service.enable(${table.uniquePrimaryKey.targetColumnName?uncap_first}List, getSessionId());
+        ResultVo<Integer> apiResult = ${classNameFirstLower}Service.enable(${table.uniPk.targetName?uncap_first}List, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -248,22 +251,23 @@ public class ${className}Controller {
      * 根据主键获取
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @return
      <#include "/include/author_info1.ftl">
      */
     @RequestMapping(value = { "/detail" }, method = RequestMethod.GET)
-    public ResponseVo<${className}DetailVm> detail(<#include "/include/table/validate_primary_parameters.ftl">) {
+    public ResponseVo<${className}DetailVm> detail(<#include "/include/table/pk_params_validate.ftl">) {
 
         ResponseVo<${className}DetailVm> responseVo;
-        ResultVo<${className}EntityExtension> apiResult = ${classNameLower}Service.get(<#include "/include/table/primary_values.ftl">, getSessionId());
+        ResultVo<${className}EntityExtension> apiResult = ${classNameFirstLower}Service.get(<#include "/include/table/pk_values.ftl">, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>();
             responseVo.setSuccess(true);
-            ${className}EntityExtension vo;
-            if ((vo = apiResult.getResult()) != null) {
-                ${className}DetailVm vm = new ${className}DetailVm(vo);
+            ${className}EntityExtension entity;
+            if ((entity = apiResult.getResult()) != null) {
+                ${className}DetailVm vm = new ${className}DetailVm(entity);
                 responseVo.setResult(vm);
             }
         } else {
@@ -286,7 +290,7 @@ public class ${className}Controller {
 
         ResponseVo<PageInfo<${className}EntityExtension>> responseVo;
         ${className}ConditionExtension parameter = searchVm.get${className}ConditionExtension();
-        ResultVo<PageInfo<${className}EntityExtension>> apiResult = ${classNameLower}Service.getPageInfo(parameter, getSessionId());
+        ResultVo<PageInfo<${className}EntityExtension>> apiResult = ${classNameFirstLower}Service.getPageInfo(parameter, getSessionId());
         if (apiResult.isSuccess()) {
             PageInfo<${className}EntityExtension> pageInfo = apiResult.getResult();
             responseVo = new ResponseVo<>(pageInfo);

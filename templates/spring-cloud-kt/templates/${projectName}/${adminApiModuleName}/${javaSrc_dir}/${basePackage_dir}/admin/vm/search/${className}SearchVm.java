@@ -1,5 +1,4 @@
 <#include "/include/table/properties.ftl">
-<#assign sortCount = 0>
 package ${basePackage}.admin.vm.search;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -13,14 +12,11 @@ import java.util.*;
 
 <#include "/include/java_copyright.ftl">
 public class ${className}SearchVm implements Serializable {
-<#list table.columns as column>
+<#list table.indexes as column>
 <#include "/include/column/properties.ftl">
-<#if column.ignoreSearch>
-<#else>
-    <#if (column.columnName != table.validStatusField.fieldName)><#assign sortCount = sortCount + 2></#if>
 
     //region ${column.columnComment}
-    <#if (column.columnName == table.validStatusColumn.columnName || column.fkSelect || column.select)>
+    <#if (column.validStatus || column.select || column.fkSelect)>
 
     /**
     * ${column.columnComment}
@@ -53,13 +49,11 @@ public class ${className}SearchVm implements Serializable {
     /**
     * 开始 ${column.columnComment}
     */
-    @JsonDeserialize(using = DateJsonDeserializer.class)
     private ${column.targetDataType} ${fieldName}Min;
 
     /**
     * 结束 ${column.columnComment}
     */
-    @JsonDeserialize(using = DateJsonDeserializer.class)
     private ${column.targetDataType} ${fieldName}Max;
 
     public void set${propertyName}Min(${column.targetDataType} ${fieldName}Min) {
@@ -77,7 +71,7 @@ public class ${className}SearchVm implements Serializable {
     public ${column.targetDataType} get${propertyName}Max() {
         return ${fieldName}Max;
     }
-    <#elseif (column.targetDataType == "BigDecimal" || column.targetDataType == "Double" || column.targetDataType == "Float")>
+    <#elseif (column.dataType == "double" || column.dataType == "float" || column.dataType == "decimal" || column.dataType == "numeric")>
 
     /**
     * 最小 ${column.columnComment}
@@ -104,7 +98,7 @@ public class ${className}SearchVm implements Serializable {
     public ${column.targetDataType} get${propertyName}Max() {
         return ${fieldName}Max;
     }
-    <#elseif (column.targetDataType == "String")>
+    <#elseif (column.dataType?ends_with("char"))>
 
     /**
     * ${column.columnComment} (开始匹配）
@@ -135,7 +129,6 @@ public class ${className}SearchVm implements Serializable {
     </#if>
 
     //endregion
-</#if>
 </#list>
 
     private ${className}SortEnum sortEnum;
@@ -151,11 +144,9 @@ public class ${className}SearchVm implements Serializable {
     public ${className}ConditionExtension get${className}ConditionExtension() {
 
         ${className}ConditionExtension parameter = new ${className}ConditionExtension();
-    <#list table.columns as column>
-    <#include "/include/column/properties.ftl">
-    <#if column.ignoreSearch>
-    <#else>
-        <#if (column.columnName == table.validStatusColumn.columnName || column.fkSelect || column.select)>
+        <#list table.indexes as column>
+        <#include "/include/column/properties.ftl">
+        <#if (column.validStatus || column.select || column.fkSelect)>
         parameter.set${propertyName}(${fieldName});
         <#elseif (column.dataType?contains("int"))>
         parameter.set${propertyName}(${fieldName});
@@ -168,13 +159,12 @@ public class ${className}SearchVm implements Serializable {
         <#elseif (column.dataType == "decimal" || column.dataType == "numeric")>
         parameter.set${propertyName}Min(${fieldName}Min);
         parameter.set${propertyName}Max(${fieldName}Max);
-        <#elseif (column.targetDataType == "String")>
+        <#elseif (column.dataType?ends_with("char"))>
         parameter.set${propertyName}StartWith(${fieldName}StartWith);
         <#else>
         parameter.set${propertyName}(${fieldName});
         </#if>
-    </#if>
-    </#list>
+        </#list>
         setParameterSort(parameter);
 
         return parameter;
@@ -187,18 +177,15 @@ public class ${className}SearchVm implements Serializable {
         }
 
         switch (sortEnum) {
-        <#list table.columns as column>
-        <#include "/include/column/properties.ftl">
-        <#if (column.ignoreSearch || column.columnName == table.validStatusColumn.columnName)>
-        <#else>
+            <#list table.indexes as column>
+            <#include "/include/column/properties.ftl">
             case ${propertyName}Asc:
                 parameter.set${propertyName}Asc();
                 break;
             case ${propertyName}Desc:
                 parameter.set${propertyName}Desc();
                 break;
-        </#if>
-        </#list>
+            </#list>
             default:
                 break;
         }
@@ -206,16 +193,12 @@ public class ${className}SearchVm implements Serializable {
 
     public enum ${className}SortEnum {
 
-    <#assign count = 0>
-    <#list table.columns as column>
-    <#include "/include/column/properties.ftl">
-    <#if (column.ignoreSearch || column.columnName == table.validStatusColumn.columnName)>
-    <#else>
+        <#assign count = 0>
+        <#list table.indexes as column>
+        <#include "/include/column/properties.ftl">
         ${propertyName}Asc(${count + 1}),
-        ${propertyName}Desc(${count + 2})<#if ((count + 2) == sortCount)>;<#else>,</#if>
-        <#assign count = count + 2>
-    </#if>
-    </#list>
+        ${propertyName}Desc(${count + 2})<#if (column_has_next)>,<#else>;</#if>
+        </#list>
 
         int value;
         ${className}SortEnum(int value) {
@@ -227,18 +210,15 @@ public class ${className}SearchVm implements Serializable {
 
         public static ${className}SortEnum valueOf(int i) {
             switch (i) {
-            <#assign count = 0>
-            <#list table.columns as column>
-            <#include "/include/column/properties.ftl">
-            <#if (column.ignoreSearch || column.columnName == table.validStatusColumn.columnName)>
-            <#else>
+                <#assign count = 0>
+                <#list table.indexes as column>
+                <#include "/include/column/properties.ftl">
                 case ${count + 1}:
                     return ${propertyName}Asc;
                 case ${count + 2}:
                     return ${propertyName}Desc;
                 <#assign count = count + 2>
-            </#if>
-            </#list>
+                </#list>
                 default:
                     return null;
             }

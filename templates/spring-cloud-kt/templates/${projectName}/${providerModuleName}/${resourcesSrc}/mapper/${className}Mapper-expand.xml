@@ -21,6 +21,7 @@
         <include refid="tableName"/>
         <where>
         <#list pks as column>
+        <#include "/include/column/properties.ftl">
         <#if (column_index > 0)>AND </#if>`${column.columnName}` = <@mapperEl fieldName/>
         </#list>
         <where>

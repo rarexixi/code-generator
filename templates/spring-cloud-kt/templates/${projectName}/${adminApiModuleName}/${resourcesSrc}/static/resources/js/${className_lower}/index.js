@@ -3,47 +3,49 @@
 var app = new Vue({
     el: '#app',
     data: {
-        <#list table.columns as column>
-        <#if column.fkSelect>
-        ${column.columnFieldName?uncap_first}SelectList: [],
-        <#elseif (column.select)>
-        ${column.columnFieldName?uncap_first}SelectList: [<#list column.selectOptions as option>{
-            value: ${option.value}, text: '${option.text}'
-        }<#if option_has_next>,</#if></#list>],
-        <#elseif column.columnName == table.validStatusColumn.columnName>
-        ${column.columnFieldName?uncap_first}SelectList: [{
-            value: ${table.validStatusField.validValue}, text: '有效'
+        <#if (table.validStatusColumn??)>
+        ${table.validStatusColumn.targetName?uncap_first}SelectList: [{
+            value: ${table.validStatusColumn.validStatusOption.valid}, text: '有效'
         }, {
-            value: ${table.validStatusField.invalidValue}, text: '无效'
+            value: ${table.validStatusColumn.validStatusOption.invalid}, text: '无效'
         }],
         </#if>
+        <#list table.selectColumns as column>
+        <#include "/include/column/properties.ftl">
+        ${fieldName?replace('Id', '')?replace('Key', '')?replace('Code', '')}SelectList: [<#list column.selectOptions as option>{
+            value: ${option.value}, text: '${option.text}'
+        }<#if option_has_next>,</#if></#list>],
         </#list>
-        <#if !table.hasAutoIncrementUniquePrimaryKey>
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        ${fieldName?replace('Id', '')?replace('Key', '')?replace('Code', '')}SelectList: [],
+        </#list>
+        <#if !table.hasAutoIncUniPk>
         <#list pks as column>
-        old${column.columnFieldName}: '',
+        <#include "/include/column/properties.ftl">
+        ${fieldName}: '',
         </#list>
         </#if>
         searchParams: {
             <#list table.columns as column>
-            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#include "/include/column/properties.ftl">
             <#if column.ignoreSearch>
-            <#elseif (column.columnName == table.validStatusColumn.columnName)>
-            ${fieldName}: ${table.validStatusField.validValue},
-            <#elseif (column.fkSelect || column.select)>
+            <#elseif (column.validStatus)>
+            ${fieldName}: ${table.validStatusColumn.validStatusOption.valid},
+            <#elseif (column.select || column.fkSelect || column.pk || isInteger)>
             ${fieldName}: '',
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            ${fieldName}: '',
-            <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
-            ${fieldName}Range: [],
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <#elseif (isDecimal)>
             ${fieldName}Min: '',
             ${fieldName}Max: '',
-            <#elseif (column.columnFieldType == "String")>
+            <#elseif (isString)>
             ${fieldName}StartWith: '',
+            <#elseif (isDate || isTime || isDateTime)>
+            ${fieldName}Range: [],
+            <#elseif (isContent)>
             <#else>
-            ${fieldName}: '',
             </#if>
             </#list>
+
             sortEnums: [2],
             pageIndex: 1,
             pageSize: 10
@@ -51,15 +53,10 @@ var app = new Vue({
         multipleSelection: [],
         pageInfo: {},
         addOrEditParams: {
-            <#list table.columns as column>
-            <#assign fieldName = column.columnFieldName?uncap_first>
-            <#if column.notRequired>
-            <#elseif column.fkSelect>
-            ${fieldName}: ''<#if column_has_next>,</#if>
-            <#elseif column.columnName == table.validStatusColumn.columnName>
-            <#-- ${fieldName}: ${table.validStatusField.validValue}<#if column_has_next>,</#if> -->
-            <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
-            ${fieldName}: ''<#if column_has_next>,</#if>
+            <#list table.requiredColumns as column>
+            <#include "/include/column/properties.ftl">
+            <#if (column.validStatus)>
+            <#-- ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column_has_next>,</#if> -->
             <#else>
             ${fieldName}: ''<#if column_has_next>,</#if>
             </#if>
@@ -67,13 +64,11 @@ var app = new Vue({
         },
         detail: {
             <#list table.columns as column>
-            <#assign fieldName = column.columnFieldName?uncap_first>
-            <#if column.fkSelect>
-            ${fieldName}: <#if (column.columnFieldType == "String")>''<#else>0</#if><#if column_has_next>,</#if>
-            <#elseif column.columnName == table.validStatusColumn.columnName>
-            ${fieldName}: ${table.validStatusField.validValue}<#if column_has_next>,</#if>
-            <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
-            ${fieldName}: ''<#if column_has_next>,</#if>
+            <#include "/include/column/properties.ftl">
+            <#if (column.validStatus)>
+            ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column_has_next>,</#if>
+            <#elseif (column.fkSelect || column.select)>
+            ${fieldName}: <#if (column.dataType?ends_with("char"))>''<#else>0</#if><#if column_has_next>,</#if>
             <#else>
             ${fieldName}: ''<#if column_has_next>,</#if>
             </#if>
@@ -86,26 +81,22 @@ var app = new Vue({
     mounted: function () {
         var self = this;
         self.search();
-        <#list table.columns as column>
-        <#if column.fkSelect>
-        self.init${column.columnFieldName?replace('Id', '')}();
-        </#if>
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        self.init${propertyName?replace('Id', '')?replace('Key', '')?replace('Code', '')}();
         </#list>
     },
     methods: {
-        <#list table.columns as column>
-        <#if column.fkSelect>
-        <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
-        <#assign fieldName = column.columnFieldName?uncap_first>
-        init${column.columnFieldName?replace('Id', '')}: function () {
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        init${propertyName?replace('Id', '')?replace('Key', '')?replace('Code', '')}: function () {
             var self = this;
-            var url = appConfig.baseApiPath + '/${column.fkSelectField.foreignClass?lower_case}/list';
+            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?lower_case}/list';
             var params = {};
             self.ajaxPost(url, params, '获取${columnComment}列表失败！', function(response) {
-                self.${column.columnFieldName?uncap_first}SelectList = response.result;
+                self.${fieldName}SelectList = response.result;
             });
         },
-        </#if>
         </#list>
         changePage: function(pageIndex) {
             if (this.searchParams.pageIndex == pageIndex) {
@@ -126,7 +117,7 @@ var app = new Vue({
             var self = this;
             self.checkedList = [];
 
-            var url = appConfig.baseApiPath + '/${classNameLower}/search';
+            var url = appConfig.baseApiPath + '/${classNameFirstLower}/search';
             self.ajaxPost(url, self.searchParams, '获取${tableComment}列表失败！', function(response) {
                 self.pageInfo = response.result;
             });
@@ -134,35 +125,34 @@ var app = new Vue({
         <#if table.validStatusColumn??>
         changeValidSearch: function(valid) {
             var self = this;
-            if (self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} === valid) {
+            if (self.searchParams.${table.validStatusColumn.targetName?uncap_first} === valid) {
                 return;
             }
             self.resetSearch();
-            self.searchParams.${table.validStatusColumn.columnFieldNameFirstLower} = valid;
+            self.searchParams.${table.validStatusColumn.targetName?uncap_first} = valid;
             self.search();
         },
         </#if>
         resetSearch: function() {
             <#list table.columns as column>
-            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#include "/include/column/properties.ftl">
             <#if column.ignoreSearch>
-            <#elseif (column.columnName == table.validStatusColumn.columnName)>
-            this.searchParams.${fieldName} = ${table.validStatusField.validValue};
-            <#elseif (column.fkSelect || column.select)>
+            <#elseif (column.validStatus)>
+            this.searchParams.${fieldName} = ${table.validStatusColumn.validStatusOption.valid};
+            <#elseif (column.select || column.fkSelect || column.pk || isInteger)>
             this.searchParams.${fieldName} = '';
-            <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
-            this.searchParams.${fieldName} = '';
-            <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
-            this.searchParams.${fieldName}Range = [];
-            <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+            <#elseif (isDecimal)>
             this.searchParams.${fieldName}Min = '';
             this.searchParams.${fieldName}Max = '';
-            <#elseif (column.columnFieldType == "String")>
+            <#elseif (isString)>
             this.searchParams.${fieldName}StartWith = '';
+            <#elseif (isDate || isTime || isDateTime)>
+            this.searchParams.${fieldName}Range = [];
+            <#elseif (isContent)>
             <#else>
-            this.searchParams.${fieldName} = '';
             </#if>
             </#list>
+
             this.searchParams.pageIndex = 1;
             this.searchParams.pageSize = 10;
         },
@@ -172,29 +162,30 @@ var app = new Vue({
             self.addOrEditDialogVisible = true;
             self.addOrEditTitle = '添加${tableComment}';
         },
-        edit: function (<#include "/include/table/primary_values.ftl">) {
+        edit: function (<#include "/include/table/pk_values.ftl">) {
             var self = this;
             self.resetSave();
             self.addOrEditDialogVisible = true;
             self.addOrEditTitle = '编辑${tableComment}';
-            <#if !table.hasAutoIncrementUniquePrimaryKey>
+            <#if !table.hasAutoIncUniPk>
             <#list pks as column>
-            <#assign fieldName = column.columnFieldName?uncap_first>
-            self.old${column.columnFieldName} = ${fieldName};
+            <#include "/include/column/properties.ftl">
+            self.${fieldName} = ${fieldName};
             </#list>
             </#if>
 
-            var url = appConfig.baseApiPath + '/${classNameLower}/getDetail';
+            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
             var params = {
                 <#list pks as column>
-                ${column.columnFieldNameFirstLower}: ${column.columnFieldNameFirstLower}<#if (column_has_next)>,</#if>
+                <#include "/include/column/properties.ftl">
+                ${fieldName}: ${fieldName}<#if (column_has_next)>,</#if>
                 </#list>
             };
             self.ajaxGet(url, params, '获取${tableComment}详情失败！', function(response) {
                 <#list table.columns as column>
+                <#include "/include/column/properties.ftl">
                 <#if column.notRequired>
                 <#else>
-                <#assign fieldName = column.columnFieldName?uncap_first>
                 self.addOrEditParams.${fieldName} = response.result.${fieldName};
                 </#if>
                 </#list>
@@ -203,17 +194,17 @@ var app = new Vue({
         save: function () {
             var self = this;
             var ajaxUrl;
-            <#if table.hasAutoIncrementUniquePrimaryKey>
-            if (<#list pks as column><#if (column_index > 0)> && </#if>self.addOrEditParams.${column.columnFieldNameFirstLower} == ''</#list>) {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            <#if table.hasAutoIncUniPk>
+            if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.addOrEditParams.${fieldName} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit';
+                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/edit';
             }
             <#else>
-            if (<#list pks as column><#if (column_index > 0)> && </#if>self.old${column.columnFieldName} == ''</#list>) {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/add';
+            if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.${fieldName} == ''</#list>) {
+                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameLower}/edit?'<#list pks as column><#if (column_index > 0)> + '&'</#if> + 'old${column.columnFieldName}=' + self.old${column.columnFieldName}</#list>;
+                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/edit?'<#list pks as column><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
             }
             </#if>
 
@@ -228,26 +219,24 @@ var app = new Vue({
         },
         resetSave: function() {
             var self = this;
-            <#list table.columns as column>
-            <#if column.notRequired>
-            <#elseif column.columnName == table.validStatusColumn.columnName>
-            <#-- self.addOrEditParams.${column.columnFieldNameFirstLower} = ${table.validStatusField.validValue}; -->
-            <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
-            self.addOrEditParams.${column.columnFieldNameFirstLower} = '';
+            <#list table.requiredColumns as column>
+            <#include "/include/column/properties.ftl">
+            <#if (column.validStatus)>
+            <#-- self.addOrEditParams.${fieldName} = ${table.validStatusColumn.validStatusOption.valid}; -->
             <#else>
-            self.addOrEditParams.${column.columnFieldNameFirstLower} = '';
+            self.addOrEditParams.${fieldName} = '';
             </#if>
             </#list>
             self.closeDialog();
         },
-        get: function (<#include "/include/table/primary_values.ftl">) {
+        get: function (<#include "/include/table/pk_values.ftl">) {
             var self = this;
             self.detailDialogVisible = true;
 
-            var url = appConfig.baseApiPath + '/${classNameLower}/getDetail';
+            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
             var params = {
                 <#list pks as column>
-                ${column.columnFieldNameFirstLower}: ${column.columnFieldNameFirstLower}<#if (column_has_next)>,</#if>
+                ${fieldName}: ${fieldName}<#if (column_has_next)>,</#if>
                 </#list>
             };
             self.ajaxGet(url, params, '获取详情失败！', function(response) {
@@ -259,27 +248,27 @@ var app = new Vue({
             self.detailDialogVisible = false;
             self.addOrEditDialogVisible = false;
         },
-        <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+        <#if (table.hasUniPk)>
         handleSelectionChange: function(val) {
             this.multipleSelection = val;
         },
         <#if table.validStatusColumn??>
         enableSelected: function () {
-            this.execSelected("确定启用吗？", appConfig.baseApiPath + '/${classNameLower}/enableList', "启用成功！", "启用失败！");
+            this.execSelected("确定启用吗？", appConfig.baseApiPath + '/${classNameFirstLower}/enableList', "启用成功！", "启用失败！");
         },
         disableSelected: function () {
-            this.execSelected("确定禁用吗？", appConfig.baseApiPath + '/${classNameLower}/disableList', "禁用成功！", "禁用失败！");
+            this.execSelected("确定禁用吗？", appConfig.baseApiPath + '/${classNameFirstLower}/disableList', "禁用成功！", "禁用失败！");
         },
         </#if>
         delSelected: function () {
-            this.execSelected("确定删除吗？", appConfig.baseApiPath + '/${classNameLower}/deleteList', "删除成功！", "删除失败！");
+            this.execSelected("确定删除吗？", appConfig.baseApiPath + '/${classNameFirstLower}/deleteList', "删除成功！", "删除失败！");
         },
         execSelected: function (confirmMsg, url, successMsg, failMsg) {
             var self = this;
             var checkedList = [];
             for (var i = 0; i < self.multipleSelection.length; i++) {
                 var item = self.multipleSelection[i];
-                checkedList.push(item.<#include "/include/table/primary_values.ftl">);
+                checkedList.push(item.${table.uniPk.targetName?uncap_first});
             }
             self.$confirm(confirmMsg, '', {
                 confirmButtonText: '确定',
@@ -297,19 +286,34 @@ var app = new Vue({
         },
         </#if>
         <#if table.validStatusColumn??>
-        enable: function (<#include "/include/table/primary_values.ftl">) {
-            var url = appConfig.baseApiPath + '/${classNameLower}/enable?' + <#list pks as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
-            this.exec("确定启用吗？", url, {}, "启用成功！", "启用失败！");
+        enable: function (<#include "/include/table/pk_values.ftl">) {
+            var self = this;
+            var params = self.getPkParams(<#include "/include/table/pk_values.ftl">);
+            var url = appConfig.baseApiPath + '/${classNameFirstLower}/enable';
+            this.exec("确定启用吗？", url, params, "启用成功！", "启用失败！");
         },
-        disable: function (<#include "/include/table/primary_values.ftl">) {
-            var url = appConfig.baseApiPath + '/${classNameLower}/disable?' + <#list pks as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
-            this.exec("确定禁用吗？", url, {}, "禁用成功！", "禁用失败！");
+        disable: function (<#include "/include/table/pk_values.ftl">) {
+            var self = this;
+            var params = self.getPkParams(<#include "/include/table/pk_values.ftl">);
+            var url = appConfig.baseApiPath + '/${classNameFirstLower}/disable';
+            this.exec("确定禁用吗？", url, params, "禁用成功！", "禁用失败！");
         },
         </#if>
-        del: function (<#include "/include/table/primary_values.ftl">) {
-            var url = appConfig.baseApiPath + '/${classNameLower}/delete?' + <#list pks as column><#if (column_index > 0)> + </#if>'<#if (column_index > 0)>&</#if>${column.columnFieldNameFirstLower}=' + ${column.columnFieldNameFirstLower}</#list>;
-            this.exec("确定删除吗？", url, {}, "删除成功！", "删除失败！");
+        del: function (<#include "/include/table/pk_values.ftl">) {
+            var self = this;
+            var params = self.getPkParams(<#include "/include/table/pk_values.ftl">);
+            var url = appConfig.baseApiPath + '/${classNameFirstLower}/delete';
+            this.exec("确定删除吗？", url, params, "删除成功！", "删除失败！");
         },
+        getPkParams: function (<#include "/include/table/pk_values.ftl">) {
+            var params = {
+                <#list pks as column>
+                <#include "/include/column/properties.ftl">
+                ${fieldName}: ${fieldName}<#if (column_has_next)>,</#if>
+                </#list>
+            }
+            return params;
+        }
         exec: function (confirmMsg, url, params, successMsg, failMsg) {
             var self = this;
             self.$confirm(confirmMsg, '', {
@@ -317,7 +321,6 @@ var app = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function () {
-
                 self.ajaxGet(url, params, failMsg, function(response) {
                     self.$notify({
                         type: 'success',
@@ -327,24 +330,34 @@ var app = new Vue({
                 });
             });
         },
-        <#list table.columns as column>
-        <#if column.fkSelect>
-        get${column.columnFieldName}Text: function (${column.fkSelectField.keyField?uncap_first}) {
+        <#if (table.validStatusColumn??)>
+        get${table.validStatusColumn.targetName}Text: function (value) {
             var self = this;
-            var entity = self.${column.columnFieldName?uncap_first}SelectList.find(function (item) {
-                return item.${column.fkSelectField.keyField?uncap_first} == ${column.fkSelectField.keyField?uncap_first};
-            });
-            return entity ? entity.${column.fkSelectField.valueField?uncap_first} : '';
-        },
-        <#elseif (column.select || column.columnName == table.validStatusColumn.columnName)>
-        get${column.columnFieldName}Text: function (value) {
-            var self = this;
-            var entity = self.${column.columnFieldName?uncap_first}SelectList.find(function (item) {
+            var entity = self.${table.validStatusColumn.targetName?uncap_first}SelectList.find(function (item) {
                 return item.value == value;
             });
             return entity ? entity.text : '';
         },
         </#if>
+        <#list table.selectColumns as column>
+        <#include "/include/column/properties.ftl">
+        get${propertyName}Text: function (value) {
+            var self = this;
+            var entity = self.${fieldName}SelectList.find(function (item) {
+                return item.value == value;
+            });
+            return entity ? entity.text : '';
+        },
+        </#list>
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        get${propertyName}Text: function (${column.fkSelectColumn.valueName?uncap_first}) {
+            var self = this;
+            var entity = self.${fieldName}SelectList.find(function (item) {
+                return item.${column.fkSelectColumn.valueName?uncap_first} == ${column.fkSelectColumn.valueName?uncap_first};
+            });
+            return entity ? entity.${column.fkSelectColumn.textName?uncap_first} : '';
+        },
         </#list>
         exportExcel: function() {
             var self = this;
@@ -352,7 +365,7 @@ var app = new Vue({
                 if (value) return value;
                 return undefined;
             });
-            window.open(appConfig.baseApiPath + '/${classNameLower}/export?params=' + encodeURIComponent(params));
+            window.open(appConfig.baseApiPath + '/${classNameFirstLower}/export?params=' + encodeURIComponent(params));
         }
     }
 });
