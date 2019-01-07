@@ -1,0 +1,24 @@
+.el-form-item .el-form-item__content > div {
+    width: 100% !important;
+}
+
+.el-table__body .el-button--mini,
+.el-table__body .el-button--mini.is-round {
+    padding: 5px 6px !important;
+}
+
+.el-dialog {
+    width: 90% !important;
+}
+
+.dialog-detail {
+    line-height: 2rem;
+}
+
+.dialog-detail label {
+    font-weight: bold;
+}
+
+.dialog-detail .el-row+.el-row {
+    border-top: 1px solid #eaeaea;
+}

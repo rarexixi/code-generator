@@ -1,0 +1,339 @@
+<#include "/include/table/properties.ftl">
+<#macro mapperEl value>${r"${"}${value}}</#macro>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>${tableComment}管理</title>
+    <link rel="stylesheet" href="//unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/resources/css/common.css">
+    <link rel="stylesheet" href="/resources/css/element-ui-override.css">
+</head>
+<body>
+    <div id="app">
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item>${tableComment}管理</el-breadcrumb-item>
+        </el-breadcrumb>
+        <el-form ref="searchParams" :model="searchParams" :label-position="'left'" label-width="120px">
+            <el-row :gutter="10">
+                <#list table.columns as column>
+                <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
+                <#assign fieldName = column.columnFieldName?uncap_first>
+                <#if column.ignoreSearch>
+                <#elseif column.columnName == table.validStatusColumn.columnName>
+                <#-- <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-select v-model="searchParams.${fieldName}" placeholder="全部">
+                            <el-option v-for="item in ${fieldName}SelectList" :value="item.value" :label="item.text"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col> -->
+                <#elseif column.fkSelect>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-select v-model="searchParams.${fieldName}" placeholder="全部">
+                            <el-option value="" label="全部"></el-option>
+                            <el-option v-for="item in ${fieldName}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}" :label="item.${column.fkSelectField.valueField?uncap_first}"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <#elseif column.select>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-select v-model="searchParams.${fieldName}" placeholder="全部">
+                            <el-option value="" label="全部"></el-option>
+                            <el-option v-for="item in ${fieldName}SelectList" :value="item.value" :label="item.text"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <#elseif column.primaryKey>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-input v-model="searchParams.${fieldName}" type="text"></el-input>
+                    </el-form-item>
+                </el-col>
+                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-input v-model="searchParams.${fieldName}" type="text"></el-input>
+                    </el-form-item>
+                </el-col>
+                <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-date-picker
+                                v-model="searchParams.${fieldName}Range"
+                                type="daterange"
+                                :default-time="['00:00:00', '23:59:59']"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-input v-model="searchParams.${fieldName}Min"></el-input>
+                        <el-input v-model="searchParams.${fieldName}Max"></el-input>
+                    </el-form-item>
+                </el-col>
+                <#elseif (column.columnFieldType == "String")>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-input v-model="searchParams.${fieldName}StartWith"></el-input>
+                    </el-form-item>
+                </el-col>
+                <#else>
+                <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
+                    <el-form-item label="${columnComment}">
+                        <el-input v-model="searchParams.${fieldName}"></el-input>
+                    </el-form-item>
+                </el-col>
+                </#if>
+                </#list>
+                <el-col :span="24">
+                    <el-form-item>
+                        <el-button type="primary" @click="search">搜索</el-button>
+                        <el-button type="warning" @click="resetSearch">重置</el-button>
+                        <el-button type="success" @click="exportExcel">导出</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+
+        <#if table.validStatusColumn??>
+        <el-tabs v-model="searchParams.${table.validStatusColumn.columnFieldNameFirstLower}" @tab-click="search">
+            <el-tab-pane label="有效" name="${table.validStatusField.validValue}"></el-tab-pane>
+            <el-tab-pane label="无效" name="${table.validStatusField.invalidValue}"></el-tab-pane>
+        </el-tabs>
+        </#if>
+        <el-row>
+            <el-button type="primary" @click="add">添加</el-button>
+            <#if table.validStatusColumn??>
+            <el-button type="success" @click="enableSelected" v-if="multipleSelection.length > 0">启用</el-button>
+            <el-button type="warning" @click="disableSelected" v-if="multipleSelection.length > 0">禁用</el-button>
+            </#if>
+            <#if table.uniquePrimaryKey??>
+            <el-button type="danger" @click="delSelected" v-if="multipleSelection.length > 0">删除</el-button>
+            </#if>
+        </el-row>
+        <el-table ref="multipleTable" :data="pageInfo.list" tooltip-effect="dark"<#if (table.hasPrimaryKey && table.uniquePrimaryKey??)> @selection-change="handleSelectionChange"</#if>>
+            <#if (table.hasPrimaryKey && table.uniquePrimaryKey??)>
+            <el-table-column type="selection" width="55"></el-table-column>
+            </#if>
+            <#list table.columns as column>
+            <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
+            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#if column.fkSelect>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">
+                    <span>{{get${column.columnFieldName}Text(scope.row.${fieldName})}}</span>
+                </template>
+            </el-table-column>
+            <#elseif column.content>
+            <#elseif column.columnName == table.validStatusColumn.columnName>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.${fieldName}==${table.validStatusField.validValue}" class="text-success">有效</span>
+                    <span v-else class="text-danger">无效</span>
+                </template>
+            </el-table-column>
+            <#elseif column.select>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">
+                    <span>{{get${column.columnFieldName}Text(scope.row.${fieldName})}}</span>
+                </template>
+            </el-table-column>
+            <#elseif column.imgUrl>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">
+                    <div class="ratio ratio-4by3 table-img-container">
+                        <div class="content center">
+                            <img :src="scope.row.${fieldName}" alt="${columnComment}" class="content" />
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+            <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">{{scope.row.${fieldName} | formatDate}}</template>
+            </el-table-column>
+            <#else>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">{{scope.row.${fieldName}}}</template>
+            </el-table-column>
+            </#if>
+            </#list>
+            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>180<#else>140</#if>">
+                <template slot-scope="scope">
+                    <el-button-group>
+                        <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" size="mini">编辑</el-button>
+                        <el-button type="info" @click="get(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" size="mini">详情</el-button>
+                        <#if table.validStatusColumn??>
+                        <el-button type="warning" @click="disable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" v-if="scope.row.${table.validStatusColumn.columnFieldNameFirstLower}==${table.validStatusField.validValue}" size="mini">禁用</el-button>
+                        <el-button type="success" @click="enable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" v-else size="mini">启用</el-button>
+                        </#if>
+                        <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.columnFieldNameFirstLower}</#list>)" size="mini">删除</el-button>
+                    </el-button-group>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-pagination
+                background
+                @size-change="changePageSize"
+                @current-change="changePage"
+                :current-page="pageInfo.pageNum"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="pageInfo.pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="pageInfo.total"
+                v-show="pageInfo.pages > 1">
+        </el-pagination>
+
+        <el-dialog title="${tableComment}详情" class="dialog-detail" :visible.sync="detailDialogVisible">
+            <#list table.columns as column>
+            <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
+            <#assign fieldName = column.columnFieldName?uncap_first>
+            <#if column.fkSelect>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <span>{{get${column.columnFieldName}Text(detail.${fieldName})}}</span>
+                </el-col>
+            </el-row>
+            <#elseif column.columnName == table.validStatusColumn.columnName>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <span>{{get${column.columnFieldName}Text(detail.${fieldName})}}</span>
+                </el-col>
+            </el-row>
+            <#elseif column.select>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <span>{{get${column.columnFieldName}Text(detail.${fieldName})}}</span>
+                </el-col>
+            </el-row>
+            <#elseif column.imgUrl>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <img :src="detail.${fieldName}" alt="${columnComment}">
+                </el-col>
+            </el-row>
+            <#elseif column.content>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <pre>{{detail.${fieldName}}}</pre>
+                </el-col>
+            </el-row>
+            <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <span>{{detail.${fieldName} | formatDate}}</span>
+                </el-col>
+            </el-row>
+            <#else>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <span>{{detail.${fieldName}}}</span>
+                </el-col>
+            </el-row>
+            </#if>
+            </#list>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="closeDialog">关闭</el-button>
+                <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)">编辑</el-button>
+                <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>detail.${column.columnFieldNameFirstLower}</#list>)">删除</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog :title="addOrEditTitle" :visible.sync="addOrEditDialogVisible">
+            <el-form ref="addOrEditParams" :model="addOrEditParams" :label-position="'left'" label-width="120px">
+                <#list table.columns as column>
+                <#assign columnComment = (column.columnComment?split("[（ ,，(]", "r"))[0]>
+                <#assign fieldName = column.columnFieldName?uncap_first>
+                <#if column.notRequired>
+                <#elseif column.autoIncrement>
+                <el-input v-model="addOrEditParams.${fieldName}" type="hidden"></el-input>
+                <#elseif column.columnName == table.validStatusColumn.columnName>
+                <#-- <el-form-item label="${columnComment}">
+                    <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
+                        <el-option v-for="item in ${fieldName}SelectList" :value="item.value" :label="item.text"></el-option>
+                    </el-select>
+                </el-form-item> -->
+                <#elseif column.fkSelect>
+                <el-form-item label="${columnComment}">
+                    <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
+                        <el-option v-for="item in ${fieldName}SelectList" :value="item.${column.fkSelectField.keyField?uncap_first}" :label="item.${column.fkSelectField.valueField?uncap_first}"></el-option>
+                    </el-select>
+                </el-form-item>
+                <#elseif column.select>
+                <el-form-item label="${columnComment}">
+                    <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
+                        <el-option v-for="item in ${fieldName}SelectList" :value="item.value" :label="item.text"></el-option>
+                    </el-select>
+                </el-form-item>
+                <#elseif (column.columnFieldType == "Integer" || column.columnFieldType == "Long" || column.columnFieldType == "Short" || column.columnFieldType == "Byte")>
+                <el-form-item label="${columnComment}">
+                    <el-input type="number" v-model="addOrEditParams.${fieldName}"></el-input>
+                </el-form-item>
+                <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
+                <el-form-item label="${columnComment}">
+                    <el-date-picker type="datetime" v-model="addOrEditParams.${fieldName}" placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <#elseif (column.columnFieldType == "BigDecimal" || column.columnFieldType == "Double" || column.columnFieldType == "Float")>
+                <el-form-item label="${columnComment}">
+                    <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
+                </el-form-item>
+                <#elseif (column.content)>
+                <el-form-item label="${columnComment}">
+                    <el-input type="textarea" v-model="addOrEditParams.${fieldName}" :autosize="{ minRows: 5, maxRows: 100}"></el-input>
+                </el-form-item>
+                <#elseif (column.columnFieldType == "String")>
+                <el-form-item label="${columnComment}">
+                    <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
+                </el-form-item>
+                <#else>
+                <el-form-item label="${columnComment}">
+                    <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
+                </el-form-item>
+                </#if>
+                </#list>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="save">保存</el-button>
+                <el-button @click="closeDialog">取消</el-button>
+            </div>
+        </el-dialog>
+    </div>
+
+    <script src="//unpkg.com/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/element-ui/lib/index.js"></script>
+    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/resources/js/config.js"></script>
+    <script src="/resources/js/common.js"></script>
+    <script src="/resources/js/${classNameLower}/index.js"></script>
+</body>
+</html>
