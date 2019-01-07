@@ -26,8 +26,8 @@ generator:
   encoding: UTF-8
   table-name-match-regex: '(?<=dm_uba_).*(?=_tmp)'
   paths:
-    template: /Workspace/github.com/java/templates/spring-cloud-kt/
-    out: /Workspace/github.com/java/templates/out/
+    template: /Workspace/github.com/java/code-generator/templates/spring-cloud-kt/templates/
+    out: /Workspace/github.com/java/code-generator/templates/out/
   files:
     ignore: include/
     aggregate: static/index.html
