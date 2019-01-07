@@ -64,13 +64,15 @@ commonProperties配置的map
 |hasPk                                |是否有主键                 |Boolean               |
 |pks                                  |主键列表                   |List<ColumnModel>     |
 |hasUniPk                             |主键唯一                   |Boolean               |
-|uniPk                                |是否有唯一主键             |ColumnModel           |
+|uniPk                                |唯一主键                   |ColumnModel           |
 |hasAutoIncUniPk                      |唯一主键是否自增           |Boolean               |
 |indexes                              |索引列                     |List<ColumnModel>     |
+|searchColumns                        |除了公共列以外的列         |List<ColumnModel>     |
+|requiredColumns                      |除了公共列以外的列         |List<ColumnModel>     |
 |columnsExceptBase                    |除了公共列以外的列         |List<ColumnModel>     |
 |selectColumns                        |选择列                     |List<ColumnModel>     |
 |fkSelectColumns                      |外键选择列                 |List<ColumnModel>     |
-|validStatusColumn                    |有效性字段                 |ValidStatusField      |
+|validStatusColumn                    |有效性字段                 |ColumnModel           |
 
 ### ColumnModel
 
@@ -122,8 +124,8 @@ commonProperties配置的map
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
 |foreignTableName             |外键表名                  |String                |db_user
-|valueColumnName              |值的列名                  |String                |id
-|textColumnName               |展示的列名                |String                |name
+|valueName                    |值的列名                  |String                |Id
+|textName                     |展示的列名                |String                |Name
 |foreignTargetTableName       |外键目标表名              |String                |user
 |foreignClassName             |外键类名                  |String                |User
 

@@ -62,8 +62,8 @@ generator:
       - column-name-set: user_type_id
         fk:
           foreign-table-name: user_type
-          value-column: id
-          text-column: user_type_name
+          value-column-name: id
+          text-column-name: user_type_name
     valid-status:
       - column-name-set: is_deleted
         status:

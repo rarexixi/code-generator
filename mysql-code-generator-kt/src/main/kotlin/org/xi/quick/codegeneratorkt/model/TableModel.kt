@@ -56,6 +56,10 @@ class TableModel(table: Table,
     var searchColumns: List<ColumnModel> = listOf()
         private set
 
+    // 需要的列
+    var requiredColumns: List<ColumnModel> = listOf()
+        private set
+
     // 除了公共列以外的列
     var columnsExceptBase: List<ColumnModel> = listOf()
         private set
@@ -83,6 +87,7 @@ class TableModel(table: Table,
         pks = columns.filter { column -> column.columnKey == "PRI" }
         indexes = columns.filter { column -> column.index }
         searchColumns = columns.filter { column -> !column.ignoreSearch }
+        requiredColumns = columns.filter { column -> !column.notRequired }
         columnsExceptBase = columns.filter { column -> !column.columnName.isBaseColumn() }
         selectColumns = columns.filter { column -> column.select }
         fkSelectColumns = columns.filter { column -> column.fkSelect }
