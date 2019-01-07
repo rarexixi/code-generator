@@ -10,7 +10,7 @@
 
     <parameterMap id="ConditionExtensionMap" type="${basePackage}.condition.extension.${className}ConditionExtension"></parameterMap>
 
-    <#if table.hasPrimaryKey>
+    <#if table.hasPk>
     <select id="getByPk" resultMap="ExtensionResultMap">
         SELECT DISTINCT
         <#list table.columns as column>
@@ -48,7 +48,7 @@
             <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
                 AND `${column.columnName}` in
                 <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=",">
-                    <@mapperEl it/>
+                    <@mapperEl 'it'/>
                 </foreach>
             </if>
             </#if>

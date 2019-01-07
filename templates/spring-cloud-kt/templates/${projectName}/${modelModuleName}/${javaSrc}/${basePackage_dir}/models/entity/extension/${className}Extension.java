@@ -1,7 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.vo;
 
-import ${basePackage}.entity.${table.tableClassName}Entity;
+import ${basePackage}.entity.${className}Entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

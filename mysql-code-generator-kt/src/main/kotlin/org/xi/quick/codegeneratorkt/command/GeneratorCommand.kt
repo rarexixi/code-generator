@@ -43,13 +43,13 @@ class GeneratorCommand : CommandLineRunner {
     private fun printUsages() {
         var introduction = """
 操作说明:
-    ga/da:                        生成/删除所有文件")
-    gb/db:                        生成/删除基本类型的相关文件")
-    gag/dag:                      生成聚合相关文件")
-    gat/dat:                      生成/删除所有表的相关文件")
-    gen/del table [table2...]:    根据表名生成/删除相关文件(多个表之间空格分开，支持*通配符)")
-    s (show):                     显示所有表名")
-    q (quit):                     退出")
+    ga/da:                        生成/删除所有文件
+    gb/db:                        生成/删除基本类型的相关文件
+    gag/dag:                      生成聚合相关文件
+    gat/dat:                      生成/删除所有表的相关文件
+    gen/del table [table2...]:    根据表名生成/删除相关文件(多个表之间空格分开，支持*通配符)
+    s (show):                     显示所有表名
+    q (quit):                     退出
 请输入命令: """
         print(introduction)
     }

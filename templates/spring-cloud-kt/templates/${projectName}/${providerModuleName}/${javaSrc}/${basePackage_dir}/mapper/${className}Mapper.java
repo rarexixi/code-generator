@@ -15,12 +15,13 @@ import java.util.List;
 <#include "/include/java_copyright.ftl">
 @Mapper
 public interface ${className}Mapper extends BaseMapper<${className}Entity, ${className}Condition> {
-    <#if table.hasPrimaryKey>
+    <#if table.hasPk>
 
     /**
      * 根据主键获取
      *
      <#list pks as column>
+     <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
      * @return

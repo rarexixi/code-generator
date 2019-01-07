@@ -32,7 +32,7 @@
                 <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
                     AND `${column.columnName}` in
                     <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=",">
-                        <@mapperEl it/>
+                        <@mapperEl 'it'/>
                     </foreach>
                 </if>
                 </#if>
@@ -93,7 +93,7 @@
     <sql id="updateColumnSet">
         <set>
             <#list table.columns as column>
-            <#if (column.primaryKey && column.autoIncrement)>
+            <#if (column.pk && column.autoIncrement)>
             <#else>
             <if test="entity.${fieldName} != null">
                 `${column.columnName}` = <@mapperEl 'entity.' + fieldName/><#if column_has_next>,</#if>

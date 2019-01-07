@@ -28,14 +28,14 @@ public class BaseEntity implements Serializable {
     <#list baseColumns as column>
     <#include "/include/column/properties.ftl">
     /**
-     * 设置${column.columnComment}
+     * 设置${columnComment}
      */
     public void set${propertyName}(${fieldType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }
 
     /**
-     * 获取${column.columnComment}
+     * 获取${columnComment}
      */
     public ${fieldType} get${propertyName}() {
         return ${fieldName};

@@ -43,6 +43,7 @@ public class ${className}Condition implements Serializable {
      * ${column.columnComment}
      */
     private Boolean ${fieldName}IsNull;
+    </#if>
     <#if (column.dataType?ends_with("char"))>
 
     /**
@@ -127,6 +128,7 @@ public class ${className}Condition implements Serializable {
     public Boolean get${propertyName}IsNull() {
         return ${fieldName}IsNull;
     }
+    </#if>
     <#if (column.dataType?ends_with("char"))>
 
     public void set${propertyName}IsEmpty(Boolean ${fieldName}IsEmpty) {

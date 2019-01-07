@@ -17,7 +17,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false
     username: root
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 dollar: $
 
