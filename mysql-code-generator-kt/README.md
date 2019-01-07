@@ -60,11 +60,11 @@ commonProperties配置的map
 |targetTableName                      |目标表名                   |String                |user_type_rela
 |className                            |表对应的类名               |String                |UserTypeRela
 |comment                              |表说明                     |String                |用户类型关系表
-|hasPk                                |是否有主键                 |Boolean               |
 |columns                              |表列                       |List<ColumnModel>     |
+|hasPk                                |是否有主键                 |Boolean               |
 |pks                                  |主键列表                   |List<ColumnModel>     |
 |hasUniPk                             |主键唯一                   |Boolean               |
-|uniPk                                |是否有唯一主键             |Boolean               |
+|uniPk                                |是否有唯一主键             |ColumnModel           |
 |hasAutoIncUniPk                      |唯一主键是否自增           |Boolean               |
 |indexes                              |索引列                     |List<ColumnModel>     |
 |columnsExceptBase                    |除了公共列以外的列         |List<ColumnModel>     |
@@ -81,7 +81,7 @@ commonProperties配置的map
 |columnName                   |列名                      |String                |user_id
 |columnPosition               |列位置                    |Long                  |1
 |columnDefault                |默认值                    |String                |0
-|nullable                     |是否为空                  |String                |NO
+|nullable                     |是否为空                  |Boolean               |NO
 |dataType                     |数据类型                  |String                |int
 |charLength                   |字符长度                  |Long                  |32
 |byteLength                   |字节长度                  |Long                  |96
