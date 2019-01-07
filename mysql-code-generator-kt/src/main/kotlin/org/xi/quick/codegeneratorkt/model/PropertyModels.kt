@@ -35,6 +35,12 @@ class FileProperties {
     var copy: Set<String>? = HashSet()
 }
 
+class TableProperty {
+
+    var tableName: String = ""
+    var targetTableName: String = ""
+}
+
 class ColumnProperties {
 
     /**

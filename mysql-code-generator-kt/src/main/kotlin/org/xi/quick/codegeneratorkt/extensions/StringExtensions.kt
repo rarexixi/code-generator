@@ -70,6 +70,11 @@ fun String.getTargetTableName(): String {
     var tableName = this
     if (tableName.isBlank()) return tableName
 
+    var tablePropertyList = GeneratorProperties.tables.filter { it.tableName == tableName }
+    if (tablePropertyList.isNotEmpty()) {
+        return tablePropertyList[0].targetTableName
+    }
+
     val pattern = Pattern.compile(GeneratorProperties.tableNameMatchRegex)
     val matcher = pattern.matcher(tableName)
     if (matcher.find()) {

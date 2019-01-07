@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 import org.xi.quick.codegeneratorkt.model.ColumnProperties
 import org.xi.quick.codegeneratorkt.model.FileProperties
 import org.xi.quick.codegeneratorkt.model.PathProperties
+import org.xi.quick.codegeneratorkt.model.TableProperty
 import java.util.HashMap
 
 @Component
@@ -38,6 +39,11 @@ object GeneratorProperties {
      */
     @NestedConfigurationProperty
     var files: FileProperties? = null
+
+    /**
+     * 表的配置
+     */
+    var tables: Array<TableProperty> = arrayOf()
 
     /**
      * 字段配置
