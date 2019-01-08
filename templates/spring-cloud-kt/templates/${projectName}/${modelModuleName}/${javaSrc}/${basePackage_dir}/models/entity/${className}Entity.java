@@ -2,11 +2,11 @@
 package ${basePackage}.models.entity;
 
 import ${baseCommonPackage}.validation.*;
+import ${basePackage}.models.common.BaseEntity;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.io.Serializable;
 
 <#include "/include/java_copyright.ftl">
 public class ${className}Entity extends BaseEntity {

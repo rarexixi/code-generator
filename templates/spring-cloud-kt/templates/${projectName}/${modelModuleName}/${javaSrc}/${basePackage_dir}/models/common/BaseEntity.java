@@ -1,4 +1,4 @@
-package ${basePackage}.models.entity;
+package ${basePackage}.models.common;
 
 import ${baseCommonPackage}.validation.*;
 

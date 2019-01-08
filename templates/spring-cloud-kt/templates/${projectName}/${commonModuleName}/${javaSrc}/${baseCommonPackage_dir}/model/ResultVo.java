@@ -15,11 +15,11 @@ public class ResultVo<T> implements Serializable {
     }
 
     public ResultVo(OperationConstants constants) {
-        this(false, constants.getCode(), constants.getMsg(), null);
+        this(false, constants.getCode(), constants.getMessage(), null);
     }
 
     public ResultVo(OperationConstants constants, Object extData) {
-        this(false, constants.getCode(), constants.getMsg(), null, extData);
+        this(false, constants.getCode(), constants.getMessage(), null, extData);
     }
 
     public ResultVo(int code, String msg) {

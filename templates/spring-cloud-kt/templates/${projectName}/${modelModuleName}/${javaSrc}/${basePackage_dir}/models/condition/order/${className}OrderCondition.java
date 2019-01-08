@@ -1,26 +1,33 @@
 <#include "/include/table/properties.ftl">
-package ${basePackage}.condition.order;
+package ${basePackage}.models.condition.order;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.*;
+import ${baseCommonPackage}.model.OrderCondition;
 
 <#include "/include/java_copyright.ftl">
 public class ${className}OrderCondition extends OrderCondition {
-
-    public ${className}OrderCondition() {
-        super();
-    }
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
+    <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+    <#else>
 
-    public void set${propertyName}Asc() {
-        super.orderByMap.put("${column.tableName}.${column.columnName}", "ASC");
+    /**
+     * 以${columnComment}排序 (null不排序，true升序，false降序)
+     */
+    public Boolean ${fieldName}Sort;
+    </#if>
+    </#list>
+    <#list table.columns as column>
+    <#include "/include/column/properties.ftl">
+    <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+    <#else>
+
+    public void set${propertyName}Sort(Boolean ${fieldName}Sort) {
+        this.${fieldName}Sort = ${fieldName}Sort;
     }
 
-    public void set${propertyName}Desc() {
-        super.orderByMap.put("${column.tableName}.${column.columnName}", "DESC");
+    public Boolean get${propertyName}Sort() {
+        return ${fieldName}Sort;
     }
-
+    </#if>
     </#list>
 }

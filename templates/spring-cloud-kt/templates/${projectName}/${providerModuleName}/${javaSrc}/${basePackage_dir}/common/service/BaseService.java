@@ -1,14 +1,12 @@
-package ${basePackage}.service;
+package ${basePackage}.common.service;
 
 import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.SearchPage;
-
-import ${basePackage}.models.entity.BaseEntity;
-import ${basePackage}.models.condition.BaseCondition;
+import ${basePackage}.models.common.BaseCondition;
+import ${basePackage}.models.common.BaseEntity;
 
 import com.github.pagehelper.PageInfo;
 
-import java.io.Serializable;
 import java.util.List;
 
 public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
@@ -108,7 +106,6 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
     /**
      * 分页查询符合条件的列表
      *
-     * @param condition
      * @param searchPage
      * @return
      */
@@ -117,9 +114,8 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
     /**
      * 分页查询符合条件的列表
      *
-     * @param condition
-     * @param order
      * @param searchPage
+     * @param order
      * @return
      */
     PageInfo<T> getPageInfo(SearchPage<C> searchPage, OrderCondition order);
@@ -127,21 +123,19 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
     /**
      * 分页查询符合条件的列表
      *
-     * @param conditionList
      * @param searchPage
      * @return
      */
-    PageInfo<T> getPageInfo(SearchPage<List<C>> searchPage);
+    PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage);
 
     /**
      * 分页查询符合条件的列表
      *
-     * @param conditionList
-     * @param order
      * @param searchPage
+     * @param order
      * @return
      */
-    PageInfo<T> getPageInfo(SearchPage<List<C>> searchPage, OrderCondition order);
+    PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage, OrderCondition order);
 
     /**
      * 查询数量

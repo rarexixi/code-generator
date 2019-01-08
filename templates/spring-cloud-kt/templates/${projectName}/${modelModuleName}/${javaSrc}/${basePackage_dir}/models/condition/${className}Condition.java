@@ -1,5 +1,7 @@
 <#include "/include/table/properties.ftl">
-package ${basePackage}.condition;
+package ${basePackage}.models.condition;
+
+import ${basePackage}.models.common.BaseCondition;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -84,15 +86,6 @@ public class ${className}Condition extends BaseCondition {
 
     public List<${fieldType}> get${propertyName}List() {
         return ${fieldName}List;
-    }
-
-    public void set${propertyName}In(${fieldType}... ${fieldName}List) {
-        if (this.${fieldName}List == null) {
-            this.${fieldName}List = new ArrayList<${fieldType}>();
-        }
-        for (${fieldType} ${fieldName} : ${fieldName}List) {
-            this.${fieldName}List.add(${fieldName});
-        }
     }
     </#if>
     <#if (canBeRange)>

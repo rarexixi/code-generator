@@ -1,14 +1,12 @@
-package ${baseCommonPackage}.mapper;
+package ${basePackage}.common.mapper;
 
 import ${baseCommonPackage}.model.OrderCondition;
 
-import ${basePackage}.models.entity.BaseEntity;
-import ${basePackage}.models.condition.BaseCondition;
+import ${basePackage}.models.common.BaseEntity;
+import ${basePackage}.models.common.BaseCondition;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.io.Serializable;
 import java.util.List;
 
 public interface BaseMapper<T extends BaseEntity, C extends BaseCondition> {

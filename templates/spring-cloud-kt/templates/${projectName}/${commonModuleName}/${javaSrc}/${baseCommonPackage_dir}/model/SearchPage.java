@@ -3,7 +3,6 @@ package ${baseCommonPackage}.model;
 import java.io.Serializable;
 
 <#include "/include/java_copyright.ftl">
-
 public class SearchPage<T> implements Serializable {
 
     public static final int DEFAULT_PAGE_INDEX = 1;
@@ -18,8 +17,8 @@ public class SearchPage<T> implements Serializable {
     }
 
     public SearchPage(int pageIndex, int pageSize) {
-        this.pageIndex = pageIndex;
-        this.pageSize = pageSize;
+        this.setPageIndex(pageIndex);
+        this.setPageSize(pageSize);
     }
 
     public int getPageIndex() {
@@ -27,7 +26,7 @@ public class SearchPage<T> implements Serializable {
     }
 
     public void setPageIndex(int pageIndex) {
-        this.pageIndex = pageIndex;
+        this.pageIndex = pageIndex <= 0 ? DEFAULT_PAGE_INDEX : pageIndex;
     }
 
     public int getPageSize() {
@@ -35,7 +34,7 @@ public class SearchPage<T> implements Serializable {
     }
 
     public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+        this.pageSize = pageSize <= 0 ? DEFAULT_PAGE_SIZE : pageSize;
     }
 
     public T getCondition() {

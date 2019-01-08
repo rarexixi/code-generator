@@ -8,11 +8,16 @@ spring:
     url: ${dbUrl}
     username: ${dbUsername}
     password: ${dbPassword}
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    time-zone: GMT+8
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true
 eureka:
   client:
     serviceUrl:
       defaultZone: http://127.0.0.1:${eurekaServerPort}/eureka/
+
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -28,3 +33,8 @@ mybatis:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     call-setters-on-nulls: true
+
+pagehelper:
+  reasonable: true
+  params: count=countSql
+  auto-runtime-dialect: true

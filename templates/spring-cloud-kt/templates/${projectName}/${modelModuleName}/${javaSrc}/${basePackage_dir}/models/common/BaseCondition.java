@@ -1,4 +1,4 @@
-package ${basePackage}.condition;
+package ${basePackage}.models.common;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -88,7 +88,7 @@ public class BaseCondition implements Serializable {
 
     public void set${propertyName}In(${fieldType}... ${fieldName}List) {
         if (this.${fieldName}List == null) {
-            this.${fieldName}List = new ArrayList<${fieldType}>();
+            this.${fieldName}List = new ArrayList<>();
         }
         for (${fieldType} ${fieldName} : ${fieldName}List) {
             this.${fieldName}List.add(${fieldName});

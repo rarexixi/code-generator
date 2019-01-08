@@ -1,14 +1,14 @@
 <#include "/include/table/properties.ftl">
 <#macro mapperEl value>${r"#{"}${value}}</#macro>
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 存放手写的sql -->
 <mapper namespace="${basePackage}.mapper.${className}Mapper">
 
-    <resultMap id="ExtensionResultMap" extends="BaseModelMap" type="${basePackage}.entity.extension.${className}EntityExtension"></resultMap>
+    <resultMap id="ExtensionResultMap" extends="BaseResultMap" type="${basePackage}.models.entity.extension.${className}EntityExtension"></resultMap>
 
-    <parameterMap id="ConditionExtensionMap" type="${basePackage}.condition.extension.${className}ConditionExtension"></parameterMap>
+    <parameterMap id="ConditionExtensionMap" type="${basePackage}.models.condition.extension.${className}ConditionExtension"></parameterMap>
 
     <#if table.hasPk>
     <select id="getByPk" resultMap="ExtensionResultMap">
@@ -24,7 +24,7 @@
         <#include "/include/column/properties.ftl">
         <#if (column_index > 0)>AND </#if>`${column.columnName}` = <@mapperEl fieldName/>
         </#list>
-        <where>
+        </where>
     </select>
     </#if>
 
@@ -48,9 +48,7 @@
             <#if (canBeList)>
             <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
                 AND `${column.columnName}` in
-                <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=",">
-                    <@mapperEl 'it'/>
-                </foreach>
+                <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
             </if>
             </#if>
             <#if (canBeRange)>
@@ -84,8 +82,28 @@
         </#if>
         </#list>
         </where>
-        <if test="orderBy != null and orderBy != ''">
-            ORDER BY ${r"${orderBy}"}
+        <if test="order != null">
+            <trim suffixOverrides="ORDER BY">
+                ORDER BY
+                <trim suffixOverrides=",">
+                <#list table.columns as column>
+                <#include "/include/column/properties.ftl">
+                <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+                <#else>
+                <if test="order.${fieldName}Sort != null">
+                    <choose>
+                        <when test="order.${fieldName}Sort == true">
+                            `${column.columnName}` ASC,
+                        </when>
+                        <otherwise>
+                            `${column.columnName}` DESC,
+                        </otherwise>
+                    </choose>
+                </if>
+                </#if>
+                </#list>
+                </trim>
+            </trim>
         </if>
     </select>
 </mapper>

@@ -5,8 +5,8 @@
 <#assign fieldType = column.targetDataType>
 <#-- -->
 <#assign canBeEqual = (column.validStatus || column.dataType?contains("int") || column.dataType == "date" || column.dataType?ends_with("char"))>
-<#assign canBeList = (column.dataType?contains("int") || column.dataType?contains("date") || column.dataType?ends_with("char"))>
-<#assign canBeRange = (column.dataType?contains("int") || column.dataType == "double" || column.dataType == "float" || column.dataType == "decimal" || column.dataType == "numeric" || column.dataType?contains("date") || column.dataType?contains("time"))>
+<#assign canBeList = (!column.validStatus && (column.dataType?contains("int") || column.dataType?contains("date") || column.dataType?ends_with("char")))>
+<#assign canBeRange = (!column.validStatus && (column.dataType?contains("int") || column.dataType == "double" || column.dataType == "float" || column.dataType == "decimal" || column.dataType == "numeric" || column.dataType?contains("date") || column.dataType?contains("time")))>
 <#assign canBeNull = column.nullable>
 <#-- -->
 <#assign isContent = (column.content || column.dataType?contains("text"))>

@@ -15,11 +15,11 @@ public class ResponseVo<T> implements Serializable {
     }
 
     public ResponseVo(OperationConstants constants) {
-        this(false, constants.getMsg(), null);
+        this(false, constants.getMessage(), null);
     }
 
     public ResponseVo(OperationConstants constants, Object extData) {
-        this(false, constants.getMsg(), null, extData);
+        this(false, constants.getMessage(), null, extData);
     }
 
     public ResponseVo(boolean success, String msg) {

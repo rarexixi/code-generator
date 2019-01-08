@@ -1,14 +1,15 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.service.impl;
 
-import ${baseCommonPackage}.mapper.BaseMapper;
-import ${baseCommonPackage}.model.SearchPage;
+import ${baseCommonPackage}.model.OrderSearchPage;
 
-import ${basePackage}.condition.${className}Condition;
-import ${basePackage}.condition.extension.${className}ConditionExtension;
-import ${basePackage}.entity.${className}Entity;
-import ${basePackage}.entity.extension.${className}EntityExtension;
+import ${basePackage}.common.service.impl.BaseServiceImpl;
 import ${basePackage}.mapper.${className}Mapper;
+import ${basePackage}.models.condition.${className}Condition;
+import ${basePackage}.models.condition.extension.${className}ConditionExtension;
+import ${basePackage}.models.condition.order.${className}OrderCondition;
+import ${basePackage}.models.entity.${className}Entity;
+import ${basePackage}.models.entity.extension.${className}EntityExtension;
 import ${basePackage}.service.${className}Service;
 
 import com.github.pagehelper.PageHelper;
@@ -36,7 +37,7 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
     <#if table.hasPk>
 
     /**
-     * 根据主键获取
+     * 根据主键获取${tableComment}详情
      *
      <#list pks as column>
      <#include "/include/column/properties.ftl">
@@ -54,7 +55,24 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
     </#if>
 
     /**
-     * 分页查询
+     * 获取${tableComment}列表（不分页）
+     *
+     * @param condition
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<${className}EntityExtension> getList(${className}ConditionExtension condition) {
+
+        if (condition == null) return null;
+
+        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(condition, null);
+        return list;
+    }
+
+    /**
+     * 分页查询${tableComment}
      *
      * @param searchPage
      * @return
@@ -62,28 +80,14 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<${className}EntityExtension> getPageList(SearchPage<${className}ConditionExtension> searchPage) {
+    public PageInfo<${className}EntityExtension> getPageList(OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage) {
 
-        int pageIndex = searchPage == null || searchPage.getPageIndex() == null ? SearchPage.DEFAULT_PAGE_INDEX : searchPage.getPageIndex();
-        int pageSize = searchPage == null || searchPage.getPageSize() == null ? SearchPage.DEFAULT_PAGE_SIZE : searchPage.getPageSize();
-        PageHelper.startPage(pageIndex, pageSize);
-        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(searchPage.getCondition());
+        ${className}ConditionExtension condition;
+        if (searchPage == null || (condition = searchPage.getCondition()) == null) return null;
+
+        PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
+        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(condition, searchPage.getOrderCondition());
         PageInfo<${className}EntityExtension> pageInfo = new PageInfo<>(list);
         return pageInfo;
-    }
-
-    /**
-     * 获取列表（不分页）
-     *
-     * @param parameter
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public List<${className}Vo> getList(${className}ConditionExtension condition) {
-
-        List<${className}Vo> list = ${classNameFirstLower}Mapper.getList(condition);
-        return list;
     }
 }

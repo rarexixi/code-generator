@@ -1,19 +1,17 @@
-package ${basePackage}.service.impl;
+package ${basePackage}.common.service.impl;
 
-import ${baseCommonPackage}.mapper.BaseMapper;
 import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.SearchPage;
-
-import ${basePackage}.models.entity.BaseEntity;
-import ${basePackage}.models.condition.BaseCondition;
-import ${basePackage}.service.BaseService;
+import ${basePackage}.common.mapper.BaseMapper;
+import ${basePackage}.common.service.BaseService;
+import ${basePackage}.models.common.BaseCondition;
+import ${basePackage}.models.common.BaseEntity;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Transactional
@@ -161,7 +159,6 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     /**
      * 分页查询符合条件的列表
      *
-     * @param condition
      * @param searchPage
      * @return
      */
@@ -175,19 +172,19 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     /**
      * 分页查询符合条件的列表
      *
-     * @param condition
-     * @param order
      * @param searchPage
+     * @param order
      * @return
      */
     @Transactional(readOnly = true)
     @Override
     public PageInfo<T> getPageInfo(SearchPage<C> searchPage, OrderCondition order) {
 
-        int pageIndex = searchPage == null || searchPage.getPageIndex() == null ? SearchPage.DEFAULT_PAGE_INDEX : searchPage.getPageIndex();
-        int pageSize = searchPage == null || searchPage.getPageSize() == null ? SearchPage.DEFAULT_PAGE_SIZE : searchPage.getPageSize();
-        PageHelper.startPage(pageIndex, pageSize);
-        List<T> list = mapper.selectByCondition(searchPage.getCondition(), order);
+        C condition;
+        if (searchPage == null || (condition = searchPage.getCondition()) == null) return null;
+
+        PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
+        List<T> list = mapper.selectByCondition(condition, order);
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
@@ -195,33 +192,32 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     /**
      * 分页查询符合条件的列表
      *
-     * @param conditionList
      * @param searchPage
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> getPageInfo(SearchPage<List<C>> searchPage) {
+    public PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage) {
 
-        return getPageInfo(searchPage, null);
+        return getPageInfoByList(searchPage, null);
     }
 
     /**
      * 分页查询符合条件的列表
      *
-     * @param conditionList
-     * @param order
      * @param searchPage
+     * @param order
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> getPageInfo(SearchPage<List<C>> searchPage, OrderCondition order) {
+    public PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage, OrderCondition order) {
 
-        int pageIndex = searchPage == null || searchPage.getPageIndex() == null ? SearchPage.DEFAULT_PAGE_INDEX : searchPage.getPageIndex();
-        int pageSize = searchPage == null || searchPage.getPageSize() == null ? SearchPage.DEFAULT_PAGE_SIZE : searchPage.getPageSize();
-        PageHelper.startPage(pageIndex, pageSize);
-        List<T> list = mapper.selectByConditionList(searchPage.getCondition(), order);
+        List<C> conditionList;
+        if (searchPage == null || (conditionList = searchPage.getCondition()) == null) return null;
+
+        PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
+        List<T> list = mapper.selectByConditionList(conditionList, order);
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }

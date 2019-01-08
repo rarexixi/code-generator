@@ -1,22 +1,22 @@
 <#include "/include/table/properties.ftl">
 <#macro mapperEl value>${r"#{"}${value}}</#macro>
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 默认生成的的sql，不要修改！！！ -->
 <mapper namespace="${basePackage}.mapper.${className}Mapper">
 
-    <resultMap id="BaseResultMap" type="${basePackage}.entity.${className}Entity">
+    <resultMap id="BaseResultMap" type="${basePackage}.models.entity.${className}Entity">
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
         <result property="${fieldName}" column="${column.columnName}"/>
         </#list>
     </resultMap>
 
-    <parameterMap id="BaseParameterMap" type="${basePackage}.entity.${className}Entity"></parameterMap>
-    <parameterMap id="BaseConditionMap" type="${basePackage}.condition.${className}Condition"></parameterMap>
+    <parameterMap id="BaseParameterMap" type="${basePackage}.models.entity.${className}Entity"></parameterMap>
+    <parameterMap id="BaseConditionMap" type="${basePackage}.models.condition.${className}Condition"></parameterMap>
 
-    <sql id="tablename">`${table.tableName}`</sql>
+    <sql id="tableName">`${table.tableName}`</sql>
     <sql id="selectCondition">
         <trim prefixOverrides="AND|OR">
         <#list table.columns as column>
@@ -31,9 +31,7 @@
                 <#if (canBeList)>
                 <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
                     AND `${column.columnName}` in
-                    <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=",">
-                        <@mapperEl 'it'/>
-                    </foreach>
+                    <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
                 </if>
                 </#if>
                 <#if (canBeRange)>
@@ -83,6 +81,31 @@
                     <include refid="selectCondition"/>
                 </foreach>
             </where>
+        </if>
+    </sql>
+    <sql id="orderBy">
+        <if test="order != null">
+            <trim suffixOverrides="ORDER BY">
+                ORDER BY
+                <trim suffixOverrides=",">
+                <#list table.columns as column>
+                <#include "/include/column/properties.ftl">
+                <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+                <#else>
+                <if test="order.${fieldName}Sort != null">
+                    <choose>
+                        <when test="order.${fieldName}Sort == true">
+                            `${column.columnName}` ASC,
+                        </when>
+                        <otherwise>
+                            `${column.columnName}` DESC,
+                        </otherwise>
+                    </choose>
+                </if>
+                </#if>
+                </#list>
+                </trim>
+            </trim>
         </if>
     </sql>
     <sql id="selectColumnList">
@@ -181,9 +204,7 @@
         FROM
         <include refid="tableName"/>
         <include refid="where"/>
-        <if test="order != null and order.orderBy != null and order.orderBy != ''">
-            ORDER BY ${r"${order.orderBy}"}
-        </if>
+        <include refid="orderBy"/>
     </select>
 
     <select id="selectByConditionList" resultMap="BaseResultMap">
@@ -192,9 +213,7 @@
         FROM
         <include refid="tableName"/>
         <include refid="listWhere"/>
-        <if test="order != null and order.orderBy != null and order.orderBy != ''">
-            ORDER BY ${r"${order.orderBy}"}
-        </if>
+        <include refid="orderBy"/>
     </select>
 
     <select id="countByCondition" parameterMap="BaseConditionMap" resultType="java.lang.Integer">

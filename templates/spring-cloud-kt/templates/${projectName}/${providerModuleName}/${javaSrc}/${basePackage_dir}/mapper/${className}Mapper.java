@@ -1,11 +1,13 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.mapper;
 
-import ${baseCommonPackage}.mapper.BaseMapper;
-import ${basePackage}.condition.${className}Condition;
-import ${basePackage}.condition.extension.${className}ConditionExtension;
-import ${basePackage}.entity.${className}Entity;
-import ${basePackage}.entity.extension.${className}EntityExtension;
+import ${baseCommonPackage}.model.OrderCondition;
+
+import ${basePackage}.common.mapper.BaseMapper;
+import ${basePackage}.models.condition.${className}Condition;
+import ${basePackage}.models.condition.extension.${className}ConditionExtension;
+import ${basePackage}.models.entity.${className}Entity;
+import ${basePackage}.models.entity.extension.${className}EntityExtension;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,9 +35,10 @@ public interface ${className}Mapper extends BaseMapper<${className}Entity, ${cla
     /**
      * 查询
      *
-     * @param parameter
+     * @param condition
+     * @param order
      * @return
     <#include "/include/author_info1.ftl">
      */
-    List<${className}EntityExtension> getList(@Param("condition") ${className}ConditionExtension condition);
+    List<${className}EntityExtension> getList(@Param("condition") ${className}ConditionExtension condition, @Param("order") OrderCondition order);
 }

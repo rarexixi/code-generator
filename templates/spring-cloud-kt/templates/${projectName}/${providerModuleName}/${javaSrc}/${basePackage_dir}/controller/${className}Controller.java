@@ -2,11 +2,14 @@
 package ${basePackage}.controller;
 
 import ${baseCommonPackage}.model.ResultVo;
+import ${baseCommonPackage}.model.OrderSearchPage;
 import ${baseCommonPackage}.validation.*;
-import ${basePackage}.condition.${className}Condition;
-import ${basePackage}.condition.extension.${className}ConditionExtension;
-import ${basePackage}.entity.${className}Entity;
-import ${basePackage}.entity.extension.${className}EntityExtension;
+
+import ${basePackage}.models.condition.${className}Condition;
+import ${basePackage}.models.condition.extension.${className}ConditionExtension;
+import ${basePackage}.models.condition.order.${className}OrderCondition;
+import ${basePackage}.models.entity.${className}Entity;
+import ${basePackage}.models.entity.extension.${className}EntityExtension;
 import ${basePackage}.service.${className}Service;
 
 import com.github.pagehelper.PageInfo;
@@ -28,14 +31,14 @@ public class ${className}Controller {
     private ${className}Service ${classNameFirstLower}Service;
 
     /**
-     * 添加
+     * 添加${tableComment}
      *
      * @param entity
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping("/add")
     public ResultVo<${className}Entity> add(@Validated({DataAdd.class}) @RequestBody ${className}Entity entity, Errors errors, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         int count = ${classNameFirstLower}Service.insert(entity);
@@ -44,77 +47,49 @@ public class ${className}Controller {
     }
 
     /**
-     * 添加列表
+     * 添加${tableComment}列表
      *
      * @param list
      * @param sessionId
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/addList", method = RequestMethod.POST)
-    public ResultVo<Integer> addList(@Validated({DataAdd.class}) @RequestBody List<${className}Entity> list, Errors errors, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    @PostMapping("/addList")
+    public ResultVo<Integer> add(@Validated({DataAdd.class}) @RequestBody List<${className}Entity> list, Errors errors, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         int count = ${classNameFirstLower}Service.insert(list);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
-    <#if table.hasPk>
 
     /**
-     * 根据主键物理删除
+     * 根据条件删除${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName}
-     </#list>
+     * @param condition
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public ResultVo<Integer> delete(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    @PostMapping("/delete")
+    public ResultVo<Integer> delete(@RequestBody ${className}Condition condition, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
         int count = ${classNameFirstLower}Service.delete(condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
-    <#if (table.hasUniPk)>
-
-    /**
-     * 根据主键列表物理删除
-     *
-     * @param ${table.uniPk.targetName?uncap_first}List
-     * @param sessionId
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResultVo<Integer> delete(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
-
-        ${className}Condition condition = getPkListCondition(${table.uniPk.targetName?uncap_first}List);
-        int count = ${classNameFirstLower}Service.delete(condition);
-        ResultVo<Integer> result = new ResultVo<>(count);
-        return result;
-    }
-    </#if>
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键禁用
+     * 根据条件禁用${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName}
-     </#list>
+     * @param condition
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/disable", method = RequestMethod.GET)
-    public ResultVo<Integer> disable(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    @PostMapping("/disable")
+    public ResultVo<Integer> disable(@RequestBody ${className}Condition condition, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
         ${className}Entity entity = new ${className}Entity();
         entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.invalid});
         int count = ${classNameFirstLower}Service.update(entity, condition);
@@ -123,91 +98,65 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据主键启用
+     * 根据条件启用${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName}
-     </#list>
+     * @param condition
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/enable", method = RequestMethod.GET)
-    public ResultVo<Integer> enable(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    @PostMapping("/enable")
+    public ResultVo<Integer> enableList(@RequestBody ${className}Condition condition, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
         ${className}Entity entity = new ${className}Entity();
         entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.valid});
         int count = ${classNameFirstLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
+        return result;
+    }
+    </#if>
+
+    /**
+     * 根据条件获取${tableComment}实体
+     *
+     * @param condition
+     * @param sessionId
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @PostMapping("/get")
+    public ResultVo<${className}Entity> get(@RequestBody ${className}Condition condition, @RequestParam(value = "sessionId", required = false) String sessionId) {
+
+        ${className}Entity entity = ${classNameFirstLower}Service.get(condition);
+        ResultVo<${className}Entity> result = new ResultVo<>(entity);
         return result;
     }
     <#if (table.hasUniPk)>
 
     /**
-     * 根据主键列表禁用
-     *
-     * @param ${table.uniPk.targetName?uncap_first}List
-     * @param sessionId
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @RequestMapping(value = "/disable", method = RequestMethod.POST)
-    public ResultVo<Integer> disable(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
-
-        ${className}Condition condition = getPkListCondition(${table.uniPk.targetName?uncap_first}List);
-        ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.invalid});
-        int count = ${classNameFirstLower}Service.update(entity, condition);
-        ResultVo<Integer> result = new ResultVo<>(count);
-        return result;
-    }
-
-    /**
-     * 根据主键列表启用
-     *
-     * @param ${table.uniPk.targetName?uncap_first}List
-     * @param sessionId
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    @RequestMapping(value = "/enable", method = RequestMethod.POST)
-    public ResultVo<Integer> enable(@RequestBody List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List, @RequestParam(value = "sessionId", required = false) String sessionId) {
-
-        ${className}Condition condition = getPkListCondition(${table.uniPk.targetName?uncap_first}List);
-        ${className}Entity entity = new ${className}Entity();
-        entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.valid});
-        int count = ${classNameFirstLower}Service.update(entity, condition);
-        ResultVo<Integer> result = new ResultVo<>(count);
-        return result;
-    }
-    </#if>
-    </#if>
-
-    /**
-     * 根据主键更新
+     * 根据主键更新${tableComment}
      *
      * @param entity
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @PostMapping("/update")
     public ResultVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}Entity entity, Errors errors<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_request_params_validate.ftl"></#if>, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        <#if !table.hasAutoIncUniPk>
-        ${className}Condition condition = getPkCondition(<#include "/include/table/pk_values.ftl">);
-        <#else>
-        ${className}Condition condition = getPkCondition(<#list pks as column><#if (column_index > 0)>, </#if>entity.get${propertyName}()</#list>);
-        </#if>
+        ${className}Condition condition = new ${className}Condition();
+        <#list pks as column>
+        <#include "/include/column/properties.ftl">
+        condition.set${propertyName}(<#if table.hasAutoIncUniPk>entity.get${propertyName}()<#else>${fieldName}</#if>);
+        </#list>
+
         int count = ${classNameFirstLower}Service.update(entity, condition);
         ResultVo<Integer> result = new ResultVo<>(count);
         return result;
     }
 
     /**
-     * 根据主键获取
+     * 根据主键获取${tableComment}详情
      *
      <#list pks as column>
      <#include "/include/column/properties.ftl">
@@ -217,48 +166,44 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
-    public ResultVo<${className}EntityExtension> get(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    @GetMapping("/getDetail")
+    public ResultVo<${className}EntityExtension> getDetail(<#include "/include/table/pk_request_params_validate.ftl">, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}EntityExtension vo = ${classNameFirstLower}Service.getByPk(<#include "/include/table/pk_values.ftl">);
-        ResultVo<${className}EntityExtension> result = new ResultVo<>(vo);
+        ${className}EntityExtension entity = ${classNameFirstLower}Service.getByPk(<#include "/include/table/pk_values.ftl">);
+        ResultVo<${className}EntityExtension> result = new ResultVo<>(entity);
         return result;
     }
     </#if>
 
     /**
-     * 分页查询
+     * 获取${tableComment}列表
      *
-     * @param parameter
+     * @param condition
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/getPageInfo", method = RequestMethod.POST)
-    public ResultVo<PageInfo<${className}EntityExtension>> getPageInfo(@RequestBody ${className}ConditionExtension parameter, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    @PostMapping("/getList")
+    public ResultVo<List<${className}EntityExtension>> getList(@RequestBody ${className}ConditionExtension condition, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        PageInfo<${className}EntityExtension> paginationVo = ${classNameFirstLower}Service.getPageList(parameter);
-        ResultVo<PageInfo<${className}EntityExtension>> result = new ResultVo<>(paginationVo);
+        List<${className}EntityExtension> list = ${classNameFirstLower}Service.getList(condition);
+        ResultVo<List<${className}EntityExtension>> result = new ResultVo<>(list);
         return result;
     }
 
-    private ${className}Condition getPkCondition(<#include "/include/table/pk_params.ftl">) {
+    /**
+     * 分页查询${tableComment}
+     *
+     * @param searchPage
+     * @param sessionId
+     * @return
+    <#include "/include/author_info1.ftl">
+     */
+    @PostMapping("/getPageInfo")
+    public ResultVo<PageInfo<${className}EntityExtension>> getPageInfo(@RequestBody OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        ${className}Condition condition = new ${className}Condition();
-        <#list pks as column>
-        <#include "/include/column/properties.ftl">
-        condition.set${propertyName}(${fieldName});
-        </#list>
-        return condition;
+        PageInfo<${className}EntityExtension> pageInfo = ${classNameFirstLower}Service.getPageList(searchPage);
+        ResultVo<PageInfo<${className}EntityExtension>> result = new ResultVo<>(pageInfo);
+        return result;
     }
-    <#if (table.hasUniPk)>
-
-    private ${className}Condition getPkListCondition(List<${table.uniPk.targetDataType}> ${table.uniPk.targetName?uncap_first}List) {
-
-        ${className}Condition condition = new ${className}Condition();
-        condition.set${table.uniPk.targetName}List(${table.uniPk.targetName?uncap_first}List);
-        return condition;
-    }
-    </#if>
-
 }
