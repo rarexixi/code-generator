@@ -43,11 +43,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>${projectGroup}</groupId>
             <artifactId>${commonModuleName}</artifactId>
         </dependency>

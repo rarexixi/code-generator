@@ -2,7 +2,8 @@
 <#assign sortCount = 0>
 package ${basePackage}.admin.vm.detail;
 
-import ${basePackage}.entity.extension.${className}EntityExtension;
+import ${basePackage}.models.entity.${className}Entity;
+import ${basePackage}.models.entity.extension.${className}EntityExtension;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,28 +22,36 @@ public class ${className}DetailVm implements Serializable {
         ${fieldName} = entity.get${propertyName}();
         </#list>
     }
+
+    public ${className}DetailVm(${className}Entity entity) {
+
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+        ${fieldName} = entity.get${propertyName}();
+        </#list>
+    }
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
 
     /**
-     * ${column.columnComment}
+     * ${columnFullComment}
      */
-    private ${column.targetDataType} ${fieldName};
+    private ${fieldType} ${fieldName};
     </#list>
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
 
     /**
-    * 获取${column.columnComment}
+    * 获取${columnComment}
     */
-    public ${column.targetDataType} get${propertyName}() {
+    public ${fieldType} get${propertyName}() {
         return ${fieldName};
     }
 
     /**
-    * 设置${column.columnComment}
+    * 设置${columnComment}
     */
-    public void set${propertyName}(${column.targetDataType} ${fieldName}) {
+    public void set${propertyName}(${fieldType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }
     </#list>

@@ -5,3 +5,4 @@
 <#assign className = table.className>
 <#assign classNameFirstLower = className?uncap_first>
 <#assign pks = table.pks>
+<#assign classNameLength = className?length>

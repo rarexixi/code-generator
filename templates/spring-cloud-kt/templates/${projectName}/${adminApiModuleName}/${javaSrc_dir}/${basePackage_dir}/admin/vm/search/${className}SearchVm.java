@@ -2,8 +2,7 @@
 package ${basePackage}.admin.vm.search;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import ${basePackage}.admin.databind.DateJsonDeserializer;
-import ${basePackage}.condition.extension.${className}ConditionExtension;
+import ${basePackage}.models.condition.extension.${className}ConditionExtension;
 import ${baseCommonPackage}.model.SearchPage;
 
 import java.io.Serializable;

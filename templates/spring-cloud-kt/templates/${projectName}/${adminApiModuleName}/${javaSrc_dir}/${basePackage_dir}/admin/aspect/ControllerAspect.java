@@ -26,9 +26,9 @@ import java.util.*;
 <#include "/include/java_copyright.ftl">
 @Component
 @Aspect
-public class CloudServiceAspect {
+public class ControllerAspect {
 
-    private final LogUtils logger = LogUtils.build(CloudServiceAspect.class);
+    private final LogUtils logger = LogUtils.build(ControllerAspect.class);
 
     @Autowired
     HttpServletRequest request;
@@ -36,7 +36,7 @@ public class CloudServiceAspect {
     /**
      * 设置标识
      */
-    @Pointcut("execution(public * ${basePackage}.controller.*.*(..))")
+    @Pointcut("execution(public * ${basePackage}.admin.controller.*.*(..))")
     public void invoke() {
     }
 

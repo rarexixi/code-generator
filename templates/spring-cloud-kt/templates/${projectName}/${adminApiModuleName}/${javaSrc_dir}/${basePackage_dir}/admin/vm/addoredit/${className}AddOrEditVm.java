@@ -1,7 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.vm.addoredit;
 
-import ${basePackage}.entity.${className}Entity;
+import ${basePackage}.models.entity.${className}Entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,24 +13,24 @@ public class ${className}AddOrEditVm implements Serializable {
     <#include "/include/column/properties.ftl">
 
     /**
-     * ${column.columnComment}
+     * ${columnFullComment}
      */
-    private ${column.targetDataType} ${fieldName};
+    private ${fieldType} ${fieldName};
     </#list>
     <#list table.requiredColumns as column>
     <#include "/include/column/properties.ftl">
 
     /**
-    * 获取${column.columnComment}
+    * 获取${columnComment}
     */
-    public ${column.targetDataType} get${propertyName}() {
+    public ${fieldType} get${propertyName}() {
         return ${fieldName};
     }
 
     /**
-    * 设置${column.columnComment}
+    * 设置${columnComment}
     */
-    public void set${propertyName}(${column.targetDataType} ${fieldName}) {
+    public void set${propertyName}(${fieldType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }
     </#list>

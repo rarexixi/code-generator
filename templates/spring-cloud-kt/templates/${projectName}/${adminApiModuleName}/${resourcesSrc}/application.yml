@@ -20,13 +20,3 @@ eureka:
 feign:
   hystrix:
     enabled: true
-
-cors:
-  cors-registrations:
-    - pathPattern: /**
-      allowedOrigins: '*'
-      allowedMethods: GET,POST,UPDATE,DELETE,PUT,TRACE,OPTIONS
-      allowedHeaders: Origin, X-Requested-With, Content-Type, Accept
-      exposedHeaders:
-      allowCredentials: true
-      maxAge: 3600
