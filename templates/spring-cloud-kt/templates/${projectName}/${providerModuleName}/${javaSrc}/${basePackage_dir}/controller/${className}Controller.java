@@ -1,6 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.controller;
 
+import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResultVo;
 import ${baseCommonPackage}.model.OrderSearchPage;
 import ${baseCommonPackage}.validation.*;
@@ -200,10 +201,14 @@ public class ${className}Controller {
     <#include "/include/author_info1.ftl">
      */
     @PostMapping("/getPageInfo")
-    public ResultVo<PageInfo<${className}EntityExtension>> getPageInfo(@RequestBody OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage, @RequestParam(value = "sessionId", required = false) String sessionId) {
+    public ResultVo<PageInfoVo<${className}EntityExtension>> getPageInfo(@RequestBody OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage, @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         PageInfo<${className}EntityExtension> pageInfo = ${classNameFirstLower}Service.getPageList(searchPage);
-        ResultVo<PageInfo<${className}EntityExtension>> result = new ResultVo<>(pageInfo);
+        PageInfoVo<${className}EntityExtension> pageInfoVo =
+                pageInfo != null
+                        ? null
+                        : new PageInfoVo<>(pageInfo.getPageNum(), pageInfo.getPages(), pageInfo.getTotal(), pageInfo.getList());
+        ResultVo<PageInfo<${className}EntityExtension>> result = new ResultVo<>(pageInfoVo);
         return result;
     }
 }
