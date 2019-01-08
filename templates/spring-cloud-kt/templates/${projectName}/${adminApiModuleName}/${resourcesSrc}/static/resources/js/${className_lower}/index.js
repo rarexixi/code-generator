@@ -27,7 +27,7 @@ var app = new Vue({
         </#list>
         </#if>
         searchParams: {
-            <#list table.columns as column>
+            <#list table.indexes as column>
             <#include "/include/column/properties.ftl">
             <#if column.ignoreSearch>
             <#elseif (column.validStatus)>
@@ -46,7 +46,6 @@ var app = new Vue({
             </#if>
             </#list>
 
-            sortEnums: [2],
             pageIndex: 1,
             pageSize: 10
         },
@@ -134,7 +133,7 @@ var app = new Vue({
         },
         </#if>
         resetSearch: function() {
-            <#list table.columns as column>
+            <#list table.indexes as column>
             <#include "/include/column/properties.ftl">
             <#if column.ignoreSearch>
             <#elseif (column.validStatus)>

@@ -1,10 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.service.impl;
 
-import ${baseCommonPackage}.model.OrderSearchPage;
-import ${baseCommonPackage}.model.PageInfoVo;
-import ${baseCommonPackage}.model.ResponseVo;
-import ${baseCommonPackage}.model.ResultVo;
+import ${baseCommonPackage}.model.*;
 import ${basePackage}.admin.cloudservice.${className}CloudService;
 import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
@@ -19,7 +16,9 @@ import ${basePackage}.models.entity.extension.${className}EntityExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
@@ -79,37 +78,39 @@ public class ${className}ServiceImpl implements ${className}Service {
     /**
      * 根据条件删除${tableComment}
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResponseVo<Integer> delete(${className}SearchVm condition) {
+    public ResponseVo<Integer> delete(${className}SearchVm searchVm) {
 
-         ResponseVo<Integer> responseVo;
-         ResultVo<Integer> apiResult = ${classNameFirstLower}CloudService.delete(condition, getSessionId());
-         if (apiResult.isSuccess()) {
-             responseVo = new ResponseVo<>(apiResult.getResult());
-         } else {
-             responseVo = new ResponseVo<>(false, apiResult.getMsg());
-         }
+        ResponseVo<Integer> responseVo;
+        ${className}Condition condition = searchVm.getCondition();
+        ResultVo<Integer> apiResult = ${classNameFirstLower}CloudService.delete(condition, getSessionId());
+        if (apiResult.isSuccess()) {
+            responseVo = new ResponseVo<>(apiResult.getResult());
+        } else {
+            responseVo = new ResponseVo<>(false, apiResult.getMsg());
+        }
 
-         return responseVo;
+        return responseVo;
     }
     <#if table.validStatusColumn??>
 
     /**
      * 根据条件禁用${tableComment}
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResponseVo<Integer> disable(${className}SearchVm condition) {
+    public ResponseVo<Integer> disable(${className}SearchVm searchVm) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameFirstLower}CloudService.disable(<#include "/include/table/pk_values.ftl">, getSessionId());
+        ${className}Condition condition = searchVm.getCondition();
+        ResultVo<Integer> apiResult = ${classNameFirstLower}CloudService.disable(condition, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -122,15 +123,16 @@ public class ${className}ServiceImpl implements ${className}Service {
     /**
      * 根据条件启用${tableComment}
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResponseVo<Integer> enable(${className}SearchVm condition) {
+    public ResponseVo<Integer> enable(${className}SearchVm searchVm) {
 
         ResponseVo<Integer> responseVo;
-        ResultVo<Integer> apiResult = ${classNameFirstLower}CloudService.enable(<#include "/include/table/pk_values.ftl">, getSessionId());
+        ${className}Condition condition = searchVm.getCondition();
+        ResultVo<Integer> apiResult = ${classNameFirstLower}CloudService.enable(condition, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>(apiResult.getResult());
         } else {
@@ -144,19 +146,20 @@ public class ${className}ServiceImpl implements ${className}Service {
     /**
      * 根据条件获取${tableComment}实体
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResponseVo<${className}DetailVm> get(${className}SearchVm condition) {
+    public ResponseVo<${className}DetailVm> get(${className}SearchVm searchVm) {
 
         ResponseVo<${className}DetailVm> responseVo;
-        ResultVo<${className}EntityExtension> apiResult = ${classNameFirstLower}CloudService.get(condition, getSessionId());
+        ${className}Condition condition = searchVm.getCondition();
+        ResultVo<${className}Entity> apiResult = ${classNameFirstLower}CloudService.get(condition, getSessionId());
         if (apiResult.isSuccess()) {
             responseVo = new ResponseVo<>();
             responseVo.setSuccess(true);
-            ${className}EntityExtension entity;
+            ${className}Entity entity;
             if ((entity = apiResult.getResult()) != null) {
                 ${className}DetailVm vm = new ${className}DetailVm(entity);
                 responseVo.setResult(vm);
@@ -230,19 +233,23 @@ public class ${className}ServiceImpl implements ${className}Service {
     /**
      * 获取${tableComment}列表
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm condition) {
+    public ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm searchVm) {
 
         ResponseVo<List<${className}DetailVm>> responseVo;
-        ${className}ConditionExtension parameter = searchVm.get${className}ConditionExtension();
+        ${className}ConditionExtension condition = searchVm.getConditionExtension();
         ResultVo<List<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getList(condition, getSessionId());
         if (apiResult.isSuccess()) {
-            List<${className}DetailVm> list = apiResult.getResult();
-            responseVo = new ResponseVo<>(list);
+            List<${className}EntityExtension> list = apiResult.getResult();
+            List<${className}DetailVm> vmList = new ArrayList<>();
+            if (list != null) {
+                list.forEach(item -> vmList.add(new ${className}DetailVm(item)));
+            }
+            responseVo = new ResponseVo<>(vmList);
         } else {
             responseVo = new ResponseVo<>(false, apiResult.getMsg());
         }
@@ -261,11 +268,21 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(SearchPage<${className}SearchVm> searchPage) {
 
         ResponseVo<PageInfoVo<${className}DetailVm>> responseVo;
-        ${className}ConditionExtension parameter = searchVm.get${className}ConditionExtension();
-        ResultVo<PageInfoVo<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getPageInfo(parameter, getSessionId());
+        ${className}SearchVm searchVm = searchPage.getCondition();
+        ${className}ConditionExtension condition = searchVm.getConditionExtension();
+        ${className}OrderCondition orderCondition = searchVm.getOrderCondition();
+        OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> orderSearchPage =
+                new OrderSearchPage<>(searchPage.getPageIndex(), searchPage.getPageSize(), condition, orderCondition);
+        ResultVo<PageInfoVo<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getPageInfo(orderSearchPage, getSessionId());
         if (apiResult.isSuccess()) {
             PageInfoVo<${className}EntityExtension> pageInfo = apiResult.getResult();
-            responseVo = new ResponseVo<>(pageInfo);
+            List<${className}DetailVm> list = new ArrayList<>();
+            if (pageInfo.getList() != null) {
+                pageInfo.getList().forEach(item -> list.add(new ${className}DetailVm(item)));
+            }
+            PageInfoVo<${className}DetailVm> pageInfoVo =
+                    new PageInfoVo<>(pageInfo.getPageIndex(), pageInfo.getPageSize(), pageInfo.getTotal(), list);
+            responseVo = new ResponseVo<>(pageInfoVo);
         } else {
             responseVo = new ResponseVo<>(false, apiResult.getMsg());
         }

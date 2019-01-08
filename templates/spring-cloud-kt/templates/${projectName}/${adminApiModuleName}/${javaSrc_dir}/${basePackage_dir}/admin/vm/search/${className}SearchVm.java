@@ -1,9 +1,9 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.vm.search;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
-import ${baseCommonPackage}.model.SearchPage;
+import ${basePackage}.models.condition.order.${className}OrderCondition;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,216 +11,203 @@ import java.util.*;
 
 <#include "/include/java_copyright.ftl">
 public class ${className}SearchVm implements Serializable {
-<#list table.indexes as column>
-<#include "/include/column/properties.ftl">
-
-    //region ${column.columnComment}
-    <#if (column.validStatus || column.select || column.fkSelect)>
+    <#list table.indexes as column>
+    <#include "/include/column/properties.ftl">
+    <#if (canBeEqual)>
 
     /**
-    * ${column.columnComment}
-    */
-    private ${column.targetDataType} ${fieldName};
+     * ${column.columnComment}
+     */
+    private ${fieldType} ${fieldName};
+    </#if>
+    <#if (canBeList)>
 
-    public void set${propertyName}(${column.targetDataType} ${fieldName}) {
+    /**
+     * ${column.columnComment} 列表
+     */
+    private List<${fieldType}> ${fieldName}List;
+    </#if>
+    <#if (canBeRange)>
+
+    /**
+     * 最小 ${column.columnComment}
+     */
+    private ${fieldType} ${fieldName}Min;
+
+    /**
+     * 最大 ${column.columnComment}
+     */
+    private ${fieldType} ${fieldName}Max;
+    </#if>
+    <#if (canBeNull)>
+
+    /**
+     * ${column.columnComment}
+     */
+    private Boolean ${fieldName}IsNull;
+    </#if>
+    <#if (column.dataType?ends_with("char"))>
+
+    /**
+     * ${column.columnComment}
+     */
+    private Boolean ${fieldName}IsEmpty;
+
+    /**
+     * ${column.columnComment}
+     */
+    private ${fieldType} ${fieldName}StartWith;
+
+    /**
+     * ${column.columnComment}
+     */
+    private ${fieldType} ${fieldName}Contains;
+    </#if>
+    </#list>
+    <#list table.indexes as column>
+    <#include "/include/column/properties.ftl">
+
+    /**
+     * 以${columnComment}排序 (null不排序，true升序，false降序)
+     */
+    public Boolean ${fieldName}Sort;
+    </#list>
+    <#list table.indexes as column>
+    <#include "/include/column/properties.ftl">
+    <#if (canBeEqual)>
+
+    public void set${propertyName}(${fieldType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }
 
-    public ${column.targetDataType} get${propertyName}() {
-        return ${fieldName};
-    }
-    <#elseif (column.dataType?contains("int"))>
-
-    /**
-    * ${column.columnComment}
-    */
-    private ${column.targetDataType} ${fieldName};
-
-    public void set${propertyName}(${column.targetDataType} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
-
-    public ${column.targetDataType} get${propertyName}() {
-        return ${fieldName};
-    }
-    <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
-
-    /**
-    * 开始 ${column.columnComment}
-    */
-    private ${column.targetDataType} ${fieldName}Min;
-
-    /**
-    * 结束 ${column.columnComment}
-    */
-    private ${column.targetDataType} ${fieldName}Max;
-
-    public void set${propertyName}Min(${column.targetDataType} ${fieldName}Min) {
-        this.${fieldName}Min = ${fieldName}Min;
-    }
-
-    public ${column.targetDataType} get${propertyName}Min() {
-        return ${fieldName}Min;
-    }
-
-    public void set${propertyName}Max(${column.targetDataType} ${fieldName}Max) {
-        this.${fieldName}Max = ${fieldName}Max;
-    }
-
-    public ${column.targetDataType} get${propertyName}Max() {
-        return ${fieldName}Max;
-    }
-    <#elseif (column.dataType == "double" || column.dataType == "float" || column.dataType == "decimal" || column.dataType == "numeric")>
-
-    /**
-    * 最小 ${column.columnComment}
-    */
-    private ${column.targetDataType} ${fieldName}Min;
-
-    /**
-    * 最大 ${column.columnComment}
-    */
-    private ${column.targetDataType} ${fieldName}Max;
-
-    public void set${propertyName}Min(${column.targetDataType} ${fieldName}Min) {
-        this.${fieldName}Min = ${fieldName}Min;
-    }
-
-    public ${column.targetDataType} get${propertyName}Min() {
-        return ${fieldName}Min;
-    }
-
-    public void set${propertyName}Max(${column.targetDataType} ${fieldName}Max) {
-        this.${fieldName}Max = ${fieldName}Max;
-    }
-
-    public ${column.targetDataType} get${propertyName}Max() {
-        return ${fieldName}Max;
-    }
-    <#elseif (column.dataType?ends_with("char"))>
-
-    /**
-    * ${column.columnComment} (开始匹配）
-    */
-    private ${column.targetDataType} ${fieldName}StartWith;
-
-    public void set${propertyName}StartWith(${column.targetDataType} ${fieldName}StartWith) {
-        this.${fieldName}StartWith = ${fieldName}StartWith;
-    }
-
-    public ${column.targetDataType} get${propertyName}StartWith() {
-        return ${fieldName}StartWith;
-    }
-    <#else>
-
-    /**
-    * ${column.columnComment}
-    */
-    private ${column.targetDataType} ${fieldName};
-
-    public void set${propertyName}(${column.targetDataType} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
-
-    public ${column.targetDataType} get${propertyName}() {
+    public ${fieldType} get${propertyName}() {
         return ${fieldName};
     }
     </#if>
+    <#if (canBeList)>
 
-    //endregion
-</#list>
-
-    private ${className}SortEnum sortEnum;
-
-    public void setSortEnum(Integer sort) {
-        this.sortEnum = ${className}SortEnum.valueOf(sort);
+    public void set${propertyName}List(List<${fieldType}> ${fieldName}List) {
+        this.${fieldName}List = ${fieldName}List;
     }
 
-    public Integer getSortEnum() {
-        return sortEnum.getValue();
+    public List<${fieldType}> get${propertyName}List() {
+        return ${fieldName}List;
+    }
+    </#if>
+    <#if (canBeRange)>
+
+    public void set${propertyName}Min(${fieldType} ${fieldName}Min) {
+        this.${fieldName}Min = ${fieldName}Min;
     }
 
-    public ${className}ConditionExtension get${className}ConditionExtension() {
+    public ${fieldType} get${propertyName}Min() {
+        return ${fieldName}Min;
+    }
 
-        ${className}ConditionExtension parameter = new ${className}ConditionExtension();
+    public void set${propertyName}Max(${fieldType} ${fieldName}Max) {
+        this.${fieldName}Max = ${fieldName}Max;
+    }
+
+    public ${fieldType} get${propertyName}Max() {
+        return ${fieldName}Max;
+    }
+    <#if (isDate || isTime || isDateTime)>
+
+    public void set${propertyName}Range(Date[] dateRange) {
+        this.${fieldName}Min = ${fieldName}Min;
+        this.${fieldName}Max = ${fieldName}Max;
+    }
+    </#if>
+    </#if>
+    <#if (canBeNull)>
+
+    public void set${propertyName}IsNull(Boolean ${fieldName}IsNull) {
+        this.${fieldName}IsNull = ${fieldName}IsNull;
+    }
+
+    public Boolean get${propertyName}IsNull() {
+        return ${fieldName}IsNull;
+    }
+    </#if>
+    <#if (column.dataType?ends_with("char"))>
+
+    public void set${propertyName}IsEmpty(Boolean ${fieldName}IsEmpty) {
+        this.${fieldName}IsEmpty = ${fieldName}IsEmpty;
+    }
+
+    public Boolean get${propertyName}IsEmpty() {
+        return ${fieldName}IsEmpty;
+    }
+
+    public void set${propertyName}StartWith(${fieldType} ${fieldName}StartWith) {
+        this.${fieldName}StartWith = ${fieldName}StartWith;
+    }
+
+    public ${fieldType} get${propertyName}StartWith() {
+        return ${fieldName}StartWith;
+    }
+
+    public void set${propertyName}Contains(${fieldType} ${fieldName}Contains) {
+        this.${fieldName}Contains = ${fieldName}Contains;
+    }
+
+    public ${fieldType} get${propertyName}Contains() {
+        return ${fieldName}Contains;
+    }
+    </#if>
+    </#list>
+    <#list table.indexes as column>
+    <#include "/include/column/properties.ftl">
+
+    public void set${propertyName}Sort(Boolean ${fieldName}Sort) {
+        this.${fieldName}Sort = ${fieldName}Sort;
+    }
+
+    public Boolean get${propertyName}Sort() {
+        return ${fieldName}Sort;
+    }
+    </#list>
+
+    public ${className}Condition getCondition() {
+
+        return getConditionExtension();
+    }
+
+    public ${className}ConditionExtension getConditionExtension() {
+
+        ${className}ConditionExtension condition = new ${className}ConditionExtension();
         <#list table.indexes as column>
         <#include "/include/column/properties.ftl">
-        <#if (column.validStatus || column.select || column.fkSelect)>
-        parameter.set${propertyName}(${fieldName});
-        <#elseif (column.dataType?contains("int"))>
-        parameter.set${propertyName}(${fieldName});
-        <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
-        parameter.set${propertyName}Min(${fieldName}Min);
-        parameter.set${propertyName}Max(${fieldName}Max);
-        <#elseif (column.dataType == "double" || column.dataType == "float")>
-        parameter.set${propertyName}Min(${fieldName}Min);
-        parameter.set${propertyName}Max(${fieldName}Max);
-        <#elseif (column.dataType == "decimal" || column.dataType == "numeric")>
-        parameter.set${propertyName}Min(${fieldName}Min);
-        parameter.set${propertyName}Max(${fieldName}Max);
-        <#elseif (column.dataType?ends_with("char"))>
-        parameter.set${propertyName}StartWith(${fieldName}StartWith);
-        <#else>
-        parameter.set${propertyName}(${fieldName});
+        <#if (canBeEqual)>
+        condition.set${propertyName}(${fieldName});
+        </#if>
+        <#if (canBeList)>
+        condition.set${propertyName}List(${fieldName}List);
+        </#if>
+        <#if (canBeRange)>
+        condition.set${propertyName}Min(${fieldName}Min);
+        condition.set${propertyName}Max(${fieldName}Max);
+        </#if>
+        <#if (canBeNull)>
+        condition.set${propertyName}IsNull(${fieldName}IsNull);
+        </#if>
+        <#if (column.dataType?ends_with("char"))>
+        condition.set${propertyName}IsEmpty(${fieldName}IsEmpty);
+        condition.set${propertyName}StartWith(${fieldName}StartWith);
+        condition.set${propertyName}Contains(${fieldName}Contains);
         </#if>
         </#list>
-        setParameterSort(parameter);
-
-        return parameter;
+        return condition;
     }
 
-    private void setParameterSort(${className}ConditionExtension parameter) {
+    public ${className}OrderCondition getOrderCondition() {
 
-        if (sortEnum == null) {
-            return;
-        }
-
-        switch (sortEnum) {
-            <#list table.indexes as column>
-            <#include "/include/column/properties.ftl">
-            case ${propertyName}Asc:
-                parameter.set${propertyName}Asc();
-                break;
-            case ${propertyName}Desc:
-                parameter.set${propertyName}Desc();
-                break;
-            </#list>
-            default:
-                break;
-        }
-    }
-
-    public enum ${className}SortEnum {
-
-        <#assign count = 0>
+        ${className}OrderCondition condition = new ${className}OrderCondition();
         <#list table.indexes as column>
         <#include "/include/column/properties.ftl">
-        ${propertyName}Asc(${count + 1}),
-        ${propertyName}Desc(${count + 2})<#if (column_has_next)>,<#else>;</#if>
+        condition.set${propertyName}Sort(${fieldName}Sort);
         </#list>
 
-        int value;
-        ${className}SortEnum(int value) {
-            this.value = value;
-        }
-        public int getValue() {
-            return value;
-        }
-
-        public static ${className}SortEnum valueOf(int i) {
-            switch (i) {
-                <#assign count = 0>
-                <#list table.indexes as column>
-                <#include "/include/column/properties.ftl">
-                case ${count + 1}:
-                    return ${propertyName}Asc;
-                case ${count + 2}:
-                    return ${propertyName}Desc;
-                <#assign count = count + 2>
-                </#list>
-                default:
-                    return null;
-            }
-        }
+        return condition;
     }
 }

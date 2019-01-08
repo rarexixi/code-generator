@@ -112,7 +112,7 @@ public class ${className}Controller {
      */
     @PostMapping("/enable")
     public ResultVo<Integer> enable(@RequestBody ${className}Condition condition,
-                                        @RequestParam(value = "sessionId", required = false) String sessionId) {
+                                    @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         ${className}Entity entity = new ${className}Entity();
         entity.set${table.validStatusColumn.targetName}(${table.validStatusColumn.validStatusOption.valid});

@@ -58,7 +58,7 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> enableList(${className}SearchVm condition);
+    ResponseVo<Integer> enable(${className}SearchVm condition);
     </#if>
 
     /**

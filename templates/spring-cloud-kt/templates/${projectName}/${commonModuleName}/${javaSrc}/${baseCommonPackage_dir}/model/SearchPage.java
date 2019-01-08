@@ -21,6 +21,12 @@ public class SearchPage<T> implements Serializable {
         this.setPageSize(pageSize);
     }
 
+    public SearchPage(int pageIndex, int pageSize, T condition) {
+        this.setPageIndex(pageIndex);
+        this.setPageSize(pageSize);
+        this.setCondition(condition);
+    }
+
     public int getPageIndex() {
         return pageIndex;
     }

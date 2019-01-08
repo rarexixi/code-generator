@@ -59,6 +59,7 @@ public class CloudServiceAspect {
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = methodSignature.getMethod();
         String methodName = request.getRemoteHost() + method.getDeclaringClass().getName() + "." + method.getName();
+        String sessionId = request.getParameter("sessionId");
 
         try {
             List<String> messages = getErrorMessage(proceedingJoinPoint.getArgs());
