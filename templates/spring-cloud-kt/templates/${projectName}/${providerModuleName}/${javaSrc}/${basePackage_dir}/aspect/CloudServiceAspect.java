@@ -65,7 +65,7 @@ public class CloudServiceAspect {
             List<String> messages = getErrorMessage(proceedingJoinPoint.getArgs());
             if (!messages.isEmpty()) {
                 logger.error(methodName, "参数验证失败", messages);
-                return new ResponseVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, messages);
+                return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, messages);
             }
 
             Object result = proceedingJoinPoint.proceed();
@@ -73,15 +73,15 @@ public class CloudServiceAspect {
         } catch (ConstraintViolationException e) {
             logger.error(methodName, "参数验证失败", e);
             List<String> messages = getErrorMessage(e);
-            return new ResponseVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, messages);
+            return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, messages);
         } catch (ValidationException e) {
             logger.error(methodName, "参数验证失败", e);
-            return new ResponseVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, e.getMessage());
+            return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, e.getMessage());
         } catch (Exception e) {
             logger.error(methodName, "服务出现异常", e);
         }
 
-        return new ResponseVo<>(OperationConstants.SYSTEM_ERROR);
+        return new ResultVo<>(OperationConstants.SYSTEM_ERROR);
     }
 
     /**

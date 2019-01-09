@@ -116,7 +116,7 @@ public class ${className}ServiceHystric implements ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<Integer> update(${className}Entity entity, Errors errors, <#if !table.hasAutoIncUniPk><#include "/include/table/pk_request_params_validate.ftl">, </#if>String sessionId) {
+    public ResultVo<Integer> update(${className}Entity entity, <#if !table.hasAutoIncUniPk><#include "/include/table/pk_params.ftl">, </#if>String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 
@@ -131,9 +131,8 @@ public class ${className}ServiceHystric implements ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @GetMapping("/${classNameFirstLower}/getDetail")
     @Override
-    public ResultVo<${className}EntityExtension> getDetail(<#include "/include/table/pk_request_params_validate.ftl">, String sessionId) {
+    public ResultVo<${className}EntityExtension> getDetail(<#include "/include/table/pk_params.ftl">, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
     </#if>

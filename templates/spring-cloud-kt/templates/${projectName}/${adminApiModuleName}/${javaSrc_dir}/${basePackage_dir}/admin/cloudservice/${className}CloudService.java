@@ -30,8 +30,9 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/add")
-    ResultVo<${className}Entity> add(@RequestBody ${className}Entity entity,
-                        <#include "/include/table/class_length_whitespace.ftl">@RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<${className}Entity> add(
+            @RequestBody ${className}Entity entity,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 添加${tableComment}列表
@@ -42,8 +43,9 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/addList")
-    ResultVo<Integer> addList(@RequestBody List<${className}Entity> list,
-                              @RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<Integer> addList(
+            @RequestBody List<${className}Entity> list,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 根据条件删除${tableComment}
@@ -54,8 +56,9 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/delete")
-    ResultVo<Integer> delete(@RequestBody ${className}Condition condition,
-                             @RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<Integer> delete(
+            @RequestBody ${className}Condition condition,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
     <#if table.validStatusColumn??>
 
     /**
@@ -67,8 +70,9 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/disable")
-    ResultVo<Integer> disable(@RequestBody ${className}Condition condition,
-                              @RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<Integer> disable(
+            @RequestBody ${className}Condition condition,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 根据条件启用${tableComment}
@@ -79,8 +83,9 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/enable")
-    ResultVo<Integer> enable(@RequestBody ${className}Condition condition,
-                                 @RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<Integer> enable(
+            @RequestBody ${className}Condition condition,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
     </#if>
 
     /**
@@ -92,8 +97,9 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/get")
-    ResultVo<${className}Entity> get(@RequestBody ${className}Condition condition,
-                        <#include "/include/table/class_length_whitespace.ftl">@RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<${className}Entity> get(
+            @RequestBody ${className}Condition condition,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
     <#if (table.hasPk)>
 
     /**
@@ -111,8 +117,15 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/update")
-    ResultVo<Integer> update(@RequestBody ${className}Entity entity, <#if !table.hasAutoIncUniPk><#include "/include/table/pk_request_params.ftl">,</#if>
-                             @RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<Integer> update(
+            @RequestBody ${className}Entity entity,
+            <#if !table.hasAutoIncUniPk>
+            <#list pks as column>
+            <#include "/include/column/properties.ftl">
+            @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName},
+            </#list>
+            </#if>
+            @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 根据主键获取${tableComment}详情
@@ -126,8 +139,12 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @GetMapping("/${classNameFirstLower}/getDetail")
-    ResultVo<${className}EntityExtension> getDetail(<#include "/include/table/pk_request_params.ftl">,
-                                       <#include "/include/table/class_length_whitespace.ftl">@RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<${className}EntityExtension> getDetail(
+            <#list pks as column>
+            <#include "/include/column/properties.ftl">
+            @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName},
+            </#list>
+            @RequestParam(value = "sessionId", required = false) String sessionId);
     </#if>
 
     /**
@@ -139,8 +156,9 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/getList")
-    ResultVo<List<${className}EntityExtension>> getList(@RequestBody ${className}ConditionExtension condition,
-                                           <#include "/include/table/class_length_whitespace.ftl">@RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<List<${className}EntityExtension>> getList(
+            @RequestBody ${className}ConditionExtension condition,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**
      * 分页查询${tableComment}
@@ -151,6 +169,7 @@ public interface ${className}CloudService {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/getPageInfo")
-    ResultVo<PageInfoVo<${className}EntityExtension>> getPageInfo(@RequestBody OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage,
-                                                     <#include "/include/table/class_length_whitespace.ftl">@RequestParam(value = "sessionId", required = false) String sessionId);
+    ResultVo<PageInfoVo<${className}EntityExtension>> getPageInfo(
+            @RequestBody OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage,
+            @RequestParam(value = "sessionId", required = false) String sessionId);
 }

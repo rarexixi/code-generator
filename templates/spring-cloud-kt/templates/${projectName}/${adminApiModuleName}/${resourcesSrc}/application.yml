@@ -8,6 +8,8 @@ spring:
     service-registry:
       auto-registration:
         enabled: true
+  main:
+    allow-bean-definition-overriding: true # FeignClient value 可以重名
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: true

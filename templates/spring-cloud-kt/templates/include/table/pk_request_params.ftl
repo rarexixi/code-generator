@@ -1,1 +1,1 @@
-<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)>, </#if>@RequestParam(value="${fieldName}") ${fieldType} ${fieldName}</#list>
+<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)>, </#if>@RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}</#list>

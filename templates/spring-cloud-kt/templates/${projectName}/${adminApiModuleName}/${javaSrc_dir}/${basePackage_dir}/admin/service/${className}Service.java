@@ -35,40 +35,40 @@ public interface ${className}Service {
     /**
      * 根据条件删除${tableComment}
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> delete(${className}SearchVm condition);
+    ResponseVo<Integer> delete(${className}SearchVm searchVm);
     <#if table.validStatusColumn??>
 
     /**
      * 根据条件禁用${tableComment}
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> disable(${className}SearchVm condition);
+    ResponseVo<Integer> disable(${className}SearchVm searchVm);
 
     /**
      * 根据条件启用${tableComment}
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> enable(${className}SearchVm condition);
+    ResponseVo<Integer> enable(${className}SearchVm searchVm);
     </#if>
 
     /**
      * 根据条件获取${tableComment}实体
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<${className}DetailVm> get(${className}SearchVm condition);
+    ResponseVo<${className}DetailVm> get(${className}SearchVm searchVm);
     <#if (table.hasPk)>
 
     /**
@@ -102,11 +102,11 @@ public interface ${className}Service {
     /**
      * 获取${tableComment}列表
      *
-     * @param condition
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm condition);
+    ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm searchVm);
 
     /**
      * 分页查询${tableComment}

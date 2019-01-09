@@ -1,8 +1,7 @@
-package ${basePackage}.aspect;
+package ${basePackage}.admin.aspect;
 
 import ${baseCommonPackage}.constant.OperationConstants;
-import ${baseCommonPackage}.model.ResultVo;
-import ${baseCommonPackage}.utils.AnnotationUtils;
+import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.utils.LogUtils;
 
 import org.aspectj.lang.ProceedingJoinPoint;

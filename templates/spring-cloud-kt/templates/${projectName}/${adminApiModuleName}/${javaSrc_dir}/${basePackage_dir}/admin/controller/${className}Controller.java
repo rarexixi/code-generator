@@ -1,33 +1,25 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.controller;
 
+import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResponseVo;
-import ${baseCommonPackage}.model.ResultVo;
-import ${baseCommonPackage}.utils.LogUtils;
+import ${baseCommonPackage}.model.SearchPage;
 import ${baseCommonPackage}.validation.*;
 import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
 import ${basePackage}.admin.vm.search.${className}SearchVm;
-import ${basePackage}.entity.${className}Entity;
-import ${basePackage}.condition.extension.${className}ConditionExtension;
-import ${basePackage}.entity.extension.${className}EntityExtension;
-
-import com.github.pagehelper.PageInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.*;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
 @CrossOrigin
-@RequestMapping("/${className?lower_case}")
+@RequestMapping("/${classNameFirstLower}")
 @RestController
 @Validated
 public class ${className}Controller {
@@ -36,13 +28,13 @@ public class ${className}Controller {
     private ${className}Service ${classNameFirstLower}Service;
 
     /**
-     * 添加
+     * 添加${tableComment}
      *
      * @param vm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/add" }, method = RequestMethod.POST)
+    @PostMapping("/add")
     public ResponseVo<${className}AddOrEditVm> add(@Validated({DataAdd.class}) ${className}AddOrEditVm vm) {
 
         ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
@@ -50,118 +42,143 @@ public class ${className}Controller {
     }
 
     /**
-     * 添加列表
+     * 添加${tableComment}列表
      *
      * @param list
      * @return
-    <#include "/include/author_info1.ftl">
+     <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/addList" }, method = RequestMethod.POST)
+    @PostMapping("/addList")
     public ResponseVo<Integer> addList(@RequestBody List<${className}AddOrEditVm> list) {
 
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
+        ResponseVo<Integer> result = ${classNameFirstLower}Service.addList(list);
         return result;
     }
 
     /**
-     * 根据主键物理删除
+     * 根据条件删除${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName}
-     </#list>
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-     @RequestMapping(value = { "/delete" }, method = RequestMethod.GET)
-     public ResponseVo<Integer> delete(<#include "/include/table/pk_params_validate.ftl">) {
+    @PostMapping("/delete")
+    public ResponseVo<Integer> delete(${className}SearchVm searchVm) {
 
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
+        ResponseVo<Integer> result = ${classNameFirstLower}Service.delete(searchVm);
         return result;
     }
     <#if table.validStatusColumn??>
 
     /**
-     * 根据主键禁用
+     * 根据条件禁用${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName}
-     </#list>
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/disable", method = RequestMethod.GET)
-    public ResponseVo<Integer> disable(<#include "/include/table/pk_params_validate.ftl">) {
+    @PostMapping("/disable")
+    public ResponseVo<Integer> disable(${className}SearchVm searchVm) {
 
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
+        ResponseVo<Integer> result = ${classNameFirstLower}Service.disable(searchVm);
         return result;
     }
 
     /**
-     * 根据主键启用
+     * 根据条件启用${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName}
-     </#list>
+     * @param searchVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = "/enable", method = RequestMethod.GET)
-    public ResponseVo<Integer> enable(<#include "/include/table/pk_params_validate.ftl">) {
+    @PostMapping("/enable")
+    public ResponseVo<Integer> enable(${className}SearchVm searchVm) {
 
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
+        ResponseVo<Integer> result = ${classNameFirstLower}Service.enable(searchVm);
         return result;
     }
     </#if>
+
+    /**
+     * 根据主键获取${tableComment}实体
+     *
+     * @param searchVm
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @PostMapping("/get")
+    public ResponseVo<${className}DetailVm> get(${className}SearchVm searchVm) {
+
+        ResponseVo<${className}DetailVm> result = ${classNameFirstLower}Service.get(searchVm);
+        return result;
+    }
     <#if table.hasPk>
 
     /**
-     * 根据主键获取
+     * 根据主键更新${tableComment}
      *
+     * @param vm
+     <#if !table.hasAutoIncUniPk>
      <#list pks as column>
      <#include "/include/column/properties.ftl">
      * @param ${fieldName}
      </#list>
+     </#if>
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/detail" }, method = RequestMethod.GET)
-    public ResponseVo<${className}DetailVm> detail(<#include "/include/table/pk_params_validate.ftl">) {
+    @PostMapping("/update")
+    public ResponseVo<Integer> update(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_request_params_validate.ftl"></#if>) {
 
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
+        ResponseVo<Integer> result = ${classNameFirstLower}Service.update(vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_values.ftl"></#if>);
         return result;
     }
 
     /**
-     * 编辑
+     * 根据主键获取${tableComment}详情
      *
-     * @param vm
+     <#if !table.hasAutoIncUniPk>
+     <#list pks as column>
+     <#include "/include/column/properties.ftl">
+     * @param ${fieldName}
+     </#list>
+     </#if>
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @RequestMapping(value = { "/update" }, method = RequestMethod.POST)
-    public ResponseVo<Integer> update(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_params.ftl"></#if>) {
+    @GetMapping("/getDetail")
+    public ResponseVo<${className}DetailVm> getDetail(<#include "/include/table/pk_request_params_validate.ftl">) {
 
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
+        ResponseVo<${className}DetailVm> result = ${classNameFirstLower}Service.getDetail(<#include "/include/table/pk_values.ftl">);
         return result;
     }
     </#if>
 
+    /**
+     * 获取${tableComment}列表
+     *
+     * @param searchVm
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @PostMapping("/getList")
+    public ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm searchVm) {
+
+        ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(searchVm);
+        return result;
+    }
 
     /**
      * 分页查询${tableComment}
      *
      * @param searchPage
-     * @param sessionId
      * @return
-    <#include "/include/author_info1.ftl">
+     <#include "/include/author_info1.ftl">
      */
     @PostMapping("/getPageInfo")
-    public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(@RequestBody ${className}SearchVm searchVm) {
+    public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(@RequestBody SearchPage<${className}SearchVm> searchPage) {
 
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
+        ResponseVo<PageInfoVo<${className}DetailVm>> result = ${classNameFirstLower}Service.getPageInfo(searchPage);
         return result;
     }
 

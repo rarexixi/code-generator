@@ -10,7 +10,6 @@ spring:
     password: ${dbPassword}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jackson:
-    time-zone: GMT+8
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: true
 eureka:
