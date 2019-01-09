@@ -211,13 +211,13 @@ var app = new Vue({
             if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.addOrEditParams.${fieldName} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/edit';
+                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update';
             }
             <#else>
             if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.${fieldName} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/edit?'<#list pks as column><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
+                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update?'<#list pks as column><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
             }
             </#if>
 

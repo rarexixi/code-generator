@@ -65,7 +65,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/delete")
-    public ResponseVo<Integer> delete(${className}SearchVm searchVm) {
+    public ResponseVo<Integer> delete(@RequestBody ${className}SearchVm searchVm) {
 
         ResponseVo<Integer> result = ${classNameFirstLower}Service.delete(searchVm);
         return result;
@@ -80,7 +80,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/disable")
-    public ResponseVo<Integer> disable(${className}SearchVm searchVm) {
+    public ResponseVo<Integer> disable(@RequestBody ${className}SearchVm searchVm) {
 
         ResponseVo<Integer> result = ${classNameFirstLower}Service.disable(searchVm);
         return result;
@@ -94,7 +94,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/enable")
-    public ResponseVo<Integer> enable(${className}SearchVm searchVm) {
+    public ResponseVo<Integer> enable(@RequestBody ${className}SearchVm searchVm) {
 
         ResponseVo<Integer> result = ${classNameFirstLower}Service.enable(searchVm);
         return result;
@@ -109,7 +109,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/get")
-    public ResponseVo<${className}DetailVm> get(${className}SearchVm searchVm) {
+    public ResponseVo<${className}DetailVm> get(@RequestBody ${className}SearchVm searchVm) {
 
         ResponseVo<${className}DetailVm> result = ${classNameFirstLower}Service.get(searchVm);
         return result;
@@ -130,7 +130,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/update")
-    public ResponseVo<Integer> update(@Validated({DataEdit.class}) ${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_request_params_validate.ftl"></#if>) {
+    public ResponseVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_request_params_validate.ftl"></#if>) {
 
         ResponseVo<Integer> result = ${classNameFirstLower}Service.update(vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_values.ftl"></#if>);
         return result;
@@ -164,7 +164,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/getList")
-    public ResponseVo<List<${className}DetailVm>> getList(OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
+    public ResponseVo<List<${className}DetailVm>> getList(@RequestBody OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
 
         ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(search);
         return result;

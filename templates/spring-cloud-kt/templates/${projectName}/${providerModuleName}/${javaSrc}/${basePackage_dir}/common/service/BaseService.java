@@ -14,18 +14,18 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
     /**
      * 添加
      *
-     * @param model
+     * @param entity
      * @return
      */
-    int insert(T model);
+    int insert(T entity);
 
     /**
      * 添加
      *
-     * @param models
+     * @param entityList
      * @return
      */
-    int insert(List<T> models);
+    int insert(List<T> entityList);
 
     /**
      * 根据条件删除
@@ -46,20 +46,20 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
     /**
      * 根据条件更新
      *
-     * @param model
+     * @param entity
      * @param condition
      * @return
      */
-    int update(T model, C condition);
+    int update(T entity, C condition);
 
     /**
      * 根据条件更新
      *
-     * @param model
+     * @param entity
      * @param conditionList
      * @return
      */
-    int update(T model, List<C> conditionList);
+    int update(T entity, List<C> conditionList);
 
     /**
      * 查询

@@ -116,6 +116,7 @@
     <sql id="updateColumnSet">
         <set>
             <#list table.columns as column>
+            <#include "/include/column/properties.ftl">
             <#if (column.pk && column.autoIncrement)>
             <#else>
             <if test="entity.${fieldName} != null">

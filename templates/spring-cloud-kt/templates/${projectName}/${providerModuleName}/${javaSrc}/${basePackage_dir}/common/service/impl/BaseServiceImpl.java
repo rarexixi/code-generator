@@ -22,23 +22,23 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     /**
      * 添加
      *
-     * @param model
+     * @param entity
      * @return
      */
     @Override
-    public int insert(T model) {
-        return mapper.insert(model);
+    public int insert(T entity) {
+        return mapper.insert(entity);
     }
 
     /**
      * 添加
      *
-     * @param models
+     * @param entityList
      * @return
      */
     @Override
-    public int insert(List<T> models) {
-        return mapper.insertList(models);
+    public int insert(List<T> entityList) {
+        return mapper.insertList(entityList);
     }
 
     /**
@@ -66,25 +66,25 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     /**
      * 根据条件更新
      *
-     * @param model
+     * @param entity
      * @param condition
      * @return
      */
     @Override
-    public int update(T model, C condition) {
-        return mapper.updateByCondition(model, condition);
+    public int update(T entity, C condition) {
+        return mapper.updateByCondition(entity, condition);
     }
 
     /**
      * 根据条件更新
      *
-     * @param model
+     * @param entity
      * @param conditionList
      * @return
      */
     @Override
-    public int update(T model, List<C> conditionList) {
-        return mapper.updateByConditionList(model, conditionList);
+    public int update(T entity, List<C> conditionList) {
+        return mapper.updateByConditionList(entity, conditionList);
     }
 
     /**

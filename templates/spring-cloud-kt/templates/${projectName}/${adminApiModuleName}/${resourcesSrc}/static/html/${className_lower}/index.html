@@ -173,13 +173,13 @@
             <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>180<#else>140</#if>">
                 <template slot-scope="scope">
                     <el-button-group>
-                        <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${fieldName}</#list>)" size="mini">编辑</el-button>
-                        <el-button type="info" @click="get(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${fieldName}</#list>)" size="mini">详情</el-button>
+                        <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" size="mini">编辑</el-button>
+                        <el-button type="info" @click="get(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" size="mini">详情</el-button>
                         <#if table.validStatusColumn??>
-                        <el-button type="warning" @click="disable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${fieldName}</#list>)" v-if="scope.row.${table.validStatusColumn.targetName?uncap_first}==${table.validStatusColumn.validStatusOption.valid}" size="mini">禁用</el-button>
-                        <el-button type="success" @click="enable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${fieldName}</#list>)" v-else size="mini">启用</el-button>
+                        <el-button type="warning" @click="disable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" v-if="scope.row.${table.validStatusColumn.targetName?uncap_first}==${table.validStatusColumn.validStatusOption.valid}" size="mini">禁用</el-button>
+                        <el-button type="success" @click="enable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" v-else size="mini">启用</el-button>
                         </#if>
-                        <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${fieldName}</#list>)" size="mini">删除</el-button>
+                        <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" size="mini">删除</el-button>
                     </el-button-group>
                 </template>
             </el-table-column>
@@ -219,8 +219,8 @@
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="closeDialog">关闭</el-button>
-                <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>detail.${fieldName}</#list>)">编辑</el-button>
-                <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>detail.${fieldName}</#list>)">删除</el-button>
+                <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>detail.${column.targetName?uncap_first}</#list>)">编辑</el-button>
+                <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>detail.${column.targetName?uncap_first}</#list>)">删除</el-button>
             </div>
         </el-dialog>
         <el-dialog :title="addOrEditTitle" :visible.sync="addOrEditDialogVisible">
