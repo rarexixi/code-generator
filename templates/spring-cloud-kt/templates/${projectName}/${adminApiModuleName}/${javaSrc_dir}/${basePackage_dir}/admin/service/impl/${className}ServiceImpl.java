@@ -7,6 +7,7 @@ import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.utils.VoUtils;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
+import ${basePackage}.admin.vm.order.${className}OrderVm;
 import ${basePackage}.admin.vm.search.${className}SearchVm;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.order.${className}OrderCondition;
@@ -196,15 +197,19 @@ public class ${className}ServiceImpl implements ${className}Service {
     /**
      * 获取${tableComment}列表
      *
-     * @param searchVm
+     * @param search
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm searchVm) {
+    public ResponseVo<List<${className}DetailVm>> getList(OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
 
+        ${className}SearchVm searchVm = search.getCondition();
+        ${className}OrderVm orderVm = search.getOrder();
         ${className}ConditionExtension condition = searchVm.getConditionExtension();
-        ResultVo<List<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getList(condition, getSessionId());
+        ${className}OrderCondition orderCondition = orderVm.getOrderCondition();
+        OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch = new OrderSearch<>(condition, orderCondition);
+        ResultVo<List<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getList(orderSearch, getSessionId());
 
         return VoUtils.getResponseVo(apiResult, result -> {
             List<${className}DetailVm> vmList = new ArrayList<>();
@@ -223,19 +228,19 @@ public class ${className}ServiceImpl implements ${className}Service {
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(SearchPage<${className}SearchVm> searchPage) {
+    public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage) {
 
-        ResponseVo<PageInfoVo<${className}DetailVm>> responseVo;
         ${className}SearchVm searchVm = searchPage.getCondition();
+        ${className}OrderVm orderVm = searchPage.getOrder();
         ${className}ConditionExtension condition = searchVm.getConditionExtension();
-        ${className}OrderCondition orderCondition = searchVm.getOrderCondition();
+        ${className}OrderCondition orderCondition = orderVm.getOrderCondition();
         OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> orderSearchPage =
                 new OrderSearchPage<>(searchPage.getPageIndex(), searchPage.getPageSize(), condition, orderCondition);
         ResultVo<PageInfoVo<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getPageInfo(orderSearchPage, getSessionId());
 
         return VoUtils.getResponseVo(apiResult, result -> {
             List<${className}DetailVm> list = new ArrayList<>();
-            if (result.getList() != null) {
+            if (result != null && result.getList() != null) {
                 result.getList().forEach(item -> list.add(new ${className}DetailVm(item)));
             }
             PageInfoVo<${className}DetailVm> pageInfoVo =

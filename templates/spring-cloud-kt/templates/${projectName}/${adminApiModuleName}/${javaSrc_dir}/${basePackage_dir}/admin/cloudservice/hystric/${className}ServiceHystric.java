@@ -2,6 +2,7 @@
 package ${basePackage}.admin.cloudservice.hystric;
 
 import ${baseCommonPackage}.constant.OperationConstants;
+import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.OrderSearchPage;
 import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResultVo;
@@ -140,13 +141,13 @@ public class ${className}ServiceHystric implements ${className}CloudService {
     /**
      * 获取${tableComment}列表
      *
-     * @param condition
+     * @param orderSearch
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Override
-    public ResultVo<List<${className}EntityExtension>> getList(${className}ConditionExtension condition, String sessionId) {
+    public ResultVo<List<${className}EntityExtension>> getList(OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch, String sessionId) {
         return new ResultVo<>(OperationConstants.SERVICE_NOT_AVAILABLE);
     }
 

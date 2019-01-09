@@ -3,6 +3,7 @@ package ${basePackage}.controller;
 
 import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResultVo;
+import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.OrderSearchPage;
 import ${baseCommonPackage}.validation.*;
 
@@ -213,17 +214,17 @@ public class ${className}Controller {
     /**
      * 获取${tableComment}列表
      *
-     * @param condition
+     * @param search
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/getList")
     public ResultVo<List<${className}EntityExtension>> getList(
-            @RequestBody ${className}ConditionExtension condition,
+            @RequestBody OrderSearch<${className}ConditionExtension, ${className}OrderCondition> search,
             @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        List<${className}EntityExtension> list = ${classNameFirstLower}Service.getList(condition);
+        List<${className}EntityExtension> list = ${classNameFirstLower}Service.getList(search);
         ResultVo<List<${className}EntityExtension>> result = new ResultVo<>(list);
         return result;
     }
@@ -243,9 +244,9 @@ public class ${className}Controller {
 
         PageInfo<${className}EntityExtension> pageInfo = ${classNameFirstLower}Service.getPageList(searchPage);
         PageInfoVo<${className}EntityExtension> pageInfoVo =
-                pageInfo != null
+                pageInfo == null
                         ? null
-                        : new PageInfoVo<>(pageInfo.getPageNum(), pageInfo.getPages(), pageInfo.getTotal(), pageInfo.getList());
+                        : new PageInfoVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), pageInfo.getList());
         ResultVo<PageInfoVo<${className}EntityExtension>> result = new ResultVo<>(pageInfoVo);
         return result;
     }

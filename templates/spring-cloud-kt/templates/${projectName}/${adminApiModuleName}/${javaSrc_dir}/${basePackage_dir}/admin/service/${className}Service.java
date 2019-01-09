@@ -1,12 +1,14 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.service;
 
+import ${baseCommonPackage}.model.OrderSearch;
+import ${baseCommonPackage}.model.OrderSearchPage;
 import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResponseVo;
-import ${baseCommonPackage}.model.SearchPage;
 
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
+import ${basePackage}.admin.vm.order.${className}OrderVm;
 import ${basePackage}.admin.vm.search.${className}SearchVm;
 
 import java.util.List;
@@ -102,11 +104,11 @@ public interface ${className}Service {
     /**
      * 获取${tableComment}列表
      *
-     * @param searchVm
+     * @param search
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm searchVm);
+    ResponseVo<List<${className}DetailVm>> getList(OrderSearch<${className}SearchVm, ${className}OrderVm> search);
 
     /**
      * 分页查询${tableComment}
@@ -115,5 +117,5 @@ public interface ${className}Service {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(SearchPage<${className}SearchVm> searchPage);
+    ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage);
 }

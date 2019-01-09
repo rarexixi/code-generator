@@ -66,14 +66,6 @@ public class ${className}SearchVm implements Serializable {
     </#list>
     <#list table.indexes as column>
     <#include "/include/column/properties.ftl">
-
-    /**
-     * 以${columnComment}排序 (null不排序，true升序，false降序)
-     */
-    public Boolean ${fieldName}Sort;
-    </#list>
-    <#list table.indexes as column>
-    <#include "/include/column/properties.ftl">
     <#if (canBeEqual)>
 
     public void set${propertyName}(${fieldType} ${fieldName}) {
@@ -156,17 +148,6 @@ public class ${className}SearchVm implements Serializable {
     }
     </#if>
     </#list>
-    <#list table.indexes as column>
-    <#include "/include/column/properties.ftl">
-
-    public void set${propertyName}Sort(Boolean ${fieldName}Sort) {
-        this.${fieldName}Sort = ${fieldName}Sort;
-    }
-
-    public Boolean get${propertyName}Sort() {
-        return ${fieldName}Sort;
-    }
-    </#list>
 
     public ${className}Condition getCondition() {
 
@@ -197,17 +178,6 @@ public class ${className}SearchVm implements Serializable {
         condition.set${propertyName}Contains(${fieldName}Contains);
         </#if>
         </#list>
-        return condition;
-    }
-
-    public ${className}OrderCondition getOrderCondition() {
-
-        ${className}OrderCondition condition = new ${className}OrderCondition();
-        <#list table.indexes as column>
-        <#include "/include/column/properties.ftl">
-        condition.set${propertyName}Sort(${fieldName}Sort);
-        </#list>
-
         return condition;
     }
 }

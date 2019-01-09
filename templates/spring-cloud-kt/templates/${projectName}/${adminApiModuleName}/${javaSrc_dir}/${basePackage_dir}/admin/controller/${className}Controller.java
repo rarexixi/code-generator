@@ -3,11 +3,13 @@ package ${basePackage}.admin.controller;
 
 import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResponseVo;
-import ${baseCommonPackage}.model.SearchPage;
+import ${baseCommonPackage}.model.OrderSearch;
+import ${baseCommonPackage}.model.OrderSearchPage;
 import ${baseCommonPackage}.validation.*;
 import ${basePackage}.admin.service.${className}Service;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
+import ${basePackage}.admin.vm.order.${className}OrderVm;
 import ${basePackage}.admin.vm.search.${className}SearchVm;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -157,14 +159,14 @@ public class ${className}Controller {
     /**
      * 获取${tableComment}列表
      *
-     * @param searchVm
+     * @param search
      * @return
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/getList")
-    public ResponseVo<List<${className}DetailVm>> getList(${className}SearchVm searchVm) {
+    public ResponseVo<List<${className}DetailVm>> getList(OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
 
-        ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(searchVm);
+        ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(search);
         return result;
     }
 
@@ -176,7 +178,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/getPageInfo")
-    public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(@RequestBody SearchPage<${className}SearchVm> searchPage) {
+    public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(@RequestBody OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage) {
 
         ResponseVo<PageInfoVo<${className}DetailVm>> result = ${classNameFirstLower}Service.getPageInfo(searchPage);
         return result;

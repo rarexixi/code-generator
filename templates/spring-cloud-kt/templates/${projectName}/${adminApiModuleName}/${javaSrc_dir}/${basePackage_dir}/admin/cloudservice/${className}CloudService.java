@@ -1,6 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.cloudservice;
 
+import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.OrderSearchPage;
 import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResultVo;
@@ -150,14 +151,14 @@ public interface ${className}CloudService {
     /**
      * 获取${tableComment}列表
      *
-     * @param condition
+     * @param orderSearch
      * @param sessionId
      * @return
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/${classNameFirstLower}/getList")
     ResultVo<List<${className}EntityExtension>> getList(
-            @RequestBody ${className}ConditionExtension condition,
+            @RequestBody OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch,
             @RequestParam(value = "sessionId", required = false) String sessionId);
 
     /**

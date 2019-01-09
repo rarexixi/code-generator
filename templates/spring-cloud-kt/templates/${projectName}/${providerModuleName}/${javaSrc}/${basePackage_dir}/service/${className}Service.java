@@ -1,6 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.service;
 
+import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.OrderSearchPage;
 
 import ${basePackage}.common.service.BaseService;
@@ -35,11 +36,11 @@ public interface ${className}Service extends BaseService<${className}Entity, ${c
     /**
      * 获取${tableComment}列表（不分页）
      *
-     * @param condition
+     * @param search
      * @return
      <#include "/include/author_info1.ftl">
      */
-    List<${className}EntityExtension> getList(${className}ConditionExtension condition);
+    List<${className}EntityExtension> getList(OrderSearch<${className}ConditionExtension, ${className}OrderCondition> search);
 
     /**
      * 分页查询${tableComment}

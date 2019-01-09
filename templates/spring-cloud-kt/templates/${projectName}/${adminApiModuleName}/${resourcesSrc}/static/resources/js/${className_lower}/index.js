@@ -45,10 +45,12 @@ var app = new Vue({
             <#else>
             </#if>
             </#list>
-
+        },
+        searchPage: {
             pageIndex: 1,
             pageSize: 10
         },
+
         multipleSelection: [],
         pageInfo: {},
         addOrEditParams: {
@@ -90,34 +92,46 @@ var app = new Vue({
         <#include "/include/column/properties.ftl">
         init${propertyName?replace('Id', '')?replace('Key', '')?replace('Code', '')}: function () {
             var self = this;
-            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?lower_case}/list';
-            var params = {};
+            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?uncap_first}/getList';
+            var params = {
+                condition: {},
+                order: {}
+            };
             self.ajaxPost(url, params, '获取${columnComment}列表失败！', function(response) {
                 self.${fieldName}SelectList = response.result;
             });
         },
         </#list>
         changePage: function(pageIndex) {
-            if (this.searchParams.pageIndex == pageIndex) {
+            var self = this;
+            if (self.searchPage.pageIndex == pageIndex) {
                 return;
             }
-            this.searchParams.pageIndex = pageIndex;
-            this.search();
+            self.searchPage.pageIndex = pageIndex;
+            self.search();
         },
         changePageSize: function(pageSize) {
-            if (this.searchParams.pageSize == pageSize) {
+            var self = this;
+            if (self.searchPage.pageSize == pageSize) {
                 return;
             }
-            this.searchParams.pageSize = pageSize;
-            this.searchParams.pageIndex = 1;
-            this.search();
+            self.searchPage.pageSize = pageSize;
+            self.searchPage.pageIndex = 1;
+            self.search();
         },
         search: function () {
             var self = this;
             self.checkedList = [];
 
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/search';
-            self.ajaxPost(url, self.searchParams, '获取${tableComment}列表失败！', function(response) {
+            var params = {
+                pageSize: self.searchPage.pageSize,
+                pageIndex: self.searchPage.pageIndex,
+                condition: self.searchParams,
+                order: {}
+            };
+
+            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getPageInfo';
+            self.ajaxPost(url, params, '获取${tableComment}列表失败！', function(response) {
                 self.pageInfo = response.result;
             });
         },
@@ -152,8 +166,8 @@ var app = new Vue({
             </#if>
             </#list>
 
-            this.searchParams.pageIndex = 1;
-            this.searchParams.pageSize = 10;
+            this.searchPage.pageIndex = 1;
+            this.searchPage.pageSize = 10;
         },
         add: function() {
             var self = this;
@@ -312,7 +326,7 @@ var app = new Vue({
                 </#list>
             }
             return params;
-        }
+        },
         exec: function (confirmMsg, url, params, successMsg, failMsg) {
             var self = this;
             self.$confirm(confirmMsg, '', {
@@ -320,7 +334,7 @@ var app = new Vue({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(function () {
-                self.ajaxGet(url, params, failMsg, function(response) {
+                self.ajaxPost(url, params, failMsg, function(response) {
                     self.$notify({
                         type: 'success',
                         message: successMsg
@@ -360,11 +374,16 @@ var app = new Vue({
         </#list>
         exportExcel: function() {
             var self = this;
-            var params = JSON.stringify(self.searchParams, function (key, value) {
+
+            var params = {
+                condition: self.searchParams,
+                order: {}
+            };
+            var paramsStr = JSON.stringify(params, function (key, value) {
                 if (value) return value;
                 return undefined;
             });
-            window.open(appConfig.baseApiPath + '/${classNameFirstLower}/export?params=' + encodeURIComponent(params));
+            window.open(appConfig.baseApiPath + '/${classNameFirstLower}/export?params=' + encodeURIComponent(paramsStr));
         }
     }
 });

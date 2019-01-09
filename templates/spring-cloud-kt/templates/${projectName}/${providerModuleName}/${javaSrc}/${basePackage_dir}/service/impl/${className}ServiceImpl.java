@@ -1,6 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.service.impl;
 
+import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.OrderSearchPage;
 
 import ${basePackage}.common.service.impl.BaseServiceImpl;
@@ -57,17 +58,17 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
     /**
      * 获取${tableComment}列表（不分页）
      *
-     * @param condition
+     * @param search
      * @return
      <#include "/include/author_info1.ftl">
      */
     @Transactional(readOnly = true)
     @Override
-    public List<${className}EntityExtension> getList(${className}ConditionExtension condition) {
+    public List<${className}EntityExtension> getList(OrderSearch<${className}ConditionExtension, ${className}OrderCondition> search) {
 
-        if (condition == null) return null;
+        if (search == null) return null;
 
-        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(condition, null);
+        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(search.getCondition(), search.getOrder());
         return list;
     }
 
@@ -86,7 +87,7 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Entity,
         if (searchPage == null || (condition = searchPage.getCondition()) == null) return null;
 
         PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
-        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(condition, searchPage.getOrderCondition());
+        List<${className}EntityExtension> list = ${classNameFirstLower}Mapper.getList(condition, searchPage.getOrder());
         PageInfo<${className}EntityExtension> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
