@@ -1,7 +1,8 @@
 package ${basePackage}.common.service;
 
 import ${baseCommonPackage}.model.OrderCondition;
-import ${baseCommonPackage}.model.SearchPage;
+import ${baseCommonPackage}.model.OrderSearch;
+import ${baseCommonPackage}.model.OrderSearchPage;
 import ${basePackage}.models.common.BaseCondition;
 import ${basePackage}.models.common.BaseEntity;
 
@@ -9,7 +10,7 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
-public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
+public interface BaseService<T extends BaseEntity, C extends BaseCondition, O extends OrderCondition> {
 
     /**
      * 添加
@@ -72,36 +73,18 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
     /**
      * 查询符合条件的列表
      *
-     * @param condition
+     * @param search
      * @return
      */
-    List<T> getList(C condition);
+    List<T> getList(OrderSearch<C, O> search);
 
     /**
      * 查询符合条件的列表
      *
-     * @param condition
-     * @param order
+     * @param search
      * @return
      */
-    List<T> getList(C condition, OrderCondition order);
-
-    /**
-     * 查询符合条件的列表
-     *
-     * @param conditionList
-     * @return
-     */
-    List<T> getList(List<C> conditionList);
-
-    /**
-     * 查询符合条件的列表
-     *
-     * @param conditionList
-     * @param order
-     * @return
-     */
-    List<T> getList(List<C> conditionList, OrderCondition order);
+    List<T> getListByConditionList(OrderSearch<List<C>, O> search);
 
     /**
      * 分页查询符合条件的列表
@@ -109,16 +92,7 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
      * @param searchPage
      * @return
      */
-    PageInfo<T> getPageInfo(SearchPage<C> searchPage);
-
-    /**
-     * 分页查询符合条件的列表
-     *
-     * @param searchPage
-     * @param order
-     * @return
-     */
-    PageInfo<T> getPageInfo(SearchPage<C> searchPage, OrderCondition order);
+    PageInfo<T> getPageInfo(OrderSearchPage<C, O> searchPage);
 
     /**
      * 分页查询符合条件的列表
@@ -126,16 +100,7 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition> {
      * @param searchPage
      * @return
      */
-    PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage);
-
-    /**
-     * 分页查询符合条件的列表
-     *
-     * @param searchPage
-     * @param order
-     * @return
-     */
-    PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage, OrderCondition order);
+    PageInfo<T> getPageInfoByConditionList(OrderSearchPage<List<C>, O> searchPage);
 
     /**
      * 查询数量

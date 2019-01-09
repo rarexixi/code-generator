@@ -18,10 +18,9 @@
         </el-breadcrumb>
         <el-form ref="searchParams" :model="searchParams" :label-position="'left'" label-width="120px">
             <el-row :gutter="10">
-                <#list table.columns as column>
+                <#list table.indexes as column>
                 <#include "/include/column/properties.ftl">
-                <#if column.ignoreSearch>
-                <#elseif column.validStatus>
+                <#if column.validStatus>
                 <#-- <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
                     <el-form-item label="${columnComment}">
                         <el-select v-model="searchParams.${fieldName}" placeholder="全部">
@@ -34,7 +33,7 @@
                     <el-form-item label="${columnComment}">
                         <el-select v-model="searchParams.${fieldName}" placeholder="全部">
                             <el-option value="" label="全部"></el-option>
-                            <el-option v-for="item in ${fieldName?replace('Id', '')?replace('Key', '')?replace('Code', '')}SelectList" :value="item.${column.fkSelectColumn.valueName?uncap_first}" :label="item.${column.fkSelectColumn.textName?uncap_first}"></el-option>
+                            <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.${column.fkSelectColumn.valueName?uncap_first}" :label="item.${column.fkSelectColumn.textName?uncap_first}"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -43,7 +42,7 @@
                     <el-form-item label="${columnComment}">
                         <el-select v-model="searchParams.${fieldName}" placeholder="全部">
                             <el-option value="" label="全部"></el-option>
-                            <el-option v-for="item in ${fieldName?replace('Id', '')?replace('Key', '')?replace('Code', '')}SelectList" :value="item.value" :label="item.text"></el-option>
+                            <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.value" :label="item.text"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -196,9 +195,9 @@
         </el-pagination>
 
         <el-dialog title="${tableComment}详情" class="dialog-detail" :visible.sync="detailDialogVisible">
+            <#list table.columns as column>
+            <#include "/include/column/properties.ftl">
             <el-row :gutter="20">
-                <#list table.columns as column>
-                <#include "/include/column/properties.ftl">
                 <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
                     <label>${columnComment}</label>
                 </el-col>
@@ -215,8 +214,8 @@
                     <span>{{detail.${fieldName}}}</span>
                     </#if>
                 </el-col>
-                </#list>
             </el-row>
+            </#list>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="closeDialog">关闭</el-button>
                 <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>detail.${column.targetName?uncap_first}</#list>)">编辑</el-button>
@@ -231,13 +230,13 @@
                 <#elseif (column.select)>
                 <el-form-item label="${columnComment}">
                     <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
-                        <el-option v-for="item in ${fieldName}SelectList" :value="item.value" :label="item.text"></el-option>
+                        <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.value" :label="item.text"></el-option>
                     </el-select>
                 </el-form-item>
                 <#elseif (column.fkSelect)>
                 <el-form-item label="${columnComment}">
                     <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
-                        <el-option v-for="item in ${fieldName}SelectList" :value="item.${column.fkSelectColumn.valueName?uncap_first}" :label="item.${column.fkSelectColumn.textName?uncap_first}"></el-option>
+                        <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.${column.fkSelectColumn.valueName?uncap_first}" :label="item.${column.fkSelectColumn.textName?uncap_first}"></el-option>
                     </el-select>
                 </el-form-item>
                 <#elseif (column.validStatus)>

@@ -28,7 +28,7 @@
     </select>
     </#if>
 
-    <select id="getList" resultMap="ExtensionResultMap" parameterMap="ConditionExtensionMap">
+    <select id="getExList" resultMap="ExtensionResultMap" parameterMap="ConditionExtensionMap">
         SELECT DISTINCT
         <#list table.columns as column>
         `${column.columnName}`<#if column_has_next>,</#if>

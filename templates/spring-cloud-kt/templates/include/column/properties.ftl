@@ -3,6 +3,8 @@
 <#assign propertyName = column.targetName>
 <#assign fieldName = propertyName?uncap_first>
 <#assign fieldType = column.targetDataType>
+<#assign propertyExceptKey = propertyName?replace('Id', '')?replace('Key', '')?replace('Code', '')>
+<#assign fieldNameExceptKey = propertyExceptKey?uncap_first>
 <#-- -->
 <#assign canBeEqual = (column.validStatus || column.dataType?contains("int") || column.dataType == "date" || column.dataType?ends_with("char"))>
 <#assign canBeList = (!column.validStatus && (column.dataType?contains("int") || column.dataType?contains("date") || column.dataType?ends_with("char")))>

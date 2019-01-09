@@ -1,9 +1,6 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.service;
 
-import ${baseCommonPackage}.model.OrderSearch;
-import ${baseCommonPackage}.model.OrderSearchPage;
-import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResponseVo;
 
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
@@ -11,37 +8,8 @@ import ${basePackage}.admin.vm.detail.${className}DetailVm;
 import ${basePackage}.admin.vm.order.${className}OrderVm;
 import ${basePackage}.admin.vm.search.${className}SearchVm;
 
-import java.util.List;
-
 <#include "/include/java_copyright.ftl">
-public interface ${className}Service {
-
-    /**
-     * 添加${tableComment}
-     *
-     * @param vm
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    ResponseVo<${className}AddOrEditVm> add(${className}AddOrEditVm vm);
-
-    /**
-     * 添加${tableComment}列表
-     *
-     * @param list
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    ResponseVo<Integer> addList(List<${className}AddOrEditVm> list);
-
-    /**
-     * 根据条件删除${tableComment}
-     *
-     * @param searchVm
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    ResponseVo<Integer> delete(${className}SearchVm searchVm);
+public interface ${className}Service extends BaseService<${className}AddOrEditVm, ${className}DetailVm, ${className}OrderVm, ${className}SearchVm> {
     <#if table.validStatusColumn??>
 
     /**
@@ -62,15 +30,6 @@ public interface ${className}Service {
      */
     ResponseVo<Integer> enable(${className}SearchVm searchVm);
     </#if>
-
-    /**
-     * 根据条件获取${tableComment}实体
-     *
-     * @param searchVm
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    ResponseVo<${className}DetailVm> get(${className}SearchVm searchVm);
     <#if (table.hasPk)>
 
     /**
@@ -100,22 +59,4 @@ public interface ${className}Service {
      */
     ResponseVo<${className}DetailVm> getDetail(<#include "/include/table/pk_params.ftl">);
     </#if>
-
-    /**
-     * 获取${tableComment}列表
-     *
-     * @param search
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    ResponseVo<List<${className}DetailVm>> getList(OrderSearch<${className}SearchVm, ${className}OrderVm> search);
-
-    /**
-     * 分页查询${tableComment}
-     *
-     * @param searchPage
-     * @return
-     <#include "/include/author_info1.ftl">
-     */
-    ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage);
 }

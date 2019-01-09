@@ -12,13 +12,13 @@ var app = new Vue({
         </#if>
         <#list table.selectColumns as column>
         <#include "/include/column/properties.ftl">
-        ${fieldName?replace('Id', '')?replace('Key', '')?replace('Code', '')}SelectList: [<#list column.selectOptions as option>{
+        ${fieldNameExceptKey}SelectList: [<#list column.selectOptions as option>{
             value: ${option.value}, text: '${option.text}'
         }<#if option_has_next>,</#if></#list>],
         </#list>
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
-        ${fieldName?replace('Id', '')?replace('Key', '')?replace('Code', '')}SelectList: [],
+        ${fieldNameExceptKey}SelectList: [],
         </#list>
         <#if !table.hasAutoIncUniPk>
         <#list pks as column>
@@ -84,13 +84,13 @@ var app = new Vue({
         self.search();
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
-        self.init${propertyName?replace('Id', '')?replace('Key', '')?replace('Code', '')}();
+        self.init${propertyExceptKey}();
         </#list>
     },
     methods: {
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
-        init${propertyName?replace('Id', '')?replace('Key', '')?replace('Code', '')}: function () {
+        init${propertyExceptKey}: function () {
             var self = this;
             var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?uncap_first}/getList';
             var params = {
@@ -98,7 +98,7 @@ var app = new Vue({
                 order: {}
             };
             self.ajaxPost(url, params, '获取${columnComment}列表失败！', function(response) {
-                self.${fieldName}SelectList = response.result;
+                self.${fieldNameExceptKey}SelectList = response.result;
             });
         },
         </#list>
@@ -356,7 +356,7 @@ var app = new Vue({
         <#include "/include/column/properties.ftl">
         get${propertyName}Text: function (value) {
             var self = this;
-            var entity = self.${fieldName}SelectList.find(function (item) {
+            var entity = self.${fieldNameExceptKey}SelectList.find(function (item) {
                 return item.value == value;
             });
             return entity ? entity.text : '';
@@ -366,7 +366,7 @@ var app = new Vue({
         <#include "/include/column/properties.ftl">
         get${propertyName}Text: function (${column.fkSelectColumn.valueName?uncap_first}) {
             var self = this;
-            var entity = self.${fieldName}SelectList.find(function (item) {
+            var entity = self.${fieldNameExceptKey}SelectList.find(function (item) {
                 return item.${column.fkSelectColumn.valueName?uncap_first} == ${column.fkSelectColumn.valueName?uncap_first};
             });
             return entity ? entity.${column.fkSelectColumn.textName?uncap_first} : '';

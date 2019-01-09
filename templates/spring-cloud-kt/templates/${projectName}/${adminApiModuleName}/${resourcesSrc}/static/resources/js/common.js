@@ -23,16 +23,60 @@ Vue.filter('formatDate', function (timestamp) {
     if (/(y+)/.test(fmt)) {
         fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
     }
-    let o = {
+    var o = {
         'M+': date.getMonth() + 1,
         'd+': date.getDate(),
         'h+': date.getHours(),
         'm+': date.getMinutes(),
         's+': date.getSeconds()
     };
-    for (let k in o) {
+    for (var k in o) {
         if (new RegExp(`(${k})`).test(fmt)) {
-            let str = o[k] + '';
+            var str = o[k] + '';
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length));
+        }
+    }
+    return fmt;
+});
+/*vue 格式化日期函数*/
+Vue.filter('formatTime', function (timestamp) {
+    var date = new Date(timestamp);
+    var fmt = 'yyyy-MM-dd hh:mm';
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+    }
+    var o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds()
+    };
+    for (var k in o) {
+        if (new RegExp(`(${k})`).test(fmt)) {
+            var str = o[k] + '';
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length));
+        }
+    }
+    return fmt;
+});
+/*vue 格式化日期函数*/
+Vue.filter('formatDateTime', function (timestamp) {
+    var date = new Date(timestamp);
+    var fmt = 'yyyy-MM-dd hh:mm';
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+    }
+    var o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds()
+    };
+    for (var k in o) {
+        if (new RegExp(`(${k})`).test(fmt)) {
+            var str = o[k] + '';
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length));
         }
     }

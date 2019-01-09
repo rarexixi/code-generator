@@ -1,9 +1,12 @@
 package ${basePackage}.common.service.impl;
 
 import ${baseCommonPackage}.model.OrderCondition;
-import ${baseCommonPackage}.model.SearchPage;
+import ${baseCommonPackage}.model.OrderSearch;
+import ${baseCommonPackage}.model.OrderSearchPage;
 import ${basePackage}.common.mapper.BaseMapper;
+import ${basePackage}.common.mapper.BaseMapperExtension;
 import ${basePackage}.common.service.BaseService;
+import ${basePackage}.common.service.BaseServiceExtension;
 import ${basePackage}.models.common.BaseCondition;
 import ${basePackage}.models.common.BaseEntity;
 
@@ -15,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondition> implements BaseService<T, C> {
+public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondition, O extends OrderCondition, TE extends T, CE extends C>
+        implements BaseService<T, C, O>, BaseServiceExtension<TE, CE, O> {
 
     protected BaseMapper<T, C> mapper;
+    protected BaseMapperExtension<TE, CE, O> mapperExtension;
 
     /**
      * 添加
@@ -102,57 +107,28 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     /**
      * 查询符合条件的列表
      *
-     * @param condition
+     * @param search
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> getList(C condition) {
+    public List<T> getList(OrderSearch<C, O> search) {
 
-        return mapper.selectByCondition(condition, null);
-    }
-
-    /**
-     * 查询符合条件的列表
-     *
-     * @param condition
-     * @param order
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public List<T> getList(C condition, OrderCondition order) {
-
-        List<T> list = mapper.selectByCondition(condition, order);
+        List<T> list = mapper.selectByCondition(search.getCondition(), search.getOrder());
         return list;
     }
 
     /**
      * 查询符合条件的列表
      *
-     * @param conditionList
+     * @param search
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public List<T> getList(List<C> conditionList) {
+    public List<T> getListByConditionList(OrderSearch<List<C>, O> search) {
 
-        List<T> list = mapper.selectByConditionList(conditionList, null);
-        return list;
-    }
-
-    /**
-     * 查询符合条件的列表
-     *
-     * @param conditionList
-     * @param order
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public List<T> getList(List<C> conditionList, OrderCondition order) {
-
-        List<T> list = mapper.selectByConditionList(conditionList, order);
+        List<T> list = mapper.selectByConditionList(search.getCondition(), search.getOrder());
         return list;
     }
 
@@ -164,27 +140,13 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> getPageInfo(SearchPage<C> searchPage) {
-
-        return getPageInfo(searchPage, null);
-    }
-
-    /**
-     * 分页查询符合条件的列表
-     *
-     * @param searchPage
-     * @param order
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public PageInfo<T> getPageInfo(SearchPage<C> searchPage, OrderCondition order) {
+    public PageInfo<T> getPageInfo(OrderSearchPage<C, O> searchPage) {
 
         C condition;
         if (searchPage == null || (condition = searchPage.getCondition()) == null) return null;
 
         PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
-        List<T> list = mapper.selectByCondition(condition, order);
+        List<T> list = mapper.selectByCondition(condition, searchPage.getOrder());
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
@@ -197,27 +159,13 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
      */
     @Transactional(readOnly = true)
     @Override
-    public PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage) {
-
-        return getPageInfoByList(searchPage, null);
-    }
-
-    /**
-     * 分页查询符合条件的列表
-     *
-     * @param searchPage
-     * @param order
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public PageInfo<T> getPageInfoByList(SearchPage<List<C>> searchPage, OrderCondition order) {
+    public PageInfo<T> getPageInfoByConditionList(OrderSearchPage<List<C>, O> searchPage) {
 
         List<C> conditionList;
         if (searchPage == null || (conditionList = searchPage.getCondition()) == null) return null;
 
         PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
-        List<T> list = mapper.selectByConditionList(conditionList, order);
+        List<T> list = mapper.selectByConditionList(conditionList, searchPage.getOrder());
         PageInfo<T> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
@@ -244,5 +192,41 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     @Override
     public int countByConditionList(List<C> conditionList) {
         return mapper.countByConditionList(conditionList);
+    }
+
+
+    /**
+     * 获取列表（不分页）
+     *
+     * @param search
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<TE> getExList(OrderSearch<CE, O> search) {
+
+        if (search == null) return null;
+
+        List<TE> list = mapperExtension.getExList(search.getCondition(), search.getOrder());
+        return list;
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param searchPage
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo<TE> getPageList(OrderSearchPage<CE, O> searchPage) {
+
+        CE condition;
+        if (searchPage == null || (condition = searchPage.getCondition()) == null) return null;
+
+        PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
+        List<TE> list = mapperExtension.getExList(condition, searchPage.getOrder());
+        PageInfo<TE> pageInfo = new PageInfo<>(list);
+        return pageInfo;
     }
 }

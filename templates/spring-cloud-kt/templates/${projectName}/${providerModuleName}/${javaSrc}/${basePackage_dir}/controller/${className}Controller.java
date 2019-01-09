@@ -13,6 +13,7 @@ import ${basePackage}.models.condition.order.${className}OrderCondition;
 import ${basePackage}.models.entity.${className}Entity;
 import ${basePackage}.models.entity.extension.${className}EntityExtension;
 import ${basePackage}.service.${className}Service;
+import ${basePackage}.utils.VoUtils;
 
 import com.github.pagehelper.PageInfo;
 
@@ -224,7 +225,7 @@ public class ${className}Controller {
             @RequestBody OrderSearch<${className}ConditionExtension, ${className}OrderCondition> search,
             @RequestParam(value = "sessionId", required = false) String sessionId) {
 
-        List<${className}EntityExtension> list = ${classNameFirstLower}Service.getList(search);
+        List<${className}EntityExtension> list = ${classNameFirstLower}Service.getExList(search);
         ResultVo<List<${className}EntityExtension>> result = new ResultVo<>(list);
         return result;
     }
@@ -243,10 +244,7 @@ public class ${className}Controller {
             @RequestParam(value = "sessionId", required = false) String sessionId) {
 
         PageInfo<${className}EntityExtension> pageInfo = ${classNameFirstLower}Service.getPageList(searchPage);
-        PageInfoVo<${className}EntityExtension> pageInfoVo =
-                pageInfo == null
-                        ? null
-                        : new PageInfoVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), pageInfo.getList());
+        PageInfoVo<${className}EntityExtension> pageInfoVo = VoUtils.getPageInfoVo(pageInfo);
         ResultVo<PageInfoVo<${className}EntityExtension>> result = new ResultVo<>(pageInfoVo);
         return result;
     }
