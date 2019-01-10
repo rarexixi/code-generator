@@ -36,7 +36,7 @@ generator:
   columns:
     base:
       column-name-set: is_deleted, create_time, update_time
-      table-name: user
+      table-name: quick_user
     not-required:
       - column-name-set: create_time, update_time
     img-url:
@@ -50,7 +50,7 @@ generator:
 
     select:
       - column-name-set: status
-        table-name: multi_pk
+        table-name: quick_multi_pk
         options:
           - value: 1
             text: 正常
@@ -59,9 +59,9 @@ generator:
           - value: 3
             text: 起飞
     fk-select:
-      - column-name-set: user_type_id
+      - column-name-set: quick_user_type_id
         fk:
-          foreign-table-name: user_type
+          foreign-table-name: quick_user_type
           value-column-name: id
           text-column-name: user_type_name
     valid-status:
