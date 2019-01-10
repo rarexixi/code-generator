@@ -229,8 +229,8 @@ org.xi.quick.codegeneratorkt.model.ValidStatus
 
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
-|valid                        |数据库名                  |String                |0 (未删除)
-|invalid                      |数据库名                  |String                |1 (已删除)
+|valid                        |数据库名                  |Integer               |0 (未删除)
+|invalid                      |数据库名                  |Integer               |1 (已删除)
 
 
 
