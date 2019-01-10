@@ -24,7 +24,7 @@ dollar: $
 generator:
   database-name: quick
   encoding: UTF-8
-  table-name-match-regex: '(?<=dm_uba_).*(?=_tmp)'
+  table-name-match-regex: '(?<=quick_).*'
   paths:
     template: C:\Projects\github\code-generator\templates\spring-cloud-kt\templates\
     out: C:\Projects\github\code-generator\templates\out\
