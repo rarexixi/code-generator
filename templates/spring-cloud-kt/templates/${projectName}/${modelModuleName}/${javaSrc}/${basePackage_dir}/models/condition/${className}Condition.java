@@ -15,50 +15,50 @@ public class ${className}Condition extends BaseCondition {
     <#if (canBeEqual)>
 
     /**
-     * ${column.columnComment}
+     * ${columnFullComment}
      */
     private ${fieldType} ${fieldName};
     </#if>
     <#if (canBeList)>
 
     /**
-     * ${column.columnComment} 列表
+     * ${columnComment} 列表
      */
     private List<${fieldType}> ${fieldName}List;
     </#if>
     <#if (canBeRange)>
 
     /**
-     * 最小 ${column.columnComment}
+     * 最小 ${columnComment}
      */
     private ${fieldType} ${fieldName}Min;
 
     /**
-     * 最大 ${column.columnComment}
+     * 最大 ${columnComment}
      */
     private ${fieldType} ${fieldName}Max;
     </#if>
     <#if (canBeNull)>
 
     /**
-     * ${column.columnComment}
+     * ${columnComment}为null
      */
     private Boolean ${fieldName}IsNull;
     </#if>
     <#if (column.dataType?ends_with("char"))>
 
     /**
-     * ${column.columnComment}
+     * ${columnComment}为空
      */
     private Boolean ${fieldName}IsEmpty;
 
     /**
-     * ${column.columnComment}
+     * ${columnComment}
      */
     private ${fieldType} ${fieldName}StartWith;
 
     /**
-     * ${column.columnComment}
+     * ${columnComment}
      */
     private ${fieldType} ${fieldName}Contains;
     </#if>
