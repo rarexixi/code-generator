@@ -1,5 +1,9 @@
 package org.xi.quick.admin.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import ${baseCommonPackage}.model.OrderCondition;
+import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.model.ResultVo;
 
@@ -20,5 +24,19 @@ public class VoUtils {
             responseVo = new ResponseVo<>(false, apiResult.getMsg());
         }
         return responseVo;
+    }
+
+    public static <C, O extends OrderCondition> OrderSearch<C, O> getOrderSearch(String params, Class<C> cClass, Class<O> oClass) {
+
+        OrderSearch<C, O> search = new OrderSearch<>();
+        JSONObject obj = JSON.parseObject(params);
+        JSONObject conditionObj, orderObj;
+        if ((conditionObj = (JSONObject) obj.get("condition")) != null) {
+            search.setCondition(conditionObj.toJavaObject(cClass));
+        }
+        if ((orderObj = (JSONObject) obj.get("order")) != null) {
+            search.setOrder(orderObj.toJavaObject(oClass));
+        }
+        return search;
     }
 }

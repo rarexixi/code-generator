@@ -1,6 +1,7 @@
 <#include "/include/table/properties.ftl">
-<#assign sortCount = 0>
 package ${basePackage}.admin.vm.detail;
+
+import ${baseCommonPackage}.annotation.ExcelCol;
 
 import ${basePackage}.models.entity.${className}Entity;
 import ${basePackage}.models.entity.extension.${className}EntityExtension;
@@ -36,6 +37,17 @@ public class ${className}DetailVm implements Serializable {
     /**
      * ${columnFullComment}
      */
+    <#if (isDecimal)>
+    @ExcelCol(value = "${columnComment}", formatter = "%.2f%%")
+    <#elseif (isDate)>
+    @ExcelCol(value = "${columnComment}", formatter = "yyyy-MM-dd")
+    <#elseif (isTime)>
+    @ExcelCol(value = "${columnComment}", formatter = "HH:mm")
+    <#elseif (isDateTime)>
+    @ExcelCol(value = "${columnComment}", formatter = "yyyy-MM-dd HH:mm")
+    <#else>
+    @ExcelCol("${columnComment}")
+    </#if>
     private ${fieldType} ${fieldName};
     </#list>
     <#list table.columns as column>

@@ -7,15 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ExcelCol {
+public @interface ExcelCols {
 
-    String value() default "";
-
-    int width() default 0;
-
-    String condition() default "";
-
-    int order() default 0;
-
-    String formatter() default "";
+    ExcelCol[] value();
 }

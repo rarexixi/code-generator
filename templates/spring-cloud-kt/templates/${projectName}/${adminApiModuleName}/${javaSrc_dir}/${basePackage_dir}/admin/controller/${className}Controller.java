@@ -5,18 +5,24 @@ import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.OrderSearchPage;
+import ${baseCommonPackage}.utils.poi.ExcelUtils;
 import ${baseCommonPackage}.validation.*;
 import ${basePackage}.admin.service.${className}Service;
+import ${basePackage}.admin.utils.VoUtils;
 import ${basePackage}.admin.vm.addoredit.${className}AddOrEditVm;
 import ${basePackage}.admin.vm.detail.${className}DetailVm;
 import ${basePackage}.admin.vm.order.${className}OrderVm;
 import ${basePackage}.admin.vm.search.${className}SearchVm;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.*;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 <#include "/include/java_copyright.ftl">
@@ -182,6 +188,24 @@ public class ${className}Controller {
 
         ResponseVo<PageInfoVo<${className}DetailVm>> result = ${classNameFirstLower}Service.getPageInfo(searchPage);
         return result;
+    }
+
+    /**
+     * 导出Excel
+     *
+     * @param params
+     * @return
+     <#include "/include/author_info1.ftl">
+     */
+    @RequestMapping(value = {"/export"})
+    public void export(HttpServletResponse response, String params, @RequestParam(defaultValue = "", required = false) String exportName) throws IOException, IllegalAccessException {
+
+        OrderSearch<${className}SearchVm, ${className}OrderVm> search = VoUtils.getOrderSearch(params, ${className}SearchVm.class, ${className}OrderVm.class);
+        ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(search);
+
+        String fileName = StringUtils.isBlank(exportName) ? "${tableComment}" : exportName;
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName + ".xlsx", "utf-8"));
+        ExcelUtils.exportExcel(fileName, ${className}DetailVm.class, result.getResult(), response.getOutputStream());
     }
 
 }
