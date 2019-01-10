@@ -20,6 +20,7 @@
                 `TABLE_SCHEMA`=#{databaseName}
             </if>
         </where>
+        ORDER BY `TABLE_NAME`
     </select>
 
     <select id="getTables" resultMap="resultMap" parameterType="java.lang.String">
@@ -40,5 +41,6 @@
                 <foreach collection="tableNames" item="it" open="(" close=")" separator=",">#{it}</foreach>
             </if>
         </where>
+        ORDER BY `TABLE_NAME`
     </select>
 </mapper>
