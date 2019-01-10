@@ -19,8 +19,6 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-dollar: $
-
 generator:
   database-name: quick
   encoding: UTF-8

@@ -24,8 +24,8 @@ generator:
   encoding: UTF-8
   table-name-match-regex: '(?<=quick_).*'
   paths:
-    template: /Workspace/github.com/java/code-generator/templates/spring-cloud-kt/templates/
-    out: /Workspace/github.com/java/code-generator/templates/out/
+    template: ./templates/
+    out: ../out/
   files:
     ignore: include/
     aggregate: static/index.html
