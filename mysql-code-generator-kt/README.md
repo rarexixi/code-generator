@@ -99,7 +99,16 @@ generator:                                                  # 参见 org.xi.quic
 
 ## 模版说明
 
-模版引擎采用freemarker
+模版引擎采用freemarker，所有模板在项目templates目录下，可以自行复制移动，也可以自己创建新的模板，
+模版具体语法参见 
+[官方文档（指令）](http://freemarker.foofun.cn/ref_directives.html)
+[官方文档（函数）](http://freemarker.foofun.cn/ref_builtins.html)
+
+路径中带```${className}|${tableName}|${targetTableName}```的代表会生成表对应的相关文件
+
+除了```application-xxx.yml```配置中的三种文件以及表对应的文件，其他的都是基本文件
+
+实际生成路径会根据配置进行替换
 
 公共属性在commonProperties，其中other map object包括
 ```
@@ -112,7 +121,7 @@ commonProperties配置的map
 对于表，页面model为
 ```
 {
-    table: object,
+    table: org.xi.quick.codegeneratorkt.model.TableModel,
     other map object
 }
 ```
@@ -120,7 +129,7 @@ commonProperties配置的map
 对于基本文件，页面model为
 ```
 {
-    baseColumns: 基本的公共列（如is_deleted, create_time等）
+    baseColumns: List<org.xi.quick.codegeneratorkt.model.ColumnModel> 基本的公共列（如is_deleted, create_time等）
     other map object
 }
 ```
@@ -128,12 +137,13 @@ commonProperties配置的map
 对于聚合文件，页面model为
 ```
 {
-    tableModels: table对象列表,
+    tableModels: List<org.xi.quick.codegeneratorkt.model.TableModel>,
     other map object
 }
 ```
 
 ### TableModel
+org.xi.quick.codegeneratorkt.model.TableModel
 
 |FieldName                            |FieldRemark                |type                  |example
 |-------------------------------------|---------------------------|----------------------|--------------------
@@ -157,6 +167,7 @@ commonProperties配置的map
 |validStatusColumn                    |有效性字段                 |ColumnModel           |
 
 ### ColumnModel
+org.xi.quick.codegeneratorkt.model.ColumnModel
 
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
@@ -195,6 +206,7 @@ commonProperties配置的map
 |ignoreSearch                 |是否忽略查询              |Boolean               |
 
 #### SelectOption
+org.xi.quick.codegeneratorkt.model.SelectOption
 
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
@@ -202,6 +214,7 @@ commonProperties配置的map
 |text                         |展示的值                  |String                 |状态1，状态2
 
 #### FkSelectColumn
+org.xi.quick.codegeneratorkt.model.FkSelectColumn
 
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
@@ -212,6 +225,7 @@ commonProperties配置的map
 |foreignClassName             |外键类名                  |String                |User
 
 #### ValidStatus
+org.xi.quick.codegeneratorkt.model.ValidStatus
 
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
