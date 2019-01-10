@@ -83,43 +83,9 @@ class GeneratorAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.deleteAll(..))")
+    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.del(..))")
     @Throws(Throwable::class)
-    fun deleteAllAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
-
-        logger.info("正在删除所有类...")
-        val result = proceedingJoinPoint.proceed()
-        logger.info("删除所有类完成")
-
-        return result
-    }
-
-
-    /**
-     * @param proceedingJoinPoint
-     * @return
-     * @throws Throwable
-     */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.generateAll(..))")
-    @Throws(Throwable::class)
-    fun generateAllAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
-
-        logger.info("正在生成所有类...")
-        val result = proceedingJoinPoint.proceed()
-        logger.info("生成所有类完成")
-
-        return result
-    }
-
-
-    /**
-     * @param proceedingJoinPoint
-     * @return
-     * @throws Throwable
-     */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.delete(..))")
-    @Throws(Throwable::class)
-    fun deleteAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
+    fun delAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         val args = proceedingJoinPoint.args
         val tables = (args[0] as Array<Any>).joinToString(",")
@@ -137,9 +103,9 @@ class GeneratorAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.generate(..))")
+    @Around("execution(* org.xi.quick.codegeneratorkt.service.GeneratorService.gen(..))")
     @Throws(Throwable::class)
-    fun generateAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
+    fun genAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         val args = proceedingJoinPoint.args
         val tables = (args[0] as Array<Any>).joinToString(",")
