@@ -1,9 +1,0 @@
-server:
-  port: 8800
-
-spring:
-  application:
-    name: ${adminApiModuleName}
-
-upload-roperties:
-  file-origin: http://localhost:8800

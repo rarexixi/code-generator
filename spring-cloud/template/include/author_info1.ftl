@@ -1,2 +1,0 @@
-     * @author ${author}
-     * @version ${codeVersion}

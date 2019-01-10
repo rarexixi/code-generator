@@ -1,1 +1,0 @@
-<#list primaryKey as column><#if (column_index > 0)>, </#if>${column.targetColumnNameFirstLower}</#list>
