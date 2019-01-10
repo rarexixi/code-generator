@@ -111,6 +111,7 @@
 
         <#if table.validStatusColumn??>
         <el-tabs v-model="searchParams.${table.validStatusColumn.targetName?uncap_first}" @tab-click="search">
+            <el-tab-pane label="全部" name="null"></el-tab-pane>
             <el-tab-pane label="有效" name="${table.validStatusColumn.validStatusOption.valid}"></el-tab-pane>
             <el-tab-pane label="无效" name="${table.validStatusColumn.validStatusOption.invalid}"></el-tab-pane>
         </el-tabs>
@@ -227,6 +228,7 @@
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>
+                <#elseif column.autoIncrement>
                 <#elseif (column.select)>
                 <el-form-item label="${columnComment}">
                     <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">

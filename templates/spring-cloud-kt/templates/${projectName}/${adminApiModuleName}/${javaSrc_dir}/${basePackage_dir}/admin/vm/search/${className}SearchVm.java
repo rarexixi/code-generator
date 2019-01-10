@@ -11,7 +11,16 @@ import java.util.*;
 
 <#include "/include/java_copyright.ftl">
 public class ${className}SearchVm implements Serializable {
+    <#if (table.validStatusColumn??)>
+
+    /**
+     * ${table.validStatusColumn.columnComment}
+     */
+    private ${table.validStatusColumn.targetDataType} ${table.validStatusColumn.targetName?uncap_first};
+    </#if>
     <#list table.indexes as column>
+    <#if (column.validStatus)>
+    <#else>
     <#include "/include/column/properties.ftl">
     <#if (canBeEqual)>
 
@@ -63,8 +72,21 @@ public class ${className}SearchVm implements Serializable {
      */
     private ${fieldType} ${fieldName}Contains;
     </#if>
+    </#if>
     </#list>
+    <#if (table.validStatusColumn??)>
+
+    public void set${table.validStatusColumn.targetName}(${table.validStatusColumn.targetDataType} ${table.validStatusColumn.targetName?uncap_first}) {
+        this.${table.validStatusColumn.targetName?uncap_first} = ${table.validStatusColumn.targetName?uncap_first};
+    }
+
+    public ${table.validStatusColumn.targetDataType} get${table.validStatusColumn.targetName?uncap_first}() {
+        return ${table.validStatusColumn.targetName?uncap_first};
+    }
+    </#if>
     <#list table.indexes as column>
+    <#if (column.validStatus)>
+    <#else>
     <#include "/include/column/properties.ftl">
     <#if (canBeEqual)>
 
@@ -106,8 +128,9 @@ public class ${className}SearchVm implements Serializable {
     <#if (isDate || isTime || isDateTime)>
 
     public void set${propertyName}Range(Date[] dateRange) {
-        this.${fieldName}Min = ${fieldName}Min;
-        this.${fieldName}Max = ${fieldName}Max;
+        if (dateRange == null || dateRange.length != 2) return;
+        this.${fieldName}Min = dateRange[0];
+        this.${fieldName}Max = dateRange[1];
     }
     </#if>
     </#if>
@@ -147,6 +170,7 @@ public class ${className}SearchVm implements Serializable {
         return ${fieldName}Contains;
     }
     </#if>
+    </#if>
     </#list>
 
     public ${className}Condition getCondition() {
@@ -157,7 +181,12 @@ public class ${className}SearchVm implements Serializable {
     public ${className}ConditionExtension getConditionExtension() {
 
         ${className}ConditionExtension condition = new ${className}ConditionExtension();
+        <#if (table.validStatusColumn??)>
+        condition.set${table.validStatusColumn.targetName}(${table.validStatusColumn.targetName?uncap_first});
+        </#if>
         <#list table.indexes as column>
+        <#if (column.validStatus)>
+        <#else>
         <#include "/include/column/properties.ftl">
         <#if (canBeEqual)>
         condition.set${propertyName}(${fieldName});
@@ -176,6 +205,7 @@ public class ${className}SearchVm implements Serializable {
         condition.set${propertyName}IsEmpty(${fieldName}IsEmpty);
         condition.set${propertyName}StartWith(${fieldName}StartWith);
         condition.set${propertyName}Contains(${fieldName}Contains);
+        </#if>
         </#if>
         </#list>
         return condition;

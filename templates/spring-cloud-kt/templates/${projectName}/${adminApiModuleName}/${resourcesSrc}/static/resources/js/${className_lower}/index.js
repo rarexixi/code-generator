@@ -13,7 +13,11 @@ var app = new Vue({
         <#list table.selectColumns as column>
         <#include "/include/column/properties.ftl">
         ${fieldNameExceptKey}SelectList: [<#list column.selectOptions as option>{
+            <#if (isInteger)>
             value: ${option.value}, text: '${option.text}'
+            <#else>
+            value: '${option.value}', text: '${option.text}'
+            </#if>
         }<#if option_has_next>,</#if></#list>],
         </#list>
         <#list table.fkSelectColumns as column>
@@ -27,11 +31,12 @@ var app = new Vue({
         </#list>
         </#if>
         searchParams: {
+            <#if (table.validStatusColumn??)>
+            ${table.validStatusColumn.targetName?uncap_first}: 'null',
+            </#if>
             <#list table.indexes as column>
             <#include "/include/column/properties.ftl">
-            <#if column.ignoreSearch>
-            <#elseif (column.validStatus)>
-            ${fieldName}: ${table.validStatusColumn.validStatusOption.valid},
+            <#if (column.validStatus)>
             <#elseif (column.select || column.fkSelect || column.pk || isInteger)>
             ${fieldName}: '',
             <#elseif (isDecimal)>
@@ -147,27 +152,29 @@ var app = new Vue({
         },
         </#if>
         resetSearch: function() {
+            var self = this;
+            <#if (table.validStatusColumn??)>
+            // self.searchParams.${table.validStatusColumn.targetName?uncap_first} = 'null';
+            </#if>
             <#list table.indexes as column>
             <#include "/include/column/properties.ftl">
-            <#if column.ignoreSearch>
-            <#elseif (column.validStatus)>
-            this.searchParams.${fieldName} = ${table.validStatusColumn.validStatusOption.valid};
+            <#if (column.validStatus)>
             <#elseif (column.select || column.fkSelect || column.pk || isInteger)>
-            this.searchParams.${fieldName} = '';
+            self.searchParams.${fieldName} = '';
             <#elseif (isDecimal)>
-            this.searchParams.${fieldName}Min = '';
-            this.searchParams.${fieldName}Max = '';
+            self.searchParams.${fieldName}Min = '';
+            self.searchParams.${fieldName}Max = '';
             <#elseif (isString)>
-            this.searchParams.${fieldName}StartWith = '';
+            self.searchParams.${fieldName}StartWith = '';
             <#elseif (isDate || isTime || isDateTime)>
-            this.searchParams.${fieldName}Range = [];
+            self.searchParams.${fieldName}Range = [];
             <#elseif (isContent)>
             <#else>
             </#if>
             </#list>
 
-            this.searchPage.pageIndex = 1;
-            this.searchPage.pageSize = 10;
+            self.searchPage.pageIndex = 1;
+            self.searchPage.pageSize = 10;
         },
         add: function() {
             var self = this;
