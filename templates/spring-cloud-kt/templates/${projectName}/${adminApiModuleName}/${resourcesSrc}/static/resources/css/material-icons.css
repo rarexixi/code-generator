@@ -1,4 +1,8 @@
-/* 参照 https://fonts.googleapis.com/icon?family=Material+Icons */
+/*
+文件本身参照 https://fonts.googleapis.com/icon?family=Material+Icons
+图标参照 https://material.io/tools/icons/
+文档参照 http://google.github.io/material-design-icons/
+*/
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
