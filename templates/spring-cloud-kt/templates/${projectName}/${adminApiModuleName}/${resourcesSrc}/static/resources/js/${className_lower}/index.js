@@ -93,20 +93,6 @@ var app = new Vue({
         </#list>
     },
     methods: {
-        <#list table.fkSelectColumns as column>
-        <#include "/include/column/properties.ftl">
-        init${propertyExceptKey}: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?uncap_first}/getList';
-            var params = {
-                condition: {},
-                order: {}
-            };
-            self.ajaxPost(url, params, '获取${columnComment}列表失败！', function(response) {
-                self.${fieldNameExceptKey}SelectList = response.result;
-            });
-        },
-        </#list>
         changePage: function(pageIndex) {
             var self = this;
             if (self.searchPage.pageIndex == pageIndex) {
@@ -346,6 +332,7 @@ var app = new Vue({
                         type: 'success',
                         message: successMsg
                     });
+                    self.closeDialog();
                     self.search();
                 });
             });
@@ -377,6 +364,20 @@ var app = new Vue({
                 return item.${column.fkSelectColumn.valueName?uncap_first} == ${column.fkSelectColumn.valueName?uncap_first};
             });
             return entity ? entity.${column.fkSelectColumn.textName?uncap_first} : '';
+        },
+        </#list>
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        init${propertyExceptKey}: function () {
+            var self = this;
+            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?uncap_first}/getList';
+            var params = {
+                condition: {},
+                order: {}
+            };
+            self.ajaxPost(url, params, '获取${columnComment}列表失败！', function(response) {
+                self.${fieldNameExceptKey}SelectList = response.result;
+            });
         },
         </#list>
         exportExcel: function() {
