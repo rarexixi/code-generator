@@ -29,7 +29,7 @@ generator:
   files:
     ignore: include/
     aggregate: static/index.html
-    copy: resources/css/, common.js, .gitignore
+    copy: resources/css/, resources/fonts/, resources/js/common.js, .gitignore
 
   columns:
     base:

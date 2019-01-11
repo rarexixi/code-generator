@@ -217,7 +217,7 @@ class GeneratorServiceImpl : GeneratorService {
 
         FileOutputStream(absolutePath).use { stream ->
             OutputStreamWriter(stream, GeneratorProperties.encoding).use { out ->
-                outModel.template.process(dataModel, out)
+                outModel.template?.process(dataModel, out)
             }
         }
     }

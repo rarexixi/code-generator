@@ -71,9 +71,21 @@ class FreeMarkerServiceImpl : FreeMarkerService {
     @Throws(IOException::class)
     override fun getCopyTemplates(): List<FreemarkerModel> {
 
-        return getMatchingTemplates { templateRelativePath ->
+        return getMatchingTemplates(true) { templateRelativePath ->
             isMatchingFile(templateRelativePath, GeneratorProperties.files!!.copy)
         }
+    }
+
+    /**
+     * 获取匹配的模版
+     *
+     * @param predicate
+     * @return
+     * @throws IOException
+     */
+    @Throws(IOException::class)
+    fun getMatchingTemplates(predicate: (String) -> Boolean): List<FreemarkerModel> {
+        return this.getMatchingTemplates(false, predicate)
     }
 
 
@@ -85,7 +97,7 @@ class FreeMarkerServiceImpl : FreeMarkerService {
      * @throws IOException
      */
     @Throws(IOException::class)
-    fun getMatchingTemplates(predicate: (String) -> Boolean): List<FreemarkerModel> {
+    fun getMatchingTemplates(isCopy: Boolean, predicate: (String) -> Boolean): List<FreemarkerModel> {
 
         var freeMarkerConfiguration = getConfiguration()
 
@@ -104,7 +116,7 @@ class FreeMarkerServiceImpl : FreeMarkerService {
             val templateRelativePath = file.absolutePath.substring(dirAbsolutePath.length + 1)
             if (!predicate(templateRelativePath)) continue
 
-            val template = freeMarkerConfiguration.getTemplate(templateRelativePath, GeneratorProperties.encoding)
+            val template = if (isCopy) null else freeMarkerConfiguration.getTemplate(templateRelativePath, GeneratorProperties.encoding)
 
             val outModel = FreemarkerModel(templateRelativePath, template)
 
