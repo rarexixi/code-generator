@@ -255,10 +255,6 @@
                 <el-form-item label="${columnComment}">
                     <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>
-                <#elseif (isString)>
-                <el-form-item label="${columnComment}">
-                    <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
-                </el-form-item>
                 <#elseif (isDate)>
                 <el-form-item label="${columnComment}">
                     <el-date-picker type="date" v-model="addOrEditParams.${fieldName}" placeholder="选择日期"></el-date-picker>
@@ -274,6 +270,10 @@
                 <#elseif (isContent)>
                 <el-form-item label="${columnComment}">
                     <el-input type="textarea" v-model="addOrEditParams.${fieldName}" :autosize="{ minRows: 5, maxRows: 100}"></el-input>
+                </el-form-item>
+                <#elseif (isString)>
+                <el-form-item label="${columnComment}">
+                    <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>
                 <#else>
                 </#if>

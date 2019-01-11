@@ -42,11 +42,11 @@ var app = new Vue({
             <#elseif (isDecimal)>
             ${fieldName}Min: '',
             ${fieldName}Max: '',
-            <#elseif (isString)>
-            ${fieldName}StartWith: '',
             <#elseif (isDate || isTime || isDateTime)>
             ${fieldName}Range: [],
             <#elseif (isContent)>
+            <#elseif (isString)>
+            ${fieldName}StartWith: '',
             <#else>
             </#if>
             </#list>
@@ -150,11 +150,11 @@ var app = new Vue({
             <#elseif (isDecimal)>
             self.searchParams.${fieldName}Min = '';
             self.searchParams.${fieldName}Max = '';
-            <#elseif (isString)>
-            self.searchParams.${fieldName}StartWith = '';
             <#elseif (isDate || isTime || isDateTime)>
             self.searchParams.${fieldName}Range = [];
             <#elseif (isContent)>
+            <#elseif (isString)>
+            self.searchParams.${fieldName}StartWith = '';
             <#else>
             </#if>
             </#list>

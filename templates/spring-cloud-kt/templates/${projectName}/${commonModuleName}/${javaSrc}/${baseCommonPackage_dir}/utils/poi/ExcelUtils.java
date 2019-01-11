@@ -16,14 +16,11 @@ import java.util.*;
 
 public class ExcelUtils {
 
-    // 默认单元格宽度
-    static final int DEFAULT_COL_WIDTH = 20;
-
-    // 最小单元格宽度
-    static final int MIN_COL_WIDTH = 2;
+    // 默认添加的列宽
+    static final int DEFAULT_ADD_WIDTH = 6;
 
     // 最大单元格宽度
-    static final int MAX_COL_WIDTH = 100;
+    static final int MAX_COL_WIDTH = 64;
 
     /**
      * 导出多标签页Excel
@@ -151,7 +148,7 @@ public class ExcelUtils {
         int colIndex = 0;
 
         row = sheet.createRow(rowIndex++);
-        // 设置header 高度
+        // 设置列头高度
         row.setHeight((short) 512);
         List<FieldSort> fieldSorts = getFieldSorts(clazz, condition);
 
@@ -167,14 +164,18 @@ public class ExcelUtils {
 
             cell = row.createCell(colIndex);
             cell.setCellValue(name);
-            colWidths[colIndex] = name.getBytes().length;
             cell.setCellStyle(defaultHeaderCellStyle);
+
+            // 根据列头设置宽度
+            int width = name.getBytes().length + DEFAULT_ADD_WIDTH;
+            colWidths[colIndex] = width > MAX_COL_WIDTH ? MAX_COL_WIDTH : width;
             colIndex++;
         }
 
         Row[] rows = new Row[list.size()];
         for (int i = 0; i < rows.length; i++) {
             Row rowItem = sheet.createRow(rowIndex++);
+            // 设置行高
             rowItem.setHeight((short) 512);
             rows[i] = rowItem;
         }
@@ -183,57 +184,97 @@ public class ExcelUtils {
         for (FieldSort fieldSort : fieldSorts) {
             Field field = fieldSort.getField();
             ExcelCol excelCol = fieldSort.getExcelCol();
+
+            // 获取字段值的映射
             Map<String, String> fieldEnumMap = enumFieldsMap == null ? null : enumFieldsMap.getOrDefault(field.getName(), null);
-            rowIndex = 0;
-            boolean isEnumField = fieldEnumMap != null && !fieldEnumMap.isEmpty();
 
             boolean hasWidth = excelCol.width() > 0;
-            int colWidth = excelCol.width() > 0 ? excelCol.width() : colWidths[colIndex];
+            int colWidth = hasWidth ? excelCol.width() : colWidths[colIndex];
+
+            rowIndex = 0;
             for (T model : list) {
                 cell = rows[rowIndex++].createCell(colIndex);
                 Object val = field.get(model);
-                String value;
+                // 格式化字符串
                 String pattern = excelCol.formatter();
-                if (StringUtils.isBlank(pattern)) {
-                    value = val == null ? "" : val + "";
-                } else {
-                    if (val instanceof Date) {
-                        value = getDateTime(val, excelCol.formatter());
-                    } else {
-                        value = getVal(val, excelCol.formatter());
-                    }
-                }
-                String mapValue = isEnumField ? fieldEnumMap.getOrDefault(value, null) : value;
-                value = mapValue == null ? value : mapValue;
+                // 获取实际输出到Excel的值
+                String value = getValue(val, pattern, fieldEnumMap);
+
                 cell.setCellValue(value);
                 cell.setCellStyle(defaultCellStyle);
 
                 if (!hasWidth) colWidth = getColWidth(colWidth, value);
             }
-            // 设置每列宽度为20个字符，这个参数的单位是1/256个字符宽度
+            // 设置列宽，这个参数的单位是1/256个字符宽度
             sheet.setColumnWidth(colIndex, colWidth * 256);
             colIndex++;
         }
         fieldSorts.forEach(fieldSort -> fieldSort.getField().setAccessible(false));
     }
 
+    /**
+     * 获取格式化后的值
+     *
+     * @param val          原值
+     * @param pattern      格式化字符串
+     * @param fieldEnumMap 枚举map
+     * @return
+     */
+    private static String getValue(Object val, String pattern, Map<String, String> fieldEnumMap) {
+
+        if (val == null) return "";
+        String value;
+        if (StringUtils.isBlank(pattern)) {
+            value = val + "";
+        } else {
+            if (val instanceof Date) {
+                // 格式化日期
+                SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+                value = sdf.format(val);
+            } else {
+                value = String.format(pattern, val);
+            }
+        }
+        // 字段是否是枚举
+        if (fieldEnumMap != null && !fieldEnumMap.isEmpty()) {
+            value = fieldEnumMap.getOrDefault(value, value);
+        }
+        return value;
+    }
+
+    /**
+     * 获取列宽
+     *
+     * @param currentWidth 当前的列宽
+     * @param value        列的内容
+     * @return
+     */
     private static int getColWidth(int currentWidth, String value) {
 
-        if (currentWidth >= MAX_COL_WIDTH) return currentWidth;
+        if (currentWidth >= MAX_COL_WIDTH) return MAX_COL_WIDTH;
 
         String[] lines = value.split("\n");
         int width = currentWidth;
+        // 将内容按行分割后获取最长的一行的宽度
         for (String line : lines) {
             if (StringUtils.isBlank(line)) continue;
-            int byteLength = line.getBytes().length + 6;
+            int byteLength = line.getBytes().length + DEFAULT_ADD_WIDTH;
             if (byteLength > MAX_COL_WIDTH) {
-                width = MAX_COL_WIDTH;
+                byteLength = MAX_COL_WIDTH;
             }
             if (byteLength > width) width = byteLength;
         }
         return width;
     }
 
+    /**
+     * 根据条件获取排序后的列
+     *
+     * @param clazz
+     * @param condition
+     * @param <T>
+     * @return
+     */
     private static <T> List<FieldSort> getFieldSorts(Class<T> clazz, String condition) {
 
         List<FieldSort> fieldSorts = new ArrayList<>();
@@ -296,17 +337,6 @@ public class ExcelUtils {
         CellStyle style = wb.createCellStyle();
         style.setWrapText(true);
         return style;
-    }
-
-    private static String getDateTime(Object obj, String pattern) {
-        if (obj == null) return "";
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        return sdf.format(obj);
-    }
-
-    private static String getVal(Object obj, String pattern) {
-        if (obj == null) return "";
-        return String.format(pattern, obj);
     }
 
     private final static class FieldSort {

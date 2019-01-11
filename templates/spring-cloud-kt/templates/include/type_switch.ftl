@@ -29,11 +29,11 @@
 <#elseif (column.pk)>
 <#elseif (isInteger)>
 <#elseif (isDecimal)>
-<#elseif (isString)>
 <#elseif (isDate)>
 <#elseif (isTime)>
 <#elseif (isDateTime)>
 <#elseif (isContent)>
+<#elseif (isString)>
 </#if>
 
 <#if column.ignoreSearch>
