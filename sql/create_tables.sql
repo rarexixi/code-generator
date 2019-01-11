@@ -47,7 +47,7 @@ CREATE TABLE `quick_user_info`
   `age`          INT           NOT NULL DEFAULT 0
   COMMENT '年龄',
   `sex`          TINYINT       NOT NULL DEFAULT 0
-  COMMENT '性别',
+  COMMENT '性别(0保密，1男，2女)',
   `photo`        VARCHAR(200)  NOT NULL DEFAULT ''
   COMMENT '头像',
   `introduction` VARCHAR(1000) NOT NULL DEFAULT ''
@@ -130,7 +130,7 @@ CREATE TABLE `quick_multi_pk`
   `value`       VARCHAR(50) NOT NULL
   COMMENT '值',
   `status`      INT         NOT NULL DEFAULT 0
-  COMMENT '状态：1，正常 2，提高 3，起飞',
+  COMMENT '状态(1正常， 2提高， 3起飞)',
   `is_deleted`  TINYINT     NOT NULL DEFAULT 0
   COMMENT '是否删除',
   `create_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp

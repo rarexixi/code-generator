@@ -48,7 +48,7 @@ generator:
 
     select:
       - column-name-set: sex
-        table-name: quick_user
+        table-name: quick_user_info
         options:
           - value: 0
             text: 保密
