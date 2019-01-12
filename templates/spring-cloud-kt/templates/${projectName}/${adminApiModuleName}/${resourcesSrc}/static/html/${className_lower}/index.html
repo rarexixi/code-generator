@@ -166,15 +166,15 @@
             </el-table-column>
             </#if>
             </#list>
-            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>250<#else>200</#if>">
+            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>200<#else>160</#if>">
                 <template slot-scope="scope">
-                    <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini" circle></el-button>
-                    <el-button @click="get(scope.row)" type="info" icon="el-icon-more" size="mini" circle></el-button>
+                    <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="small" circle></el-button>
+                    <el-button @click="get(scope.row)" type="info" icon="el-icon-more" size="small" circle></el-button>
                     <#if table.validStatusColumn??>
-                    <el-button @click="disable(scope.row)" v-if="scope.row.${table.validStatusColumn.targetName?uncap_first}==${table.validStatusColumn.validStatusOption.valid}" type="warning" icon="el-icon-close" size="mini" circle></el-button>
-                    <el-button @click="enable(scope.row)" v-else type="success" icon="el-icon-check" size="mini" circle></el-button>
+                    <el-button @click="disable(scope.row)" v-if="scope.row.${table.validStatusColumn.targetName?uncap_first}==${table.validStatusColumn.validStatusOption.valid}" type="warning" icon="el-icon-close" size="small" circle></el-button>
+                    <el-button @click="enable(scope.row)" v-else type="success" icon="el-icon-check" size="small" circle></el-button>
                     </#if>
-                    <el-button @click="del(scope.row)" type="danger" icon="el-icon-delete" size="mini" circle></el-button>
+                    <el-button @click="del(scope.row)" type="danger" icon="el-icon-delete" size="small" circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
