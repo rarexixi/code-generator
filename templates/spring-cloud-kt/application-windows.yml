@@ -105,9 +105,9 @@ generator:
 
     author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
-    javaSrc: src/main/java
-    javaTestSrc: src/test/java
-    resourcesSrc: src/main/resources
+    javaSrc: src\main\java
+    javaTestSrc: src\test\java
+    resourcesSrc: src\main\resources
 
   # 获取数据映射关系
   data-type-map:
