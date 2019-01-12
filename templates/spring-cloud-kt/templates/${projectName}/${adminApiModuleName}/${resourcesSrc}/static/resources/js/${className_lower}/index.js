@@ -168,7 +168,7 @@ var app = new Vue({
             self.addOrEditDialogVisible = true;
             self.addOrEditTitle = '添加${tableComment}';
         },
-        edit: function (<#include "/include/table/pk_values.ftl">) {
+        edit: function (item) {
             var self = this;
             self.resetSave();
             self.addOrEditDialogVisible = true;
@@ -176,17 +176,12 @@ var app = new Vue({
             <#if !table.hasAutoIncUniPk>
             <#list pks as column>
             <#include "/include/column/properties.ftl">
-            self.${fieldName} = ${fieldName};
+            self.${fieldName} = item.${fieldName};
             </#list>
             </#if>
 
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
-            var params = {
-                <#list pks as column>
-                <#include "/include/column/properties.ftl">
-                ${fieldName}: ${fieldName}<#if (column_has_next)>,</#if>
-                </#list>
-            };
+            var params = self.getPkParams(item);
             self.ajaxGet(url, params, '获取${tableComment}详情失败！', function(response) {
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
@@ -210,7 +205,7 @@ var app = new Vue({
             if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.${fieldName} == ''</#list>) {
                 ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update?'<#list pks as column><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
+                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update?'<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
             }
             </#if>
 
@@ -235,16 +230,12 @@ var app = new Vue({
             </#list>
             self.closeDialog();
         },
-        get: function (<#include "/include/table/pk_values.ftl">) {
+        get: function (item) {
             var self = this;
             self.detailDialogVisible = true;
 
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
-            var params = {
-                <#list pks as column>
-                ${fieldName}: ${fieldName}<#if (column_has_next)>,</#if>
-                </#list>
-            };
+            var params = self.getPkParams(item);
             self.ajaxGet(url, params, '获取详情失败！', function(response) {
                 self.detail = response.result;
             });
@@ -292,30 +283,30 @@ var app = new Vue({
         },
         </#if>
         <#if table.validStatusColumn??>
-        enable: function (<#include "/include/table/pk_values.ftl">) {
+        enable: function (item) {
             var self = this;
-            var params = self.getPkParams(<#include "/include/table/pk_values.ftl">);
+            var params = self.getPkParams(item);
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/enable';
             this.exec("确定启用吗？", url, params, "启用成功！", "启用失败！");
         },
-        disable: function (<#include "/include/table/pk_values.ftl">) {
+        disable: function (item) {
             var self = this;
-            var params = self.getPkParams(<#include "/include/table/pk_values.ftl">);
+            var params = self.getPkParams(item);
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/disable';
             this.exec("确定禁用吗？", url, params, "禁用成功！", "禁用失败！");
         },
         </#if>
-        del: function (<#include "/include/table/pk_values.ftl">) {
+        del: function (item) {
             var self = this;
-            var params = self.getPkParams(<#include "/include/table/pk_values.ftl">);
+            var params = self.getPkParams(item);
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/delete';
             this.exec("确定删除吗？", url, params, "删除成功！", "删除失败！");
         },
-        getPkParams: function (<#include "/include/table/pk_values.ftl">) {
+        getPkParams: function (item) {
             var params = {
                 <#list pks as column>
                 <#include "/include/column/properties.ftl">
-                ${fieldName}: ${fieldName}<#if (column_has_next)>,</#if>
+                ${fieldName}: item.${fieldName}<#if (column_has_next)>,</#if>
                 </#list>
             }
             return params;

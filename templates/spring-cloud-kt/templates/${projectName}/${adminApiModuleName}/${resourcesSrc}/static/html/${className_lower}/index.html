@@ -101,9 +101,9 @@
                 </#list>
                 <el-col :span="24">
                     <el-form-item>
-                        <el-button type="primary" @click="search">搜索</el-button>
-                        <el-button type="warning" @click="resetSearch">重置</el-button>
-                        <el-button type="success" @click="exportExcel">导出</el-button>
+                        <el-button @click="search" type="primary" icon="el-icon-search">搜索</el-button>
+                        <el-button @click="resetSearch" type="warning" icon="el-icon-refresh">重置</el-button>
+                        <el-button @click="exportExcel" type="success" icon="el-icon-download">导出</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -111,19 +111,19 @@
 
         <#if table.validStatusColumn??>
         <el-tabs v-model="searchParams.${table.validStatusColumn.targetName?uncap_first}" @tab-click="search">
-            <el-tab-pane label="全部" name="null"></el-tab-pane>
-            <el-tab-pane label="有效" name="${table.validStatusColumn.validStatusOption.valid}"></el-tab-pane>
-            <el-tab-pane label="无效" name="${table.validStatusColumn.validStatusOption.invalid}"></el-tab-pane>
+            <el-tab-pane name="null" label="全部"></el-tab-pane>
+            <el-tab-pane name="${table.validStatusColumn.validStatusOption.valid}" label="有效"></el-tab-pane>
+            <el-tab-pane name="${table.validStatusColumn.validStatusOption.invalid}" label="无效"></el-tab-pane>
         </el-tabs>
         </#if>
         <el-row>
-            <el-button type="primary" @click="add">添加</el-button>
+            <el-button @click="add" type="primary" icon="el-icon-plus">添加</el-button>
             <#if table.validStatusColumn??>
-            <el-button type="success" @click="enableSelected" v-if="multipleSelection.length > 0">启用</el-button>
-            <el-button type="warning" @click="disableSelected" v-if="multipleSelection.length > 0">禁用</el-button>
+            <el-button @click="enableSelected" v-if="multipleSelection.length > 0" type="success" icon="el-icon-check">启用</el-button>
+            <el-button @click="disableSelected" v-if="multipleSelection.length > 0" type="warning" icon="el-icon-close">禁用</el-button>
             </#if>
             <#if table.hasUniPk>
-            <el-button type="danger" @click="delSelected" v-if="multipleSelection.length > 0">删除</el-button>
+            <el-button @click="delSelected" v-if="multipleSelection.length > 0" type="danger" icon="el-icon-delete">删除</el-button>
             </#if>
         </el-row>
         <el-table ref="multipleTable" :data="pageInfo.list" tooltip-effect="dark"<#if (table.hasUniPk)> @selection-change="handleSelectionChange"</#if>>
@@ -148,10 +148,6 @@
                     </div>
                 </template>
             </el-table-column>
-            <#elseif (isInteger || isDecimal || isString)>
-            <el-table-column label="${columnComment}">
-                <template slot-scope="scope">{{scope.row.${fieldName}}}</template>
-            </el-table-column>
             <#elseif (isDate)>
             <el-table-column label="${columnComment}">
                 <template slot-scope="scope">{{scope.row.${fieldName} | formatDate}}</template>
@@ -170,17 +166,15 @@
             </el-table-column>
             </#if>
             </#list>
-            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>180<#else>140</#if>">
+            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>250<#else>200</#if>">
                 <template slot-scope="scope">
-                    <el-button-group>
-                        <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" size="mini">编辑</el-button>
-                        <el-button type="info" @click="get(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" size="mini">详情</el-button>
-                        <#if table.validStatusColumn??>
-                        <el-button type="warning" @click="disable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" v-if="scope.row.${table.validStatusColumn.targetName?uncap_first}==${table.validStatusColumn.validStatusOption.valid}" size="mini">禁用</el-button>
-                        <el-button type="success" @click="enable(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" v-else size="mini">启用</el-button>
-                        </#if>
-                        <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>scope.row.${column.targetName?uncap_first}</#list>)" size="mini">删除</el-button>
-                    </el-button-group>
+                    <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="mini" circle></el-button>
+                    <el-button @click="get(scope.row)" type="info" icon="el-icon-more" size="mini" circle></el-button>
+                    <#if table.validStatusColumn??>
+                    <el-button @click="disable(scope.row)" v-if="scope.row.${table.validStatusColumn.targetName?uncap_first}==${table.validStatusColumn.validStatusOption.valid}" type="warning" icon="el-icon-close" size="mini" circle></el-button>
+                    <el-button @click="enable(scope.row)" v-else type="success" icon="el-icon-check" size="mini" circle></el-button>
+                    </#if>
+                    <el-button @click="del(scope.row)" type="danger" icon="el-icon-delete" size="mini" circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -209,8 +203,12 @@
                     <img :src="detail.${fieldName}" alt="${columnComment}">
                     <#elseif column.content>
                     <pre>{{detail.${fieldName}}}</pre>
-                    <#elseif (column.dataType?contains("date") || column.dataType?contains("time"))>
+                    <#elseif (isDate)>
                     <span>{{detail.${fieldName} | formatDate}}</span>
+                    <#elseif (isTime)>
+                    <span>{{detail.${fieldName} | formatTime}}</span>
+                    <#elseif (isDateTime)>
+                    <span>{{detail.${fieldName} | formatDateTime}}</span>
                     <#else>
                     <span>{{detail.${fieldName}}}</span>
                     </#if>
@@ -218,9 +216,9 @@
             </el-row>
             </#list>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="closeDialog">关闭</el-button>
-                <el-button type="primary" @click="edit(<#list pks as column><#if (column_index > 0)>, </#if>detail.${column.targetName?uncap_first}</#list>)">编辑</el-button>
-                <el-button type="danger" @click="del(<#list pks as column><#if (column_index > 0)>, </#if>detail.${column.targetName?uncap_first}</#list>)">删除</el-button>
+                <el-button @click="closeDialog" icon="el-icon-close">关闭</el-button>
+                <el-button @click="edit(detail)" type="primary" icon="el-icon-edit">编辑</el-button>
+                <el-button @click="del(detail)" type="danger" icon="el-icon-delete">删除</el-button>
             </div>
         </el-dialog>
         <el-dialog :title="addOrEditTitle" :visible.sync="addOrEditDialogVisible">
@@ -249,15 +247,15 @@
                 </el-form-item> -->
                 <#elseif (isInteger)>
                 <el-form-item label="${columnComment}">
-                    <el-input type="number" v-model="addOrEditParams.${fieldName}"></el-input>
+                    <el-input v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>
                 <#elseif (isDecimal)>
                 <el-form-item label="${columnComment}">
-                    <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
+                    <el-input v-model="addOrEditParams.${fieldName}"></el-input>
                 </el-form-item>
                 <#elseif (isDate)>
                 <el-form-item label="${columnComment}">
-                    <el-date-picker type="date" v-model="addOrEditParams.${fieldName}" placeholder="选择日期"></el-date-picker>
+                    <el-date-picker v-model="addOrEditParams.${fieldName}" type="date" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
                 <#elseif (isTime)>
                 <el-form-item label="${columnComment}">
@@ -265,23 +263,23 @@
                 </el-form-item>
                 <#elseif (isDateTime)>
                 <el-form-item label="${columnComment}">
-                    <el-date-picker type="datetime" v-model="addOrEditParams.${fieldName}" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="addOrEditParams.${fieldName}" type="datetime" placeholder="选择日期时间"></el-date-picker>
                 </el-form-item>
                 <#elseif (isContent)>
                 <el-form-item label="${columnComment}">
-                    <el-input type="textarea" v-model="addOrEditParams.${fieldName}" :autosize="{ minRows: 5, maxRows: 100}"></el-input>
+                    <el-input v-model="addOrEditParams.${fieldName}" type="textarea" :autosize="{ minRows: 5, maxRows: 100}"></el-input>
                 </el-form-item>
                 <#elseif (isString)>
                 <el-form-item label="${columnComment}">
-                    <el-input type="text" v-model="addOrEditParams.${fieldName}"></el-input>
+                    <el-input v-model="addOrEditParams.${fieldName}" type="text"></el-input>
                 </el-form-item>
                 <#else>
                 </#if>
                 </#list>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="save">保存</el-button>
-                <el-button @click="closeDialog">取消</el-button>
+                <el-button @click="save" type="primary" icon="el-icon-document">保存</el-button>
+                <el-button @click="closeDialog" icon="el-icon-close">取消</el-button>
             </div>
         </el-dialog>
     </div>
