@@ -16,7 +16,6 @@ import org.xi.quick.codegeneratorkt.service.FreeMarkerService
 import org.xi.quick.codegeneratorkt.service.GeneratorService
 import org.xi.quick.codegeneratorkt.service.TableService
 import org.xi.quick.codegeneratorkt.utils.DirectoryUtils
-import org.xi.quick.codegeneratorkt.utils.FileUtils
 import org.xi.quick.codegeneratorkt.utils.SystemUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -163,14 +162,16 @@ class GeneratorServiceImpl : GeneratorService {
 
             putAllCommonProperties(dataModel)
 
-            val targetPath = getFilePath(outModel, dataModel)
+            val relativePath = getActualPath(outModel.relativePath, dataModel)
+            logger.info("正在复制$relativePath")
+
+            val targetPath = getAbsoluteFilePath(relativePath)
             val sourcePath = GeneratorProperties.paths?.template + outModel.relativePath
 
-            logger.info("正在生成$targetPath")
             try {
                 //创建文件路径
                 DirectoryUtils.createIfNotExists(getAbsoluteDirectory(targetPath))
-                FileUtils.deleteIfExists(File(targetPath))
+                File(targetPath).delete()
                 Files.copy(File(sourcePath).toPath(), File(targetPath).toPath())
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -208,11 +209,10 @@ class GeneratorServiceImpl : GeneratorService {
 
         putAllCommonProperties(dataModel)
 
-        val absolutePath = getFilePath(outModel, dataModel)
+        val relativePath = getActualPath(outModel.relativePath, dataModel)
+        logger.info("正在生成$relativePath")
 
-        logger.info("正在生成$absolutePath")
-
-        //创建文件路径
+        val absolutePath = getAbsoluteFilePath(relativePath)
         DirectoryUtils.createIfNotExists(getAbsoluteDirectory(absolutePath))
 
         FileOutputStream(absolutePath).use { stream ->
@@ -226,11 +226,11 @@ class GeneratorServiceImpl : GeneratorService {
 
         putAllCommonProperties(dataModel)
 
-        val absolutePath = getFilePath(outModel, dataModel)
+        val relativePath = getActualPath(outModel.relativePath, dataModel)
+        logger.info("正在生成$relativePath")
 
-        logger.info("正在删除$absolutePath")
-
-        FileUtils.delete(absolutePath)
+        val absolutePath = getAbsoluteFilePath(relativePath)
+        File(absolutePath).delete()
     }
 
     /**
@@ -246,10 +246,10 @@ class GeneratorServiceImpl : GeneratorService {
     /**
      * 获取文件实际路径
      */
-    private fun getFilePath(model: FreemarkerModel, dataModel: Map<Any, Any>): String {
+    private fun getAbsoluteFilePath(relativePath: String): String {
 
         val directory = File(GeneratorProperties.paths?.out)
-        return directory.absolutePath + SystemUtils.SYSTEM_SLASH + getActualPath(model.relativePath, dataModel)
+        return directory.absolutePath + SystemUtils.SYSTEM_SLASH + relativePath
     }
 
     private fun getAbsoluteDirectory(absolutePath: String): String {

@@ -122,11 +122,14 @@ class ColumnModel(column: Column) {
 
     //endregion
 
-    private fun matchColumn(columnProperties: Array<ColumnProperty>): Boolean {
+    private fun <E : ColumnProperty> matchColumn(columnProperties: Array<E>, consumer: ((column: E) -> Unit)? = null): Boolean {
 
-        for (column in columnProperties) {
-            if (column.columnNameSet.contains(columnName) && (column.tableName.isNullOrBlank() || column.tableName == tableName)) {
-                return true
+        columnProperties.forEach { column ->
+            apply {
+                if (column.columnNameSet.contains(columnName) && (column.tableName.isNullOrBlank() || column.tableName == tableName)) {
+                    consumer?.apply { this(column) }
+                    return true
+                }
             }
         }
         return false
@@ -163,35 +166,21 @@ class ColumnModel(column: Column) {
 
 
         var columnProperties = GeneratorProperties.columns
+
         if (columnProperties != null) {
 
             // 判断是否是有效性列
-            for (property in columnProperties.validStatus) {
-                if (property.columnNameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
-                    validStatusOption = property.status
-                    validStatus = true
-                    break
-                }
+            validStatus = matchColumn(columnProperties.validStatus) {
+                validStatusOption = it.status
             }
-
             // 判断是否是逻辑外键选择项
-            for (property in columnProperties.fkSelect) {
-                if (property.columnNameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
-                    fkSelectColumn = property.fk
-                    fkSelect = true
-                    break
-                }
+            fkSelect = matchColumn(columnProperties.fkSelect) {
+                fkSelectColumn = it.fk
             }
-
             // 判断是否是选择字段
-            for (property in columnProperties.select) {
-                if (property.columnNameSet.contains(columnName) && (property.tableName.isNullOrBlank() || property.tableName == tableName)) {
-                    selectOptions = property.options
-                    select = true
-                    break
-                }
+            select = matchColumn(columnProperties.select) {
+                selectOptions = it.options
             }
-
 
             notRequired = matchColumn(columnProperties.notRequired)
 

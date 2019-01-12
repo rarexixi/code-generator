@@ -3,14 +3,12 @@ package org.xi.quick.codegeneratorkt.command
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
-import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.xi.quick.codegeneratorkt.service.GeneratorService
 import org.xi.quick.codegeneratorkt.service.TableService
 import java.util.*
 
 @Component
-@Order(100)
 class GeneratorCommand : CommandLineRunner {
 
     internal var logger = LoggerFactory.getLogger(GeneratorCommand::class.java)
@@ -87,9 +85,10 @@ class GeneratorCommand : CommandLineRunner {
         if (tables.isEmpty()) return
 
         invoke(tableNameSet, tables, false) { tablesToInvoke, tablesNotExist ->
-            run {
-                generatorService.gen(*tablesToInvoke)
-                if (!tablesNotExist.isEmpty()) {
+            apply {
+                if (tablesToInvoke.isNotEmpty())
+                    generatorService.gen(*tablesToInvoke)
+                if (tablesNotExist.isNotEmpty()) {
                     logger.warn("表" + tablesNotExist.joinToString(",") + "不存在或者没有配置")
                 }
             }
@@ -101,7 +100,7 @@ class GeneratorCommand : CommandLineRunner {
         if (tables.isEmpty()) return
 
         invoke(tableNameSet, tables, true) { tablesToInvoke, tablesNotExist ->
-            run {
+            apply {
                 generatorService.del(*tablesToInvoke)
             }
         }
