@@ -1,4 +1,4 @@
-package org.xi.quick.common.service;
+package ${basePackage}.common.service;
 
 import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.OrderSearch;

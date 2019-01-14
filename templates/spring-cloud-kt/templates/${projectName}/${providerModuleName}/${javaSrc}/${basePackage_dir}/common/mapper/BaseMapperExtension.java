@@ -1,9 +1,9 @@
-package org.xi.quick.common.mapper;
+package ${basePackage}.common.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.xi.common.model.OrderCondition;
-import org.xi.quick.models.common.BaseCondition;
-import org.xi.quick.models.common.BaseEntity;
+import ${baseCommonPackage}.model.OrderCondition;
+import ${basePackage}.models.common.BaseCondition;
+import ${basePackage}.models.common.BaseEntity;
 
 import java.util.List;
 

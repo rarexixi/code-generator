@@ -1,4 +1,4 @@
-package org.xi.quick.admin.utils;
+package ${basePackage}.admin.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

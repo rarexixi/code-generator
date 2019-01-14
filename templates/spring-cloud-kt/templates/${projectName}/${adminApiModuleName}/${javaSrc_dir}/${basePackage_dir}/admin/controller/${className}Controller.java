@@ -43,7 +43,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/add")
-    public ResponseVo<${className}AddOrEditVm> add(@Validated({DataAdd.class}) ${className}AddOrEditVm vm) {
+    public ResponseVo<${className}AddOrEditVm> add(@Validated({DataAdd.class}) @RequestBody ${className}AddOrEditVm vm) {
 
         ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
         return result;
