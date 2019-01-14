@@ -129,7 +129,6 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Override
     public ResponseVo<${className}DetailVm> get(${className}SearchVm searchVm) {
 
-
         ${className}Condition condition = searchVm.getCondition();
         ResultVo<${className}Entity> apiResult = ${classNameFirstLower}CloudService.get(condition, getSessionId());
 

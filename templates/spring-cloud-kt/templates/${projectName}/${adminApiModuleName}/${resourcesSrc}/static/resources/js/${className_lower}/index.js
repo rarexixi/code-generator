@@ -3,23 +3,7 @@
 var app = new Vue({
     el: '#app',
     data: {
-        <#if (table.validStatusColumn??)>
-        ${table.validStatusColumn.targetName?uncap_first}SelectList: [{
-            value: ${table.validStatusColumn.validStatusOption.valid}, text: '有效'
-        }, {
-            value: ${table.validStatusColumn.validStatusOption.invalid}, text: '无效'
-        }],
-        </#if>
-        <#list table.selectColumns as column>
-        <#include "/include/column/properties.ftl">
-        ${fieldNameExceptKey}SelectList: [<#list column.selectOptions as option>{
-            <#if (isInteger)>
-            value: ${option.value}, text: '${option.text}'
-            <#else>
-            value: '${option.value}', text: '${option.text}'
-            </#if>
-        }<#if option_has_next>,</#if></#list>],
-        </#list>
+        <#include "/include/js/data_select_list.ftl">
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         ${fieldNameExceptKey}SelectList: [],
@@ -93,76 +77,8 @@ var app = new Vue({
         </#list>
     },
     methods: {
-        changePage: function(pageIndex) {
-            var self = this;
-            if (self.searchPage.pageIndex == pageIndex) {
-                return;
-            }
-            self.searchPage.pageIndex = pageIndex;
-            self.search();
-        },
-        changePageSize: function(pageSize) {
-            var self = this;
-            if (self.searchPage.pageSize == pageSize) {
-                return;
-            }
-            self.searchPage.pageSize = pageSize;
-            self.searchPage.pageIndex = 1;
-            self.search();
-        },
-        search: function () {
-            var self = this;
-            self.checkedList = [];
-
-            var params = {
-                pageSize: self.searchPage.pageSize,
-                pageIndex: self.searchPage.pageIndex,
-                condition: self.searchParams,
-                order: {}
-            };
-
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getPageInfo';
-            self.ajaxPost(url, params, '获取${tableComment}列表失败！', function(response) {
-                self.pageInfo = response.result;
-            });
-        },
-        <#if table.validStatusColumn??>
-        changeValidSearch: function(valid) {
-            var self = this;
-            if (self.searchParams.${table.validStatusColumn.targetName?uncap_first} === valid) {
-                return;
-            }
-            self.resetSearch();
-            self.searchParams.${table.validStatusColumn.targetName?uncap_first} = valid;
-            self.search();
-        },
-        </#if>
-        resetSearch: function() {
-            var self = this;
-            <#if (table.validStatusColumn??)>
-            // self.searchParams.${table.validStatusColumn.targetName?uncap_first} = 'null';
-            </#if>
-            <#list table.indexes as column>
-            <#include "/include/column/properties.ftl">
-            <#if (column.validStatus)>
-            <#elseif (column.select || column.fkSelect || column.pk || isInteger)>
-            self.searchParams.${fieldName} = '';
-            <#elseif (isDecimal)>
-            self.searchParams.${fieldName}Min = '';
-            self.searchParams.${fieldName}Max = '';
-            <#elseif (isDate || isTime || isDateTime)>
-            self.searchParams.${fieldName}Range = [];
-            <#elseif (isContent)>
-            <#elseif (isString)>
-            self.searchParams.${fieldName}StartWith = '';
-            <#else>
-            </#if>
-            </#list>
-
-            self.searchPage.pageIndex = 1;
-            self.searchPage.pageSize = 10;
-        },
-        add: function() {
+        <#include "/include/js/search.ftl">
+        add: function () {
             var self = this;
             self.resetSave();
             self.addOrEditDialogVisible = true;
@@ -182,7 +98,7 @@ var app = new Vue({
 
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
             var params = self.getPkParams(item);
-            self.ajaxGet(url, params, '获取${tableComment}详情失败！', function(response) {
+            self.ajaxGet(url, params, '获取${tableComment}详情失败！', function (response) {
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>
@@ -209,7 +125,7 @@ var app = new Vue({
             }
             </#if>
 
-            self.ajaxPost(ajaxUrl, self.addOrEditParams, '操作失败！', function(response) {
+            self.ajaxPost(ajaxUrl, self.addOrEditParams, '操作失败！', function (response) {
                 self.$notify({
                     message: '操作成功！',
                     type: 'success'
@@ -218,7 +134,7 @@ var app = new Vue({
                 setTimeout(self.search, 1000);
             });
         },
-        resetSave: function() {
+        resetSave: function () {
             var self = this;
             <#list table.requiredColumns as column>
             <#include "/include/column/properties.ftl">
@@ -236,7 +152,7 @@ var app = new Vue({
 
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
             var params = self.getPkParams(item);
-            self.ajaxGet(url, params, '获取详情失败！', function(response) {
+            self.ajaxGet(url, params, '获取详情失败！', function (response) {
                 self.detail = response.result;
             });
         },
@@ -246,111 +162,14 @@ var app = new Vue({
             self.addOrEditDialogVisible = false;
         },
         <#if (table.hasUniPk)>
-        handleSelectionChange: function(val) {
+        handleSelectionChange: function (val) {
             this.multipleSelection = val;
         },
-        <#if table.validStatusColumn??>
-        enableSelected: function () {
-            this.execSelected("确定启用吗？", appConfig.baseApiPath + '/${classNameFirstLower}/enable', "启用成功！", "启用失败！");
-        },
-        disableSelected: function () {
-            this.execSelected("确定禁用吗？", appConfig.baseApiPath + '/${classNameFirstLower}/disable', "禁用成功！", "禁用失败！");
-        },
         </#if>
-        delSelected: function () {
-            this.execSelected("确定删除吗？", appConfig.baseApiPath + '/${classNameFirstLower}/delete', "删除成功！", "删除失败！");
-        },
-        execSelected: function (confirmMsg, url, successMsg, failMsg) {
-            var self = this;
-            var checkedList = [];
-            for (var i = 0; i < self.multipleSelection.length; i++) {
-                var item = self.multipleSelection[i];
-                checkedList.push(item.${table.uniPk.targetName?uncap_first});
-            }
-
-            var params = {
-                ${table.uniPk.targetName?uncap_first}List: checkedList
-            };
-            self.$confirm(confirmMsg, '', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(function () {
-                self.ajaxPost(url, params, failMsg, function(response) {
-                    self.$notify({
-                        type: 'success',
-                        message: successMsg
-                    });
-                    self.search();
-                });
-            });
-        },
-        </#if>
-        <#if table.validStatusColumn??>
-        enable: function (item) {
-            var self = this;
-            var params = self.getPkParams(item);
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/enable';
-            this.exec("确定启用吗？", url, params, "启用成功！", "启用失败！");
-        },
-        disable: function (item) {
-            var self = this;
-            var params = self.getPkParams(item);
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/disable';
-            this.exec("确定禁用吗？", url, params, "禁用成功！", "禁用失败！");
-        },
-        </#if>
-        del: function (item) {
-            var self = this;
-            var params = self.getPkParams(item);
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/delete';
-            this.exec("确定删除吗？", url, params, "删除成功！", "删除失败！");
-        },
-        getPkParams: function (item) {
-            var params = {
-                <#list pks as column>
-                <#include "/include/column/properties.ftl">
-                ${fieldName}: item.${fieldName}<#if (column_has_next)>,</#if>
-                </#list>
-            }
-            return params;
-        },
-        exec: function (confirmMsg, url, params, successMsg, failMsg) {
-            var self = this;
-            self.$confirm(confirmMsg, '', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(function () {
-                self.ajaxPost(url, params, failMsg, function(response) {
-                    self.$notify({
-                        type: 'success',
-                        message: successMsg
-                    });
-                    self.closeDialog();
-                    self.search();
-                });
-            });
-        },
-        <#if (table.validStatusColumn??)>
-        get${table.validStatusColumn.targetName}Text: function (value) {
-            var self = this;
-            var entity = self.${table.validStatusColumn.targetName?uncap_first}SelectList.find(function (item) {
-                return item.value == value;
-            });
-            return entity ? entity.text : '';
-        },
-        </#if>
-        <#list table.selectColumns as column>
-        <#include "/include/column/properties.ftl">
-        get${propertyName}Text: function (value) {
-            var self = this;
-            var entity = self.${fieldNameExceptKey}SelectList.find(function (item) {
-                return item.value == value;
-            });
-            return entity ? entity.text : '';
-        },
-        </#list>
+        <#include "/include/js/exec_list.ftl">
+        <#assign isSplit = false>
+        <#include "/include/js/exec.ftl">
+        <#include "/include/js/select_get_text.ftl">
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         get${propertyName}Text: function (${column.fkSelectColumn.valueName?uncap_first}) {
@@ -370,12 +189,12 @@ var app = new Vue({
                 condition: {},
                 order: {}
             };
-            self.ajaxPost(url, params, '获取${columnComment}列表失败！', function(response) {
+            self.ajaxPost(url, params, '获取${columnComment}列表失败！', function (response) {
                 self.${fieldNameExceptKey}SelectList = response.result;
             });
         },
         </#list>
-        exportExcel: function() {
+        exportExcel: function () {
             var self = this;
 
             var params = {

@@ -21,6 +21,9 @@ public class ${className}DetailVm implements Serializable {
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
         ${fieldName} = entity.get${propertyName}();
+        <#if (column.fkSelect)>
+        ${fieldNameExceptKey}Text = entity.get${propertyExceptKey}Text();
+        </#if>
         </#list>
     }
 
@@ -33,6 +36,7 @@ public class ${className}DetailVm implements Serializable {
     }
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
+
 
     /**
      * ${columnFullComment}
@@ -49,6 +53,10 @@ public class ${className}DetailVm implements Serializable {
     @ExcelCol("${columnComment}")
     </#if>
     private ${fieldType} ${fieldName};
+    <#if (column.fkSelect)>
+
+    private String ${fieldNameExceptKey}Text;
+    </#if>
     </#list>
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
@@ -66,5 +74,21 @@ public class ${className}DetailVm implements Serializable {
     public void set${propertyName}(${fieldType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }
+    <#if (column.fkSelect)>
+
+    /**
+    * 获取${columnComment}
+    */
+    public String get${propertyExceptKey}Text() {
+        return ${fieldNameExceptKey}Text;
+    }
+
+    /**
+    * 设置${columnComment}
+    */
+    public void set${propertyExceptKey}Text(String ${fieldNameExceptKey}Text) {
+        this.${fieldNameExceptKey}Text = ${fieldNameExceptKey}Text;
+    }
+    </#if>
     </#list>
 }

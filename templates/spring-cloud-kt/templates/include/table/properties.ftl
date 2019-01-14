@@ -4,5 +4,6 @@
 <#assign targetTableName = table.targetTableName>
 <#assign className = table.className>
 <#assign classNameFirstLower = className?uncap_first>
+<#assign classNameLower = className?lower_case>
 <#assign pks = table.pks>
 <#assign classNameLength = className?length>

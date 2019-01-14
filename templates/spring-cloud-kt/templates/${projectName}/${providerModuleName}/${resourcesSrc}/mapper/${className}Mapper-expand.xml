@@ -6,7 +6,12 @@
 <!-- 存放手写的sql -->
 <mapper namespace="${basePackage}.mapper.${className}Mapper">
 
-    <resultMap id="ExtensionResultMap" extends="BaseResultMap" type="${basePackage}.models.entity.extension.${className}EntityExtension"></resultMap>
+    <resultMap id="ExtensionResultMap" extends="BaseResultMap" type="${basePackage}.models.entity.extension.${className}EntityExtension">
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        <result property="${fieldNameExceptKey}Text" column="${column.columnName}_text"/>
+        </#list>
+    </resultMap>
 
     <parameterMap id="ConditionExtensionMap" type="${basePackage}.models.condition.extension.${className}ConditionExtension"></parameterMap>
 
@@ -15,14 +20,22 @@
         SELECT DISTINCT
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
-        `${column.columnName}`<#if column_has_next>,</#if>
+        <include refid="tableName"/>.`${column.columnName}`<#if column_has_next>,</#if>
+        <#if (column.fkSelect)>
+        `${column.fkSelectColumn.foreignTableName}`.`${column.fkSelectColumn.textColumnName}` `${column.columnName}_text`<#if column_has_next>,</#if>
+        </#if>
         </#list>
         FROM
         <include refid="tableName"/>
+        <#if (table.fkSelectColumns?size > 0)>
+            <#list table.fkSelectColumns as column>
+            left join `${column.fkSelectColumn.foreignTableName}` on <include refid="tableName"/>.${column.columnName} = `${column.fkSelectColumn.foreignTableName}`.`${column.fkSelectColumn.valueColumnName}`
+            </#list>
+        </#if>
         <where>
         <#list pks as column>
         <#include "/include/column/properties.ftl">
-        <#if (column_index > 0)>AND </#if>`${column.columnName}` = <@mapperEl fieldName/>
+        <#if (column_index > 0)>AND </#if><include refid="tableName"/>.`${column.columnName}` = <@mapperEl fieldName/>
         </#list>
         </where>
     </select>

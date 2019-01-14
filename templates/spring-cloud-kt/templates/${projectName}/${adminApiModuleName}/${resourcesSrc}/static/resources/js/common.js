@@ -83,27 +83,49 @@ Vue.filter('formatDateTime', function (timestamp) {
     return fmt;
 });
 
-Vue.prototype.ajaxPost = function (url, params, failMsg, callback) {
+function getResponseMsg(response) {
+    var msg = response.message;
+    if (msg) {
+        msg = '<h2>' + msg + '</h2>'
+    }
+    if (response.extData) {
+        response.extData.forEach(function (item, index) {
+            msg += '<br/>' + item;
+        });
+    }
+}
+
+Vue.prototype.ajaxPost = function (url, params, failMsg, successCallback, failCallback, errorCallback) {
 
     var self = this;
     axios.post(url, params).then(function (res) {
         var response = res.data;
         if (response.success == true) {
-            if (callback) callback(response);
+            if (successCallback) successCallback(response);
         } else {
+            var msg;
+            if (failMsg) {
+                msg = failMsg;
+            } else {
+                msg = getResponseMsg(response)
+            }
             self.$notify({
-                message: failMsg,
+                dangerouslyUseHTMLString: true,
+                message: msg,
                 type: 'error'
             });
+            if (fail) fail();
         }
     }).catch(function (error) {
         self.$notify({
             message: error,
             type: 'error'
         });
+        if (errorCallback) errorCallback();
     });
 };
-Vue.prototype.ajaxGet = function (url, params, failMsg, callback) {
+
+Vue.prototype.ajaxGet = function (url, params, failMsg, successCallback, failCallback, errorCallback) {
 
     var self = this;
     axios.get(url, {
@@ -111,17 +133,26 @@ Vue.prototype.ajaxGet = function (url, params, failMsg, callback) {
     }).then(function (res) {
         var response = res.data;
         if (response.success == true) {
-            if (callback) callback(response);
+            if (successCallback) successCallback(response);
         } else {
+            var msg;
+            if (failMsg) {
+                msg = failMsg;
+            } else {
+                msg = getResponseMsg(response)
+            }
             self.$notify({
-                message: failMsg,
+                dangerouslyUseHTMLString: true,
+                message: msg,
                 type: 'error'
             });
+            if (failCallback) failCallback();
         }
     }).catch(function (error) {
         self.$notify({
             message: error,
             type: 'error'
         });
+        if (errorCallback) errorCallback();
     });
 };
