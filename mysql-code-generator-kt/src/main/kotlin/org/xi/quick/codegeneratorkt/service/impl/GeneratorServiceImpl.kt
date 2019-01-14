@@ -90,7 +90,7 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun del(vararg tableNames: String) {
 
-        val tables = if (tableNames == null || tableNames.isEmpty()) tableService.getAllTableNameList().toTypedArray() else tableNames
+        val tables = if (tableNames.isEmpty()) tableService.getAllTableNameList().toTypedArray() else tableNames
 
         var tableTemplates = freeMarkerService.getTableTemplates()
 
@@ -218,7 +218,9 @@ class GeneratorServiceImpl : GeneratorService {
         FileOutputStream(absolutePath).use { stream ->
             OutputStreamWriter(stream, GeneratorProperties.encoding).use { out ->
                 outModel.template?.process(dataModel, out)
+                out.flush()
             }
+            stream.flush()
         }
     }
 
@@ -268,7 +270,7 @@ class GeneratorServiceImpl : GeneratorService {
 
         return Regex("""\$\{[^\}]*\}""").replace(path) {
 
-            var group = it?.value
+            var group = it.value
             var tmp = group.substring(2, group.length - 1)
             var index = tmp.indexOf('_')
             var key = if (index > -1) tmp.substring(0, index) else tmp
