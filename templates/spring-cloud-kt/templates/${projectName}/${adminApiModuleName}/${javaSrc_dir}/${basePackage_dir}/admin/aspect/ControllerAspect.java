@@ -35,7 +35,7 @@ public class ControllerAspect {
     /**
      * 设置标识
      */
-    @Pointcut("execution(public * ${basePackage}.admin.controller.*.*(..))")
+    @Pointcut("execution(public ${baseCommonPackage}.model.ResponseVo ${basePackage}.admin.controller.*.*(..))")
     public void invoke() {
     }
 

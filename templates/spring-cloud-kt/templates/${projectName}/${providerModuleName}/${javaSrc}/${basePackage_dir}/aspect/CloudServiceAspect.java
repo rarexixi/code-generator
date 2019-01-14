@@ -36,7 +36,7 @@ public class CloudServiceAspect {
     /**
      * 设置标识
      */
-    @Pointcut("execution(public * ${basePackage}.controller.*.*(..))")
+    @Pointcut("execution(public ${baseCommonPackage}.model.ResultVo ${basePackage}.controller.*.*(..))")
     public void invoke() {
     }
 

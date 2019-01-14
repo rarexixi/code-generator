@@ -19,7 +19,7 @@ public class ${className}Entity extends BaseEntity {
      */
     <#if (column.pk)>
     @${annotationName}(groups = {<#if column.autoIncrement>DataEdit.class<#else>DataAdd.class</#if>}, message = "${fieldName} (${columnComment})不能为空")
-    <#elseif (!column.notRequired && (!column.nullable && !(column.columnDefault??)))>
+    <#elseif (!column.notRequired && !column.nullable && (column.columnDefault!"") == "")>
     @${annotationName}(groups = {DataAdd.class, DataEdit.class}, message = "${fieldName} (${columnComment})不能为空")
     </#if>
     private ${fieldType} ${fieldName};
