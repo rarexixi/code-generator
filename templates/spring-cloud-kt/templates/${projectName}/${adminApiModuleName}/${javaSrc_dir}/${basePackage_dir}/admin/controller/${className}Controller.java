@@ -16,6 +16,7 @@ import ${basePackage}.admin.vm.search.${className}SearchVm;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 
@@ -43,7 +44,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/add")
-    public ResponseVo<${className}AddOrEditVm> add(@Validated({DataAdd.class}) @RequestBody ${className}AddOrEditVm vm) {
+    public ResponseVo<${className}AddOrEditVm> add(@Validated({DataAdd.class}) @RequestBody ${className}AddOrEditVm vm, Errors errors) {
 
         ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
         return result;
@@ -57,7 +58,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/addList")
-    public ResponseVo<Integer> addList(@RequestBody List<${className}AddOrEditVm> list) {
+    public ResponseVo<Integer> addList(@Validated({DataAdd.class}) @RequestBody List<${className}AddOrEditVm> list, Errors errors) {
 
         ResponseVo<Integer> result = ${classNameFirstLower}Service.addList(list);
         return result;
@@ -136,7 +137,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @PostMapping("/update")
-    public ResponseVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_request_params_validate.ftl"></#if>) {
+    public ResponseVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}AddOrEditVm vm, Errors errors<#if !table.hasAutoIncUniPk><#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>, @${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}</#list></#if>) {
 
         ResponseVo<Integer> result = ${classNameFirstLower}Service.update(vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_values.ftl"></#if>);
         return result;
@@ -155,7 +156,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @GetMapping("/getDetail")
-    public ResponseVo<${className}DetailVm> getDetail(<#include "/include/table/pk_request_params_validate.ftl">) {
+    public ResponseVo<${className}DetailVm> getDetail(<#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>@${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}<#if column_has_next>,</#if></#list>) {
 
         ResponseVo<${className}DetailVm> result = ${classNameFirstLower}Service.getDetail(<#include "/include/table/pk_values.ftl">);
         return result;

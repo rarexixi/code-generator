@@ -170,7 +170,7 @@ public class ${className}Controller {
             <#list pks as column>
             <#include "/include/column/properties.ftl">
             <#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>
-            @${annotationName} @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName},
+            @${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName},
             </#list>
             </#if>
             @RequestParam(value = "sessionId", required = false) String sessionId) {
@@ -202,7 +202,7 @@ public class ${className}Controller {
             <#list pks as column>
             <#include "/include/column/properties.ftl">
             <#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>
-            @${annotationName} @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName},
+            @${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName},
             </#list>
             @RequestParam(value = "sessionId", required = false) String sessionId) {
 
