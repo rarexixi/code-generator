@@ -17,15 +17,15 @@ public class ${className}EntityExtension extends ${className}Entity {
     <#include "/include/column/properties.ftl">
 
     /**
-    * 获取${columnComment}
-    */
+     * 获取${columnComment}
+     */
     public String get${propertyExceptKey}Text() {
         return ${fieldNameExceptKey}Text;
     }
 
     /**
-    * 设置${columnComment}
-    */
+     * 设置${columnComment}
+     */
     public void set${propertyExceptKey}Text(String ${fieldNameExceptKey}Text) {
         this.${fieldNameExceptKey}Text = ${fieldNameExceptKey}Text;
     }

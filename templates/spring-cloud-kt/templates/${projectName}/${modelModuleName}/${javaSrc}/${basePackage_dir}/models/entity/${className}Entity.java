@@ -10,10 +10,10 @@ import java.util.Date;
 
 <#include "/include/java_copyright.ftl">
 public class ${className}Entity extends BaseEntity {
-
     <#list table.columnsExceptBase as column>
     <#include "/include/column/properties.ftl">
     <#assign annotationName = ((fieldType == 'String') ? string('NotBlank', 'NotNull'))>
+
     /**
      * ${columnFullComment}
      */
@@ -23,11 +23,10 @@ public class ${className}Entity extends BaseEntity {
     @${annotationName}(groups = {DataAdd.class, DataEdit.class}, message = "${fieldName} (${columnComment})不能为空")
     </#if>
     private ${fieldType} ${fieldName};
-
     </#list>
-
     <#list table.columnsExceptBase as column>
     <#include "/include/column/properties.ftl">
+
     /**
      * 设置${columnComment}
      */
@@ -41,6 +40,5 @@ public class ${className}Entity extends BaseEntity {
     public ${fieldType} get${propertyName}() {
         return ${fieldName};
     }
-
     </#list>
 }

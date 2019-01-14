@@ -29,15 +29,15 @@ public class ${className}AddOrEditVm implements Serializable {
     <#include "/include/column/properties.ftl">
 
     /**
-    * 获取${columnComment}
-    */
+     * 获取${columnComment}
+     */
     public ${fieldType} get${propertyName}() {
         return ${fieldName};
     }
 
     /**
-    * 设置${columnComment}
-    */
+     * 设置${columnComment}
+     */
     public void set${propertyName}(${fieldType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }

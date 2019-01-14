@@ -37,7 +37,6 @@ public class ${className}DetailVm implements Serializable {
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
 
-
     /**
      * ${columnFullComment}
      */
@@ -62,30 +61,30 @@ public class ${className}DetailVm implements Serializable {
     <#include "/include/column/properties.ftl">
 
     /**
-    * 获取${columnComment}
-    */
+     * 获取${columnComment}
+     */
     public ${fieldType} get${propertyName}() {
         return ${fieldName};
     }
 
     /**
-    * 设置${columnComment}
-    */
+     * 设置${columnComment}
+     */
     public void set${propertyName}(${fieldType} ${fieldName}) {
         this.${fieldName} = ${fieldName};
     }
     <#if (column.fkSelect)>
 
     /**
-    * 获取${columnComment}
-    */
+     * 获取${columnComment}
+     */
     public String get${propertyExceptKey}Text() {
         return ${fieldNameExceptKey}Text;
     }
 
     /**
-    * 设置${columnComment}
-    */
+     * 设置${columnComment}
+     */
     public void set${propertyExceptKey}Text(String ${fieldNameExceptKey}Text) {
         this.${fieldNameExceptKey}Text = ${fieldNameExceptKey}Text;
     }
