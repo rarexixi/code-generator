@@ -8,7 +8,7 @@ import java.util.*;
 
 <#include "/include/java_copyright.ftl">
 public class ${className}Condition extends BaseCondition {
-<#list table.columns as column>
+<#list table.columnsExceptBase as column>
 <#include "/include/column/properties.ftl">
 <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
 <#else>
@@ -64,7 +64,7 @@ public class ${className}Condition extends BaseCondition {
     </#if>
 </#if>
 </#list>
-<#list table.columns as column>
+<#list table.columnsExceptBase as column>
 <#include "/include/column/properties.ftl">
 <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
 <#else>
