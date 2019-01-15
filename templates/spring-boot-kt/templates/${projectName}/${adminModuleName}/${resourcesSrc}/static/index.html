@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>${projectShortName}</title>
+    <link rel="stylesheet" href="//unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/resources/css/material-icons.css">
+    <link rel="stylesheet" href="/resources/css/common.css">
+    <link rel="stylesheet" href="/resources/css/element-ui-override.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #app>.el-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        #mainFrame {
+            width: 100%;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            padding: 0;
+        }
+
+        #mainFrame iframe {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .system-title {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 60px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .el-header {
+            background: #44444a;
+            color: #fafafe;
+        }
+
+        .nav-menu {
+            height: calc(100vh - 60px);
+            font-weight: bold;
+            border-right: none;
+            background-color: #989fa8;
+        }
+
+        .nav-menu .el-submenu__title {
+            font-size: 1.0rem !important;
+            color: #fafafa;
+        }
+
+        .nav-menu .el-submenu__title:hover {
+            background-color: #787f88;
+        }
+
+        .nav-menu .el-submenu__title i {
+            color: #fafafa !important;
+        }
+
+        .nav-menu .el-menu-item {
+            font-size: 0.875rem;
+            background-color: #abb2bb;
+            color: #fafafa;
+        }
+
+        .nav-menu .el-menu-item.is-active {
+            background-color: #787f88;
+        }
+
+        .material-icons {
+            color: #eaeafe !important;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-aside width="250px">
+            <el-header><div class="system-title"><i class="material-icons">storage</i> <span>${projectShortName}</span></div></el-header>
+            <el-menu class="nav-menu">
+                <el-submenu index="1">
+                    <template slot="title">
+                        <i class="material-icons">sync</i>
+                        <span>${projectShortName}</span>
+                    </template>
+                    <#assign menuIndex = 0>
+                    <#list tableModels as table>
+                    <#include "/include/table/properties.ftl">
+                    <#assign menuIndex = menuIndex + 1>
+                    <el-menu-item index="1-${menuIndex}0" @click="openLink('/html/${className?lower_case}/index.html')">${tableComment}</el-menu-item>
+                    </#list>
+                </el-submenu>
+            </el-menu>
+        </el-aside>
+        <el-container>
+            <el-header></el-header>
+            <el-main id="mainFrame">
+                <iframe :src="iframeSrc" frameborder="no" border="0"></iframe>
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+<script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/element-ui/lib/index.js"></script>
+<script src="/resources/js/config.js"></script>
+<script src="/resources/js/common.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            iframeSrc: ''
+        },
+        mounted: function () {
+        },
+        methods: {
+            openLink: function (href) {
+                var self = this;
+                self.iframeSrc = href;
+            }
+        }
+    });
+</script>
+</body>
+</html>

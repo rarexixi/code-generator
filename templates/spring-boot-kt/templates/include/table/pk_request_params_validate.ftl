@@ -1,0 +1,1 @@
+<#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))><#if (column_index > 0)>, </#if>@${annotationName} ${fieldType} ${fieldName}</#list>

@@ -1,0 +1,36 @@
+server:
+  port: ${adminServicePort}
+
+spring:
+  application:
+    name: ${adminModuleName}
+  datasource:
+    url: ${dbUrl}
+    username: ${dbUsername}
+    password: ${dbPassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    allow-bean-definition-overriding: true # FeignClient value 可以重名
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: ${basePackage}.mapper
+  configuration:
+    cache-enabled: false
+    lazy-loading-enabled: false
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    default-executor-type: simple
+    default-statement-timeout: 25000
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    call-setters-on-nulls: true
+
+pagehelper:
+  reasonable: true
+  params: count=countSql
+  auto-runtime-dialect: true
