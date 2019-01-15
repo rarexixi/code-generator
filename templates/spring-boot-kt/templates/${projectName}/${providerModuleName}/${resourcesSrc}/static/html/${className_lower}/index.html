@@ -1,0 +1,194 @@
+<#include "/include/table/properties.ftl">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>${tableComment}管理</title>
+    <link rel="stylesheet" href="//unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/resources/css/common.css">
+    <link rel="stylesheet" href="/resources/css/element-ui-override.css">
+</head>
+<body>
+    <div id="app">
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item>${tableComment}管理</el-breadcrumb-item>
+        </el-breadcrumb>
+        <#include "/include/html/search.ftl">
+        <el-row>
+            <el-button @click="add" type="primary" icon="el-icon-plus">添加</el-button>
+            <#if table.validStatusColumn??>
+            <el-button @click="enableSelected" v-if="multipleSelection.length > 0" type="success" icon="el-icon-check">启用</el-button>
+            <el-button @click="disableSelected" v-if="multipleSelection.length > 0" type="warning" icon="el-icon-close">禁用</el-button>
+            </#if>
+            <#if table.hasUniPk>
+            <el-button @click="delSelected" v-if="multipleSelection.length > 0" type="danger" icon="el-icon-delete">删除</el-button>
+            </#if>
+        </el-row>
+        <el-table ref="multipleTable" :data="pageInfo.list" tooltip-effect="dark"<#if (table.hasUniPk)> @selection-change="handleSelectionChange"</#if>>
+            <#if (table.hasUniPk)>
+            <el-table-column type="selection" width="55"></el-table-column>
+            </#if>
+            <#list table.columns as column>
+            <#include "/include/column/properties.ftl">
+            <#if (column.validStatus || column.select || column.fkSelect)>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">
+                    <span>{{get${propertyName}Text(scope.row.${fieldName})}}</span>
+                </template>
+            </el-table-column>
+            <#elseif column.imgUrl>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">
+                    <div class="ratio ratio-4by3 table-img-container">
+                        <div class="content center">
+                            <img :src="scope.row.${fieldName}" alt="${columnComment}" class="content" />
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+            <#elseif (isDate)>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">{{scope.row.${fieldName} | formatDate}}</template>
+            </el-table-column>
+            <#elseif (isTime)>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">{{scope.row.${fieldName} | formatTime}}</template>
+            </el-table-column>
+            <#elseif (isDateTime)>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">{{scope.row.${fieldName} | formatDateTime}}</template>
+            </el-table-column>
+            <#else>
+            <el-table-column label="${columnComment}">
+                <template slot-scope="scope">{{scope.row.${fieldName}}}</template>
+            </el-table-column>
+            </#if>
+            </#list>
+            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>200<#else>160</#if>">
+                <template slot-scope="scope">
+                    <el-button @click="edit(scope.row)" type="primary" icon="el-icon-edit" size="small" circle></el-button>
+                    <el-button @click="get(scope.row)" type="info" icon="el-icon-more" size="small" circle></el-button>
+                    <#if table.validStatusColumn??>
+                    <el-button @click="disable(scope.row)" v-if="scope.row.${table.validStatusColumn.targetName?uncap_first}==${table.validStatusColumn.validStatusOption.valid}" type="warning" icon="el-icon-close" size="small" circle></el-button>
+                    <el-button @click="enable(scope.row)" v-else type="success" icon="el-icon-check" size="small" circle></el-button>
+                    </#if>
+                    <el-button @click="del(scope.row)" type="danger" icon="el-icon-delete" size="small" circle></el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <el-pagination
+                background
+                @size-change="changePageSize"
+                @current-change="changePage"
+                :current-page="pageInfo.pageNum"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="pageInfo.pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="pageInfo.total">
+        </el-pagination>
+
+        <el-dialog title="${tableComment}详情" class="dialog-detail" :visible.sync="detailDialogVisible">
+            <#list table.columns as column>
+            <#include "/include/column/properties.ftl">
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="6" :md="5" :lg="4" :xl="3">
+                    <label>${columnComment}</label>
+                </el-col>
+                <el-col :xs="24" :sm="18" :md="19" :lg="20" :xl="21">
+                    <#if (column.validStatus || column.select || column.fkSelect)>
+                    <span>{{get${propertyName}Text(detail.${fieldName})}}</span>
+                    <#elseif column.imgUrl>
+                    <img :src="detail.${fieldName}" alt="${columnComment}">
+                    <#elseif column.content>
+                    <pre>{{detail.${fieldName}}}</pre>
+                    <#elseif (isDate)>
+                    <span>{{detail.${fieldName} | formatDate}}</span>
+                    <#elseif (isTime)>
+                    <span>{{detail.${fieldName} | formatTime}}</span>
+                    <#elseif (isDateTime)>
+                    <span>{{detail.${fieldName} | formatDateTime}}</span>
+                    <#else>
+                    <span>{{detail.${fieldName}}}</span>
+                    </#if>
+                </el-col>
+            </el-row>
+            </#list>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="closeDialog" icon="el-icon-close">关闭</el-button>
+                <el-button @click="edit(detail)" type="primary" icon="el-icon-edit">编辑</el-button>
+                <el-button @click="del(detail)" type="danger" icon="el-icon-delete">删除</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog :title="addOrEditTitle" :visible.sync="addOrEditDialogVisible">
+            <el-form ref="addOrEditParams" :model="addOrEditParams" :label-position="'left'" label-width="120px">
+                <#list table.columns as column>
+                <#include "/include/column/properties.ftl">
+                <#if column.notRequired>
+                <#elseif column.autoIncrement>
+                <#elseif (column.select)>
+                <el-form-item label="${columnComment}">
+                    <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
+                        <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.value" :label="item.text"></el-option>
+                    </el-select>
+                </el-form-item>
+                <#elseif (column.fkSelect)>
+                <el-form-item label="${columnComment}">
+                    <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
+                        <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.${column.fkSelectColumn.valueName?uncap_first}" :label="item.${column.fkSelectColumn.textName?uncap_first}"></el-option>
+                    </el-select>
+                </el-form-item>
+                <#elseif (column.validStatus)>
+                <#-- <el-form-item label="${columnComment}">
+                    <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
+                        <el-option v-for="item in ${fieldName}SelectList" :value="item.value" :label="item.text"></el-option>
+                    </el-select>
+                </el-form-item> -->
+                <#elseif (isInteger)>
+                <el-form-item label="${columnComment}">
+                    <el-input v-model="addOrEditParams.${fieldName}"></el-input>
+                </el-form-item>
+                <#elseif (isDecimal)>
+                <el-form-item label="${columnComment}">
+                    <el-input v-model="addOrEditParams.${fieldName}"></el-input>
+                </el-form-item>
+                <#elseif (isDate)>
+                <el-form-item label="${columnComment}">
+                    <el-date-picker v-model="addOrEditParams.${fieldName}" type="date" placeholder="选择日期"></el-date-picker>
+                </el-form-item>
+                <#elseif (isTime)>
+                <el-form-item label="${columnComment}">
+                    <el-time-select v-model="addOrEditParams.${fieldName}" placeholder="选择时间"></el-time-select>
+                </el-form-item>
+                <#elseif (isDateTime)>
+                <el-form-item label="${columnComment}">
+                    <el-date-picker v-model="addOrEditParams.${fieldName}" type="datetime" placeholder="选择日期时间"></el-date-picker>
+                </el-form-item>
+                <#elseif (isContent)>
+                <el-form-item label="${columnComment}">
+                    <el-input v-model="addOrEditParams.${fieldName}" type="textarea" :autosize="{ minRows: 5, maxRows: 100}"></el-input>
+                </el-form-item>
+                <#elseif (isString)>
+                <el-form-item label="${columnComment}">
+                    <el-input v-model="addOrEditParams.${fieldName}" type="text"></el-input>
+                </el-form-item>
+                <#else>
+                </#if>
+                </#list>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="save" type="primary" icon="el-icon-document">保存</el-button>
+                <el-button @click="closeDialog" icon="el-icon-close">取消</el-button>
+            </div>
+        </el-dialog>
+    </div>
+
+    <script src="//unpkg.com/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/element-ui/lib/index.js"></script>
+    <script src="//unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/resources/js/config.js"></script>
+    <script src="/resources/js/common.js"></script>
+    <script src="/resources/js/${className?lower_case}/index.js"></script>
+</body>
+</html>
