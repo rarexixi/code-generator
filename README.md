@@ -1,6 +1,6 @@
-# MySqlCodeGenerator
+# mysql code generator
 
-mysql代码生成器
+mysql代码生成器，用来生成java代码
 
 ## 使用方式
 
@@ -152,18 +152,18 @@ org.xi.quick.codegeneratorkt.model.TableModel
 |targetTableName                      |目标表名                   |String                |user_type_rela
 |className                            |表对应的类名               |String                |UserTypeRela
 |comment                              |表说明                     |String                |用户类型关系表
-|columns                              |表列                       |List<ColumnModel>     |
+|columns                              |表列                       |List\<ColumnModel>    |
 |hasPk                                |是否有主键                 |Boolean               |
-|pks                                  |主键列表                   |List<ColumnModel>     |
+|pks                                  |主键列表                   |List\<ColumnModel>    |
 |hasUniPk                             |主键唯一                   |Boolean               |
 |uniPk                                |唯一主键                   |ColumnModel           |
 |hasAutoIncUniPk                      |唯一主键是否自增           |Boolean               |
-|indexes                              |索引列                     |List<ColumnModel>     |
-|searchColumns                        |除了公共列以外的列         |List<ColumnModel>     |
-|requiredColumns                      |除了公共列以外的列         |List<ColumnModel>     |
-|columnsExceptBase                    |除了公共列以外的列         |List<ColumnModel>     |
-|selectColumns                        |选择列                     |List<ColumnModel>     |
-|fkSelectColumns                      |外键选择列                 |List<ColumnModel>     |
+|indexes                              |索引列                     |List\<ColumnModel>    |
+|searchColumns                        |可以被搜索的列             |List\<ColumnModel>    |
+|requiredColumns                      |修改时需要的列             |List\<ColumnModel>    |
+|columnsExceptBase                    |除了公共列以外的列         |List\<ColumnModel>    |
+|selectColumns                        |选择列                     |List\<ColumnModel>    |
+|fkSelectColumns                      |外键选择列                 |List\<ColumnModel>    |
 |validStatusColumn                    |有效性字段                 |ColumnModel           |
 
 ### ColumnModel
@@ -211,7 +211,7 @@ org.xi.quick.codegeneratorkt.model.SelectOption
 |FieldName                    |FieldRemark               |type                  |example
 |-----------------------------|--------------------------|----------------------|-----------------
 |value                        |值                        |String                |1,2
-|text                         |展示的值                  |String                 |状态1，状态2
+|text                         |展示的值                  |String                |状态1，状态2
 
 #### FkSelectColumn
 org.xi.quick.codegeneratorkt.model.FkSelectColumn
