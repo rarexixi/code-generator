@@ -110,7 +110,7 @@
     </sql>
     <sql id="selectColumnList">
         <#list table.columns as column>
-        `${column.columnName}`<#if column_has_next>,</#if>
+        `${column.columnName}`<#if column?has_next>,</#if>
         </#list>
     </sql>
     <sql id="updateColumnSet">
@@ -120,7 +120,7 @@
             <#if (column.pk && column.autoIncrement)>
             <#else>
             <if test="entity.${fieldName} != null">
-                `${column.columnName}` = <@mapperEl 'entity.' + fieldName/><#if column_has_next>,</#if>
+                `${column.columnName}` = <@mapperEl 'entity.' + fieldName/><#if column?has_next>,</#if>
             </if>
             </#if>
             </#list>

@@ -20,9 +20,9 @@
         SELECT DISTINCT
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
-        <include refid="tableName"/>.`${column.columnName}`<#if column_has_next>,</#if>
+        <include refid="tableName"/>.`${column.columnName}`<#if column?has_next>,</#if>
         <#if (column.fkSelect)>
-        `${column.fkSelectColumn.foreignTableName}`.`${column.fkSelectColumn.textColumnName}` `${column.columnName}_text`<#if column_has_next>,</#if>
+        `${column.fkSelectColumn.foreignTableName}`.`${column.fkSelectColumn.textColumnName}` `${column.columnName}_text`<#if column?has_next>,</#if>
         </#if>
         </#list>
         FROM
@@ -44,7 +44,7 @@
     <select id="getExList" resultMap="ExtensionResultMap" parameterMap="ConditionExtensionMap">
         SELECT DISTINCT
         <#list table.columns as column>
-        `${column.columnName}`<#if column_has_next>,</#if>
+        `${column.columnName}`<#if column?has_next>,</#if>
         </#list>
         FROM
         <include refid="tableName"/>

@@ -13,5 +13,5 @@
             <#else>
             value: '${option.value}', text: '${option.text}'
             </#if>
-        }<#if option_has_next>, </#if></#list>],
+        }<#if option?has_next>, </#if></#list>],
 </#list>

@@ -22,7 +22,7 @@
             var params = {
 <#list pks as column>
                 <#include "/include/column/properties.ftl">
-                ${fieldName}: item.${fieldName}<#if (column_has_next)>,</#if>
+                ${fieldName}: item.${fieldName}<#if (column?has_next)>,</#if>
 </#list>
             };
             return params;
