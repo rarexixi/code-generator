@@ -1,4 +1,4 @@
-# MySqlCodeGenerator
+# mysql code generator
 
 mysql代码生成器
 
