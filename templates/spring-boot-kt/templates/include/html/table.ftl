@@ -1,4 +1,3 @@
-
         <el-row>
             <el-button @click="add" type="primary" icon="el-icon-plus">添加</el-button>
 <#if table.validStatusColumn??>
