@@ -51,7 +51,7 @@
             </div>
         </el-dialog>
         <el-dialog :title="addOrEditTitle" :visible.sync="addOrEditDialogVisible">
-            <el-form ref="addOrEditParams" :model="addOrEditParams" :label-position="'left'" label-width="120px">
+            <el-form ref="addOrEditParams" :model="addOrEditParams" label-position="left" label-width="120px">
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>

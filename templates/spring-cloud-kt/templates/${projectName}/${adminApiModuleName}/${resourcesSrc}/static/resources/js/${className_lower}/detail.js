@@ -16,7 +16,7 @@ var app = new Vue({
             <#if (column.validStatus)>
             ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column?has_next>,</#if>
             <#elseif (column.fkSelect || column.select)>
-            ${fieldName}: <#if (column.dataType?ends_with("char"))>''<#else>0</#if><#if column?has_next>,</#if>
+            ${fieldName}: <#if (isString)>''<#else>0</#if><#if column?has_next>,</#if>
             <#else>
             ${fieldName}: ''<#if column?has_next>,</#if>
             </#if>

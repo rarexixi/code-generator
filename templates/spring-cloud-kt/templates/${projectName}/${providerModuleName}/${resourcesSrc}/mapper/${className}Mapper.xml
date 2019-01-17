@@ -51,7 +51,7 @@
                     AND `${column.columnName}` IS NULL
                 </if>
                 </#if>
-                <#if (column.dataType?ends_with("char"))>
+                <#if (isString)>
                 <if test="condition.${fieldName}IsEmpty != null">
                     AND `${column.columnName}` = ''
                 </if>

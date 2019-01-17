@@ -45,7 +45,7 @@ public class ${className}Condition extends BaseCondition {
      */
     private Boolean ${fieldName}IsNull;
     </#if>
-    <#if (column.dataType?ends_with("char"))>
+    <#if (isString)>
 
     /**
      * ${columnComment}为空
@@ -121,7 +121,7 @@ public class ${className}Condition extends BaseCondition {
         return ${fieldName}IsNull;
     }
     </#if>
-    <#if (column.dataType?ends_with("char"))>
+    <#if (isString)>
 
     public void set${propertyName}IsEmpty(Boolean ${fieldName}IsEmpty) {
         this.${fieldName}IsEmpty = ${fieldName}IsEmpty;
