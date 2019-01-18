@@ -41,11 +41,12 @@
             <#elseif column.imgUrl>
             <el-table-column label="${columnComment}">
                 <template slot-scope="scope">
-                    <div class="ratio ratio-4by3 table-img-container">
+                    <div class="ratio ratio-4by3 table-img-container" v-if="scope.row.${fieldName} != ''">
                         <div class="content center">
                             <img :src="scope.row.${fieldName}" alt="${columnComment}" class="content" />
                         </div>
                     </div>
+                    <span v-else>-</span>
                 </template>
             </el-table-column>
             <#elseif (isDate)>
@@ -100,7 +101,8 @@
                     <#if (column.validStatus || column.select || column.fkSelect)>
                     <span>{{get${propertyName}Text(detail.${fieldName})}}</span>
                     <#elseif column.imgUrl>
-                    <img :src="detail.${fieldName}" alt="${columnComment}">
+                    <img :src="detail.${fieldName}" alt="${columnComment}" v-if="detail.${fieldName} != ''">
+                    <span v-else>-</span>
                     <#elseif column.content>
                     <pre>{{detail.${fieldName}}}</pre>
                     <#elseif (isDate)>
