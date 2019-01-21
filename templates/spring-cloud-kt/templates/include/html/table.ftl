@@ -24,10 +24,12 @@
             <el-table-column label="${columnComment}">
                 <template slot-scope="scope">
                     <div class="ratio ratio-4by3 table-img-container">
+                    <div class="ratio ratio-4by3 table-img-container" v-if="scope.row.${fieldName} != ''">
                         <div class="content center">
                             <img :src="scope.row.${fieldName}" alt="${columnComment}" class="content" />
                         </div>
                     </div>
+                    <span v-else>-</span>
                 </template>
             </el-table-column>
             <#elseif (isDate)>
