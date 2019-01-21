@@ -1,4 +1,4 @@
-        <el-form ref="searchParams" :model="searchParams" :label-position="'left'" label-width="120px">
+        <el-form ref="searchParams" :model="searchParams" label-position="left" label-width="120px">
             <el-row :gutter="10">
 <#list table.indexes as column>
                 <#include "/include/column/properties.ftl">
@@ -13,7 +13,7 @@
                 <#elseif column.fkSelect>
                 <el-col :xs="24" :sm="12" :md="8" :lg="8" :xl="6">
                     <el-form-item label="${columnComment}">
-                        <el-select v-model="searchParams.${fieldName}" placeholder="全部">
+                        <el-select v-model="searchParams.${fieldName}" filterable placeholder="全部">
                             <el-option value="" label="全部"></el-option>
                             <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.${column.fkSelectColumn.valueName?uncap_first}" :label="item.${column.fkSelectColumn.textName?uncap_first}"></el-option>
                         </el-select>

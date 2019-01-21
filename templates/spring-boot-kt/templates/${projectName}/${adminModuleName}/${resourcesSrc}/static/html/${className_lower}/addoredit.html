@@ -16,7 +16,7 @@
             <el-breadcrumb-item>${tableComment}管理</el-breadcrumb-item>
         </el-breadcrumb>
         <div>
-            <el-form ref="addOrEditParams" :model="addOrEditParams" :label-position="'left'" label-width="120px">
+            <el-form ref="addOrEditParams" :model="addOrEditParams" label-position="left" label-width="120px">
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>

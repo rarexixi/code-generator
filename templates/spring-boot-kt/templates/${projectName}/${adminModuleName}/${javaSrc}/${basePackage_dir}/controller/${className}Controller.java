@@ -190,7 +190,7 @@ public class ${className}Controller {
      <#include "/include/author_info1.ftl">
      */
     @GetMapping("/getDetail")
-    public ResponseVo<${className}DetailVm> getDetail(<#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>@${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}<#if column_has_next>,</#if></#list>) {
+    public ResponseVo<${className}DetailVm> getDetail(<#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>@${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}<#if column?has_next>,</#if></#list>) {
 
         ${className}EntityExtension entity = ${classNameFirstLower}Service.getByPk(<#include "/include/table/pk_values.ftl">);
         ${className}DetailVm vm = new ${className}DetailVm(entity);

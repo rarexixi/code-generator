@@ -16,7 +16,7 @@
             <el-breadcrumb-item>${tableComment}管理</el-breadcrumb-item>
         </el-breadcrumb>
         <div>
-            <el-form ref="addOrEditParams" :model="addOrEditParams" :label-position="'left'" label-width="120px">
+            <el-form ref="addOrEditParams" :model="addOrEditParams" label-position="left" label-width="120px">
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>
@@ -29,7 +29,7 @@
                 </el-form-item>
                 <#elseif (column.fkSelect)>
                 <el-form-item label="${columnComment}">
-                    <el-select v-model="addOrEditParams.${fieldName}" placeholder="请选择">
+                    <el-select v-model="addOrEditParams.${fieldName}" filterable placeholder="请选择">
                         <el-option v-for="item in ${fieldNameExceptKey}SelectList" :value="item.${column.fkSelectColumn.valueName?uncap_first}" :label="item.${column.fkSelectColumn.textName?uncap_first}"></el-option>
                     </el-select>
                 </el-form-item>

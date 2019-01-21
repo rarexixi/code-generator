@@ -11,18 +11,18 @@ var app = new Vue({
         pkParams: {
             <#list pks as column>
             <#include "/include/column/properties.ftl">
-            ${fieldName}: ''<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column?has_next>,</#if>
             </#list>
         },
         detail: {
             <#list table.columns as column>
             <#include "/include/column/properties.ftl">
             <#if (column.validStatus)>
-            <#-- ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column_has_next>,</#if> -->
+            <#-- ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column?has_next>,</#if> -->
             <#elseif (column.fkSelect || column.select)>
-            ${fieldName}: <#if (column.dataType?ends_with("char"))>''<#else>0</#if><#if column_has_next>,</#if>
+            ${fieldName}: <#if (isString)>''<#else>0</#if><#if column?has_next>,</#if>
             <#else>
-            ${fieldName}: ''<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column?has_next>,</#if>
             </#if>
             </#list>
         },
@@ -30,9 +30,9 @@ var app = new Vue({
             <#list table.requiredColumns as column>
             <#include "/include/column/properties.ftl">
             <#if (column.validStatus)>
-            <#-- ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column_has_next>,</#if> -->
+            <#-- ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column?has_next>,</#if> -->
             <#else>
-            ${fieldName}: ''<#if column_has_next>,</#if>
+            ${fieldName}: ''<#if column?has_next>,</#if>
             </#if>
             </#list>
         },

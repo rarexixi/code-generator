@@ -73,6 +73,22 @@ public interface BaseService<T extends BaseEntity, C extends BaseCondition, O ex
     /**
      * 查询符合条件的列表
      *
+     * @param condition
+     * @return
+     */
+    List<T> getList(C condition);
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param conditionList
+     * @return
+     */
+    List<T> getListByConditionList(List<C> conditionList);
+
+    /**
+     * 查询符合条件的列表
+     *
      * @param search
      * @return
      */

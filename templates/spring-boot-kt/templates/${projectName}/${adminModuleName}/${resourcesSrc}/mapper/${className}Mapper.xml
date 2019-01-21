@@ -24,7 +24,7 @@
             <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
             <#else>
                 <#if (canBeEqual)>
-                <if test="condition.${fieldName} != null">
+                <if test="condition.${fieldName} != null<#if (isString)> and condition.${fieldName} != ''</#if>">
                     AND `${column.columnName}` = <@mapperEl 'condition.' + fieldName/>
                 </if>
                 </#if>
@@ -47,12 +47,12 @@
                 </if>
                 </#if>
                 <#if (canBeNull)>
-                <if test="condition.${fieldName}IsNull != null">
+                <if test="condition.${fieldName}IsNull != null and condition.${fieldName}IsNull == true">
                     AND `${column.columnName}` IS NULL
                 </if>
                 </#if>
-                <#if (column.dataType?ends_with("char"))>
-                <if test="condition.${fieldName}IsEmpty != null">
+                <#if (isString)>
+                <if test="condition.${fieldName}IsEmpty != null and condition.${fieldName}IsEmpty == true">
                     AND `${column.columnName}` = ''
                 </if>
                 <if test="condition.${fieldName}StartWith != null and condition.${fieldName}StartWith != ''">
@@ -78,7 +78,7 @@
         <if test="conditionList != null and conditionList.size() > 0">
             <where>
                 <foreach collection="conditionList" item="condition" open="(" close=")" separator=" OR ">
-                    <include refid="selectCondition"/>
+                    (<include refid="selectCondition"/>)
                 </foreach>
             </where>
         </if>
@@ -110,7 +110,7 @@
     </sql>
     <sql id="selectColumnList">
         <#list table.columns as column>
-        `${column.columnName}`<#if column_has_next>,</#if>
+        `${column.columnName}`<#if column?has_next>,</#if>
         </#list>
     </sql>
     <sql id="updateColumnSet">
@@ -120,7 +120,7 @@
             <#if (column.pk && column.autoIncrement)>
             <#else>
             <if test="entity.${fieldName} != null">
-                `${column.columnName}` = <@mapperEl 'entity.' + fieldName/><#if column_has_next>,</#if>
+                `${column.columnName}` = <@mapperEl 'entity.' + fieldName/><#if column?has_next>,</#if>
             </if>
             </#if>
             </#list>

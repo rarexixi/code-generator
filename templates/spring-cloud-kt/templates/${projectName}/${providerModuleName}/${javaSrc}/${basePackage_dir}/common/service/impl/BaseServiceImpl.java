@@ -107,6 +107,34 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     /**
      * 查询符合条件的列表
      *
+     * @param condition
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<T> getList(C condition) {
+
+        List<T> list = mapper.selectByCondition(condition, null);
+        return list;
+    }
+
+    /**
+     * 查询符合条件的列表
+     *
+     * @param conditionList
+     * @return
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<T> getListByConditionList(List<C> conditionList) {
+
+        List<T> list = mapper.selectByConditionList(conditionList, null);
+        return list;
+    }
+
+    /**
+     * 查询符合条件的列表
+     *
      * @param search
      * @return
      */

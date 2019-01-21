@@ -61,7 +61,7 @@ var app = new Vue({
             var pkParams = '';
             <#list pks as column>
             <#include "/include/column/properties.ftl">
-            pkParams += <#if (!column?is_first)>'&${fieldName}='<#else>'${fieldName}='</#if> + item.${fieldName};
+            pkParams += <#if (column?is_first)>'${fieldName}='<#else>'&${fieldName}='</#if> + item.${fieldName};
             </#list>
             var url = 'addoredit.html?' + pkParams;
             location.href = url;
@@ -70,7 +70,7 @@ var app = new Vue({
             var pkParams = '';
             <#list pks as column>
             <#include "/include/column/properties.ftl">
-            pkParams += <#if (!column?is_first)>'&${fieldName}='<#else>'${fieldName}='</#if> + item.${fieldName};
+            pkParams += <#if (column?is_first)>'${fieldName}='<#else>'&${fieldName}='</#if> + item.${fieldName};
             </#list>
             var url = 'detail.html?' + pkParams;
             location.href = url;

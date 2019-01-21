@@ -55,7 +55,7 @@ public class ${className}SearchVm implements Serializable {
      */
     private Boolean ${fieldName}IsNull;
     </#if>
-    <#if (column.dataType?ends_with("char"))>
+    <#if (isString)>
 
     /**
      * ${columnComment}为空
@@ -144,7 +144,7 @@ public class ${className}SearchVm implements Serializable {
         return ${fieldName}IsNull;
     }
     </#if>
-    <#if (column.dataType?ends_with("char"))>
+    <#if (isString)>
 
     public void set${propertyName}IsEmpty(Boolean ${fieldName}IsEmpty) {
         this.${fieldName}IsEmpty = ${fieldName}IsEmpty;
@@ -201,7 +201,7 @@ public class ${className}SearchVm implements Serializable {
         <#if (canBeNull)>
         condition.set${propertyName}IsNull(${fieldName}IsNull);
         </#if>
-        <#if (column.dataType?ends_with("char"))>
+        <#if (isString)>
         condition.set${propertyName}IsEmpty(${fieldName}IsEmpty);
         condition.set${propertyName}StartWith(${fieldName}StartWith);
         condition.set${propertyName}Contains(${fieldName}Contains);
