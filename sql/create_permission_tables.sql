@@ -1,10 +1,10 @@
-drop database if exists `quick`;
+drop database if exists `permission`;
 
-create database `quick`
-  default character set utf8mb4
+create database `permission`
+  default character set utf8
   collate utf8mb4_general_ci;
 
-use `quick`;
+use `permission`;
 drop table if exists `sys_user`;
 drop table if exists `sys_role`;
 drop table if exists `sys_permission`;
