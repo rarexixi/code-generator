@@ -1,4 +1,4 @@
-drop database `quick`;
+drop database if exists `quick`;
 
 create database `quick`
   default character set utf8mb4
@@ -63,6 +63,7 @@ create table `sys_permission`
   `update_time`     datetime     not null default current_timestamp on update current_timestamp comment '更新时间',
 
   primary key (`id`),
+  unique (`permission_code`),
   unique (`permission_name`),
   index (`create_time`),
   index (`update_time`)
