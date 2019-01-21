@@ -78,7 +78,7 @@
         <if test="conditionList != null and conditionList.size() > 0">
             <where>
                 <foreach collection="conditionList" item="condition" open="(" close=")" separator=" OR ">
-                    <include refid="selectCondition"/>
+                    (<include refid="selectCondition"/>)
                 </foreach>
             </where>
         </if>
