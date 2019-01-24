@@ -132,17 +132,13 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
-            <#if !column.autoIncrement>
             <if test="entity.${fieldName} != null">`${column.columnName}`,</if>
-            </#if>
         </#list>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
-            <#if !column.autoIncrement>
             <if test="entity.${fieldName} != null"><@mapperEl 'entity.' + fieldName/>,</if>
-            </#if>
         </#list>
         </trim>
     </insert>
@@ -153,17 +149,13 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
             <#list table.columns as column>
             <#include "/include/column/properties.ftl">
-                <#if !column.autoIncrement>
                 <if test="item.${fieldName} != null">`${column.columnName}`,</if>
-                </#if>
             </#list>
             </trim>
             <trim prefix="values (" suffix=")" suffixOverrides=",">
             <#list table.columns as column>
             <#include "/include/column/properties.ftl">
-                <#if !column.autoIncrement>
                 <if test="item.${fieldName} != null"><@mapperEl 'item.' + fieldName/>,</if>
-                </#if>
             </#list>
             </trim>
         </foreach>
