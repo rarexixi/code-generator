@@ -33,8 +33,12 @@ import java.util.List;
 @Validated
 public class ${className}Controller {
 
+    private final ${className}Service ${classNameFirstLower}Service;
+
     @Autowired
-    private ${className}Service ${classNameFirstLower}Service;
+    private ${className}Controller(${className}Service ${classNameFirstLower}Service) {
+        this.${classNameFirstLower}Service = ${classNameFirstLower}Service;
+    }
 
     /**
      * 添加${tableComment}

@@ -31,8 +31,12 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Value("${r'${spring.application.name}'}")
     private String applicationName;
 
+    private final ${className}CloudService ${classNameFirstLower}CloudService;
+
     @Autowired
-    private ${className}CloudService ${classNameFirstLower}CloudService;
+    public ${className}ServiceImpl(${className}CloudService ${classNameFirstLower}CloudService) {
+        this.${classNameFirstLower}CloudService = ${classNameFirstLower}CloudService;
+    }
 
     /**
      * 添加${tableComment}
