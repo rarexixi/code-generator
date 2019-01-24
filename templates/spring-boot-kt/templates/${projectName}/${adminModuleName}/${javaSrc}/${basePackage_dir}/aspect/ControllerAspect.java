@@ -1,8 +1,8 @@
 package ${basePackage}.aspect;
 
-import ${basePackage}.common.constant.OperationConstants;
-import ${basePackage}.common.model.ResponseVo;
-import ${basePackage}.common.utils.LogUtils;
+import ${baseCommonPackage}.constant.OperationConstants;
+import ${baseCommonPackage}.model.ResponseVo;
+import ${baseCommonPackage}.utils.LogUtils;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -35,7 +35,7 @@ public class ControllerAspect {
     /**
      * 设置标识
      */
-    @Pointcut("execution(public ${basePackage}.common.model.ResponseVo ${basePackage}.controller.*.*(..))")
+    @Pointcut("execution(public ${baseCommonPackage}.model.ResponseVo ${basePackage}.controller.*.*(..))")
     public void invoke() {
     }
 

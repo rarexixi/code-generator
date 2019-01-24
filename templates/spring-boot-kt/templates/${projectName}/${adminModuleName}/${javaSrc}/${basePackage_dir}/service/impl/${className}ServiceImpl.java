@@ -1,7 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.service.impl;
 
-import ${basePackage}.common.service.impl.BaseServiceImpl;
+import ${baseCommonPackage}.service.impl.BaseServiceImpl;
 import ${basePackage}.mapper.${className}Mapper;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;

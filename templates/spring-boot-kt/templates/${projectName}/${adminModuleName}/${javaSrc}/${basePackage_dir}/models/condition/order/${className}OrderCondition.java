@@ -1,10 +1,10 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.models.condition.order;
 
-import ${basePackage}.common.model.OrderCondition;
+import ${baseCommonPackage}.model.OrderCondition;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}OrderCondition extends OrderCondition {
+public class ${className}OrderCondition implements OrderCondition {
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
     <#if (column.ignoreSearch || isContent)>

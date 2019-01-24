@@ -1,6 +1,6 @@
 package ${basePackage}.models.common;
 
-import ${basePackage}.common.validation.*;
+import ${baseCommonPackage}.validation.*;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;

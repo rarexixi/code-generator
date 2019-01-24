@@ -1,12 +1,12 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.controller;
 
-import ${basePackage}.common.model.PageInfoVo;
-import ${basePackage}.common.model.ResponseVo;
-import ${basePackage}.common.model.OrderSearch;
-import ${basePackage}.common.model.OrderSearchPage;
-import ${basePackage}.common.utils.poi.ExcelUtils;
-import ${basePackage}.common.validation.*;
+import ${baseCommonPackage}.model.PageInfoVo;
+import ${baseCommonPackage}.model.ResponseVo;
+import ${baseCommonPackage}.model.OrderSearch;
+import ${baseCommonPackage}.model.OrderSearchPage;
+import ${baseCommonPackage}.utils.poi.ExcelUtils;
+import ${baseCommonPackage}.validation.*;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
 import ${basePackage}.models.condition.order.${className}OrderCondition;
@@ -224,12 +224,9 @@ public class ${className}Controller {
     @PostMapping("/getPageInfo")
     public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(@RequestBody OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage) {
 
-        ${className}SearchVm searchVm = searchPage.getCondition();
-        ${className}OrderVm orderVm = searchPage.getOrder();
-        ${className}ConditionExtension condition = searchVm.getConditionExtension();
-        ${className}OrderCondition orderCondition = orderVm.getOrderCondition();
+        OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch = VoUtils.getOrderSearch(searchPage);
         OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> orderSearchPage =
-                new OrderSearchPage<>(searchPage.getPageIndex(), searchPage.getPageSize(), condition, orderCondition);
+                new OrderSearchPage<>(searchPage.getPageIndex(), searchPage.getPageSize(), orderSearch);
 
         PageInfo<${className}EntityExtension> pageInfo = ${classNameFirstLower}Service.getPageList(orderSearchPage);
         PageInfoVo<${className}DetailVm> pageInfoVo = VoUtils.getPageInfoVo(pageInfo, entity -> new ${className}DetailVm(entity));
@@ -257,12 +254,7 @@ public class ${className}Controller {
 
     private List<${className}DetailVm> getVmList(OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
 
-        ${className}SearchVm searchVm = search.getCondition();
-        ${className}OrderVm orderVm = search.getOrder();
-        ${className}ConditionExtension condition = searchVm.getConditionExtension();
-        ${className}OrderCondition orderCondition = orderVm.getOrderCondition();
-        OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch = new OrderSearch<>(condition, orderCondition);
-
+        OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch = VoUtils.getOrderSearch(search);
         List<${className}EntityExtension> list = ${classNameFirstLower}Service.getExList(orderSearch);
         List<${className}DetailVm> vmList = list.stream().map(o -> new ${className}DetailVm(o)).collect(Collectors.toList());
         return vmList;

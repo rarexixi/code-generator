@@ -1,7 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.vm.addoredit;
 
-import ${basePackage}.common.validation.*;
+import ${baseCommonPackage}.validation.*;
 import ${basePackage}.models.entity.${className}Entity;
 
 import javax.validation.constraints.*;

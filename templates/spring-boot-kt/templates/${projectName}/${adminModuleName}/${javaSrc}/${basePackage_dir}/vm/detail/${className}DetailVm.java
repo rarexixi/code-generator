@@ -1,7 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.vm.detail;
 
-import ${basePackage}.common.annotation.ExcelCol;
+import ${baseCommonPackage}.annotation.ExcelCol;
 
 import ${basePackage}.models.entity.${className}Entity;
 import ${basePackage}.models.entity.extension.${className}EntityExtension;

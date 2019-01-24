@@ -1,16 +1,16 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.vm.search;
 
+import ${basePackage}.models.common.SearchVm;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
-import ${basePackage}.models.condition.order.${className}OrderCondition;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}SearchVm implements Serializable {
+public class ${className}SearchVm implements SearchVm<${className}ConditionExtension> {
     <#if (table.validStatusColumn??)>
 
     /**

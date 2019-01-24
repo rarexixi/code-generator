@@ -1,8 +1,8 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.service;
 
-import ${basePackage}.common.service.BaseService;
-import ${basePackage}.common.service.BaseServiceExtension;
+import ${baseCommonPackage}.service.BaseService;
+import ${baseCommonPackage}.service.BaseServiceExtension;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
 import ${basePackage}.models.condition.order.${className}OrderCondition;

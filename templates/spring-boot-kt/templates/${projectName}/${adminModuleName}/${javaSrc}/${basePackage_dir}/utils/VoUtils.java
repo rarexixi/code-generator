@@ -1,10 +1,13 @@
 package ${basePackage}.utils;
 
-import ${basePackage}.common.model.PageInfoVo;
+import ${baseCommonPackage}.model.PageInfoVo;
 import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.model.ResultVo;
+import ${basePackage}.models.common.BaseCondition;
+import ${basePackage}.models.common.OrderVm;
+import ${basePackage}.models.common.SearchVm;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -56,5 +59,15 @@ public class VoUtils {
             pageInfoVo = new PageInfoVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getTotal(), list);
         }
         return pageInfoVo;
+    }
+
+    public static <RC extends BaseCondition, RO extends OrderCondition, TC extends SearchVm<RC>, TO extends OrderVm<RO>>
+    OrderSearch<RC, RO> getOrderSearch(OrderSearch<TC, TO> search) {
+
+        TC searchVm = search.getCondition();
+        TO orderVm = search.getOrder();
+        RC condition = searchVm == null ? null : searchVm.getConditionExtension();
+        RO orderCondition = orderVm == null ? null : orderVm.getOrderCondition();
+        return new OrderSearch<>(condition, orderCondition);
     }
 }

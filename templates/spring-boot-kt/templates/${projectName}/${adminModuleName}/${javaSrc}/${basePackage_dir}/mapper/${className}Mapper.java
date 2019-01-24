@@ -1,8 +1,8 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.mapper;
 
-import ${basePackage}.common.mapper.BaseMapper;
-import ${basePackage}.common.mapper.BaseMapperExtension;
+import ${baseCommonPackage}.mapper.BaseMapper;
+import ${baseCommonPackage}.mapper.BaseMapperExtension;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
 import ${basePackage}.models.condition.order.${className}OrderCondition;

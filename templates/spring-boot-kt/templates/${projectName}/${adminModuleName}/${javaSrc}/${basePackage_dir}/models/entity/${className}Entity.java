@@ -1,7 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.models.entity;
 
-import ${basePackage}.common.validation.*;
+import ${baseCommonPackage}.validation.*;
 import ${basePackage}.models.common.BaseEntity;
 
 import javax.validation.constraints.*;
