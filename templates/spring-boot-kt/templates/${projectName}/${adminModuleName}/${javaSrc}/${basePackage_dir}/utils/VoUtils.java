@@ -6,8 +6,8 @@ import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.ResponseVo;
 import ${baseCommonPackage}.model.ResultVo;
 import ${basePackage}.models.common.BaseCondition;
-import ${basePackage}.models.common.OrderVm;
-import ${basePackage}.models.common.SearchVm;
+import ${basePackage}.vm.OrderVm;
+import ${basePackage}.vm.SearchVm;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

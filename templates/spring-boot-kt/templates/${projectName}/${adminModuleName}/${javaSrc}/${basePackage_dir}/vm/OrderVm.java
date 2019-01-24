@@ -1,4 +1,4 @@
-package ${basePackage}.models.common;
+package ${basePackage}.vm;
 
 import ${baseCommonPackage}.model.OrderCondition;
 

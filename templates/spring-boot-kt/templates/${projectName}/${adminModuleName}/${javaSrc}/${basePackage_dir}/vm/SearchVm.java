@@ -1,5 +1,6 @@
-package ${basePackage}.models.common;
+package ${basePackage}.vm;
 
+import ${basePackage}.models.common.BaseCondition;
 
 public interface SearchVm<T extends BaseCondition> {
 

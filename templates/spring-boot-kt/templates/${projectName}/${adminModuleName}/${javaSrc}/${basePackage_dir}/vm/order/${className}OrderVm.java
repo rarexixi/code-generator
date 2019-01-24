@@ -1,8 +1,8 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.vm.order;
 
-import ${basePackage}.models.common.OrderVm;
 import ${basePackage}.models.condition.order.${className}OrderCondition;
+import ${basePackage}.vm.OrderVm;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

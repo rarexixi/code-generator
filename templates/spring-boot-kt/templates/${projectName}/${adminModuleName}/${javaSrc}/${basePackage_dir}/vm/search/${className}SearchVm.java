@@ -1,9 +1,9 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.vm.search;
 
-import ${basePackage}.models.common.SearchVm;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
+import ${basePackage}.vm.SearchVm;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
