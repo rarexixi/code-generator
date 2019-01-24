@@ -203,11 +203,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Override
     public ResponseVo<List<${className}DetailVm>> getList(OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
 
-        ${className}SearchVm searchVm = search.getCondition();
-        ${className}OrderVm orderVm = search.getOrder();
-        ${className}ConditionExtension condition = searchVm.getConditionExtension();
-        ${className}OrderCondition orderCondition = orderVm.getOrderCondition();
-        OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch = new OrderSearch<>(condition, orderCondition);
+        OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch = VoUtils.getOrderSearch(search);
         ResultVo<List<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getList(orderSearch, getSessionId());
 
         return VoUtils.getResponseVo(apiResult, result -> {
@@ -229,12 +225,9 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Override
     public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage) {
 
-        ${className}SearchVm searchVm = searchPage.getCondition();
-        ${className}OrderVm orderVm = searchPage.getOrder();
-        ${className}ConditionExtension condition = searchVm.getConditionExtension();
-        ${className}OrderCondition orderCondition = orderVm.getOrderCondition();
+        OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch = VoUtils.getOrderSearch(searchPage);
         OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> orderSearchPage =
-                new OrderSearchPage<>(searchPage.getPageIndex(), searchPage.getPageSize(), condition, orderCondition);
+                new OrderSearchPage<>(searchPage.getPageIndex(), searchPage.getPageSize(), orderSearch);
         ResultVo<PageInfoVo<${className}EntityExtension>> apiResult = ${classNameFirstLower}CloudService.getPageInfo(orderSearchPage, getSessionId());
 
         return VoUtils.getResponseVo(apiResult, result -> {

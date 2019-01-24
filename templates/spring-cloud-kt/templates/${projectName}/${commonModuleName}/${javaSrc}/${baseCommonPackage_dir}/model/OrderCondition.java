@@ -6,5 +6,5 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 <#include "/include/java_copyright.ftl">
-public class OrderCondition implements Serializable {
+public interface OrderCondition extends Serializable {
 }

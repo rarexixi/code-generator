@@ -21,6 +21,10 @@ public class OrderSearchPage<T, O extends OrderCondition> extends OrderSearch<T,
         this(pageIndex, pageSize, condition, null);
     }
 
+    public OrderSearchPage(int pageIndex, int pageSize, OrderSearch<T, O> orderSearch) {
+        this(pageIndex, pageSize, orderSearch.getCondition(), orderSearch.getOrder());
+    }
+
     public OrderSearchPage(int pageIndex, int pageSize, T condition, O order) {
         super(condition, order);
         this.setPageIndex(pageIndex);

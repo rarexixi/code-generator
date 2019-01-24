@@ -3,14 +3,14 @@ package ${basePackage}.admin.vm.search;
 
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
-import ${basePackage}.models.condition.order.${className}OrderCondition;
+import ${basePackage}.admin.vm.SearchVm;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}SearchVm implements Serializable {
+public class ${className}SearchVm implements SearchVm {
     <#if (table.validStatusColumn??)>
 
     /**

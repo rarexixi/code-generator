@@ -4,7 +4,7 @@ package ${basePackage}.models.condition.order;
 import ${baseCommonPackage}.model.OrderCondition;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}OrderCondition extends OrderCondition {
+public class ${className}OrderCondition implements OrderCondition {
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
     <#if (column.ignoreSearch || isContent)>

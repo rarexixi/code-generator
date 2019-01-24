@@ -1,18 +1,15 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.vm.order;
 
-import ${baseCommonPackage}.model.OrderCondition;
-
-import ${basePackage}.models.condition.${className}Condition;
-import ${basePackage}.models.condition.extension.${className}ConditionExtension;
 import ${basePackage}.models.condition.order.${className}OrderCondition;
+import ${basePackage}.admin.vm.OrderVm;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
-public class ${className}OrderVm extends OrderCondition {
+public class ${className}OrderVm implements OrderVm {
     <#list table.indexes as column>
     <#include "/include/column/properties.ftl">
 
