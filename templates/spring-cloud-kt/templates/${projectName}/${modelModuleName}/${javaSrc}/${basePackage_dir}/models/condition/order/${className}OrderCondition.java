@@ -7,7 +7,7 @@ import ${baseCommonPackage}.model.OrderCondition;
 public class ${className}OrderCondition extends OrderCondition {
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
-    <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+    <#if (column.ignoreSearch || isContent)>
     <#else>
 
     /**
@@ -18,7 +18,7 @@ public class ${className}OrderCondition extends OrderCondition {
     </#list>
     <#list table.columns as column>
     <#include "/include/column/properties.ftl">
-    <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+    <#if (column.ignoreSearch || isContent)>
     <#else>
 
     public void set${propertyName}Sort(Boolean ${fieldName}Sort) {

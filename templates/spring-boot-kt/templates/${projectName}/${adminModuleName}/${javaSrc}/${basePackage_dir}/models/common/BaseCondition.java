@@ -8,7 +8,7 @@ import java.util.*;
 public class BaseCondition implements Serializable {
 <#list baseColumns as column>
 <#include "/include/column/properties.ftl">
-<#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+<#if (column.ignoreSearch || isContent)>
 <#else>
     <#if (canBeEqual)>
 
@@ -64,7 +64,7 @@ public class BaseCondition implements Serializable {
 </#list>
 <#list baseColumns as column>
 <#include "/include/column/properties.ftl">
-<#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+<#if (column.ignoreSearch || isContent)>
 <#else>
     <#if (canBeEqual)>
 

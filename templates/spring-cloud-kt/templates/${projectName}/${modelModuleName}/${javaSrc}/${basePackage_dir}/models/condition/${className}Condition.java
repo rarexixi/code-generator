@@ -10,7 +10,7 @@ import java.util.*;
 public class ${className}Condition extends BaseCondition {
 <#list table.columnsExceptBase as column>
 <#include "/include/column/properties.ftl">
-<#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+<#if (column.ignoreSearch || isContent)>
 <#else>
     <#if (canBeEqual)>
 
@@ -66,7 +66,7 @@ public class ${className}Condition extends BaseCondition {
 </#list>
 <#list table.columnsExceptBase as column>
 <#include "/include/column/properties.ftl">
-<#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+<#if (column.ignoreSearch || isContent)>
 <#else>
     <#if (canBeEqual)>
 

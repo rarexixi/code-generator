@@ -55,7 +55,7 @@
         <where>
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
-        <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+        <#if (column.ignoreSearch || isContent)>
         <#else>
             <#if (canBeEqual)>
             <if test="condition.${fieldName} != null<#if (isString)> and condition.${fieldName} != ''</#if>">
@@ -105,7 +105,7 @@
                 <trim suffixOverrides=",">
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
-                <#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+                <#if (column.ignoreSearch || isContent)>
                 <#else>
                 <if test="order.${fieldName}Sort != null">
                     <choose>

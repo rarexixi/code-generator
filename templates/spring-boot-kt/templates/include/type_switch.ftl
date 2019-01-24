@@ -13,7 +13,7 @@
 <#assign isDateTime = (column.dataType?contains("date") || column.dataType?contains("time"))>
 
 
-<#if (column.ignoreSearch || column.dataType?ends_with("text"))>
+<#if (column.ignoreSearch || isContent)>
 <#else>
     <#if (isInteger)>
     <#elseif (canBeList)>
