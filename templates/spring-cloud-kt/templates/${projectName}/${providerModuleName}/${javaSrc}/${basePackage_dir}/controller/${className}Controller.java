@@ -32,6 +32,10 @@ import java.util.List;
 public class ${className}Controller {
 
     @Autowired
+    public ${className}Controller(${className}Service ${classNameFirstLower}Service) {
+        this.${classNameFirstLower}Service = ${classNameFirstLower}Service;
+    }
+
     private ${className}Service ${classNameFirstLower}Service;
 
     /**
