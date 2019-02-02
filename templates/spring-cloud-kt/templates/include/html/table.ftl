@@ -14,7 +14,8 @@
 </#if>
 <#list table.columns as column>
             <#include "/include/column/properties.ftl">
-            <#if (column.validStatus || column.select || column.fkSelect)>
+            <#if (isContent)>
+            <#elseif (column.validStatus || column.select || column.fkSelect)>
             <el-table-column label="${columnComment}">
                 <template slot-scope="scope">
                     <span>{{get${propertyName}Text(scope.row.${fieldName})}}</span>

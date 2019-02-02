@@ -14,18 +14,6 @@ var app = new Vue({
             ${fieldName}: ''<#if column?has_next>,</#if>
             </#list>
         },
-        detail: {
-            <#list table.columns as column>
-            <#include "/include/column/properties.ftl">
-            <#if (column.validStatus)>
-            <#-- ${fieldName}: ${table.validStatusColumn.validStatusOption.valid}<#if column?has_next>,</#if> -->
-            <#elseif (column.fkSelect || column.select)>
-            ${fieldName}: <#if (isString)>''<#else>0</#if><#if column?has_next>,</#if>
-            <#else>
-            ${fieldName}: ''<#if column?has_next>,</#if>
-            </#if>
-            </#list>
-        },
         addOrEditParams: {
             <#list table.requiredColumns as column>
             <#include "/include/column/properties.ftl">
@@ -46,10 +34,8 @@ var app = new Vue({
         </#list>
         if (location.search == '') {
             self.addOrEditTitle = '添加${tableComment}';
-            document.title = self.addOrEditTitle;
         } else {
-            self.addOrEditTitle = '更新{tableComment}';
-            document.title = self.addOrEditTitle;
+            self.addOrEditTitle = '更新${tableComment}';
 
             <#list table.pks as column>
             <#include "/include/column/properties.ftl">
@@ -57,14 +43,9 @@ var app = new Vue({
             </#list>
             self.get();
         }
+        document.title = self.addOrEditTitle;
     },
     methods: {
-        add: function () {
-            var self = this;
-            self.resetSave();
-            self.addOrEditDialogVisible = true;
-            self.addOrEditTitle = '添加${tableComment}';
-        },
         save: function () {
             var self = this;
             var ajaxUrl;
@@ -87,20 +68,7 @@ var app = new Vue({
                     message: '操作成功！',
                     type: 'success'
                 });
-                self.resetSave();
-                setTimeout(self.search, 1000);
             });
-        },
-        resetSave: function () {
-            var self = this;
-            <#list table.requiredColumns as column>
-            <#include "/include/column/properties.ftl">
-            <#if (column.validStatus)>
-            <#-- self.addOrEditParams.${fieldName} = ${table.validStatusColumn.validStatusOption.valid}; -->
-            <#else>
-            self.addOrEditParams.${fieldName} = self.detail.${fieldName};
-            </#if>
-            </#list>
         },
         get: function () {
             var self = this;
@@ -108,7 +76,6 @@ var app = new Vue({
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
             var params = self.pkParams;
             self.ajaxGet(url, params, '获取详情失败！', function (response) {
-                self.detail = response.result;
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>
@@ -118,7 +85,6 @@ var app = new Vue({
                 </#list>
             });
         },
-        <#include "/include/js/select_get_text.ftl">
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         init${propertyExceptKey}: function () {
