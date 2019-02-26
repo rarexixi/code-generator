@@ -48,7 +48,7 @@
     <select id="getExList" resultMap="ExtensionResultMap" parameterMap="ConditionExtensionMap">
         SELECT DISTINCT
         <#list table.columns as column>
-        `${column.columnName}`<#if column?has_next>,</#if>
+        <include refid="tableName"/>.`${column.columnName}`<#if column?has_next>,</#if>
         </#list>
         FROM
         <include refid="tableName"/>
@@ -59,41 +59,41 @@
         <#else>
             <#if (canBeEqual)>
             <if test="condition.${fieldName} != null<#if (isString)> and condition.${fieldName} != ''</#if>">
-                AND `${column.columnName}` = <@mapperEl 'condition.' + fieldName/>
+                AND <include refid="tableName"/>.`${column.columnName}` = <@mapperEl 'condition.' + fieldName/>
             </if>
             </#if>
             <#if (canBeList)>
             <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
-                AND `${column.columnName}` in
+                AND <include refid="tableName"/>.`${column.columnName}` in
                 <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
             </if>
             </#if>
             <#if (canBeRange)>
             <if test="condition.${fieldName}Min != null">
                 <![CDATA[
-                AND `${column.columnName}` >= <@mapperEl 'condition.' + fieldName + 'Min'/>
+                AND <include refid="tableName"/>.`${column.columnName}` >= <@mapperEl 'condition.' + fieldName + 'Min'/>
                 ]]>
             </if>
             <if test="condition.${fieldName}Max != null">
                 <![CDATA[
-                AND `${column.columnName}` <= <@mapperEl 'condition.' + fieldName + 'Max'/>
+                AND <include refid="tableName"/>.`${column.columnName}` <= <@mapperEl 'condition.' + fieldName + 'Max'/>
                 ]]>
             </if>
             </#if>
             <#if (canBeNull)>
             <if test="condition.${fieldName}IsNull != null and condition.${fieldName}IsNull == true">
-                AND `${column.columnName}` IS NULL
+                AND <include refid="tableName"/>.`${column.columnName}` IS NULL
             </if>
             </#if>
             <#if (isString)>
             <if test="condition.${fieldName}IsEmpty != null and condition.${fieldName}IsEmpty == true">
-                AND `${column.columnName}` = ''
+                AND <include refid="tableName"/>.`${column.columnName}` = ''
             </if>
             <if test="condition.${fieldName}StartWith != null and condition.${fieldName}StartWith != ''">
-                AND `${column.columnName}` LIKE concat(<@mapperEl 'condition.' + fieldName + 'StartWith'/>, '%')
+                AND <include refid="tableName"/>.`${column.columnName}` LIKE concat(<@mapperEl 'condition.' + fieldName + 'StartWith'/>, '%')
             </if>
             <if test="condition.${fieldName}Contains != null and condition.${fieldName}Contains != ''">
-                AND `${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + fieldName + 'Contains'/>, '%')
+                AND <include refid="tableName"/>.`${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + fieldName + 'Contains'/>, '%')
             </if>
             </#if>
         </#if>
@@ -110,10 +110,10 @@
                 <if test="order.${fieldName}Sort != null">
                     <choose>
                         <when test="order.${fieldName}Sort == true">
-                            `${column.columnName}` ASC,
+                            <include refid="tableName"/>.`${column.columnName}` ASC,
                         </when>
                         <otherwise>
-                            `${column.columnName}` DESC,
+                            <include refid="tableName"/>.`${column.columnName}` DESC,
                         </otherwise>
                     </choose>
                 </if>
