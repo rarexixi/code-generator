@@ -80,7 +80,7 @@ public class ${className}SearchVm implements SearchVm<${className}ConditionExten
         this.${table.validStatusColumn.targetName?uncap_first} = ${table.validStatusColumn.targetName?uncap_first};
     }
 
-    public ${table.validStatusColumn.targetDataType} get${table.validStatusColumn.targetName?uncap_first}() {
+    public ${table.validStatusColumn.targetDataType} get${table.validStatusColumn.targetName}() {
         return ${table.validStatusColumn.targetName?uncap_first};
     }
     </#if>
