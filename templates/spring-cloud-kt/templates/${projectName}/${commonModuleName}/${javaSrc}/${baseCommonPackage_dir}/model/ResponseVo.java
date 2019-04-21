@@ -2,9 +2,13 @@ package ${baseCommonPackage}.model;
 
 import ${baseCommonPackage}.constant.OperationConstants;
 
+import lombok.*;
 import java.io.Serializable;
 
-<#include "/include/java_copyright.ftl">
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class ResponseVo<T> implements Serializable {
 
     public ResponseVo() {
@@ -53,45 +57,4 @@ public class ResponseVo<T> implements Serializable {
      * 额外数据
      */
     private Object extData;
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getResult() {
-        return result;
-    }
-
-    public void setResult(T result) {
-        this.result = result;
-    }
-
-    public Object getExtData() {
-        return extData;
-    }
-
-    public void setExtData(Object extData) {
-        this.extData = extData;
-    }
-
-    @Override
-    public String toString() {
-        return "ResponseVo{" +
-                "success=" + success +
-                ", msg='" + msg + "'" +
-                ", result=" + result +
-                '}';
-    }
 }

@@ -4,12 +4,19 @@ package ${basePackage}.admin.vm.addoredit;
 import ${baseCommonPackage}.validation.*;
 import ${basePackage}.models.entity.${className}Entity;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class ${className}AddOrEditVm implements Serializable {
     <#list table.requiredColumns as column>
     <#include "/include/column/properties.ftl">
@@ -24,23 +31,6 @@ public class ${className}AddOrEditVm implements Serializable {
     @${annotationName}(groups = {DataAdd.class, DataEdit.class}, message = "${fieldName} (${columnComment})不能为空")
     </#if>
     private ${fieldType} ${fieldName};
-    </#list>
-    <#list table.requiredColumns as column>
-    <#include "/include/column/properties.ftl">
-
-    /**
-     * 获取${columnComment}
-     */
-    public ${fieldType} get${propertyName}() {
-        return ${fieldName};
-    }
-
-    /**
-     * 设置${columnComment}
-     */
-    public void set${propertyName}(${fieldType} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
     </#list>
 
     public ${className}Entity get${className}Entity() {

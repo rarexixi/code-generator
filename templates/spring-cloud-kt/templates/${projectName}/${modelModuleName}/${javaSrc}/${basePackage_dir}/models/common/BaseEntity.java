@@ -2,17 +2,23 @@ package ${basePackage}.models.common;
 
 import ${baseCommonPackage}.validation.*;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.io.Serializable;
 
 <#include "/include/java_copyright.ftl">
+@Getter
+@Setter
+@ToString
 public class BaseEntity implements Serializable {
-
     <#list baseColumns as column>
     <#include "/include/column/properties.ftl">
     <#assign annotationName = ((fieldType == 'String') ? string('NotBlank', 'NotNull'))>
+
     /**
      * ${columnFullComment}
      */
@@ -22,24 +28,5 @@ public class BaseEntity implements Serializable {
     @${annotationName}(groups = {DataAdd.class, DataEdit.class}, message = "${fieldName} (${columnComment})不能为空")
     </#if>
     protected ${fieldType} ${fieldName};
-
-    </#list>
-
-    <#list baseColumns as column>
-    <#include "/include/column/properties.ftl">
-    /**
-     * 设置${columnComment}
-     */
-    public void set${propertyName}(${fieldType} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
-
-    /**
-     * 获取${columnComment}
-     */
-    public ${fieldType} get${propertyName}() {
-        return ${fieldName};
-    }
-
     </#list>
 }

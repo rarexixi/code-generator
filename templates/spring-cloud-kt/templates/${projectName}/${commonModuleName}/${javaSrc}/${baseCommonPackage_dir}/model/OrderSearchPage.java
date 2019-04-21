@@ -1,6 +1,5 @@
 package ${baseCommonPackage}.model;
 
-<#include "/include/java_copyright.ftl">
 public class OrderSearchPage<T, O extends OrderCondition> extends OrderSearch<T, O> {
 
     public static final int DEFAULT_PAGE_INDEX = 1;

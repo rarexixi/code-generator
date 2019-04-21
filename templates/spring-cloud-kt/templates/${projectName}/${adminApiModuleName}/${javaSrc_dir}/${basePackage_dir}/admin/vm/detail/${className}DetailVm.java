@@ -6,15 +6,19 @@ import ${baseCommonPackage}.annotation.ExcelCol;
 import ${basePackage}.models.entity.${className}Entity;
 import ${basePackage}.models.entity.extension.${className}EntityExtension;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class ${className}DetailVm implements Serializable {
-
-    public ${className}DetailVm() {
-    }
 
     public ${className}DetailVm(${className}EntityExtension entity) {
 
@@ -55,39 +59,6 @@ public class ${className}DetailVm implements Serializable {
     <#if (column.fkSelect)>
 
     private String ${fieldNameExceptKey}Text;
-    </#if>
-    </#list>
-    <#list table.columns as column>
-    <#include "/include/column/properties.ftl">
-
-    /**
-     * 获取${columnComment}
-     */
-    public ${fieldType} get${propertyName}() {
-        return ${fieldName};
-    }
-
-    /**
-     * 设置${columnComment}
-     */
-    public void set${propertyName}(${fieldType} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
-    <#if (column.fkSelect)>
-
-    /**
-     * 获取${columnComment}
-     */
-    public String get${propertyExceptKey}Text() {
-        return ${fieldNameExceptKey}Text;
-    }
-
-    /**
-     * 设置${columnComment}
-     */
-    public void set${propertyExceptKey}Text(String ${fieldNameExceptKey}Text) {
-        this.${fieldNameExceptKey}Text = ${fieldNameExceptKey}Text;
-    }
     </#if>
     </#list>
 }

@@ -4,11 +4,17 @@ package ${basePackage}.admin.vm.order;
 import ${basePackage}.models.condition.order.${className}OrderCondition;
 import ${basePackage}.admin.vm.OrderVm;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
+@Getter
+@Setter
+@ToString
 public class ${className}OrderVm implements OrderVm {
     <#list table.indexes as column>
     <#include "/include/column/properties.ftl">
@@ -17,17 +23,6 @@ public class ${className}OrderVm implements OrderVm {
      * 以${columnComment}排序 (null不排序，true升序，false降序)
      */
     public Boolean ${fieldName}Sort;
-    </#list>
-    <#list table.indexes as column>
-    <#include "/include/column/properties.ftl">
-
-    public void set${propertyName}Sort(Boolean ${fieldName}Sort) {
-        this.${fieldName}Sort = ${fieldName}Sort;
-    }
-
-    public Boolean get${propertyName}Sort() {
-        return ${fieldName}Sort;
-    }
     </#list>
 
     public ${className}OrderCondition getOrderCondition() {

@@ -1,8 +1,14 @@
 package ${baseCommonPackage}.model;
 
+import lombok.*;
 import java.util.List;
 import java.util.Map;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 public class ExportExcelModel<T> {
 
     /**
@@ -25,44 +31,4 @@ public class ExportExcelModel<T> {
      * 导出的枚举字段Map
      */
     private Map<String, Map<String, String>> enumFieldsMap;
-
-    public String getSheetName() {
-        return sheetName;
-    }
-
-    public void setSheetName(String sheetName) {
-        this.sheetName = sheetName;
-    }
-
-    public Class<T> getClazz() {
-        return clazz;
-    }
-
-    public void setClazz(Class<T> clazz) {
-        this.clazz = clazz;
-    }
-
-    public List<T> getList() {
-        return list;
-    }
-
-    public void setList(List<T> list) {
-        this.list = list;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        this.condition = condition;
-    }
-
-    public Map<String, Map<String, String>> getEnumFieldsMap() {
-        return enumFieldsMap;
-    }
-
-    public void setEnumFieldsMap(Map<String, Map<String, String>> enumFieldsMap) {
-        this.enumFieldsMap = enumFieldsMap;
-    }
 }

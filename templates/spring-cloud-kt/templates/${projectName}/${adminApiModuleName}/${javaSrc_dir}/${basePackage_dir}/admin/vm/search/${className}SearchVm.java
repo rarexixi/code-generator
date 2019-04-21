@@ -5,11 +5,17 @@ import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
 import ${basePackage}.admin.vm.SearchVm;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 <#include "/include/java_copyright.ftl">
+@Getter
+@Setter
+@ToString
 public class ${className}SearchVm implements SearchVm {
     <#if (table.validStatusColumn??)>
 
@@ -74,57 +80,8 @@ public class ${className}SearchVm implements SearchVm {
     </#if>
     </#if>
     </#list>
-    <#if (table.validStatusColumn??)>
-
-    public void set${table.validStatusColumn.targetName}(${table.validStatusColumn.targetDataType} ${table.validStatusColumn.targetName?uncap_first}) {
-        this.${table.validStatusColumn.targetName?uncap_first} = ${table.validStatusColumn.targetName?uncap_first};
-    }
-
-    public ${table.validStatusColumn.targetDataType} get${table.validStatusColumn.targetName}() {
-        return ${table.validStatusColumn.targetName?uncap_first};
-    }
-    </#if>
     <#list table.indexes as column>
-    <#if (column.validStatus)>
-    <#else>
     <#include "/include/column/properties.ftl">
-    <#if (canBeEqual)>
-
-    public void set${propertyName}(${fieldType} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
-
-    public ${fieldType} get${propertyName}() {
-        return ${fieldName};
-    }
-    </#if>
-    <#if (canBeList)>
-
-    public void set${propertyName}List(List<${fieldType}> ${fieldName}List) {
-        this.${fieldName}List = ${fieldName}List;
-    }
-
-    public List<${fieldType}> get${propertyName}List() {
-        return ${fieldName}List;
-    }
-    </#if>
-    <#if (canBeRange)>
-
-    public void set${propertyName}Min(${fieldType} ${fieldName}Min) {
-        this.${fieldName}Min = ${fieldName}Min;
-    }
-
-    public ${fieldType} get${propertyName}Min() {
-        return ${fieldName}Min;
-    }
-
-    public void set${propertyName}Max(${fieldType} ${fieldName}Max) {
-        this.${fieldName}Max = ${fieldName}Max;
-    }
-
-    public ${fieldType} get${propertyName}Max() {
-        return ${fieldName}Max;
-    }
     <#if (isDate || isTime || isDateTime)>
 
     public void set${propertyName}Range(Date[] dateRange) {
@@ -132,44 +89,6 @@ public class ${className}SearchVm implements SearchVm {
         this.${fieldName}Min = dateRange[0];
         this.${fieldName}Max = dateRange[1];
     }
-    </#if>
-    </#if>
-    <#if (canBeNull)>
-
-    public void set${propertyName}IsNull(Boolean ${fieldName}IsNull) {
-        this.${fieldName}IsNull = ${fieldName}IsNull;
-    }
-
-    public Boolean get${propertyName}IsNull() {
-        return ${fieldName}IsNull;
-    }
-    </#if>
-    <#if (isString)>
-
-    public void set${propertyName}IsEmpty(Boolean ${fieldName}IsEmpty) {
-        this.${fieldName}IsEmpty = ${fieldName}IsEmpty;
-    }
-
-    public Boolean get${propertyName}IsEmpty() {
-        return ${fieldName}IsEmpty;
-    }
-
-    public void set${propertyName}StartWith(${fieldType} ${fieldName}StartWith) {
-        this.${fieldName}StartWith = ${fieldName}StartWith;
-    }
-
-    public ${fieldType} get${propertyName}StartWith() {
-        return ${fieldName}StartWith;
-    }
-
-    public void set${propertyName}Contains(${fieldType} ${fieldName}Contains) {
-        this.${fieldName}Contains = ${fieldName}Contains;
-    }
-
-    public ${fieldType} get${propertyName}Contains() {
-        return ${fieldName}Contains;
-    }
-    </#if>
     </#if>
     </#list>
 
