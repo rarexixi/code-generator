@@ -6,9 +6,7 @@ import ${baseCommonPackage}.annotation.ExcelCol;
 import ${basePackage}.models.entity.${className}Entity;
 import ${basePackage}.models.entity.extension.${className}EntityExtension;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;

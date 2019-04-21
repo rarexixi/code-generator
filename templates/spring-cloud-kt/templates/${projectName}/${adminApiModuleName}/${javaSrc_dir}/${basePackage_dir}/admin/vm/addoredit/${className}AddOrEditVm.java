@@ -4,9 +4,7 @@ package ${basePackage}.admin.vm.addoredit;
 import ${baseCommonPackage}.validation.*;
 import ${basePackage}.models.entity.${className}Entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;

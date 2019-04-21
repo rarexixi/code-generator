@@ -36,7 +36,7 @@ public class ${className}Controller {
     private final ${className}Service ${classNameFirstLower}Service;
 
     @Autowired
-    private ${className}Controller(${className}Service ${classNameFirstLower}Service) {
+    public ${className}Controller(${className}Service ${classNameFirstLower}Service) {
         this.${classNameFirstLower}Service = ${classNameFirstLower}Service;
     }
 

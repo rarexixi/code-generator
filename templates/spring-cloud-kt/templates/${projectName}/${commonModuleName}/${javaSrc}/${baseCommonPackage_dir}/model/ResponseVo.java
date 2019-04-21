@@ -11,9 +11,6 @@ import java.io.Serializable;
 @ToString
 public class ResponseVo<T> implements Serializable {
 
-    public ResponseVo() {
-    }
-
     public ResponseVo(T result) {
         this(true, null, result);
     }
