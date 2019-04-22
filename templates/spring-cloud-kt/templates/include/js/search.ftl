@@ -16,6 +16,15 @@
             self.searchPage.pageIndex = 1;
             self.search();
         },
+        handleSortChange: function({column, prop, order}) {
+            var self = this;
+            if (prop) {
+                self.sortParams = {
+                    prop + "Sort": order == 'ascending' ? true : false
+                };
+            }
+            self.search();
+        },
         search: function () {
             var self = this;
             self.checkedList = [];
@@ -24,7 +33,7 @@
                 pageSize: self.searchPage.pageSize,
                 pageIndex: self.searchPage.pageIndex,
                 condition: self.searchParams,
-                order: {}
+                order: self.sortParams
             };
 
             var url = appConfig.baseApiPath + '/${classNameFirstLower}/getPageInfo';

@@ -19,6 +19,8 @@
             </#if>
 </#list>
         },
+        sortParams: {
+        },
         searchPage: {
             pageIndex: 1,
             pageSize: 10
