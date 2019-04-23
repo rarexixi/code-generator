@@ -19,9 +19,8 @@
         handleSortChange: function({column, prop, order}) {
             var self = this;
             if (prop) {
-                self.sortParams = {
-                    prop + "Sort": order == 'ascending' ? true : false
-                };
+                self.sortParams = {};
+                self.sortParams[prop + "Sort"] = order == 'ascending' ? true : false;
             }
             self.search();
         },

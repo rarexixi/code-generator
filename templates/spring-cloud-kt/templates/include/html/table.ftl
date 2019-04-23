@@ -13,10 +13,10 @@
             <el-table-column type="selection" width="55"></el-table-column>
 </#if>
 <#list table.columns as column>
-    <#include "/include/column/properties.ftl">
+        <#include "/include/column/properties.ftl">
         <#if (isContent)>
         <#else>
-            <el-table-column label="${columnComment}" prop="${fieldName}"<#if (column.index)> sortable="custom"<#if>>
+            <el-table-column label="${columnComment}" prop="${fieldName}"<#if (column.index)> sortable="custom"</#if>>
             <#if (column.validStatus || column.select || column.fkSelect)>
                 <template slot-scope="scope">
                     <span>{{get${propertyName}Text(scope.row.${fieldName})}}</span>
