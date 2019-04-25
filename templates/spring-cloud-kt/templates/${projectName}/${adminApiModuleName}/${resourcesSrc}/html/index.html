@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>${projectShortName}</title>
     <link rel="stylesheet" href="//unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" href="/resources/css/material-icons.css">
-    <link rel="stylesheet" href="/resources/css/common.css">
-    <link rel="stylesheet" href="/resources/css/element-ui-override.css">
+    <link rel="stylesheet" href="/css/material-icons.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/element-ui-override.css">
     <style>
         body {
             margin: 0;
@@ -167,7 +167,7 @@
                 <#list tableModels as table>
                 <#include "/include/table/properties.ftl">
                 <#assign menuIndex = menuIndex + 1>
-                <el-menu-item index="1-${menuIndex}0" @click="openLink('/html/${className?lower_case}/index.html', '1-${menuIndex}0', '${tableComment}')">${tableComment}</el-menu-item>
+                <el-menu-item index="1-${menuIndex}0" @click="openLink('/${className?lower_case}/index.html', '1-${menuIndex}0', '${tableComment}')">${tableComment}</el-menu-item>
                 </#list>
             </el-submenu>
         </el-menu>
@@ -186,8 +186,8 @@
 </div>
 <script src="//unpkg.com/vue/dist/vue.js"></script>
 <script src="//unpkg.com/element-ui/lib/index.js"></script>
-<script src="/resources/js/config.js"></script>
-<script src="/resources/js/common.js"></script>
+<script src="/js/config.js"></script>
+<script src="/js/common.js"></script>
 <script>
     var app = new Vue({
         el: '#app',

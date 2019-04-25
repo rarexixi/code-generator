@@ -13,6 +13,8 @@ spring:
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: true
+  resources:
+    static-locations: classpath:/static/, classpath:/html/
 
 eureka:
   client:

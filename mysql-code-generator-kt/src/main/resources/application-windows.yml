@@ -28,8 +28,8 @@ generator:
     out: C:\Projects\github\code-generator\templates\out\
   files:
     ignore: include\
-    aggregate: static\index.html
-    copy: resources\css\, resources\fonts\, resources\js\common.js, .gitignore
+    aggregate: html\index.html
+    copy: static\css\, static\fonts\, static\js\common.js, .gitignore
 
   columns:
     base:
