@@ -30,7 +30,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/add")
+    @PostMapping("/${tablePath}/add")
     ResultVo<${className}Entity> add(
             @RequestBody ${className}Entity entity,
             @RequestParam(value = "sessionId", required = false) String sessionId);
@@ -43,7 +43,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/addList")
+    @PostMapping("/${tablePath}/add-list")
     ResultVo<Integer> addList(
             @RequestBody List<${className}Entity> list,
             @RequestParam(value = "sessionId", required = false) String sessionId);
@@ -56,7 +56,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/delete")
+    @PostMapping("/${tablePath}/delete")
     ResultVo<Integer> delete(
             @RequestBody ${className}Condition condition,
             @RequestParam(value = "sessionId", required = false) String sessionId);
@@ -70,7 +70,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/disable")
+    @PostMapping("/${tablePath}/disable")
     ResultVo<Integer> disable(
             @RequestBody ${className}Condition condition,
             @RequestParam(value = "sessionId", required = false) String sessionId);
@@ -83,7 +83,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/enable")
+    @PostMapping("/${tablePath}/enable")
     ResultVo<Integer> enable(
             @RequestBody ${className}Condition condition,
             @RequestParam(value = "sessionId", required = false) String sessionId);
@@ -97,7 +97,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/get")
+    @PostMapping("/${tablePath}/get")
     ResultVo<${className}Entity> get(
             @RequestBody ${className}Condition condition,
             @RequestParam(value = "sessionId", required = false) String sessionId);
@@ -117,7 +117,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/update")
+    @PostMapping("/${tablePath}/update")
     ResultVo<Integer> update(
             @RequestBody ${className}Entity entity,
             <#if !table.hasAutoIncUniPk>
@@ -139,7 +139,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @GetMapping("/${classNameFirstLower}/getDetail")
+    @GetMapping("/${tablePath}/detail")
     ResultVo<${className}EntityExtension> getDetail(
             <#list pks as column>
             <#include "/include/column/properties.ftl">
@@ -156,7 +156,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/getList")
+    @PostMapping("/${tablePath}/list")
     ResultVo<List<${className}EntityExtension>> getList(
             @RequestBody OrderSearch<${className}ConditionExtension, ${className}OrderCondition> orderSearch,
             @RequestParam(value = "sessionId", required = false) String sessionId);
@@ -169,7 +169,7 @@ public interface ${className}CloudService {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/${classNameFirstLower}/getPageInfo")
+    @PostMapping("/${tablePath}/page-list")
     ResultVo<PageInfoVo<${className}EntityExtension>> getPageInfo(
             @RequestBody OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage,
             @RequestParam(value = "sessionId", required = false) String sessionId);

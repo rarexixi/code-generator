@@ -26,7 +26,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 <#include "/include/java_copyright.ftl">
-@RequestMapping("/${classNameFirstLower}")
+@RequestMapping("/${tablePath}")
 @RestController
 @Validated
 public class ${className}Controller {
@@ -64,7 +64,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/addList")
+    @PostMapping("/add-list")
     public ResultVo<Integer> addList(
             @Validated({DataAdd.class}) @RequestBody List<${className}Entity> list, Errors errors,
             @RequestParam(value = "sessionId", required = false) String sessionId) {
@@ -201,7 +201,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @GetMapping("/getDetail")
+    @GetMapping("/detail")
     public ResultVo<${className}EntityExtension> getDetail(
             <#list pks as column>
             <#include "/include/column/properties.ftl">
@@ -224,7 +224,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/getList")
+    @PostMapping("/list")
     public ResultVo<List<${className}EntityExtension>> getList(
             @RequestBody OrderSearch<${className}ConditionExtension, ${className}OrderCondition> search,
             @RequestParam(value = "sessionId", required = false) String sessionId) {
@@ -242,7 +242,7 @@ public class ${className}Controller {
      * @return
     <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/getPageInfo")
+    @PostMapping("/page-list")
     public ResultVo<PageInfoVo<${className}EntityExtension>> getPageInfo(
             @RequestBody OrderSearchPage<${className}ConditionExtension, ${className}OrderCondition> searchPage,
             @RequestParam(value = "sessionId", required = false) String sessionId) {

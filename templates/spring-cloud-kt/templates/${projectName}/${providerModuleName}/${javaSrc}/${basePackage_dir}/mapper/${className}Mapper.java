@@ -2,7 +2,6 @@
 package ${basePackage}.mapper;
 
 import ${basePackage}.common.mapper.BaseMapper;
-import ${basePackage}.common.mapper.BaseMapperExtension;
 import ${basePackage}.models.condition.${className}Condition;
 import ${basePackage}.models.condition.extension.${className}ConditionExtension;
 import ${basePackage}.models.condition.order.${className}OrderCondition;
@@ -12,10 +11,11 @@ import ${basePackage}.models.entity.extension.${className}EntityExtension;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 <#include "/include/java_copyright.ftl">
 @Mapper
-public interface ${className}Mapper extends BaseMapper<${className}Entity, ${className}Condition>,
-        BaseMapperExtension<${className}EntityExtension, ${className}ConditionExtension, ${className}OrderCondition>{
+public interface ${className}Mapper extends BaseMapper<${className}Entity, ${className}Condition> {
     <#if table.hasPk>
 
     /**
@@ -30,4 +30,13 @@ public interface ${className}Mapper extends BaseMapper<${className}Entity, ${cla
      */
     ${className}EntityExtension getByPk(<#include "/include/table/pk_params_mapper.ftl">);
     </#if>
+
+    /**
+     * 查询
+     *
+     * @param condition
+     * @param order
+     * @return
+     */
+    List<${className}EntityExtension> getExList(@Param("condition") ${className}ConditionExtension condition, @Param("order") ${className}OrderCondition order);
 }

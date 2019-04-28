@@ -1,6 +1,7 @@
 <#include "/include/table/properties.ftl">
 package ${basePackage}.admin.vm.order;
 
+import ${baseCommonPackage}.constant.SortConstants;
 import ${basePackage}.models.condition.order.${className}OrderCondition;
 import ${basePackage}.admin.vm.OrderVm;
 
@@ -22,7 +23,7 @@ public class ${className}OrderVm implements OrderVm {
     /**
      * 以${columnComment}排序 (null不排序，true升序，false降序)
      */
-    public Boolean ${fieldName}Sort;
+    public SortConstants ${fieldName}Sort;
     </#list>
 
     public ${className}OrderCondition getOrderCondition() {

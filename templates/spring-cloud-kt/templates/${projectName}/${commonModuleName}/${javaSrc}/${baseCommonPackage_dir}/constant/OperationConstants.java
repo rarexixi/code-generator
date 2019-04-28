@@ -1,6 +1,5 @@
 package ${baseCommonPackage}.constant;
 
-<#include "/include/java_copyright.ftl">
 public enum OperationConstants {
 
     SYSTEM_ERROR(100000, "系统错误"),

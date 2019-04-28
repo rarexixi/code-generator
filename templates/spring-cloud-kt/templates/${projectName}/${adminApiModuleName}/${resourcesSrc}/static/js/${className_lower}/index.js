@@ -1,6 +1,6 @@
 <#include "/include/table/properties.ftl">
 <#macro mapperEl value>${r"${"}${value}}</#macro>
-var app = new Vue({
+let app = new Vue({
     el: '#app',
     data: {
         <#include "/include/js/data_select_list.ftl">
@@ -69,7 +69,7 @@ var app = new Vue({
         addOrEditDialogVisible: false
     },
     mounted: function () {
-        var self = this;
+        let self = this;
         self.search();
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
@@ -79,13 +79,13 @@ var app = new Vue({
     methods: {
         <#include "/include/js/search.ftl">
         add: function () {
-            var self = this;
+            let self = this;
             self.resetSave();
             self.addOrEditDialogVisible = true;
             self.addOrEditTitle = '添加${tableComment}';
         },
         edit: function (item) {
-            var self = this;
+            let self = this;
             self.resetSave();
             self.addOrEditDialogVisible = true;
             self.addOrEditTitle = '编辑${tableComment}';
@@ -96,9 +96,9 @@ var app = new Vue({
             </#list>
             </#if>
 
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
-            var params = self.getPkParams(item);
-            self.ajaxGet(url, params, '获取${tableComment}详情失败！', function (response) {
+            let url = appConfig.baseApiPath + '/${tablePath}/detail';
+            let params = self.getPkParams(item);
+            self.ajaxGet(url, params, '获取${tableComment}详情失败！', response => {
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>
@@ -109,23 +109,23 @@ var app = new Vue({
             });
         },
         save: function () {
-            var self = this;
-            var ajaxUrl;
+            let self = this;
+            let ajaxUrl;
             <#if table.hasAutoIncUniPk>
             if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.addOrEditParams.${fieldName} == ''</#list>) {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update';
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/update';
             }
             <#else>
             if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.${fieldName} == ''</#list>) {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update?'<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/update?'<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
             }
             </#if>
 
-            self.ajaxPost(ajaxUrl, self.addOrEditParams, '操作失败！', function (response) {
+            self.ajaxPost(ajaxUrl, self.addOrEditParams, '操作失败！', response => {
                 self.$notify({
                     message: '操作成功！',
                     type: 'success'
@@ -135,7 +135,7 @@ var app = new Vue({
             });
         },
         resetSave: function () {
-            var self = this;
+            let self = this;
             <#list table.requiredColumns as column>
             <#include "/include/column/properties.ftl">
             <#if (column.validStatus)>
@@ -147,17 +147,17 @@ var app = new Vue({
             self.closeDialog();
         },
         get: function (item) {
-            var self = this;
+            let self = this;
             self.detailDialogVisible = true;
 
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
-            var params = self.getPkParams(item);
-            self.ajaxGet(url, params, '获取详情失败！', function (response) {
+            let url = appConfig.baseApiPath + '/${tablePath}/detail';
+            let params = self.getPkParams(item);
+            self.ajaxGet(url, params, '获取详情失败！', response => {
                 self.detail = response.result;
             });
         },
         closeDialog: function () {
-            var self = this;
+            let self = this;
             self.detailDialogVisible = false;
             self.addOrEditDialogVisible = false;
         },
@@ -173,39 +173,37 @@ var app = new Vue({
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         get${propertyName}Text: function (${column.fkSelectColumn.valueName?uncap_first}) {
-            var self = this;
-            var entity = self.${fieldNameExceptKey}SelectList.find(function (item) {
-                return item.${column.fkSelectColumn.valueName?uncap_first} == ${column.fkSelectColumn.valueName?uncap_first};
-            });
+            let self = this;
+            let entity = self.${fieldNameExceptKey}SelectList.find(item => item.${column.fkSelectColumn.valueName?uncap_first} == ${column.fkSelectColumn.valueName?uncap_first});
             return entity ? entity.${column.fkSelectColumn.textName?uncap_first} : '';
         },
         </#list>
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         init${propertyExceptKey}: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?uncap_first}/getList';
-            var params = {
+            let self = this;
+            let url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignTargetTableName?replace("_", "-")}/list';
+            let params = {
                 condition: {},
                 order: {}
             };
-            self.ajaxPost(url, params, '获取${columnComment}列表失败！', function (response) {
+            self.ajaxPost(url, params, '获取${columnComment}列表失败！', response => {
                 self.${fieldNameExceptKey}SelectList = response.result;
             });
         },
         </#list>
         exportExcel: function () {
-            var self = this;
+            let self = this;
 
-            var params = {
+            let params = {
                 condition: self.searchParams,
-                order: {}
+                order: self.sortParams
             };
-            var paramsStr = JSON.stringify(params, function (key, value) {
+            let paramsStr = JSON.stringify(params, (key, value) => {
                 if (value) return value;
                 return undefined;
             });
-            window.open(appConfig.baseApiPath + '/${classNameFirstLower}/export?params=' + encodeURIComponent(paramsStr));
+            window.open(appConfig.baseApiPath + '/${tablePath}/export?params=' + encodeURIComponent(paramsStr));
         }
     }
 });

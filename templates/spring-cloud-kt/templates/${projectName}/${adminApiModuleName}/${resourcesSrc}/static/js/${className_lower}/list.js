@@ -1,6 +1,6 @@
 <#include "/include/table/properties.ftl">
 <#macro mapperEl value>${r"${"}${value}}</#macro>
-var app = new Vue({
+let app = new Vue({
     el: '#app',
     data: {
         <#include "/include/js/data_select_list.ftl">
@@ -44,7 +44,7 @@ var app = new Vue({
         pageInfo: {}
     },
     mounted: function () {
-        var self = this;
+        let self = this;
         self.search();
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
@@ -54,25 +54,25 @@ var app = new Vue({
     methods: {
         <#include "/include/js/search.ftl">
         add: function () {
-            var url = 'addoredit.html';
+            let url = 'addoredit.html';
             location.href = url;
         },
         edit: function (item) {
-            var pkParams = '';
+            let pkParams = '';
             <#list pks as column>
             <#include "/include/column/properties.ftl">
             pkParams += <#if (column?is_first)>'${fieldName}='<#else>'&${fieldName}='</#if> + item.${fieldName};
             </#list>
-            var url = 'addoredit.html?' + pkParams;
+            let url = 'addoredit.html?' + pkParams;
             location.href = url;
         },
         get: function (item) {
-            var pkParams = '';
+            let pkParams = '';
             <#list pks as column>
             <#include "/include/column/properties.ftl">
             pkParams += <#if (column?is_first)>'${fieldName}='<#else>'&${fieldName}='</#if> + item.${fieldName};
             </#list>
-            var url = 'detail.html?' + pkParams;
+            let url = 'detail.html?' + pkParams;
             location.href = url;
         },
         <#if (table.hasUniPk)>
@@ -87,39 +87,37 @@ var app = new Vue({
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         get${propertyName}Text: function (${column.fkSelectColumn.valueName?uncap_first}) {
-            var self = this;
-            var entity = self.${fieldNameExceptKey}SelectList.find(function (item) {
-                return item.${column.fkSelectColumn.valueName?uncap_first} == ${column.fkSelectColumn.valueName?uncap_first};
-            });
+            let self = this;
+            let entity = self.${fieldNameExceptKey}SelectList.find(item => item.${column.fkSelectColumn.valueName?uncap_first} == ${column.fkSelectColumn.valueName?uncap_first});
             return entity ? entity.${column.fkSelectColumn.textName?uncap_first} : '';
         },
         </#list>
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         init${propertyExceptKey}: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?uncap_first}/getList';
-            var params = {
+            let self = this;
+            let url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignTargetTableName?replace("_", "-")}/list';
+            let params = {
                 condition: {},
                 order: {}
             };
-            self.ajaxPost(url, params, '获取${columnComment}列表失败！', function (response) {
+            self.ajaxPost(url, params, '获取${columnComment}列表失败！', response => {
                 self.${fieldNameExceptKey}SelectList = response.result;
             });
         },
         </#list>
         exportExcel: function () {
-            var self = this;
+            let self = this;
 
-            var params = {
+            let params = {
                 condition: self.searchParams,
-                order: {}
+                order: self.sortParams
             };
-            var paramsStr = JSON.stringify(params, function (key, value) {
+            let paramsStr = JSON.stringify(params, (key, value) => {
                 if (value) return value;
                 return undefined;
             });
-            window.open(appConfig.baseApiPath + '/${classNameFirstLower}/export?params=' + encodeURIComponent(paramsStr));
+            window.open(appConfig.baseApiPath + '/${tablePath}/export?params=' + encodeURIComponent(paramsStr));
         }
     }
 });

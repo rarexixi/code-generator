@@ -1,6 +1,6 @@
 <#include "/include/table/properties.ftl">
 <#macro mapperEl value>${r"${"}${value}}</#macro>
-var app = new Vue({
+let app = new Vue({
     el: '#app',
     data: {
         <#include "/include/js/data_select_list.ftl">
@@ -24,7 +24,7 @@ var app = new Vue({
         }
     },
     mounted: function () {
-        var self = this;
+        let self = this;
 
         <#list table.pks as column>
         <#include "/include/column/properties.ftl">
@@ -35,9 +35,9 @@ var app = new Vue({
     },
     methods: {
         get: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
-            self.ajaxGet(url, self.pkParams, '获取详情失败！', function (response) {
+            let self = this;
+            let url = appConfig.baseApiPath + '/${tablePath}/detail';
+            self.ajaxGet(url, self.pkParams, '获取详情失败！', response => {
                 self.detail = response.result;
             });
         },
@@ -46,41 +46,24 @@ var app = new Vue({
         },
         <#if table.validStatusColumn??>
         enable: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/enable';
-            this.exec("确定启用吗？", url, self.pkParams, "启用成功！", "启用失败！");
+            let self = this;
+            let url = appConfig.baseApiPath + '/${tablePath}/enable';
+            self.confirmPost("确定启用吗？", url, self.pkParams, "启用成功！", "启用失败！", response => self.get());
         },
         disable: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/disable';
-            this.exec("确定禁用吗？", url, self.pkParams, "禁用成功！", "禁用失败！");
+            let self = this;
+            let url = appConfig.baseApiPath + '/${tablePath}/disable';
+            self.confirmPost("确定禁用吗？", url, self.pkParams, "禁用成功！", "禁用失败！", response => self.get());
         },
         </#if>
         del: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/delete';
-            this.exec("确定删除吗？", url, self.pkParams, "删除成功！", "删除失败！");
-        },
-        exec: function (confirmMsg, url, params, successMsg, failMsg) {
-            var self = this;
-            self.$confirm(confirmMsg, '', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(function () {
-                self.ajaxPost(url, params, failMsg, function (response) {
-                    self.$notify({
-                        type: 'success',
-                        message: successMsg
-                    });
-                    self.get();
-                });
-            }, function () {
-            });
+            let self = this;
+            let url = appConfig.baseApiPath + '/${tablePath}/delete';
+            self.confirmPost("确定删除吗？", url, self.pkParams, "删除成功！", "删除失败！", response => back.get());
         },
         <#include "/include/js/select_get_text.ftl">
         back: function () {
-            var self = this;
+            let self = this;
             location.href = 'list.html';
         }
     }

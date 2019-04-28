@@ -4,9 +4,7 @@ import ${baseCommonPackage}.model.OrderCondition;
 import ${baseCommonPackage}.model.OrderSearch;
 import ${baseCommonPackage}.model.OrderSearchPage;
 import ${basePackage}.common.mapper.BaseMapper;
-import ${basePackage}.common.mapper.BaseMapperExtension;
 import ${basePackage}.common.service.BaseService;
-import ${basePackage}.common.service.BaseServiceExtension;
 import ${basePackage}.models.common.BaseCondition;
 import ${basePackage}.models.common.BaseEntity;
 
@@ -18,11 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondition, O extends OrderCondition, TE extends T, CE extends C>
-        implements BaseService<T, C, O>, BaseServiceExtension<TE, CE, O> {
+public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondition, O extends OrderCondition>
+        implements BaseService<T, C, O> {
 
     protected BaseMapper<T, C> mapper;
-    protected BaseMapperExtension<TE, CE, O> mapperExtension;
 
     /**
      * 添加
@@ -220,41 +217,5 @@ public abstract class BaseServiceImpl<T extends BaseEntity, C extends BaseCondit
     @Override
     public int countByConditionList(List<C> conditionList) {
         return mapper.countByConditionList(conditionList);
-    }
-
-
-    /**
-     * 获取列表（不分页）
-     *
-     * @param search
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public List<TE> getExList(OrderSearch<CE, O> search) {
-
-        if (search == null) return null;
-
-        List<TE> list = mapperExtension.getExList(search.getCondition(), search.getOrder());
-        return list;
-    }
-
-    /**
-     * 分页查询
-     *
-     * @param searchPage
-     * @return
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public PageInfo<TE> getPageList(OrderSearchPage<CE, O> searchPage) {
-
-        CE condition;
-        if (searchPage == null || (condition = searchPage.getCondition()) == null) return null;
-
-        PageHelper.startPage(searchPage.getPageIndex(), searchPage.getPageSize());
-        List<TE> list = mapperExtension.getExList(condition, searchPage.getOrder());
-        PageInfo<TE> pageInfo = new PageInfo<>(list);
-        return pageInfo;
     }
 }

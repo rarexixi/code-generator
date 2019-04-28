@@ -1,6 +1,6 @@
 <#include "/include/table/properties.ftl">
 <#macro mapperEl value>${r"${"}${value}}</#macro>
-var app = new Vue({
+let app = new Vue({
     el: '#app',
     data: {
         <#include "/include/js/data_select_list.ftl">
@@ -27,7 +27,7 @@ var app = new Vue({
         addOrEditTitle: ''
     },
     mounted: function () {
-        var self = this;
+        let self = this;
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         self.init${propertyExceptKey}();
@@ -47,23 +47,23 @@ var app = new Vue({
     },
     methods: {
         save: function () {
-            var self = this;
-            var ajaxUrl;
+            let self = this;
+            let ajaxUrl;
             <#if table.hasAutoIncUniPk>
             if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.addOrEditParams.${fieldName} == ''</#list>) {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update';
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/update';
             }
             <#else>
             if (<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> && </#if>self.${fieldName} == ''</#list>) {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/add';
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/add';
             } else {
-                ajaxUrl = appConfig.baseApiPath + '/${classNameFirstLower}/update?'<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
+                ajaxUrl = appConfig.baseApiPath + '/${tablePath}/update?'<#list pks as column><#include "/include/column/properties.ftl"><#if (column_index > 0)> + '&'</#if> + '${fieldName}=' + self.${fieldName}</#list>;
             }
             </#if>
 
-            self.ajaxPost(ajaxUrl, self.addOrEditParams, '操作失败！', function (response) {
+            self.ajaxPost(ajaxUrl, self.addOrEditParams, '操作失败！', response => {
                 self.$notify({
                     message: '操作成功！',
                     type: 'success'
@@ -71,11 +71,11 @@ var app = new Vue({
             });
         },
         get: function () {
-            var self = this;
+            let self = this;
 
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getDetail';
-            var params = self.pkParams;
-            self.ajaxGet(url, params, '获取详情失败！', function (response) {
+            let url = appConfig.baseApiPath + '/${tablePath}/detail';
+            let params = self.pkParams;
+            self.ajaxGet(url, params, '获取详情失败！', response => {
                 <#list table.columns as column>
                 <#include "/include/column/properties.ftl">
                 <#if column.notRequired>
@@ -88,19 +88,19 @@ var app = new Vue({
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         init${propertyExceptKey}: function () {
-            var self = this;
-            var url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignClassName?uncap_first}/getList';
-            var params = {
+            let self = this;
+            let url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignTargetTableName?replace("_", "-")}/list';
+            let params = {
                 condition: {},
                 order: {}
             };
-            self.ajaxPost(url, params, '获取${columnComment}列表失败！', function (response) {
+            self.ajaxPost(url, params, '获取${columnComment}列表失败！', response => {
                 self.${fieldNameExceptKey}SelectList = response.result;
             });
         },
         </#list>
         back: function () {
-            var self = this;
+            let self = this;
             location.href = 'list.html';
         }
     }

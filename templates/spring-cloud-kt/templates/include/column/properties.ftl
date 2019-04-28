@@ -1,5 +1,6 @@
 <#assign columnFullComment = column.columnComment>
 <#assign columnComment = (columnFullComment?split("[（ ,，(：:]", "r"))[0]>
+<#assign columnPath = column.columnName?replace("_", "-")>
 <#assign propertyName = column.targetName>
 <#assign fieldName = propertyName?uncap_first>
 <#assign fieldType = column.targetDataType>

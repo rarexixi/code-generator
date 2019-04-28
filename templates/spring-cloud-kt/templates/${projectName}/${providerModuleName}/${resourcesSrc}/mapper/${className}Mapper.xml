@@ -94,7 +94,7 @@
                 <#else>
                 <if test="order.${fieldName}Sort != null">
                     <choose>
-                        <when test="order.${fieldName}Sort == true">
+                        <when test="order.${fieldName}Sort == @${baseCommonPackage}.constant.SortConstants@ASC">
                             `${column.columnName}` ASC,
                         </when>
                         <otherwise>

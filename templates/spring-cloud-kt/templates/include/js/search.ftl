@@ -1,6 +1,6 @@
 
         changePage: function (pageIndex) {
-            var self = this;
+            let self = this;
             if (self.searchPage.pageIndex == pageIndex) {
                 return;
             }
@@ -8,7 +8,7 @@
             self.search();
         },
         changePageSize: function (pageSize) {
-            var self = this;
+            let self = this;
             if (self.searchPage.pageSize == pageSize) {
                 return;
             }
@@ -16,32 +16,32 @@
             self.searchPage.pageIndex = 1;
             self.search();
         },
-        handleSortChange: function({column, prop, order}) {
-            var self = this;
+        handleSortChange: function ({column, prop, order}) {
+            let self = this;
             if (prop) {
                 self.sortParams = {};
-                self.sortParams[prop + "Sort"] = order == 'ascending' ? true : false;
+                self.sortParams[prop + "Sort"] = order == 'ascending' ? sortEnum.ASC : sortEnum.DESC;
             }
             self.search();
         },
         search: function () {
-            var self = this;
+            let self = this;
             self.checkedList = [];
 
-            var params = {
+            let params = {
                 pageSize: self.searchPage.pageSize,
                 pageIndex: self.searchPage.pageIndex,
                 condition: self.searchParams,
                 order: self.sortParams
             };
 
-            var url = appConfig.baseApiPath + '/${classNameFirstLower}/getPageInfo';
-            self.ajaxPost(url, params, '获取${tableComment}列表失败！', function (response) {
+            let url = appConfig.baseApiPath + '/${tablePath}/page-list';
+            self.ajaxPost(url, params, '获取${tableComment}列表失败！', response => {
                 self.pageInfo = response.result;
             });
         },
         resetSearch: function () {
-            var self = this;
+            let self = this;
 <#if (table.validStatusColumn??)>
             // self.searchParams.${table.validStatusColumn.targetName?uncap_first} = 'null';
 </#if>
@@ -62,12 +62,12 @@
             </#if>
 </#list>
 
-            self.searchPage.pageIndex = 1;
-            self.searchPage.pageSize = 10;
+            self.searchPage.pageIndex = searchPage.defaultPageIndex;
+            self.searchPage.pageSize = searchPage.defaultPageSize;
         },
 <#if table.validStatusColumn??>
         changeValidSearch: function (valid) {
-            var self = this;
+            let self = this;
             if (self.searchParams.${table.validStatusColumn.targetName?uncap_first} === valid) {
                 return;
             }

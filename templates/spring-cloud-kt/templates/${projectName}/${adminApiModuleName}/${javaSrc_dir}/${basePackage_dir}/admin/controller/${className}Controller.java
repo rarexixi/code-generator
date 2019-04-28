@@ -28,7 +28,7 @@ import java.util.List;
 
 <#include "/include/java_copyright.ftl">
 @CrossOrigin
-@RequestMapping("/${classNameFirstLower}")
+@RequestMapping("/${tablePath}")
 @RestController
 @Validated
 public class ${className}Controller {
@@ -61,7 +61,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/addList")
+    @PostMapping("/add-list")
     public ResponseVo<Integer> addList(@Validated({DataAdd.class}) @RequestBody List<${className}AddOrEditVm> list, Errors errors) {
 
         ResponseVo<Integer> result = ${classNameFirstLower}Service.addList(list);
@@ -159,7 +159,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @GetMapping("/getDetail")
+    @GetMapping("/detail")
     public ResponseVo<${className}DetailVm> getDetail(<#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>@${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}<#if column?has_next>,</#if></#list>) {
 
         ResponseVo<${className}DetailVm> result = ${classNameFirstLower}Service.getDetail(<#include "/include/table/pk_values.ftl">);
@@ -174,7 +174,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/getList")
+    @PostMapping("/list")
     public ResponseVo<List<${className}DetailVm>> getList(@RequestBody OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
 
         ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(search);
@@ -188,7 +188,7 @@ public class ${className}Controller {
      * @return
      <#include "/include/author_info1.ftl">
      */
-    @PostMapping("/getPageInfo")
+    @PostMapping("/page-list")
     public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(@RequestBody OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage) {
 
         ResponseVo<PageInfoVo<${className}DetailVm>> result = ${classNameFirstLower}Service.getPageInfo(searchPage);

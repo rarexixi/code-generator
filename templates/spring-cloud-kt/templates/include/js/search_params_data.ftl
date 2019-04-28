@@ -22,8 +22,8 @@
         sortParams: {
         },
         searchPage: {
-            pageIndex: 1,
-            pageSize: 10
+            pageIndex: searchPage.defaultPageIndex,
+            pageSize: searchPage.defaultPageSize
         },
         multipleSelection: [],
         pageInfo: {},
