@@ -13,7 +13,7 @@ const commonFun = {
         }
         Vue.set(vueObj[targetModel.substr(0, index)], targetModel.substr(index + 1), val);
     },
-    formateDateTime: function (timestamp, fmt) {
+    formatDateTime: function (timestamp, fmt) {
         let date = new Date(timestamp);
         if (/(y+)/.test(fmt)) {
             fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
@@ -36,11 +36,11 @@ const commonFun = {
 };
 
 /*vue 格式化日期函数*/
-Vue.filter('formatDate', timestamp => commonFun.formateDateTime(timestamp, 'yyyy-MM-dd'));
+Vue.filter('formatDate', timestamp => commonFun.formatDateTime(timestamp, 'yyyy-MM-dd'));
 /*vue 格式化时间函数*/
-Vue.filter('formatTime', timestamp => commonFun.formateDateTime(timestamp, 'hh:mm:ss'));
+Vue.filter('formatTime', timestamp => commonFun.formatDateTime(timestamp, 'hh:mm:ss'));
 /*vue 格式化日期时间函数*/
-Vue.filter('formatDateTime', timestamp => commonFun.formateDateTime(timestamp, 'yyyy-MM-dd hh:mm:ss'));
+Vue.filter('formatDateTime', timestamp => commonFun.formatDateTime(timestamp, 'yyyy-MM-dd hh:mm:ss'));
 
 function getResponseMsg(response) {
     let msg = response.message;
