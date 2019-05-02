@@ -24,11 +24,11 @@ generator:
   encoding: UTF-8
   table-name-match-regex: '(?<=quick_).*'
   paths:
-    template: ./templates/
-    out: ../out/
+    template: /Workspace/github.com/java/code-generator/templates/spring-cloud-kt/templates/
+    out: /Workspace/github.com/java/code-generator/templates/out/
   files:
     ignore: include/
-    aggregate: /index.html
+    aggregate: html/index.html
     copy: static/css/, static/fonts/, static/js/common.js, .gitignore
 
   columns:
@@ -39,23 +39,14 @@ generator:
       - column-name-set: create_time, update_time
     img-url:
       - column-name-set: photo
-#    video-url:
-#    doc-url:
-#    page-url:
-#    other-url:
+    #    video-url:
+    #    doc-url:
+    #    page-url:
+    #    other-url:
     content:
       - column-name-set: introduction, remark
 
     select:
-      - column-name-set: sex
-        table-name: quick_user_info
-        options:
-          - value: 0
-            text: 保密
-          - value: 1
-            text: 男
-          - value: 2
-            text: 女
       - column-name-set: status
         table-name: quick_multi_pk
         options:
@@ -66,6 +57,24 @@ generator:
           - value: 3
             text: 起飞
     fk-select:
+      - column-name-set: sex
+        table-name: quick_user_info
+        fk:
+          foreign-table-name: quick_enum
+          value-column-name: value
+          text-column-name: text
+          conditions:
+            - field: source
+              value: sex
+      - column-name-set: source
+        table-name: quick_enum
+        fk:
+          foreign-table-name: quick_enum
+          value-column-name: value
+          text-column-name: text
+          conditions:
+            - field: sourceIsEmpty
+              value: true
       - column-name-set: user_type_id
         fk:
           foreign-table-name: quick_user_type

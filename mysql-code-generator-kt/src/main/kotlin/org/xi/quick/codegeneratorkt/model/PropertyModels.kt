@@ -155,6 +155,7 @@ class FkSelectColumn {
     var foreignTableName: String = ""
     var valueColumnName: String = ""
     var textColumnName: String = ""
+    var conditions: Array<FkSelectColumnCondition> = arrayOf()
 
     val valueName: String
         get() = valueColumnName.getPropertyName()
@@ -171,6 +172,11 @@ class FkSelectColumn {
      */
     val foreignClassName: String
         get() = foreignTableName.getClassName()
+}
+
+class FkSelectColumnCondition {
+    var field: String = ""
+    var value: String = ""
 }
 
 class SelectOption {

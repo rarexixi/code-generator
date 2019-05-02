@@ -98,7 +98,11 @@ let app = new Vue({
             let self = this;
             let url = appConfig.baseApiPath + '/${column.fkSelectColumn.foreignTargetTableName?replace("_", "-")}/list';
             let params = {
-                condition: {},
+                condition: {
+                    <#list column.fkSelectColumn.conditions as condition>
+                    ${condition.field}: '${condition.value}'<#if condition?has_next>,</#if>
+                    </#list>
+                },
                 order: {}
             };
             self.ajaxPost(url, params, '获取${columnComment}列表失败！', response => {

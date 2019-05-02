@@ -1,106 +1,124 @@
 DROP DATABASE `quick`;
 
 CREATE DATABASE `quick`
-  DEFAULT CHARACTER SET utf8mb4
-  COLLATE utf8mb4_general_ci;
+    DEFAULT CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci;
 
 USE `quick`;
 
+CREATE TABLE `quick_enum`
+(
+    `id`          INT         NOT NULL AUTO_INCREMENT COMMENT '选择项ID',
+    `value`       VARCHAR(64) NOT NULL COMMENT '枚举值',
+    `text`        VARCHAR(64) NOT NULL COMMENT '枚举',
+    `source`      VARCHAR(64) NOT NULL DEFAULT '' COMMENT '枚举分组',
+    `sort`        TINYINT     NOT NULL DEFAULT 0 COMMENT '排序',
+
+    `create_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
+
+    PRIMARY KEY (`id`),
+    UNIQUE (`source`, `value`)
+)
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8
+    COLLATE = utf8_unicode_ci COMMENT ='枚举';
+
 CREATE TABLE `quick_user`
 (
-  `id`          INT          NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-  `username`    VARCHAR(50)  NOT NULL COMMENT '用户名',
-  `email`       VARCHAR(200) NOT NULL COMMENT '邮箱',
-  `password`    VARCHAR(200) NOT NULL COMMENT '密码',
-  `nick_name`   VARCHAR(50)  NOT NULL DEFAULT '' COMMENT '昵称',
-  `is_deleted`  TINYINT      NOT NULL DEFAULT 0 COMMENT '是否删除',
-  `create_time` TIMESTAMP    NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-  `update_time` TIMESTAMP    NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
+    `id`          INT          NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+    `username`    VARCHAR(50)  NOT NULL COMMENT '用户名',
+    `email`       VARCHAR(200) NOT NULL COMMENT '邮箱',
+    `password`    VARCHAR(200) NOT NULL COMMENT '密码',
+    `nick_name`   VARCHAR(50)  NOT NULL DEFAULT '' COMMENT '昵称',
+    `is_deleted`  TINYINT      NOT NULL DEFAULT 0 COMMENT '是否删除',
+    `create_time` TIMESTAMP    NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time` TIMESTAMP    NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
 
-  PRIMARY KEY (`id`),
-  UNIQUE (`username`),
-  UNIQUE (`email`),
-  INDEX (`nick_name`),
-  INDEX (`create_time`),
-  INDEX (`update_time`)
+    PRIMARY KEY (`id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`),
+    INDEX (`nick_name`),
+    INDEX (`create_time`),
+    INDEX (`update_time`)
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_unicode_ci COMMENT ='用户';
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8
+    COLLATE = utf8_unicode_ci COMMENT ='用户';
 
 CREATE TABLE `quick_user_info`
 (
-  `id`           INT           NOT NULL COMMENT '用户ID',
-  `true_name`    VARCHAR(50)   NOT NULL DEFAULT '' COMMENT '用户姓名',
-  `age`          INT           NOT NULL DEFAULT 0 COMMENT '年龄',
-  `sex`          TINYINT       NOT NULL DEFAULT 0 COMMENT '性别(0保密，1男，2女)',
-  `photo`        VARCHAR(200)  NOT NULL DEFAULT '' COMMENT '头像',
-  `introduction` VARCHAR(1000) NOT NULL DEFAULT '' COMMENT '简介',
-  `create_time`  TIMESTAMP     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-  `update_time`  TIMESTAMP     NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
+    `id`           INT           NOT NULL COMMENT '用户ID',
+    `true_name`    VARCHAR(50)   NOT NULL DEFAULT '' COMMENT '用户姓名',
+    `age`          INT           NOT NULL DEFAULT 0 COMMENT '年龄',
+    `sex`          TINYINT       NOT NULL DEFAULT 0 COMMENT '性别',
+    `photo`        VARCHAR(200)  NOT NULL DEFAULT '' COMMENT '头像',
+    `introduction` VARCHAR(1000) NOT NULL DEFAULT '' COMMENT '简介',
+    `create_time`  TIMESTAMP     NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time`  TIMESTAMP     NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
 
-  PRIMARY KEY (`id`),
-  INDEX (`true_name`),
-  INDEX (`age`)
+    PRIMARY KEY (`id`),
+    INDEX (`true_name`),
+    INDEX (`age`)
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_unicode_ci COMMENT ='用户额外信息';
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8
+    COLLATE = utf8_unicode_ci COMMENT ='用户额外信息';
 
 CREATE TABLE `quick_user_type`
 (
-  `id`             INT          NOT NULL COMMENT '类型ID',
-  `user_type_name` VARCHAR(50)  NOT NULL COMMENT '类型名称',
-  `remark`         VARCHAR(200) NOT NULL DEFAULT '' COMMENT '备注',
-  `is_deleted`     TINYINT      NOT NULL DEFAULT 0 COMMENT '是否删除',
-  `create_time`    TIMESTAMP    NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-  `update_time`    TIMESTAMP    NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
+    `id`             INT          NOT NULL COMMENT '类型ID',
+    `user_type_name` VARCHAR(50)  NOT NULL COMMENT '类型名称',
+    `remark`         VARCHAR(200) NOT NULL DEFAULT '' COMMENT '备注',
+    `is_deleted`     TINYINT      NOT NULL DEFAULT 0 COMMENT '是否删除',
+    `create_time`    TIMESTAMP    NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time`    TIMESTAMP    NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
 
-  PRIMARY KEY (`id`),
-  INDEX (`user_type_name`),
-  INDEX (`create_time`),
-  INDEX (`update_time`)
+    PRIMARY KEY (`id`),
+    INDEX (`user_type_name`),
+    INDEX (`create_time`),
+    INDEX (`update_time`)
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_unicode_ci COMMENT ='用户类型';
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8
+    COLLATE = utf8_unicode_ci COMMENT ='用户类型';
 
 CREATE TABLE `quick_user_type_relation`
 (
-  `id`           INT       NOT NULL AUTO_INCREMENT COMMENT '用户类型关系ID',
-  `user_id`      INT       NOT NULL COMMENT '用户ID',
-  `user_type_id` INT       NOT NULL COMMENT '类型ID',
-  `status`       INT       NOT NULL DEFAULT 0 COMMENT '状态',
-  `is_deleted`   TINYINT   NOT NULL DEFAULT 0 COMMENT '是否删除',
-  `create_time`  TIMESTAMP NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-  `update_time`  TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
+    `id`           INT       NOT NULL AUTO_INCREMENT COMMENT '用户类型关系ID',
+    `user_id`      INT       NOT NULL COMMENT '用户ID',
+    `user_type_id` INT       NOT NULL COMMENT '类型ID',
+    `status`       INT       NOT NULL DEFAULT 0 COMMENT '状态',
+    `is_deleted`   TINYINT   NOT NULL DEFAULT 0 COMMENT '是否删除',
+    `create_time`  TIMESTAMP NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time`  TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
 
-  PRIMARY KEY (`id`),
-  UNIQUE relation_index (`user_id`, `user_type_id`),
-  INDEX (`create_time`),
-  INDEX (`update_time`)
+    PRIMARY KEY (`id`),
+    UNIQUE relation_index (`user_id`, `user_type_id`),
+    INDEX (`create_time`),
+    INDEX (`update_time`)
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_unicode_ci COMMENT ='用户类型关系';
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8
+    COLLATE = utf8_unicode_ci COMMENT ='用户类型关系';
 
 CREATE TABLE `quick_multi_pk`
 (
-  `key1`        INT         NOT NULL COMMENT '主键1',
-  `key2`        INT         NOT NULL COMMENT '主键2',
-  `value`       VARCHAR(50) NOT NULL COMMENT '值',
-  `status`      INT         NOT NULL DEFAULT 0 COMMENT '状态(1正常， 2提高， 3起飞)',
-  `is_deleted`  TINYINT     NOT NULL DEFAULT 0 COMMENT '是否删除',
-  `create_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
-  `update_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
+    `key1`        INT         NOT NULL COMMENT '主键1',
+    `key2`        INT         NOT NULL COMMENT '主键2',
+    `value`       VARCHAR(50) NOT NULL COMMENT '值',
+    `status`      INT         NOT NULL DEFAULT 0 COMMENT '状态(1正常， 2提高， 3起飞)',
+    `is_deleted`  TINYINT     NOT NULL DEFAULT 0 COMMENT '是否删除',
+    `create_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp COMMENT '创建时间',
+    `update_time` TIMESTAMP   NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp COMMENT '更新时间',
 
-  PRIMARY KEY (`key1`, `key2`),
-  INDEX (`create_time`),
-  INDEX (`update_time`)
+    PRIMARY KEY (`key1`, `key2`),
+    INDEX (`create_time`),
+    INDEX (`update_time`)
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8
-  COLLATE = utf8_unicode_ci COMMENT ='多主键测试表';
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8
+    COLLATE = utf8_unicode_ci COMMENT ='多主键测试表';
 
 # CREATE TABLE `no_pk`
 # (
@@ -123,6 +141,13 @@ CREATE TABLE `quick_multi_pk`
 #   DEFAULT CHARSET = utf8
 #   COLLATE = utf8_unicode_ci
 #   COMMENT ='无主键测试表';
+
+INSERT INTO quick_enum(value, text, source)
+VALUES ('sex', '性别', ''),
+       ('0', '保密', 'sex'),
+       ('1', '男', 'sex'),
+       ('2', '女', 'sex');
+
 
 INSERT INTO quick_user_type (id, user_type_name)
 VALUES (1, '超级管理员'),
