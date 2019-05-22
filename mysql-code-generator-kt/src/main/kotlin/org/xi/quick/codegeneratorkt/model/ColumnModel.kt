@@ -22,7 +22,7 @@ class ColumnModel(column: Column) {
     var columnPosition: Long
         private set
     // 默认值
-    var columnDefault: String
+    var columnDefault: String?
         private set
     // 是否为空
     var nullable: Boolean
@@ -142,7 +142,7 @@ class ColumnModel(column: Column) {
         tableName = column.tableName ?: ""
         columnName = column.columnName ?: ""
         columnPosition = column.ordinalPosition ?: -1
-        columnDefault = column.columnDefault ?: ""
+        columnDefault = column.columnDefault
         nullable = column.isNullable == null || column.isNullable.equals("YES", true)
         dataType = column.dataType ?: ""
         charLength = column.characterMaximumLength ?: -1
