@@ -14,8 +14,8 @@ mybatis:
     call-setters-on-nulls: true
 spring:
   datasource:
-    url: jdbc:mysql://192.168.78.151:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
-    username: rarexixi
+    url: jdbc:mysql://127.0.0.1:3306/quick?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -24,12 +24,12 @@ generator:
   encoding: UTF-8
   table-name-match-regex: '(?<=quick_).*'
   paths:
-    template: .\templates\
-    out: ..\out\
+    template: C:\Projects\github\code-generator\templates\spring-cloud-kt\templates\
+    out: C:\Projects\github\code-generator\templates\out\
   files:
     ignore: include\
-    aggregate: static\index.html
-    copy: resources\css\, resources\fonts\, resources\js\common.js, .gitignore
+    aggregate: html\index.html
+    copy: static\css\, static\fonts\, static\js\common.js, .gitignore
 
   columns:
     base:
@@ -39,23 +39,14 @@ generator:
       - column-name-set: create_time, update_time
     img-url:
       - column-name-set: photo
-#    video-url:
-#    doc-url:
-#    page-url:
-#    other-url:
+    #    video-url:
+    #    doc-url:
+    #    page-url:
+    #    other-url:
     content:
       - column-name-set: introduction, remark
 
     select:
-      - column-name-set: sex
-        table-name: quick_user_info
-        options:
-          - value: 0
-            text: 保密
-          - value: 1
-            text: 男
-          - value: 2
-            text: 女
       - column-name-set: status
         table-name: quick_multi_pk
         options:
@@ -66,6 +57,24 @@ generator:
           - value: 3
             text: 起飞
     fk-select:
+      - column-name-set: sex
+        table-name: quick_user_info
+        fk:
+          foreign-table-name: quick_enum
+          value-column-name: value
+          text-column-name: text
+          conditions:
+            - field: source
+              value: sex
+      - column-name-set: source
+        table-name: quick_enum
+        fk:
+          foreign-table-name: quick_enum
+          value-column-name: value
+          text-column-name: text
+          conditions:
+            - field: sourceIsEmpty
+              value: true
       - column-name-set: user_type_id
         fk:
           foreign-table-name: quick_user_type
@@ -87,19 +96,27 @@ generator:
     basePackage: org.xi.quick
     baseCommonPackage: org.xi.common
 
-    adminModuleName: quick-admin-api
+    commonModuleName: quick-common
+    modelModuleName: quick-model
+    providerModuleName: quick-provider
+    adminApiModuleName: quick-admin-api
+    eurekaServerModuleName: quick-eureka-server
 
+    providerModuleApplicationName: QuickProviderApplication
     adminModuleApplicatioName: QuickAdminApplication
+    eurekaServerModuleApplicatioName: QuickEurekaServerApplication
 
+    eurekaServerPort: 8770
+    providerServicePort: 8810
     adminServicePort: 8820
 
     baseApiPath: http://localhost:8820
 
     author: 郗世豪（rarexixi@outlook.com）
     codeVersion: 1.0
-    javaSrc: src/main/java
-    javaTestSrc: src/test/java
-    resourcesSrc: src/main/resources
+    javaSrc: src\main\java
+    javaTestSrc: src\test\java
+    resourcesSrc: src\main\resources
 
   # 获取数据映射关系
   data-type-map:

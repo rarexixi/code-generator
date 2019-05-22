@@ -1,0 +1,45 @@
+server:
+  port: ${adminServicePort}
+
+spring:
+  application:
+    name: ${adminModuleName}
+  datasource:
+    druid:
+      url: ${dbUrl}
+      username: ${dbUsername}
+      password: ${dbPassword}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      time-between-eviction-runs-millis: 18800
+      test-while-idle: true
+      test-on-borrow: false
+      validation-query: SELECT 1
+      initial-size: 5
+      max-active: 10
+      min-idle: 5
+      max-wait: 10000
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true
+  resources:
+    static-locations: classpath:/static/, classpath:/html/
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: ${basePackage}.mapper
+  configuration:
+    cache-enabled: false
+    lazy-loading-enabled: false
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: false
+    default-executor-type: simple
+    default-statement-timeout: 25000
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    call-setters-on-nulls: true
+
+pagehelper:
+  reasonable: true
+  params: count=countSql
+  auto-runtime-dialect: true

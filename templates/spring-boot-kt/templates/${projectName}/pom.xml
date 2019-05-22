@@ -10,7 +10,7 @@
 
     <modules>
         <module>${projectName}-boot-parent</module>
-        <module>${adminModuleName}</module>
+        <module>${adminApiModuleName}</module>
     </modules>
 
 </project>

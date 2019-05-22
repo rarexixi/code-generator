@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
@@ -77,6 +78,9 @@ public class CloudServiceAspect {
         } catch (ValidationException e) {
             logger.error(methodName, "参数验证失败", e);
             return new ResultVo<>(OperationConstants.PARAMETER_VALIDATION_FAILED, e.getMessage());
+        } catch (DuplicateKeyException e) {
+            logger.error(methodName, "数据唯一索引冲突", e);
+            return new ResultVo<>(OperationConstants.DUPLICATE_KEY, e.getMessage());
         } catch (Exception e) {
             logger.error(methodName, "服务出现异常", e);
         }

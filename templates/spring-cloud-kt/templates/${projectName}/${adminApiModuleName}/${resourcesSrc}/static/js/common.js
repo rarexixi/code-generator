@@ -42,33 +42,31 @@ Vue.filter('formatTime', timestamp => commonFun.formatDateTime(timestamp, 'hh:mm
 /*vue 格式化日期时间函数*/
 Vue.filter('formatDateTime', timestamp => commonFun.formatDateTime(timestamp, 'yyyy-MM-dd hh:mm:ss'));
 
-function getResponseMsg(response) {
-    let msg = response.message;
-    if (msg) {
-        msg = '<h2>' + msg + '</h2>'
-    }
+function getResponseMsg(failMsg, response) {
+    let msg = response.msg || failMsg;
     if (response.extData) {
         response.extData.forEach((item, index) => {
             msg += '<br/>' + item;
         });
     }
+    return msg;
 }
 
 Vue.prototype.ajaxPost = function (url, params, failMsg, successCallback, failCallback, errorCallback) {
 
     let self = this;
-    axios.post(url, params).then(res => {
+    axios.post(appConfig.baseApiPath + url, params).then(res => {
         let response = res.data;
         if (response.success == true) {
             if (successCallback) successCallback(response);
         } else {
-            let msg = failMsg ? failMsg : getResponseMsg(response);
+            let msg = getResponseMsg(failMsg, response);
             self.$notify({
                 dangerouslyUseHTMLString: true,
                 message: msg,
                 type: 'error'
             });
-            if (fail) fail();
+            if (failCallback) failCallback();
         }
     }).catch(error => {
         self.$notify({
@@ -82,14 +80,14 @@ Vue.prototype.ajaxPost = function (url, params, failMsg, successCallback, failCa
 Vue.prototype.ajaxGet = function (url, params, failMsg, successCallback, failCallback, errorCallback) {
 
     let self = this;
-    axios.get(url, {
+    axios.get(appConfig.baseApiPath + url, {
         params: params
     }).then(res => {
         let response = res.data;
         if (response.success == true) {
             if (successCallback) successCallback(response);
         } else {
-            let msg = failMsg ? failMsg : getResponseMsg(response);
+            let msg = getResponseMsg(failMsg, response);
             self.$notify({
                 dangerouslyUseHTMLString: true,
                 message: msg,

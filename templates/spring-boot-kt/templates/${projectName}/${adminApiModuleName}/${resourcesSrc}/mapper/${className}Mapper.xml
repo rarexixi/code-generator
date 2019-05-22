@@ -1,0 +1,221 @@
+<#include "/include/table/properties.ftl">
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 默认生成的的sql，不要修改！！！ -->
+<mapper namespace="${basePackage}.mapper.${className}Mapper">
+
+    <resultMap id="BaseResultMap" type="${basePackage}.models.entity.${className}Entity">
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+        <result property="${fieldName}" column="${column.columnName}"/>
+        </#list>
+    </resultMap>
+
+    <parameterMap id="BaseParameterMap" type="${basePackage}.models.entity.${className}Entity"></parameterMap>
+    <parameterMap id="BaseConditionMap" type="${basePackage}.models.condition.${className}Condition"></parameterMap>
+
+    <sql id="tableName">`${table.tableName}`</sql>
+    <sql id="selectCondition">
+        <trim prefixOverrides="AND|OR">
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+            <#if (column.ignoreSearch || isContent)>
+            <#else>
+                <#if (canBeEqual)>
+                <if test="condition.${fieldName} != null<#if (isString)> and condition.${fieldName} != ''</#if>">
+                    AND `${column.columnName}` = <@mapperEl 'condition.' + fieldName/>
+                </if>
+                </#if>
+                <#if (canBeList)>
+                <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
+                    AND `${column.columnName}` in
+                    <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
+                </if>
+                </#if>
+                <#if (canBeRange)>
+                <if test="condition.${fieldName}Min != null">
+                    <![CDATA[
+                    AND `${column.columnName}` >= <@mapperEl 'condition.' + fieldName + 'Min'/>
+                    ]]>
+                </if>
+                <if test="condition.${fieldName}Max != null">
+                    <![CDATA[
+                    AND `${column.columnName}` <= <@mapperEl 'condition.' + fieldName + 'Max'/>
+                    ]]>
+                </if>
+                </#if>
+                <#if (canBeNull)>
+                <if test="condition.${fieldName}IsNull != null and condition.${fieldName}IsNull == true">
+                    AND `${column.columnName}` IS NULL
+                </if>
+                </#if>
+                <#if (isString)>
+                <if test="condition.${fieldName}IsEmpty != null and condition.${fieldName}IsEmpty == true">
+                    AND `${column.columnName}` = ''
+                </if>
+                <if test="condition.${fieldName}StartWith != null and condition.${fieldName}StartWith != ''">
+                    AND `${column.columnName}` LIKE concat(<@mapperEl 'condition.' + fieldName + 'StartWith'/>, '%')
+                </if>
+                <if test="condition.${fieldName}Contains != null and condition.${fieldName}Contains != ''">
+                    AND `${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + fieldName + 'Contains'/>, '%')
+                </if>
+                </#if>
+            </#if>
+        </#list>
+        </trim>
+    </sql>
+
+    <sql id="where">
+        <if test="condition != null">
+            <where>
+                <include refid="selectCondition"/>
+            </where>
+        </if>
+    </sql>
+    <sql id="listWhere">
+        <if test="conditionList != null and conditionList.size() > 0">
+            <where>
+                <foreach collection="conditionList" item="condition" open="(" close=")" separator=" OR ">
+                    (<include refid="selectCondition"/>)
+                </foreach>
+            </where>
+        </if>
+    </sql>
+    <sql id="orderBy">
+        <if test="order != null">
+            <trim suffixOverrides="ORDER BY">
+                ORDER BY
+                <trim suffixOverrides=",">
+                <#list table.columns as column>
+                <#include "/include/column/properties.ftl">
+                <#if (column.ignoreSearch || isContent)>
+                <#else>
+                <if test="order.${fieldName}Sort != null">
+                    <choose>
+                        <when test="order.${fieldName}Sort == @${baseCommonPackage}.constant.SortConstants@ASC">
+                            `${column.columnName}` ASC,
+                        </when>
+                        <otherwise>
+                            `${column.columnName}` DESC,
+                        </otherwise>
+                    </choose>
+                </if>
+                </#if>
+                </#list>
+                </trim>
+            </trim>
+        </if>
+    </sql>
+    <sql id="selectColumnList">
+        <#list table.columns as column>
+        `${column.columnName}`<#if column?has_next>,</#if>
+        </#list>
+    </sql>
+    <sql id="updateColumnSet">
+        <set>
+            <#list table.columns as column>
+            <#include "/include/column/properties.ftl">
+            <#if (column.pk && column.autoIncrement)>
+            <#else>
+            <if test="entity.${fieldName} != null">
+                `${column.columnName}` = <@mapperEl 'entity.' + fieldName/><#if column?has_next>,</#if>
+            </if>
+            </#if>
+            </#list>
+        </set>
+    </sql>
+
+    <insert id="insert" parameterMap="BaseParameterMap"<#if table.hasAutoIncUniPk> useGeneratedKeys="true" keyProperty="entity.${table.uniPk.targetName?uncap_first}"</#if>>
+        insert into <include refid="tableName"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+            <if test="entity.${fieldName} != null">`${column.columnName}`,</if>
+        </#list>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+            <if test="entity.${fieldName} != null"><@mapperEl 'entity.' + fieldName/>,</if>
+        </#list>
+        </trim>
+    </insert>
+
+    <insert id="insertList" parameterMap="BaseParameterMap">
+        <foreach collection="list" item="item" separator=";">
+            insert into <include refid="tableName"/>
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+            <#list table.columns as column>
+            <#include "/include/column/properties.ftl">
+                <if test="item.${fieldName} != null">`${column.columnName}`,</if>
+            </#list>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <#list table.columns as column>
+            <#include "/include/column/properties.ftl">
+                <if test="item.${fieldName} != null"><@mapperEl 'item.' + fieldName/>,</if>
+            </#list>
+            </trim>
+        </foreach>
+    </insert>
+
+    <delete id="deleteByCondition" parameterMap="BaseConditionMap">
+        DELETE FROM <include refid="tableName"/>
+        <include refid="where"/>
+    </delete>
+
+    <delete id="deleteByConditionList" parameterMap="BaseConditionMap">
+        DELETE FROM <include refid="tableName"/>
+        <include refid="listWhere"/>
+    </delete>
+
+    <update id="updateByCondition">
+        UPDATE <include refid="tableName"/>
+        <include refid="updateColumnSet"/>
+        <include refid="where"/>
+    </update>
+
+    <update id="updateByConditionList">
+        UPDATE <include refid="tableName"/>
+        <include refid="updateColumnSet"/>
+        <include refid="listWhere"/>
+    </update>
+
+    <select id="getByCondition" resultMap="BaseResultMap" parameterMap="BaseConditionMap">
+        SELECT
+        <include refid="selectColumnList"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="where"/>
+    </select>
+
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        SELECT
+        <include refid="selectColumnList"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="where"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="selectByConditionList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="selectColumnList"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="listWhere"/>
+        <include refid="orderBy"/>
+    </select>
+
+    <select id="countByCondition" parameterMap="BaseConditionMap" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM <include refid="tableName"/>
+        <include refid="where"/>
+    </select>
+
+    <select id="countByConditionList" parameterMap="BaseConditionMap" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM <include refid="tableName"/>
+        <include refid="listWhere"/>
+    </select>
+</mapper>

@@ -1,4 +1,4 @@
-        <el-form ref="searchParams" :model="searchParams" label-position="left" label-width="120px">
+        <el-form ref="searchParams" :model="searchParams" label-position="left" size="small" label-width="120px">
             <el-row :gutter="10">
 <#list table.indexes as column>
                 <#include "/include/column/properties.ftl">
@@ -90,11 +90,12 @@
                 </el-col>
             </el-row>
         </el-form>
-
 <#if table.validStatusColumn??>
         <el-tabs v-model="searchParams.${table.validStatusColumn.targetName?uncap_first}" @tab-click="search">
             <el-tab-pane name="null" label="全部"></el-tab-pane>
             <el-tab-pane name="${table.validStatusColumn.validStatusOption.valid}" label="有效"></el-tab-pane>
             <el-tab-pane name="${table.validStatusColumn.validStatusOption.invalid}" label="无效"></el-tab-pane>
         </el-tabs>
+<#else>
+        <el-divider></el-divider>
 </#if>

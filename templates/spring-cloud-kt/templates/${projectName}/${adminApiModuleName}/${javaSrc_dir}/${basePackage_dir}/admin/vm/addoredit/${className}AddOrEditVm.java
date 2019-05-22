@@ -22,10 +22,10 @@ public class ${className}AddOrEditVm implements Serializable {
     /**
      * ${columnFullComment}
      */
-    <#if (column.pk)>
     <#assign annotationName = ((fieldType == 'String') ? string('NotBlank', 'NotNull'))>
+    <#if (column.pk)>
     @${annotationName}(groups = {<#if column.autoIncrement>DataEdit.class<#else>DataAdd.class</#if>}, message = "${fieldName} (${columnComment})不能为空")
-    <#elseif (!column.notRequired && !column.nullable && (column.columnDefault!"") == "")>
+    <#elseif (!column.notRequired && !column.nullable && !(column.columnDefault??))>
     @${annotationName}(groups = {DataAdd.class, DataEdit.class}, message = "${fieldName} (${columnComment})不能为空")
     </#if>
     private ${fieldType} ${fieldName};

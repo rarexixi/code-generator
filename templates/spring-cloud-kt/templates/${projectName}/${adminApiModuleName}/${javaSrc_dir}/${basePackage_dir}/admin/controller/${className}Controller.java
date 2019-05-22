@@ -113,7 +113,7 @@ public class ${className}Controller {
     </#if>
 
     /**
-     * 根据主键获取${tableComment}实体
+     * 根据条件获取${tableComment}实体
      *
      * @param searchVm
      * @return

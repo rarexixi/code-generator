@@ -1,0 +1,126 @@
+<#include "/include/table/properties.ftl">
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 存放手写的sql -->
+<mapper namespace="${basePackage}.mapper.${className}Mapper">
+
+    <resultMap id="ExtensionResultMap" extends="BaseResultMap" type="${basePackage}.models.entity.extension.${className}EntityExtension">
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        <result property="${fieldNameExceptKey}Text" column="${column.columnName}_text"/>
+        </#list>
+    </resultMap>
+
+    <parameterMap id="ConditionExtensionMap" type="${basePackage}.models.condition.extension.${className}ConditionExtension"></parameterMap>
+
+    <#if table.hasPk>
+    <select id="getByPk" resultMap="ExtensionResultMap">
+        SELECT DISTINCT
+        <#assign fkIndex = 0>
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+        MT.`${column.columnName}`<#if column?has_next>,</#if>
+        <#if (column.fkSelect)>
+        <#assign tmpName = ('T' + fkIndex)>
+        <#assign fkIndex = (1 + fkIndex)>
+        `${tmpName}`.`${column.fkSelectColumn.textColumnName}` `${column.columnName}_text`<#if column?has_next>,</#if>
+        </#if>
+        </#list>
+        FROM
+        <include refid="tableName"/> MT
+        <#if (table.fkSelectColumns?size > 0)>
+            <#list table.fkSelectColumns as column>
+            <#assign tmpName = ('T' + column?index)>
+            left join `${column.fkSelectColumn.foreignTableName}` ${tmpName} on MT.${column.columnName} = ${tmpName}.`${column.fkSelectColumn.valueColumnName}`
+            </#list>
+        </#if>
+        <where>
+        <#list pks as column>
+        <#include "/include/column/properties.ftl">
+        <#if (column_index > 0)>AND </#if>MT.`${column.columnName}` = <@mapperEl fieldName/>
+        </#list>
+        </where>
+    </select>
+    </#if>
+
+    <select id="getExList" resultMap="ExtensionResultMap" parameterMap="ConditionExtensionMap">
+        SELECT DISTINCT
+        <#list table.columns as column>
+        MT.`${column.columnName}`<#if column?has_next>,</#if>
+        </#list>
+        FROM
+        <include refid="tableName"/> MT
+        <where>
+        <#list table.columns as column>
+        <#include "/include/column/properties.ftl">
+        <#if (column.ignoreSearch || isContent)>
+        <#else>
+            <#if (canBeEqual)>
+            <if test="condition.${fieldName} != null<#if (isString)> and condition.${fieldName} != ''</#if>">
+                AND MT.`${column.columnName}` = <@mapperEl 'condition.' + fieldName/>
+            </if>
+            </#if>
+            <#if (canBeList)>
+            <if test="condition.${fieldName}List != null and condition.${fieldName}List.size() > 0">
+                AND MT.`${column.columnName}` in
+                <foreach collection="condition.${fieldName}List" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
+            </if>
+            </#if>
+            <#if (canBeRange)>
+            <if test="condition.${fieldName}Min != null">
+                <![CDATA[
+                AND MT.`${column.columnName}` >= <@mapperEl 'condition.' + fieldName + 'Min'/>
+                ]]>
+            </if>
+            <if test="condition.${fieldName}Max != null">
+                <![CDATA[
+                AND MT.`${column.columnName}` <= <@mapperEl 'condition.' + fieldName + 'Max'/>
+                ]]>
+            </if>
+            </#if>
+            <#if (canBeNull)>
+            <if test="condition.${fieldName}IsNull != null and condition.${fieldName}IsNull == true">
+                AND MT.`${column.columnName}` IS NULL
+            </if>
+            </#if>
+            <#if (isString)>
+            <if test="condition.${fieldName}IsEmpty != null and condition.${fieldName}IsEmpty == true">
+                AND MT.`${column.columnName}` = ''
+            </if>
+            <if test="condition.${fieldName}StartWith != null and condition.${fieldName}StartWith != ''">
+                AND MT.`${column.columnName}` LIKE concat(<@mapperEl 'condition.' + fieldName + 'StartWith'/>, '%')
+            </if>
+            <if test="condition.${fieldName}Contains != null and condition.${fieldName}Contains != ''">
+                AND MT.`${column.columnName}` LIKE concat('%', <@mapperEl 'condition.' + fieldName + 'Contains'/>, '%')
+            </if>
+            </#if>
+        </#if>
+        </#list>
+        </where>
+        <if test="order != null">
+            <trim suffixOverrides="ORDER BY">
+                ORDER BY
+                <trim suffixOverrides=",">
+                <#list table.columns as column>
+                <#include "/include/column/properties.ftl">
+                <#if (column.ignoreSearch || isContent)>
+                <#else>
+                <if test="order.${fieldName}Sort != null">
+                    <choose>
+                        <when test="order.${fieldName}Sort == @${baseCommonPackage}.constant.SortConstants@ASC">
+                            MT.`${column.columnName}` ASC,
+                        </when>
+                        <otherwise>
+                            MT.`${column.columnName}` DESC,
+                        </otherwise>
+                    </choose>
+                </if>
+                </#if>
+                </#list>
+                </trim>
+            </trim>
+        </if>
+    </select>
+</mapper>
