@@ -25,7 +25,9 @@
         <#if (column.fkSelect)>
         <#assign tmpName = ('T' + fkIndex)>
         <#assign fkIndex = (1 + fkIndex)>
+        <#if (column.fkSelectColumn.conditions?size == 0)>
         `${tmpName}`.`${column.fkSelectColumn.textColumnName}` `${column.columnName}_text`<#if column?has_next>,</#if>
+        </#if>
         </#if>
         </#list>
         FROM
@@ -33,7 +35,9 @@
         <#if (table.fkSelectColumns?size > 0)>
             <#list table.fkSelectColumns as column>
             <#assign tmpName = ('T' + column?index)>
-            left join `${column.fkSelectColumn.foreignTableName}` ${tmpName} on MT.${column.columnName} = ${tmpName}.`${column.fkSelectColumn.valueColumnName}`
+            <#if (column.fkSelectColumn.conditions?size == 0)>
+            left join (select ${column.fkSelectColumn.valueColumnName}, ${column.fkSelectColumn.textColumnName} from `${column.fkSelectColumn.foreignTableName}`) ${tmpName} on MT.${column.columnName} = ${tmpName}.`${column.fkSelectColumn.valueColumnName}`
+            </#if>
             </#list>
         </#if>
         <where>
