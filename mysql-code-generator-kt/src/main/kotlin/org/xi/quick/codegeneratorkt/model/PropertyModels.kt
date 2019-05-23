@@ -177,6 +177,12 @@ class FkSelectColumn {
 class FkSelectColumnCondition {
     var field: String = ""
     var value: String = ""
+
+    /**
+     * 外键类名
+     */
+    val fieldTargetName: String
+        get() = this.field.getPropertyName()
 }
 
 class SelectOption {
