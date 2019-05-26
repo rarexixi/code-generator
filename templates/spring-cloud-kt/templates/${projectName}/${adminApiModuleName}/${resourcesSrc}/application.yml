@@ -14,7 +14,8 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: true
   resources:
-    static-locations: classpath:/static/, classpath:/html/
+    static-locations: file:${paths.out}${projectName}/${adminApiModuleName}/${resourcesSrc}/static/, file:${paths.out}${projectName}/${adminApiModuleName}/${resourcesSrc}/html/
+#    static-locations: classpath:/static/, classpath:/html/
 
 eureka:
   client:
