@@ -9,7 +9,7 @@
 </#if>
     </el-row>
     <template v-if="pageInfo && pageInfo.list && pageInfo.list.length > 0">
-        <el-table ref="multipleTable" :data="pageInfo.list" tooltip-effect="dark" @sort-change="handleSortChange"<#if (table.hasUniPk)> @selection-change="handleSelectionChange"</#if>>
+        <el-table class="data-table" ref="multipleTable" :data="pageInfo.list" tooltip-effect="dark" @sort-change="handleSortChange"<#if (table.hasUniPk)> @selection-change="handleSelectionChange"</#if>>
 <#if (table.hasUniPk)>
             <el-table-column type="selection" width="55"></el-table-column>
 </#if>
@@ -17,7 +17,7 @@
         <#include "/include/column/properties.ftl">
         <#if (isContent)>
         <#else>
-            <el-table-column label="${columnComment}" prop="${fieldName}"<#if (column.index)> sortable="custom"</#if><#if column.validStatus> v-if="searchParams.${fieldName} == 'null'"</#if>>
+            <el-table-column label="${columnComment}" prop="${fieldName}" size="small"<#if (column.index)> sortable="custom"</#if>>
             <#if column.validStatus>
                 <template slot-scope="scope">
                     <span :class="scope.row.${fieldName} == ${table.validStatusColumn.validStatusOption.valid} ? 'text-success' : 'text-danger'">{{get${propertyName}Text(scope.row.${fieldName})}}</span>
@@ -28,11 +28,7 @@
                 </template>
             <#elseif column.imgUrl>
                 <template slot-scope="scope">
-                    <div class="ratio ratio-4by3 table-img-container" v-if="scope.row.${fieldName} != ''">
-                        <div class="content center">
-                            <img :src="scope.row.${fieldName}" alt="${columnComment}" class="content" />
-                        </div>
-                    </div>
+                    <el-image v-if="scope.row.${fieldName} != ''" :src="scope.row.${fieldName}" alt="${columnComment}" fit="contain"></el-image>
                     <span v-else>-</span>
                 </template>
             <#elseif (isDate)>
@@ -47,13 +43,13 @@
             </el-table-column>
         </#if>
 </#list>
-            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>200<#else>170</#if>">
+            <el-table-column fixed="right" label="操作" width="<#if table.validStatusColumn??>200<#else>160</#if>">
                 <template slot-scope="scope">
                     <el-tooltip effect="dark" content="编辑" placement="top">
                         <el-button @click="edit(scope.row, false)" type="primary" icon="el-icon-edit" size="mini" circle></el-button>
                     </el-tooltip>
                     <el-tooltip effect="dark" content="复制" placement="top">
-                        <el-button @click="edit(scope.row, true)" icon="el-icon-document-copy" size="mini" circle></el-button>
+                        <el-button @click="edit(scope.row, true)" type="primary" icon="el-icon-document-copy" size="mini" circle></el-button>
                     </el-tooltip>
                     <el-tooltip effect="dark" content="详情" placement="top">
                         <el-button @click="get(scope.row)" type="info" icon="el-icon-more" size="mini" circle></el-button>

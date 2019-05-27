@@ -38,6 +38,9 @@ class GeneratorServiceImpl : GeneratorService {
     @Autowired
     lateinit var dataSourceProperties: DataSourceProperties
 
+    @Autowired
+    lateinit var generatorProperties: GeneratorProperties
+
     //region 生成
 
     /**
@@ -243,6 +246,7 @@ class GeneratorServiceImpl : GeneratorService {
         dataModel["dbUrl"] = dataSourceProperties.url
         dataModel["dbUsername"] = dataSourceProperties.username
         dataModel["dbPassword"] = dataSourceProperties.password
+        dataModel["paths"] = generatorProperties.paths!!
     }
 
     /**

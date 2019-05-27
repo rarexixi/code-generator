@@ -10,8 +10,21 @@
     margin-bottom: 15px;
 }
 
+.el-divider--horizontal {
+    margin: 15px 0;
+}
+
+.data-table {
+
+}
+
+.data-table .el-image {
+    width: 100px;
+    height: 75px;
+}
+
 .el-table .el-button + .el-button {
-    margin-left: 6px;
+    margin-left: 3px;
 }
 
 .el-table th {
