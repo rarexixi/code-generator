@@ -49,9 +49,8 @@ public class ${className}Controller {
      */
     @PostMapping("/add")
     public ResponseVo<${className}AddOrEditVm> add(@Validated({DataAdd.class}) @RequestBody ${className}AddOrEditVm vm, Errors errors) {
-
-        ResponseVo<${className}AddOrEditVm> result = ${classNameFirstLower}Service.add(vm);
-        return result;
+        ${classNameFirstLower}Service.add(vm);
+        return new ResponseVo<>(vm);
     }
 
     /**
@@ -63,9 +62,8 @@ public class ${className}Controller {
      */
     @PostMapping("/add-list")
     public ResponseVo<Integer> addList(@Validated({DataAdd.class}) @RequestBody List<${className}AddOrEditVm> list, Errors errors) {
-
-        ResponseVo<Integer> result = ${classNameFirstLower}Service.addList(list);
-        return result;
+        int result = ${classNameFirstLower}Service.addList(list);
+        return new ResponseVo<>(result);
     }
 
     /**
@@ -77,9 +75,8 @@ public class ${className}Controller {
      */
     @PostMapping("/delete")
     public ResponseVo<Integer> delete(@RequestBody ${className}SearchVm searchVm) {
-
-        ResponseVo<Integer> result = ${classNameFirstLower}Service.delete(searchVm);
-        return result;
+        int result = ${classNameFirstLower}Service.delete(searchVm);
+        return new ResponseVo<>(result);
     }
     <#if table.validStatusColumn??>
 
@@ -92,9 +89,8 @@ public class ${className}Controller {
      */
     @PostMapping("/disable")
     public ResponseVo<Integer> disable(@RequestBody ${className}SearchVm searchVm) {
-
-        ResponseVo<Integer> result = ${classNameFirstLower}Service.disable(searchVm);
-        return result;
+        int result = ${classNameFirstLower}Service.disable(searchVm);
+        return new ResponseVo<>(result);
     }
 
     /**
@@ -106,9 +102,8 @@ public class ${className}Controller {
      */
     @PostMapping("/enable")
     public ResponseVo<Integer> enable(@RequestBody ${className}SearchVm searchVm) {
-
-        ResponseVo<Integer> result = ${classNameFirstLower}Service.enable(searchVm);
-        return result;
+        int result = ${classNameFirstLower}Service.enable(searchVm);
+        return new ResponseVo<>(result);
     }
     </#if>
 
@@ -121,9 +116,8 @@ public class ${className}Controller {
      */
     @PostMapping("/get")
     public ResponseVo<${className}DetailVm> get(@RequestBody ${className}SearchVm searchVm) {
-
-        ResponseVo<${className}DetailVm> result = ${classNameFirstLower}Service.get(searchVm);
-        return result;
+        ${className}DetailVm result = ${classNameFirstLower}Service.get(searchVm);
+        return new ResponseVo<>(result);
     }
     <#if table.hasPk>
 
@@ -142,9 +136,8 @@ public class ${className}Controller {
      */
     @PostMapping("/update")
     public ResponseVo<Integer> update(@Validated({DataEdit.class}) @RequestBody ${className}AddOrEditVm vm, Errors errors<#if !table.hasAutoIncUniPk><#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>, @${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}</#list></#if>) {
-
-        ResponseVo<Integer> result = ${classNameFirstLower}Service.update(vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_values.ftl"></#if>);
-        return result;
+        int result = ${classNameFirstLower}Service.update(vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_values.ftl"></#if>);
+        return new ResponseVo<>(result);
     }
 
     /**
@@ -161,9 +154,8 @@ public class ${className}Controller {
      */
     @GetMapping("/detail")
     public ResponseVo<${className}DetailVm> getDetail(<#list pks as column><#include "/include/column/properties.ftl"><#assign annotationName = (isString ? string('NotBlank', 'NotNull'))>@${annotationName}(message = "${fieldName} (${columnComment})不能为空") @RequestParam(value = "${fieldName}") ${fieldType} ${fieldName}<#if column?has_next>,</#if></#list>) {
-
-        ResponseVo<${className}DetailVm> result = ${classNameFirstLower}Service.getDetail(<#include "/include/table/pk_values.ftl">);
-        return result;
+        ${className}DetailVm result = ${classNameFirstLower}Service.getDetail(<#include "/include/table/pk_values.ftl">);
+        return new ResponseVo<>(result);
     }
     </#if>
 
@@ -176,8 +168,7 @@ public class ${className}Controller {
      */
     @PostMapping("/list")
     public ResponseVo<List<${className}DetailVm>> getList(@RequestBody OrderSearch<${className}SearchVm, ${className}OrderVm> search) {
-
-        ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(search);
+        List<${className}DetailVm> result = ${classNameFirstLower}Service.getList(search);
         return result;
     }
 
@@ -190,9 +181,8 @@ public class ${className}Controller {
      */
     @PostMapping("/page-list")
     public ResponseVo<PageInfoVo<${className}DetailVm>> getPageInfo(@RequestBody OrderSearchPage<${className}SearchVm, ${className}OrderVm> searchPage) {
-
-        ResponseVo<PageInfoVo<${className}DetailVm>> result = ${classNameFirstLower}Service.getPageInfo(searchPage);
-        return result;
+        PageInfoVo<${className}DetailVm> result = ${classNameFirstLower}Service.getPageInfo(searchPage);
+        return new ResponseVo<>(result);
     }
 
     /**
@@ -206,11 +196,11 @@ public class ${className}Controller {
     public void export(HttpServletResponse response, String params, @RequestParam(defaultValue = "", required = false) String exportName) throws IOException, IllegalAccessException {
 
         OrderSearch<${className}SearchVm, ${className}OrderVm> search = VoUtils.getOrderSearch(params, ${className}SearchVm.class, ${className}OrderVm.class);
-        ResponseVo<List<${className}DetailVm>> result = ${classNameFirstLower}Service.getList(search);
+        List<${className}DetailVm> list = ${classNameFirstLower}Service.getList(search);
 
         String fileName = StringUtils.isBlank(exportName) ? "${tableComment}" : exportName;
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName + ".xlsx", "utf-8"));
-        ExcelUtils.exportExcel(fileName, ${className}DetailVm.class, result.getResult(), response.getOutputStream());
+        ExcelUtils.exportExcel(fileName, ${className}DetailVm.class, list, response.getOutputStream());
     }
 
 }

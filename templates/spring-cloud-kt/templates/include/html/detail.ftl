@@ -3,7 +3,7 @@
             <#include "/include/column/properties.ftl">
             <el-form-item label="${columnComment}">
                 <#if (column.validStatus || column.select)>
-                <span>{{get${propertyName}Text(detail.${fieldName})}}</span>
+                <span>{{get${propertyExceptKey}Text(detail.${fieldName})}}</span>
                 <#elseif (column.fkSelect)>
                 <span>{{detail.${fieldNameExceptKey}Text}}</span>
                 <#elseif column.imgUrl>

@@ -20,7 +20,7 @@
             <el-table-column label="${columnComment}" prop="${fieldName}" size="small"<#if (column.index)> sortable="custom"</#if>>
             <#if (column.validStatus || column.select || column.fkSelect)>
                 <template slot-scope="scope">
-                    <span>{{get${propertyName}Text(scope.row.${fieldName})}}</span>
+                    <span>{{get${propertyExceptKey}Text(scope.row.${fieldName})}}</span>
                 </template>
             <#elseif column.imgUrl>
                 <template slot-scope="scope">

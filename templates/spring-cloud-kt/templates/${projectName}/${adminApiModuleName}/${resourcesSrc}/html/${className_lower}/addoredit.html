@@ -65,7 +65,7 @@
             let self = this;
             <#list table.fkSelectColumns as column>
             <#include "/include/column/properties.ftl">
-            self.init${propertyExceptKey}();
+            self.init${propertyExceptKey}SelectList();
             </#list>
             self.copy = commonFun.getParam('copy') == 'true';
             <#list table.pks as column>
@@ -101,7 +101,7 @@
                     });
                 });
             },
-            get: function (copy) {
+            get: function () {
                 let self = this;
 
                 let url = '/${tablePath}/detail';
@@ -120,24 +120,7 @@
                     </#list>
                 });
             },
-            <#list table.fkSelectColumns as column>
-            <#include "/include/column/properties.ftl">
-            init${propertyExceptKey}: function () {
-                let self = this;
-                let url = '/${column.fkSelectColumn.foreignTargetTableName?replace("_", "-")}/list';
-                let params = {
-                    condition: {
-                        <#list column.fkSelectColumn.conditions as condition>
-                        ${condition.field}: '${condition.value}'<#if condition?has_next>,</#if>
-                        </#list>
-                    },
-                    order: {}
-                };
-                self.ajaxPost(url, params, '获取${columnComment}列表失败！', response => {
-                    self.${fieldNameExceptKey}SelectList = response.result;
-                });
-            },
-            </#list>
+            <#include "/include/js/init_fk_list.ftl">
             back: function () {
                 let self = this;
                 location.href = 'list.html';

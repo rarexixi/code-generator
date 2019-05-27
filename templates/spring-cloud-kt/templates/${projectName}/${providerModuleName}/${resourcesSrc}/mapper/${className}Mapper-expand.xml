@@ -9,7 +9,7 @@
     <resultMap id="ExtensionResultMap" extends="BaseResultMap" type="${basePackage}.models.entity.extension.${className}EntityExtension">
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
-        <result property="${fieldNameExceptKey}Text" column="${column.columnName}_text"/>
+        <result property="${fieldNameExceptKey}Text" column="${columnExceptKey}_text"/>
         </#list>
     </resultMap>
 
@@ -26,7 +26,7 @@
         <#assign tmpName = ('T' + fkIndex)>
         <#assign fkIndex = (1 + fkIndex)>
         <#if (column.fkSelectColumn.conditions?size == 0)>
-        `${tmpName}`.`${column.fkSelectColumn.textColumnName}` `${column.columnName}_text`<#if column?has_next>,</#if>
+        `${tmpName}`.`${column.fkSelectColumn.textColumnName}` `${columnExceptKey}_text`<#if column?has_next>,</#if>
         </#if>
         </#if>
         </#list>

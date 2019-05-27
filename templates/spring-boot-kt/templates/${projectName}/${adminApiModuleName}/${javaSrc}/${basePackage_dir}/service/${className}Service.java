@@ -19,7 +19,7 @@ public interface ${className}Service extends BaseService<${className}AddOrEditVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> disable(${className}SearchVm searchVm);
+    int disable(${className}SearchVm searchVm);
 
     /**
      * 根据条件启用${tableComment}
@@ -28,7 +28,7 @@ public interface ${className}Service extends BaseService<${className}AddOrEditVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> enable(${className}SearchVm searchVm);
+    int enable(${className}SearchVm searchVm);
     </#if>
     <#if (table.hasPk)>
 
@@ -45,7 +45,7 @@ public interface ${className}Service extends BaseService<${className}AddOrEditVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> update(${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_params.ftl"></#if>);
+    int update(${className}AddOrEditVm vm<#if !table.hasAutoIncUniPk>, <#include "/include/table/pk_params.ftl"></#if>);
 
     /**
      * 根据主键获取${tableComment}详情
@@ -57,6 +57,6 @@ public interface ${className}Service extends BaseService<${className}AddOrEditVm
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<${className}DetailVm> getDetail(<#include "/include/table/pk_params.ftl">);
+    ${className}DetailVm getDetail(<#include "/include/table/pk_params.ftl">);
     </#if>
 }

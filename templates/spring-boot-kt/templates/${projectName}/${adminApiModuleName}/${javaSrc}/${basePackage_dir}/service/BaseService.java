@@ -13,7 +13,7 @@ public interface BaseService<AddOrEditVm, DetailVm, OrderVm extends OrderConditi
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<AddOrEditVm> add(AddOrEditVm vm);
+    int add(AddOrEditVm vm);
 
     /**
      * 添加列表
@@ -22,7 +22,7 @@ public interface BaseService<AddOrEditVm, DetailVm, OrderVm extends OrderConditi
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> addList(List<AddOrEditVm> list);
+    int addList(List<AddOrEditVm> list);
 
     /**
      * 根据条件删除
@@ -31,7 +31,7 @@ public interface BaseService<AddOrEditVm, DetailVm, OrderVm extends OrderConditi
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<Integer> delete(SearchVm searchVm);
+    int delete(SearchVm searchVm);
 
     /**
      * 根据条件获取实体
@@ -40,7 +40,7 @@ public interface BaseService<AddOrEditVm, DetailVm, OrderVm extends OrderConditi
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<DetailVm> get(SearchVm searchVm);
+    DetailVm get(SearchVm searchVm);
 
     /**
      * 获取列表
@@ -49,7 +49,7 @@ public interface BaseService<AddOrEditVm, DetailVm, OrderVm extends OrderConditi
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<List<DetailVm>> getList(OrderSearch<SearchVm, OrderVm> search);
+    List<DetailVm> getList(OrderSearch<SearchVm, OrderVm> search);
 
     /**
      * 分页查询
@@ -58,5 +58,5 @@ public interface BaseService<AddOrEditVm, DetailVm, OrderVm extends OrderConditi
      * @return
      <#include "/include/author_info1.ftl">
      */
-    ResponseVo<PageInfoVo<DetailVm>> getPageInfo(OrderSearchPage<SearchVm, OrderVm> searchPage);
+    PageInfoVo<DetailVm> getPageInfo(OrderSearchPage<SearchVm, OrderVm> searchPage);
 }

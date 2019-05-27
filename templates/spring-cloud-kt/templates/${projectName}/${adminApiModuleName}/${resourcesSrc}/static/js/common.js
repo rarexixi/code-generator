@@ -13,6 +13,12 @@ const commonFun = {
         }
         Vue.set(vueObj[targetModel.substr(0, index)], targetModel.substr(index + 1), val);
     },
+    getJsonStrWithMeaning: function (json) {
+        return JSON.stringify(json, (key, value) => {
+            if (value) return value;
+            return undefined;
+        });
+    },
     formatDateTime: function (timestamp, fmt) {
         let date = new Date(timestamp);
         if (/(y+)/.test(fmt)) {

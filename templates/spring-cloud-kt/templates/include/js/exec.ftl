@@ -1,29 +1,19 @@
 <#if table.validStatusColumn??>
             enable: function (item) {
-                let self = this;
-                let params = self.getPkParams(item);
-                let url = '/${tablePath}/enable';
-                self.confirmPost("确定启用吗？", url, params, "启用成功！", "启用失败！", response => {
-                    <#if (!isSplit)>self.closeDialog();</#if>
-                    self.search();
-                });
+                this.exec(item, '/${tablePath}/enable', '确定启用吗？', '启用成功！', '启用失败！');
             },
             disable: function (item) {
-                let self = this;
-                let params = self.getPkParams(item);
-                let url = '/${tablePath}/disable';
-                self.confirmPost("确定禁用吗？", url, params, "禁用成功！", "禁用失败！", response => {
-                    <#if (!isSplit)>self.closeDialog();</#if>
-                    self.search();
-                });
+                this.exec(item, '/${tablePath}/disable', '确定禁用吗？', '禁用成功！', '禁用失败！');
             },
 </#if>
             del: function (item) {
+                this.exec(item, '/${tablePath}/delete', '确定删除吗？', '删除成功！', '删除失败！');
+            },
+            exec: function (item, url, confirmMsg, successMsg, failMsg) {
                 let self = this;
                 let params = self.getPkParams(item);
-                let url = '/${tablePath}/delete';
-                self.confirmPost("确定删除吗？", url, params, "删除成功！", "删除失败！", response => {
-                    <#if (!isSplit)>self.closeDialog();</#if>
+                self.confirmPost(confirmMsg, url, params, successMsg, failMsg, response => {
+                    self.closeDialog();
                     self.search();
                 });
             },

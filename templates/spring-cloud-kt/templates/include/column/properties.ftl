@@ -4,6 +4,7 @@
 <#assign propertyName = column.targetName>
 <#assign fieldName = propertyName?uncap_first>
 <#assign fieldType = column.targetDataType>
+<#assign columnExceptKey = column.columnName?replace('_id', '')?replace('_key', '')?replace('_code', '')>
 <#assign propertyExceptKey = propertyName?replace('Id', '')?replace('Key', '')?replace('Code', '')>
 <#assign fieldNameExceptKey = propertyExceptKey?uncap_first>
 <#-- -->
