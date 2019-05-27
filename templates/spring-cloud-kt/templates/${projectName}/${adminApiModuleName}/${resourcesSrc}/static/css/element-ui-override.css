@@ -1,8 +1,8 @@
-.el-form-item .el-form-item__content > div {
+.search-form .el-form-item .el-form-item__content > div {
     width: 100% !important;
 }
 
-.el-form .el-form-item.el-form-item--small {
+.search-form.el-form .el-form-item.el-form-item--small {
     height: 33px;
 }
 

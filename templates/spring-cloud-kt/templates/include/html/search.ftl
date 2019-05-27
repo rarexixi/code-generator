@@ -1,4 +1,4 @@
-    <el-form ref="searchParams" :model="searchParams" label-position="left" size="small" label-width="120px">
+    <el-form class="search-form" ref="searchParams" :model="searchParams" label-position="left" size="small" label-width="120px">
         <el-row :gutter="10">
 <#list table.indexes as column>
             <#include "/include/column/properties.ftl">
