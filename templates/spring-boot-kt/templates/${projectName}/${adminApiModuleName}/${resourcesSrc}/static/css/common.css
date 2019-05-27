@@ -117,3 +117,35 @@ html, body {
     width: 120px;
     border: 1px solid #dee2e6;
 }
+
+.text-primary {
+    color: #409eff;
+}
+.text-success {
+    color: #67c23a;
+}
+.text-info {
+    color: #909399;
+}
+.text-warning {
+    color: #e6a23c;
+}
+.text-danger {
+    color: #f56c6c;
+}
+
+.text-primary.disabled {
+    color: #a0cfff;
+}
+.text-success.disabled {
+    color: #b3e19d;
+}
+.text-info.disabled {
+    color: #c8c9cc;
+}
+.text-warning.disabled {
+    color: #f3d19e;
+}
+.text-danger.disabled {
+    color: #fab6b6;
+}

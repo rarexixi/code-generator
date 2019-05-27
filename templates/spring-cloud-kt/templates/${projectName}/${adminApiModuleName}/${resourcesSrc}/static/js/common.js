@@ -42,14 +42,20 @@ Vue.filter('formatTime', timestamp => commonFun.formatDateTime(timestamp, 'hh:mm
 /*vue 格式化日期时间函数*/
 Vue.filter('formatDateTime', timestamp => commonFun.formatDateTime(timestamp, 'yyyy-MM-dd hh:mm:ss'));
 
-function getResponseMsg(failMsg, response) {
-    let msg = response.msg || failMsg;
+function notifyResponseMsg(vue, title, response) {
+    title = response.msg || title;
+    let msg = '';
     if (response.extData) {
         response.extData.forEach((item, index) => {
             msg += '<br/>' + item;
         });
     }
-    return msg;
+    vue.$notify({
+        dangerouslyUseHTMLString: true,
+        title: title,
+        message: msg,
+        type: 'error'
+    });
 }
 
 Vue.prototype.ajaxPost = function (url, params, failMsg, successCallback, failCallback, errorCallback) {
@@ -60,12 +66,7 @@ Vue.prototype.ajaxPost = function (url, params, failMsg, successCallback, failCa
         if (response.success == true) {
             if (successCallback) successCallback(response);
         } else {
-            let msg = getResponseMsg(failMsg, response);
-            self.$notify({
-                dangerouslyUseHTMLString: true,
-                message: msg,
-                type: 'error'
-            });
+            notifyResponseMsg(self, failMsg, response);
             if (failCallback) failCallback();
         }
     }).catch(error => {
@@ -87,12 +88,7 @@ Vue.prototype.ajaxGet = function (url, params, failMsg, successCallback, failCal
         if (response.success == true) {
             if (successCallback) successCallback(response);
         } else {
-            let msg = getResponseMsg(failMsg, response);
-            self.$notify({
-                dangerouslyUseHTMLString: true,
-                message: msg,
-                type: 'error'
-            });
+            notifyResponseMsg(self, failMsg, response);
             if (failCallback) failCallback();
         }
     }).catch(error => {
@@ -119,4 +115,15 @@ Vue.prototype.confirmPost = function (confirmMsg, url, params, successMsg, failM
             if (successCallback) successCallback(response);
         });
     }, () => {});
+};
+
+Vue.prototype.execPost = function (url, params, successMsg, failMsg, successCallback) {
+    let self = this;
+    self.ajaxPost(url, params, failMsg, response => {
+        self.$notify({
+            type: 'success',
+            message: successMsg
+        });
+        if (successCallback) successCallback(response);
+    });
 };

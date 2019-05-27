@@ -2,8 +2,8 @@
     width: 100% !important;
 }
 
-.el-form .el-col {
-    height: 50px;
+.el-form .el-form-item.el-form-item--small {
+    height: 33px;
 }
 
 .operate-btn-group {

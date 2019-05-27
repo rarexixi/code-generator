@@ -20,6 +20,12 @@
 </#list>
             },
             sortParams: {
+<#if table.hasAutoIncUniPk>
+            <#list pks as column>
+                <#include "/include/column/properties.ftl">
+                ${fieldName}Sort: sortEnum.DESC
+            </#list>
+</#if>
             },
             searchPage: {
                 pageIndex: searchPage.defaultPageIndex,

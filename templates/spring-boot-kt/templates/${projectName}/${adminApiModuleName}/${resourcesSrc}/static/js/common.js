@@ -116,3 +116,14 @@ Vue.prototype.confirmPost = function (confirmMsg, url, params, successMsg, failM
         });
     }, () => {});
 };
+
+Vue.prototype.execPost = function (url, params, successMsg, failMsg, successCallback) {
+    let self = this;
+    self.ajaxPost(url, params, failMsg, response => {
+        self.$notify({
+            type: 'success',
+            message: successMsg
+        });
+        if (successCallback) successCallback(response);
+    });
+};
