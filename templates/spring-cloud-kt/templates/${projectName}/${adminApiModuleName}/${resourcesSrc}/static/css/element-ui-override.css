@@ -2,8 +2,8 @@
     width: 100% !important;
 }
 
-.el-form .el-col {
-    height: 50px;
+.el-form .el-form-item.el-form-item--small {
+    height: 33px;
 }
 
 .operate-btn-group {
@@ -89,4 +89,8 @@
     padding: 10px;
     margin-bottom: 10px;
     background-color: #ecf2f9;
+}
+
+.el-divider--horizontal {
+    margin: 15px 0px !important;
 }

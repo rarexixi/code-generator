@@ -18,7 +18,11 @@
         <#if (isContent)>
         <#else>
             <el-table-column label="${columnComment}" prop="${fieldName}" size="small"<#if (column.index)> sortable="custom"</#if>>
-            <#if (column.validStatus || column.select || column.fkSelect)>
+            <#if column.validStatus>
+                <template slot-scope="scope">
+                    <span :class="scope.row.${fieldName} == ${table.validStatusColumn.validStatusOption.valid} ? 'text-success' : 'text-danger'">{{get${propertyName}Text(scope.row.${fieldName})}}</span>
+                </template>
+            <#elseif (column.select || column.fkSelect)>
                 <template slot-scope="scope">
                     <span>{{get${propertyExceptKey}Text(scope.row.${fieldName})}}</span>
                 </template>
