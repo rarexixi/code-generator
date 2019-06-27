@@ -153,6 +153,10 @@
             },
             resetSave: function () {
                 let self = this;
+                <#list pks as column>
+                <#include "/include/column/properties.ftl">
+                self.pkParams.${fieldName} = '';
+                </#list>
                 <#list table.requiredColumns as column>
                 <#include "/include/column/properties.ftl">
                 <#if (column.validStatus)>
