@@ -126,6 +126,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     public ${className}DetailVm get(${className}SearchVm searchVm) {
         ${className}Condition condition = searchVm.getCondition();
         ${className}Entity entity = ${classNameFirstLower}Mapper.getByCondition(condition);
+        if (entity == null) return null;
         ${className}DetailVm detailVm = new ${className}DetailVm(entity);
         return detailVm;
     }
@@ -168,6 +169,7 @@ public class ${className}ServiceImpl implements ${className}Service {
     @Override
     public ${className}DetailVm getDetail(<#include "/include/table/pk_params.ftl">) {
         ${className}EntityExtension entity = ${classNameFirstLower}Mapper.getByPk(<#include "/include/table/pk_values.ftl">);
+        if (entity == null) return null;
         ${className}DetailVm detail = new ${className}DetailVm(entity);
         return detail;
     }
