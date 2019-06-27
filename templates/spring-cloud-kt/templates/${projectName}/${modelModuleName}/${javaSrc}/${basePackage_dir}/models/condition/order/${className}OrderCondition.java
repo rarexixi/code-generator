@@ -19,7 +19,7 @@ public class ${className}OrderCondition implements OrderCondition {
     <#else>
 
     /**
-     * 以${columnComment}排序 (null不排序，true升序，false降序)
+     * 以${columnComment}排序
      */
     public SortConstants ${fieldName}Sort;
     </#if>

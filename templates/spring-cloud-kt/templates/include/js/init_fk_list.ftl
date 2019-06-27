@@ -16,7 +16,7 @@
                 let params = {
                     condition: {
                         <#list column.fkSelectColumn.conditions as condition>
-                        ${condition.field}: '${condition.value}'<#if condition?has_next>,</#if>
+                        ${condition.fieldTargetName}: '${condition.value}'<#if condition?has_next>,</#if>
                         </#list>
                     },
                     order: {}

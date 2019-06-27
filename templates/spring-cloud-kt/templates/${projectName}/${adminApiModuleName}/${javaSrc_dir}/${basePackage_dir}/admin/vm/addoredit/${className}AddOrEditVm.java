@@ -44,6 +44,8 @@ public class ${className}AddOrEditVm implements Serializable {
 
     public void set${className}Entity(${className}Entity entity) {
 
+        if (entity == null) return;
+
         <#list table.requiredColumns as column>
         <#include "/include/column/properties.ftl">
         this.set${propertyName}(entity.get${propertyName}());

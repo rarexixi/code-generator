@@ -20,6 +20,8 @@ public class ${className}DetailVm implements Serializable {
 
     public ${className}DetailVm(${className}EntityExtension entity) {
 
+        if (entity == null) return;
+
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
         ${fieldName} = entity.get${propertyName}();
@@ -30,6 +32,8 @@ public class ${className}DetailVm implements Serializable {
     }
 
     public ${className}DetailVm(${className}Entity entity) {
+
+        if (entity == null) return;
 
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">

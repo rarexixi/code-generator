@@ -21,7 +21,7 @@ public class ${className}OrderVm implements OrderVm {
     <#include "/include/column/properties.ftl">
 
     /**
-     * 以${columnComment}排序 (null不排序，true升序，false降序)
+     * 以${columnComment}排序
      */
     public SortConstants ${fieldName}Sort;
     </#list>

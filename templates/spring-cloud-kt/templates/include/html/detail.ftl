@@ -2,7 +2,9 @@
 <#list table.columns as column>
             <#include "/include/column/properties.ftl">
             <el-form-item label="${columnComment}">
-                <#if (column.validStatus || column.select)>
+                <#if (column.validStatus)>
+                <span :class="detail.${fieldName} == ${table.validStatusColumn.validStatusOption.valid} ? 'text-success' : 'text-danger'">{{get${propertyExceptKey}Text(detail.${fieldName})}}</span>
+                <#elseif (column.select)>
                 <span>{{get${propertyExceptKey}Text(detail.${fieldName})}}</span>
                 <#elseif (column.fkSelect)>
                 <span>{{detail.${fieldNameExceptKey}Text}}</span>
