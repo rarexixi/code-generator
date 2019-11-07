@@ -29,7 +29,7 @@
         }
 
         .system-title {
-            width: 200px;
+            width: 220px;
             height: 100%;
             line-height: 60px;
             font-size: 22px;
@@ -41,9 +41,44 @@
             vertical-align: middle;
         }
 
+        .system-title .material-icons {
+            font-size: 32px;
+        }
+
         .el-header {
             background: #44444a;
             color: #fafafe;
+        }
+
+        .el-header * {
+            background: #44444a;
+            color: #fafafe;
+        }
+
+        .el-header .top-menus {
+            line-height: 60px;
+        }
+
+        .el-dropdown-menu.el-popper {
+            background-color: #44444a;
+            border: 1px solid #44444a !important;
+        }
+
+        .el-dropdown-menu.el-popper .el-dropdown-menu__item {
+            color: #fafafa;
+        }
+
+        .el-dropdown-menu.el-popper .el-dropdown-menu__item:hover {
+            background-color: #33333a;
+            color: #fafafa;
+        }
+
+        .el-dropdown-menu.el-popper .popper__arrow {
+            border-bottom-color: #44444a;
+        }
+
+        .el-dropdown-menu.el-popper .popper__arrow::after {
+            border-bottom-color: #44444a;
         }
 
         .nav-menu {
@@ -52,6 +87,7 @@
             border-right: none;
             background-color: #989fa8;
         }
+
         .nav-menu .el-menu-item.is-active {
             background-color: #434a50 !important;
         }
@@ -105,6 +141,23 @@
             margin: 5px;
             box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.5);
         }
+
+        .el-tabs__item i {
+            display: none;
+            padding: 2px;
+            border-radius: 50%;
+            transition: display 0.3s, background-color 0.3s;
+        }
+
+        .el-tabs__item i:hover {
+            background-color: #cacacd;
+            color: #ffffff;
+        }
+
+        .el-tabs__item:hover i,
+        .el-tabs__item.is-active i {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -114,14 +167,21 @@
             <i class="material-icons" @click="collapseNav" style="cursor: pointer;">storage</i>
             <span>${projectShortName}</span>
         </div>
-        <div style="flex: 1;"></div>
-        <el-dropdown @command="handleCommand" trigger="click"
-                     style="line-height: 60px; color: #ffffff; font-size: 1.2rem; font-weight: bold; cursor: pointer;">
-                    <span class="el-dropdown-link">
-                        {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-                    </span>
-            <el-dropdown-menu slot="dropdown">
-            </el-dropdown-menu>
+        <div style="flex: 1;" class="top-menus">
+            <el-dropdown @command="handleCloseTabCommand">
+                <span class="el-dropdown-link" style="cursor: pointer;">
+                    标签页操作 <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="closeAllTab">关闭所有标签页</el-dropdown-item>
+                    <el-dropdown-item command="closeAllLeftTab">关闭当前标签页左侧标签页</el-dropdown-item>
+                    <el-dropdown-item command="closeAllRightTab">关闭当前标签页右侧标签页</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </div>
+        <el-dropdown @command="handleCommand" trigger="click" style="line-height: 60px; color: #ffffff; font-size: 1.2rem; font-weight: bold; cursor: pointer;">
+            <span class="el-dropdown-link">{{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+            <el-dropdown-menu slot="dropdown"></el-dropdown-menu>
         </el-dropdown>
     </el-header>
     <el-container>
@@ -131,7 +191,7 @@
                 <i class="material-icons" v-if="isCollapse" @click="collapseNav">chevron_right</i>
                 <i class="material-icons" v-else @click="collapseNav">chevron_left</i>
             </div>
-            <el-submenu index="1">
+            <el-submenu index="${module}">
                 <template slot="title">
                     <i class="material-icons">sync</i>
                     <span>${projectShortName}</span>
@@ -140,17 +200,14 @@
                 <#list tableModels as table>
                 <#include "/include/table/properties.ftl">
                 <#assign menuIndex = menuIndex + 1>
-                <el-menu-item index="1-${menuIndex}0" @click="openLink('/${className?lower_case}/index.html', '1-${menuIndex}0', '${tableComment}')">${tableComment}</el-menu-item>
+                <el-menu-item index="${module}-${className?lower_case}" @click="openLink('/${module}/${className?lower_case}/index.html', '${module}-${className?lower_case}', '${tableComment}')">${tableComment}</el-menu-item>
                 </#list>
             </el-submenu>
         </el-menu>
         <el-main id="mainFrame">
-            <el-tabs v-model="navTabsValue" type="card" closable @edit="handleTabsEdit">
-                <el-tab-pane
-                        :key="item.name"
-                        v-for="(item, index) in navTabs"
-                        :label="item.title"
-                        :name="item.name">
+            <el-tabs v-model="navTabsValue" type="card" @edit="handleTabsEdit" @tab-click="handleTabClick" closable>
+                <el-tab-pane :key="item.name" v-for="(item, index) in navTabs" :label="item.title" :name="item.name">
+                    <span slot="label"><i @click="refreshFrame(item)" class="el-icon-refresh"></i> {{item.title}}</span>
                     <iframe name="mainFrame" :src="item.src" frameborder="no" border="0"></iframe>
                 </el-tab-pane>
             </el-tabs>
@@ -158,11 +215,12 @@
     </el-container>
 </div>
 <script src="//unpkg.com/vue/dist/vue.js"></script>
+<script src="//unpkg.com/axios/dist/axios.js"></script>
 <script src="//unpkg.com/element-ui/lib/index.js"></script>
 <script src="/js/config.js"></script>
 <script src="/js/common.js"></script>
 <script>
-    var app = new Vue({
+    window.app = new Vue({
         el: '#app',
         data: {
             isCollapse: false,
@@ -175,9 +233,10 @@
 
             navTabsValue: '',
             navTabs: [],
+            openTabIndex: 0,
         },
         mounted: function () {
-            var self = this;
+            let self = this;
             self.getUserInfo();
         },
         methods: {
@@ -186,14 +245,30 @@
             getUserInfo: function () {
             },
             handleCommand: function (command) {
-                var self = this;
+                let self = this;
                 switch (command) {
                     default:
                         break;
                 }
             },
+            handleCloseTabCommand: function (command) {
+                let self = this;
+                switch (command) {
+                    case 'closeAllTab':
+                        self.navTabs.splice(0, self.navTabs.length);
+                        break;
+                    case 'closeAllLeftTab':
+                        self.navTabs.splice(0, self.openTabIndex);
+                        break;
+                    case 'closeAllRightTab':
+                        self.navTabs.splice(self.openTabIndex + 1, self.navTabs.length - self.openTabIndex - 1);
+                        break;
+                    default:
+                        break;
+                }
+            },
             collapseNav: function () {
-                var self = this;
+                let self = this;
                 self.isCollapse = self.isCollapse ? false : true;
             },
             handleOpen: function (key, keyPath) {
@@ -202,29 +277,39 @@
             handleClose: function (key, keyPath) {
 
             },
-            openLink: function (href, name, title) {
-                var self = this;
+            openLink: function (url, name, title) {
+                let self = this;
                 if (self.navTabs.find(function (item) {
                     return item.name == name
                 })) {
                     self.navTabsValue = name;
                     return;
                 }
+                self.openTabIndex = self.navTabs.length;
                 self.navTabs.push({
                     title: title,
                     name: name,
-                    src: href
+                    src: url
                 });
                 self.navTabsValue = name;
             },
+            refreshFrame: function (item) {
+                let src = item.src;
+                let srcReplaceVersion = src.replace(/[?,&]tab-v=\d+/, '');
+                item.src = srcReplaceVersion + (srcReplaceVersion.indexOf("?") > -1 ? "&" : "?") + "tab-v=" + new Date().getTime();
+            },
+            handleTabClick: function (tab, event) {
+                let self = this;
+                self.openTabIndex = parseInt(tab.index);
+            },
             handleTabsEdit: function(targetName, action) {
                 if (action === 'remove') {
-                    var tabs = this.navTabs;
-                    var activeName = this.navTabsValue;
+                    let tabs = this.navTabs;
+                    let activeName = this.navTabsValue;
                     if (activeName === targetName) {
                         tabs.forEach(function (tab, index) {
                             if (tab.name === targetName) {
-                                var nextTab = tabs[index + 1] || tabs[index - 1];
+                                let nextTab = tabs[index + 1] || tabs[index - 1];
                                 if (nextTab) {
                                     activeName = nextTab.name;
                                 }

@@ -88,31 +88,23 @@ generator:
 
   # 公共自定义属性
   common-properties:
-    projectName: quick-cloud-auto
-    projectShortName: quick
-    projectGroup: org.xi
+    projectName: breaa
+    projectShortName: breaa
+    projectGroup: com.breaa
     projectVersion: 1.0-SNAPSHOT
 
-    basePackage: org.xi.quick
-    baseCommonPackage: org.xi.common
+    basePackage: com.breaa
+    baseCommonPackage: com.breaa.common
 
-    commonModuleName: quick-common
-    modelModuleName: quick-model
-    providerModuleName: quick-provider
-    adminApiModuleName: quick-admin-api
-    eurekaServerModuleName: quick-eureka-server
+    adminApiModuleName: breaa-admin
 
-    providerModuleApplicationName: QuickProviderApplication
-    adminModuleApplicatioName: QuickAdminApplication
-    eurekaServerModuleApplicatioName: QuickEurekaServerApplication
+    adminModuleApplicatioName: BreaaAdminApplication
 
-    eurekaServerPort: 8770
-    providerServicePort: 8810
     adminServicePort: 8820
 
-    baseApiPath: http://localhost:8820
+    baseApiPath: ''
 
-    author: 郗世豪（rarexixi@outlook.com）
+    author: ''
     codeVersion: 1.0
     javaSrc: src/main/java
     javaTestSrc: src/test/java

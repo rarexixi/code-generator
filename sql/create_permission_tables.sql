@@ -1,251 +1,251 @@
 drop database if exists `permission`;
 
 create database `permission`
-  default character set utf8
-  collate utf8mb4_general_ci;
+    default character set utf8mb4
+    collate utf8mb4_general_ci;
 
 use `permission`;
-drop table if exists `sys_user`;
-drop table if exists `sys_role`;
-drop table if exists `sys_permission`;
-drop table if exists `sys_user_role`;
-drop table if exists `sys_role_permission`;
 
+drop table if exists `sys_user`;
 create table `sys_user`
 (
-  `id`          int          not null auto_increment comment '用户ID',
-  `username`    varchar(64)  not null comment '用户名',
-  `password`    varchar(128) not null comment '密码',
-  `email`       varchar(128) not null default '' comment '邮箱',
-  `phone`       varchar(16)  not null default '' comment '手机',
-  `is_deleted`  tinyint      not null default 0 comment '是否删除',
-  `create_time` datetime     not null default current_timestamp comment '创建时间',
-  `update_time` datetime     not null default current_timestamp on update current_timestamp comment '更新时间',
+    `user_id`    bigint                             not null auto_increment comment '用户ID',
+    `username`   varchar(64)                        not null comment '用户名',
+    `password`   varchar(128)                       not null comment '密码',
+    `salt`       varchar(16)                        not null comment '盐',
+    `email`      varchar(128)                       not null comment '邮箱',
+    `mobile`     varchar(128)                       not null comment '手机号',
 
-  primary key (`id`),
-  unique (`username`),
-  unique (`email`),
-  unique (`phone`),
-  index (`create_time`),
-  index (`update_time`)
-)
-  engine = InnoDB
-  default charset = utf8
+    `deleted`    tinyint  default 0                 not null comment '是否删除',
+    `created_by` int      default 0                 not null comment '创建人',
+    `updated_by` int      default 0                 not null comment '修改人',
+    `created_at` datetime default current_timestamp not null comment '创建时间',
+    `updated_at` datetime default current_timestamp not null on update current_timestamp comment '更新时间',
+
+    primary key (`user_id`),
+    unique (`username`),
+    unique (`email`),
+    unique (`mobile`)
+) engine = InnoDB
+  default charset = utf8mb4
   collate = utf8_unicode_ci
-  comment ='用户';
+  auto_increment = 100000000
+    comment ='系统用户';
 
+drop table if exists `sys_role`;
 create table `sys_role`
 (
-  `id`          int         not null auto_increment comment '类型ID',
-  `role_code`   varchar(64) not null comment '角色编码',
-  `role_name`   varchar(64) not null comment '角色名称',
-  `is_deleted`  tinyint     not null default 0 comment '是否删除',
-  `create_time` datetime    not null default current_timestamp comment '创建时间',
-  `update_time` datetime    not null default current_timestamp on update current_timestamp comment '更新时间',
+    `role_id`    bigint                                 not null auto_increment comment '角色ID',
+    `role_code`  varchar(64)                            not null comment '角色编码',
+    `role_name`  varchar(64)                            not null comment '角色名称',
+    `remark`     varchar(128) default ''                not null comment '备注',
 
-  primary key (`id`),
-  unique (`role_code`),
-  index (`create_time`),
-  index (`update_time`)
-)
-  engine = InnoDB
-  default charset = utf8
+    `deleted`    tinyint      default 0                 not null comment '是否删除',
+    `created_by` int          default 0                 not null comment '创建人',
+    `updated_by` int          default 0                 not null comment '修改人',
+    `created_at` datetime     default current_timestamp not null comment '创建时间',
+    `updated_at` datetime     default current_timestamp not null on update current_timestamp comment '更新时间',
+
+    primary key (`role_id`)
+) engine = InnoDB
+  default charset = utf8mb4
   collate = utf8_unicode_ci
-  comment ='角色';
+  auto_increment = 100000000
+    comment ='角色';
 
+drop table if exists `sys_permission`;
 create table `sys_permission`
 (
-  `id`              int          not null auto_increment comment '权限ID',
-  `permission_code` varchar(128) not null comment '权限编码',
-  `permission_name` varchar(64)  not null comment '权限名称',
-  `is_deleted`      tinyint      not null default 0 comment '是否删除',
-  `create_time`     datetime     not null default current_timestamp comment '创建时间',
-  `update_time`     datetime     not null default current_timestamp on update current_timestamp comment '更新时间',
+    `permission_id`   bigint                                 not null auto_increment comment '权限ID',
+    `parent_id`       bigint       default 0                 not null comment '模块ID，一级模块为0',
+    `permission_code` varchar(64)                            not null comment '权限编码',
+    `permission_name` varchar(64)                            not null comment '权限名称',
+    `type`            tinyint      default 0                 not null comment '类型 (0模块,1权限)',
+    `remark`          varchar(128) default ''                not null comment '备注',
 
-  primary key (`id`),
-  unique (`permission_code`),
-  unique (`permission_name`),
-  index (`create_time`),
-  index (`update_time`)
-)
-  engine = InnoDB
-  default charset = utf8
+    `deleted`         tinyint      default 0                 not null comment '是否删除',
+    `created_by`      int          default 0                 not null comment '创建人',
+    `updated_by`      int          default 0                 not null comment '修改人',
+    `created_at`      datetime     default current_timestamp not null comment '创建时间',
+    `updated_at`      datetime     default current_timestamp not null on update current_timestamp comment '更新时间',
+    primary key (`permission_id`)
+) engine = InnoDB
+  default charset = utf8mb4
   collate = utf8_unicode_ci
-  comment ='权限';
+  auto_increment = 100000000
+    comment ='权限';
 
+drop table if exists `sys_menu`;
+create table `sys_menu`
+(
+    `menu_id`    bigint                                 not null auto_increment comment '按钮ID',
+    `parent_id`  bigint       default 0                 not null comment '父菜单ID，一级菜单为0',
+    `menu_code`  varchar(64)  default ''                not null comment '菜单编码',
+    `menu_name`  varchar(64)                            not null comment '菜单名称',
+    `url`        varchar(256) default ''                not null comment '菜单URL',
+    `type`       tinyint      default 0                 not null comment '类型 (0目录,1菜单)',
+    `icon`       varchar(64)  default ''                not null comment '菜单图标',
+    `sort`       int          default 0                 not null comment '排序',
+    `remark`     varchar(128) default ''                not null comment '备注',
+
+    `deleted`    tinyint      default 0                 not null comment '是否删除',
+    `created_by` int          default 0                 not null comment '创建人',
+    `updated_by` int          default 0                 not null comment '修改人',
+    `created_at` datetime     default current_timestamp not null comment '创建时间',
+    `updated_at` datetime     default current_timestamp not null on update current_timestamp comment '更新时间',
+
+    primary key (`menu_id`),
+    index (`sort`),
+    index (`created_at`),
+    index (`updated_at`)
+) engine = InnoDB
+  default charset = utf8mb4
+  collate = utf8_unicode_ci
+  auto_increment = 100000000
+    comment ='菜单';
+
+drop table if exists `sys_user_role`;
 create table `sys_user_role`
 (
-  `id`          int         not null auto_increment comment '用户类型关系ID',
-  `user_id`     int         not null comment '用户ID',
-  `role_code`   varchar(64) not null comment '角色编码',
-  `is_deleted`  tinyint     not null default 0 comment '是否删除',
-  `create_time` datetime    not null default current_timestamp comment '创建时间',
-  `update_time` datetime    not null default current_timestamp on update current_timestamp comment '更新时间',
-
-  primary key (`id`),
-  unique (`user_id`, `role_code`),
-  index (`create_time`),
-  index (`update_time`)
-)
-  engine = InnoDB
-  default charset = utf8
+    `user_id` bigint not null comment '用户ID',
+    `role_id` bigint not null comment '角色ID',
+    primary key (`user_id`, `role_id`)
+) engine = InnoDB
+  default charset = utf8mb4
   collate = utf8_unicode_ci
-  comment ='用户角色关系';
+    comment ='用户角色';
 
+drop table if exists `sys_role_menu`;
+create table `sys_role_menu`
+(
+    `role_id` bigint not null comment '角色ID',
+    `menu_id` bigint not null comment '菜单ID',
+    primary key (`role_id`, `menu_id`)
+) engine = InnoDB
+  default charset = utf8mb4
+  collate = utf8_unicode_ci
+    comment ='角色菜单';
+
+drop table if exists `sys_role_permission`;
 create table `sys_role_permission`
 (
-  `id`              int          not null auto_increment comment '用户类型关系ID',
-  `role_code`       varchar(64)  not null comment '角色编码',
-  `permission_code` varchar(128) not null comment '权限编码',
-  `is_deleted`      tinyint      not null default 0 comment '是否删除',
-  `create_time`     datetime     not null default current_timestamp comment '创建时间',
-  `update_time`     datetime     not null default current_timestamp on update current_timestamp comment '更新时间',
-
-  primary key (`id`),
-  unique (`role_code`, `permission_code`),
-  index (`create_time`),
-  index (`update_time`)
-)
-  engine = InnoDB
-  default charset = utf8
+    `role_id`       bigint not null comment '角色ID',
+    `permission_id` bigint not null comment '权限ID',
+    primary key (`role_id`, `permission_id`)
+) engine = InnoDB
+  default charset = utf8mb4
   collate = utf8_unicode_ci
-  comment ='角色权限关系';
+    comment ='角色权限';
 
+drop table if exists `sys_menu_permission`;
+create table `sys_menu_permission`
+(
+    `menu_id`       bigint not null comment '菜单ID',
+    `permission_id` bigint not null comment '权限ID',
+    primary key (`menu_id`, `permission_id`)
+) engine = InnoDB
+  default charset = utf8mb4
+  collate = utf8_unicode_ci
+    comment ='菜单权限';
 
-insert into sys_role (id, role_code, role_name)
-values (1, 'root', '超级管理员'),
-       (2, 'administrator', '管理员'),
-       (3, 'user', '普通用户');
+drop table if exists `sys_enum`;
+create table `sys_enum`
+(
+    `id`             bigint                                  not null auto_increment comment '枚举ID',
+    `value`          varchar(64)                             not null comment '值',
+    `text`           varchar(64)   default ''                not null comment '展示文字',
+    `parent_id`      bigint        default 0                 not null comment '父ID',
+    `source`         varchar(64)                             not null comment '分组',
+    `type`           tinyint       default 0                 not null comment '类型 (0分组,1选项)',
+    `system_related` tinyint       default 0                 not null comment '是否系统相关 (0否,1是)',
+    `ext`            varchar(1024) default ''                not null comment '扩展信息',
 
-insert into sys_user (id, username, password, email, phone)
-VALUES (1, 'root', 'root', 'root@sina.com', '13266660001'),
-       (2, 'admin1', '123456', 'admin1@example.com', '13266660002'),
-       (3, 'admin2', '123456', 'admin2@example.com', '13266660003'),
-       (4, 'admin3', '123456', 'admin3@example.com', '13266660004'),
-       (5, 'admin4', '123456', 'admin4@example.com', '13266660005'),
-       (6, 'admin5', '123456', 'admin5@example.com', '13266660006'),
-       (7, 'user1', '123456', 'user1@example.com', '13266660007'),
-       (8, 'user2', '123456', 'user2@example.com', '13266660008'),
-       (9, 'user3', '123456', 'user3@example.com', '13266660009'),
-       (10, 'user4', '123456', 'user4@example.com', '13266660010'),
-       (11, 'user5', '123456', 'user5@example.com', '13266660011'),
-       (12, 'user6', '123456', 'user6@example.com', '13266660012'),
-       (13, 'user7', '123456', 'user7@example.com', '13266660013'),
-       (14, 'user8', '123456', 'user8@example.com', '13266660014'),
-       (15, 'user9', '123456', 'user9@example.com', '13266660015'),
-       (16, 'user10', '123456', 'user10@example.com', '13266660016'),
-       (17, 'user11', '123456', 'user11@example.com', '13266660017'),
-       (18, 'user12', '123456', 'user12@example.com', '13266660018'),
-       (19, 'user13', '123456', 'user13@example.com', '13266660019'),
-       (20, 'user14', '123456', 'user14@example.com', '13266660020'),
-       (21, 'user15', '123456', 'user15@example.com', '13266660021'),
-       (22, 'user16', '123456', 'user16@example.com', '13266660022'),
-       (23, 'user17', '123456', 'user17@example.com', '13266660023'),
-       (24, 'user18', '123456', 'user18@example.com', '13266660024'),
-       (25, 'user19', '123456', 'user19@example.com', '13266660025'),
-       (26, 'user20', '123456', 'user20@example.com', '13266660026'),
-       (27, 'user21', '123456', 'user21@example.com', '13266660027'),
-       (28, 'user22', '123456', 'user22@example.com', '13266660028'),
-       (29, 'user23', '123456', 'user23@example.com', '13266660029'),
-       (30, 'user24', '123456', 'user24@example.com', '13266660030'),
-       (31, 'user25', '123456', 'user25@example.com', '13266660031'),
-       (32, 'user26', '123456', 'user26@example.com', '13266660032'),
-       (33, 'user27', '123456', 'user27@example.com', '13266660033'),
-       (34, 'user28', '123456', 'user28@example.com', '13266660034'),
-       (35, 'user29', '123456', 'user29@example.com', '13266660035'),
-       (36, 'user30', '123456', 'user30@example.com', '13266660036');
+    `deleted`        tinyint       default 0                 not null comment '是否删除',
+    `created_by`     int           default 0                 not null comment '创建人',
+    `updated_by`     int           default 0                 not null comment '修改人',
+    `created_at`     datetime      default current_timestamp not null comment '创建时间',
+    `updated_at`     datetime      default current_timestamp not null on update current_timestamp comment '更新时间',
 
-insert into sys_user_role(user_id, role_code)
-values (1, 'root'),
-       (2, 'administrator'),
-       (3, 'administrator'),
-       (4, 'administrator'),
-       (5, 'administrator'),
-       (6, 'administrator'),
-       (7, 'user'),
-       (8, 'user'),
-       (9, 'user'),
-       (10, 'user'),
-       (11, 'user'),
-       (12, 'user'),
-       (13, 'user'),
-       (14, 'user'),
-       (15, 'user'),
-       (16, 'user'),
-       (17, 'user'),
-       (18, 'user'),
-       (19, 'user'),
-       (20, 'user'),
-       (21, 'user'),
-       (22, 'user'),
-       (23, 'user'),
-       (24, 'user'),
-       (25, 'user'),
-       (26, 'user'),
-       (27, 'user'),
-       (28, 'user'),
-       (29, 'user'),
-       (30, 'user'),
-       (31, 'user'),
-       (32, 'user'),
-       (33, 'user'),
-       (34, 'user'),
-       (35, 'user'),
-       (36, 'user');
+    primary key (`id`),
+    unique (`value`, `source`),
+    index (`source`)
+) engine = InnoDB
+  default charset = utf8mb4
+  collate = utf8_unicode_ci
+    comment ='系统枚举';
 
-insert into sys_permission(id, permission_code, permission_name)
-values (1, 'role:add', '角色:添加'),
-       (2, 'role:delete', '角色:删除'),
-       (3, 'role:update', '角色:更新'),
-       (4, 'role:select', '角色:查看'),
-       (5, 'user:add', '用户:添加'),
-       (6, 'user:delete', '用户:删除'),
-       (7, 'user:update', '用户:更新'),
-       (8, 'user:select', '用户:查看'),
-       (9, 'permission:add', '权限:添加'),
-       (10, 'permission:delete', '权限:删除'),
-       (11, 'permission:update', '权限:更新'),
-       (12, 'permission:select', '权限:查看'),
-       (13, 'role_user:add', '用户角色添加:'),
-       (14, 'role_user:delete', '用户角色:删除'),
-       (15, 'role_user:update', '用户角色:更新'),
-       (16, 'role_user:select', '用户角色:查看'),
-       (17, 'role_permission:add', '用户权限:添加'),
-       (18, 'role_permission:delete', '用户权限:删除'),
-       (19, 'role_permission:update', '用户权限:更新'),
-       (20, 'role_permission:select', '用户权限:查看');
+drop table if exists `sys_config`;
+create table `sys_config`
+(
+    `key`        varchar(64)                             not null comment '配置键',
+    `value`      varchar(2048) default ''                not null comment '配置值',
+    `remark`     varchar(512)  default ''                not null comment '备注',
 
+    `deleted`    tinyint       default 0                 not null comment '是否删除',
+    `created_by` int           default 0                 not null comment '创建人',
+    `updated_by` int           default 0                 not null comment '修改人',
+    `created_at` datetime      default current_timestamp not null comment '创建时间',
+    `updated_at` datetime      default current_timestamp not null on update current_timestamp comment '更新时间',
 
-insert into sys_role_permission(role_code, permission_code)
-values ('root', 'role:add'),
-       ('root', 'role:delete'),
-       ('root', 'role:update'),
-       ('root', 'role:select'),
-       ('root', 'user:add'),
-       ('root', 'user:delete'),
-       ('root', 'user:update'),
-       ('root', 'user:select'),
-       ('root', 'permission:add'),
-       ('root', 'permission:delete'),
-       ('root', 'permission:update'),
-       ('root', 'permission:select'),
-       ('root', 'role_user:add'),
-       ('root', 'role_user:delete'),
-       ('root', 'role_user:update'),
-       ('root', 'role_user:select'),
-       ('root', 'role_permission:add'),
-       ('root', 'role_permission:delete'),
-       ('root', 'role_permission:update'),
-       ('root', 'role_permission:select'),
-       ('administrator', 'user:add'),
-       ('administrator', 'user:delete'),
-       ('administrator', 'user:update'),
-       ('administrator', 'user:select'),
-       ('administrator', 'role_user:add'),
-       ('administrator', 'role_user:delete'),
-       ('administrator', 'role_user:update'),
-       ('administrator', 'role_user:select'),
-       ('administrator', 'role_permission:add'),
-       ('administrator', 'role_permission:delete'),
-       ('administrator', 'role_permission:update'),
-       ('administrator', 'role_permission:select');
+    primary key (`key`)
+) engine = InnoDB
+  default charset = utf8mb4
+  collate = utf8_unicode_ci
+    comment ='系统配置';
+
+drop table if exists `sys_user_token`;
+create table `sys_user_token`
+(
+    `user_id`    bigint                             not null,
+    `token`      varchar(128)                       not null comment 'token',
+    `expire_at`  datetime                           not null comment '过期时间',
+    `updated_at` datetime default current_timestamp not null on update current_timestamp comment '更新时间',
+    primary key (`user_id`),
+    unique `token` (`token`)
+) engine = InnoDB
+  default charset = utf8mb4
+  collate = utf8_unicode_ci
+  auto_increment = 100000000
+    comment ='系统用户Token';
+
+drop table if exists `sys_captcha`;
+create table `sys_captcha`
+(
+    `account`   varchar(128) not null comment '系统用户账号 (用户名/手机号/邮箱)',
+    `code`      varchar(8)   not null comment '验证码',
+    `expire_at` datetime     not null comment '过期时间',
+    primary key (`account`)
+) engine = InnoDB
+  default charset = utf8mb4
+  collate = utf8_unicode_ci
+    comment ='系统验证码';
+
+insert into sys_user(user_id, username, password, salt, email, mobile)
+values (100000000, 'administrator', '123456', '123456', 'admin@123.com', '13233333333');
+
+insert into sys_role(role_id, role_code, role_name)
+values (100000000, 'administrator', '超级管理员')
+
+insert into sys_menu(menu_id, parent_id, menu_code, menu_name, url, type, icon, sort)
+values (100000000, 0, '', '权限管理', '', 1, 'people', 1),
+       (100000001, 100000000, 'sys-role', '角色', '/sys/sysrole/index.html', 1, '', 1),
+       (100000002, 100000000, 'sys-user', '系统用户', '/sys/sysuser/index.html', 1, '', 2),
+       (100000003, 100000000, 'sys-menu', '菜单', '/sys/sysmenu/index.html', 1, '', 3),
+       (100000004, 100000000, 'sys-permission', '权限', '/sys/syspermission/index.html', 1, '', 4),
+       (100000005, 0, '', '系统配置', '', 1, 'build', 1),
+       (100000006, 100000005, 'sys-config', '系统配置', '/sys/sysconfig/index.htm', 1, '', 1),
+       (100000007, 100000005, 'sys-enum', '系统枚举', '/sys/sysenum/index.html', 1, '', 2);
+
+insert into sys_enum(id, value, text, parent_id, source, type, system_related)
+values (10000000, 'boolean', 'boolean', 0, '', 0, 1),
+       (10000001, '0', '否', 10000000, 'boolean', 1, 1),
+       (10000002, '1', '是', 10000000, 'boolean', 1, 1),
+       (10000003, 'sys_enum_type', '枚举类型', 0, '', 0, 1),
+       (10000004, '0', '分组', 10000003, 'sys_enum_type', 1, 1),
+       (10000005, '1', '选项', 10000003, 'sys_enum_type', 1, 1),
+       (10000006, 'sys_menu_type', '菜单类型', 0, '', 0, 1),
+       (10000007, '0', '目录', 10000006, 'sys_menu_type', 1, 1),
+       (10000008, '1', '菜单', 10000006, 'sys_menu_type', 1, 1),
+       (10000009, 'sys_permission_type', '权限类型', 0, '', 0, 1),
+       (10000010, '0', '模块', 10000009, 'sys_permission_type', 1, 1),
+       (10000011, '1', '权限', 10000009, 'sys_permission_type', 1, 1);

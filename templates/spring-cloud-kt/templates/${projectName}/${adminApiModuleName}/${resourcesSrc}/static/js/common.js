@@ -133,3 +133,13 @@ Vue.prototype.execPost = function (url, params, successMsg, failMsg, successCall
         if (successCallback) successCallback(response);
     });
 };
+
+Vue.prototype.openLink = function (url, id, name) {
+    if (url) {
+        if (parent != window && parent.app && parent.app.openLink) {
+            parent.app.openLink(url, id, name);
+        } else {
+            window.open(url);
+        }
+    }
+};
