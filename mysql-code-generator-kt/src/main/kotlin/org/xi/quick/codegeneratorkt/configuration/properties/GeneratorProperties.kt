@@ -21,7 +21,7 @@ object GeneratorProperties {
     /**
      * 获取目标表名正则
      */
-    var tableNameMatchRegex: String? = null
+    var tableNameMatchRegex: String = ".*"
 
     /**
      * 路径配置
