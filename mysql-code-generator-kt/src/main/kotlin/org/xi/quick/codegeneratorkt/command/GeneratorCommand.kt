@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import org.xi.quick.codegeneratorkt.service.GeneratorService
 import org.xi.quick.codegeneratorkt.service.TableService
 import java.util.*
+import kotlin.system.exitProcess
 
 @Component
 class GeneratorCommand : CommandLineRunner {
@@ -21,7 +22,6 @@ class GeneratorCommand : CommandLineRunner {
 
     @Throws(Exception::class)
     override fun run(vararg strings: String) {
-
         val tableNameSet = tableService.getAllTableNameList()
 
         val sc = Scanner(System.`in`)
@@ -75,7 +75,7 @@ class GeneratorCommand : CommandLineRunner {
             "gen" -> gen(tableNameSet, args)
             "del" -> del(tableNameSet, args)
             "show", "s" -> showTables(tableNameSet)
-            "quit", "q" -> System.exit(0)
+            "quit", "q" -> exitProcess(0)
             else -> logger.error("[错误] 未知命令:$cmd")
         }
     }
@@ -108,7 +108,7 @@ class GeneratorCommand : CommandLineRunner {
 
     private fun invoke(tableNameSet: Set<String>, tables: Array<String>, isDelete: Boolean, consume: (Array<String>, Array<String>) -> Unit) {
 
-        var tablesToInvoke = HashSet<String>()
+        val tablesToInvoke = HashSet<String>()
         val tablesNotExist = HashSet<String>()
 
         for (table in tables) {
@@ -133,8 +133,8 @@ class GeneratorCommand : CommandLineRunner {
     }
 
     private fun showTables(tableNameSet: Set<String>) {
-        var maxLength = tableNameSet.map { it.length }.max()?.plus(4)
-        var formatString = "%-" + maxLength + "s"
+        val maxLength = tableNameSet.map { it.length }.max()?.plus(4)
+        val formatString = "%-" + maxLength + "s"
         var index = 0
         tableNameSet.forEach {
             print(String.format(formatString, it))

@@ -88,10 +88,8 @@ class FreeMarkerServiceImpl : FreeMarkerService {
     @Throws(IOException::class)
     fun getMatchingTemplates(isCopy: Boolean = false, predicate: (String) -> Boolean): List<FreemarkerModel> {
 
-        var freeMarkerConfiguration = getConfiguration()
-
-        var templatePath = GeneratorProperties.paths!!.template
-
+        val freeMarkerConfiguration = getConfiguration()
+        val templatePath = GeneratorProperties.paths!!.template
         val directory = File(templatePath)
         val dirAbsolutePath = directory.absolutePath
 

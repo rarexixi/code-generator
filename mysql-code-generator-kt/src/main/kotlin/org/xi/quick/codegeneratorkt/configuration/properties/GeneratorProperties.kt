@@ -24,11 +24,6 @@ object GeneratorProperties {
     var tableNameMatchRegex: String? = null
 
     /**
-     * 数据库名
-     */
-    lateinit var databaseName: String
-
-    /**
      * 路径配置
      */
     @NestedConfigurationProperty

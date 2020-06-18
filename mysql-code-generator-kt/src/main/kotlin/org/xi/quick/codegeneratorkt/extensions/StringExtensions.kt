@@ -67,10 +67,10 @@ fun String.getTargetDataType(): String {
  * 获取目标表名
  */
 fun String.getTargetTableName(): String {
-    var tableName = this
+    val tableName = this
     if (tableName.isBlank()) return tableName
 
-    var tablePropertyList = GeneratorProperties.tables.filter { it.tableName == tableName }
+    val tablePropertyList = GeneratorProperties.tables.filter { it.tableName == tableName }
     if (tablePropertyList.isNotEmpty()) {
         return tablePropertyList[0].targetTableName
     }
@@ -87,7 +87,7 @@ fun String.getTargetTableName(): String {
  * 获取目标类名
  */
 fun String.getClassName(): String {
-    var tableName = this
+    val tableName = this
     return tableName.getTargetTableName().getCamelCaseName()
 }
 
@@ -95,15 +95,15 @@ fun String.getClassName(): String {
  * 获取目标属性名
  */
 fun String.getPropertyName(): String {
-    var columnName = this
+    val columnName = this
     return columnName.getCamelCaseName()
 }
 
 fun String.isBaseColumn(): Boolean {
-    var columnName = this
+    val columnName = this
 
-    var baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
-    var baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
+    val baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
+    val baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
 
     if (baseTableName.isNullOrBlank() || baseColumns.isEmpty()) return false
     return baseColumns.contains(columnName)

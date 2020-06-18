@@ -20,7 +20,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 generator:
-  database-name: quick
   encoding: UTF-8
   table-name-match-regex: '(?<=quick_).*'
   paths:

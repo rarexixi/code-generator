@@ -1,6 +1,7 @@
 package org.xi.quick.codegeneratorkt.service.impl
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.stereotype.Service
 import org.xi.quick.codegeneratorkt.configuration.properties.GeneratorProperties
 import org.xi.quick.codegeneratorkt.mapper.ColumnsMapper
@@ -24,7 +25,12 @@ class TableServiceImpl : TableService {
     lateinit var indexesMapper: IndexMapper
 
     @Autowired
-    lateinit var generator: GeneratorProperties
+    lateinit var dataSourceProperties: DataSourceProperties
+    
+    fun getDatabaseName(): String {
+        val regex = Regex("""(?<=//)[^?]*""")
+        return regex.find(dataSourceProperties.url)!!.value.split("/")[1]
+    }
 
     /**
      * 获取所有表都存在的公共列
@@ -33,13 +39,12 @@ class TableServiceImpl : TableService {
      */
     override fun getBaseColumns(): List<ColumnModel> {
 
-        var baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
-        var baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
-        if (baseTableName.isNullOrBlank() || baseColumns.isEmpty()) return listOf()
+        val baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
+        val baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
+        if (baseTableName.isBlank() || baseColumns.isEmpty()) return listOf()
 
-        val columnList = columnsMapper.getColumnsWithIndex(generator.databaseName, baseTableName)
-        val columnModels = columnList.filter { baseColumns.contains(it.columnName) }.map { ColumnModel(it) }
-        return columnModels
+        val columnList = columnsMapper.getColumnsWithIndex(getDatabaseName(), baseTableName)
+        return columnList.filter { baseColumns.contains(it.columnName) }.map { ColumnModel(it) }
     }
 
     /**
@@ -48,7 +53,7 @@ class TableServiceImpl : TableService {
      * @return
      */
     override fun getAllTableNameList(): Set<String> {
-        return tablesMapper.getAllTableNameList(generator.databaseName)
+        return tablesMapper.getAllTableNameList(getDatabaseName())
     }
 
     /**
@@ -58,12 +63,12 @@ class TableServiceImpl : TableService {
      */
     override fun getTables(vararg tableNames: String): List<TableModel> {
 
-        val tables = tablesMapper.getTables(generator.databaseName, *tableNames)
+        val tables = tablesMapper.getTables(getDatabaseName(), *tableNames)
 
-        val tableModels = tables.map { table ->
+        return tables.map { table ->
             let {
-                val columnList = columnsMapper.getColumnsWithIndex(generator.databaseName, table.tableName!!)
-                val statisticsList = indexesMapper.getIndexes(generator.databaseName, table.tableName!!)
+                val columnList = columnsMapper.getColumnsWithIndex(getDatabaseName(), table.tableName!!)
+                val statisticsList = indexesMapper.getIndexes(getDatabaseName(), table.tableName!!)
 
                 val columnModels = columnList.map { it -> ColumnModel(it) }
                 val statisticModels = statisticsList.map { it -> IndexModel(it) }
@@ -71,8 +76,6 @@ class TableServiceImpl : TableService {
                 TableModel(table, columnModels, statisticModels)
             }
         }
-
-        return tableModels
     }
 
 }

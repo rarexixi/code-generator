@@ -50,7 +50,7 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun gen(vararg tableNames: String) {
 
-        var allTemplates = freeMarkerService.getTableTemplates()
+        val allTemplates = freeMarkerService.getTableTemplates()
 
         val tables = tableService.getTables(*tableNames)
         tables.forEach { table -> allTemplates.forEach { template -> generate(template, table) } }
@@ -61,8 +61,8 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun genBase() {
 
-        var onceTemplates = freeMarkerService.getOnceTemplates()
-        var copyTemplates = freeMarkerService.getCopyTemplates()
+        val onceTemplates = freeMarkerService.getOnceTemplates()
+        val copyTemplates = freeMarkerService.getCopyTemplates()
 
         val dataModel = HashMap<Any, Any>()
         generateOnce(onceTemplates, dataModel)
@@ -74,7 +74,7 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun genAggr(vararg tableNames: String) {
 
-        var aggrTemplates = freeMarkerService.getAggrTemplates()
+        val aggrTemplates = freeMarkerService.getAggrTemplates()
 
         val tables = tableService.getTables(*tableNames)
         val dataModel = HashMap<Any, Any>()
@@ -95,7 +95,7 @@ class GeneratorServiceImpl : GeneratorService {
 
         val tables = if (tableNames.isEmpty()) tableService.getAllTableNameList().toTypedArray() else tableNames
 
-        var tableTemplates = freeMarkerService.getTableTemplates()
+        val tableTemplates = freeMarkerService.getTableTemplates()
 
         tables.forEach { tableName -> tableTemplates.forEach { template -> delete(template, tableName) } }
     }
@@ -105,8 +105,8 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun delBase() {
 
-        var onceTemplates = freeMarkerService.getOnceTemplates()
-        var copyTemplates = freeMarkerService.getCopyTemplates()
+        val onceTemplates = freeMarkerService.getOnceTemplates()
+        val copyTemplates = freeMarkerService.getCopyTemplates()
 
         deleteOnce(onceTemplates)
         deleteOnce(copyTemplates)
@@ -117,7 +117,7 @@ class GeneratorServiceImpl : GeneratorService {
      */
     override fun delAggr() {
 
-        var aggrTemplates = freeMarkerService.getAggrTemplates()
+        val aggrTemplates = freeMarkerService.getAggrTemplates()
 
         deleteOnce(aggrTemplates)
     }
@@ -145,7 +145,7 @@ class GeneratorServiceImpl : GeneratorService {
 
     private fun generateOnce(templates: List<FreemarkerModel>, dataModel: MutableMap<Any, Any>) {
 
-        var baseColumns = tableService.getBaseColumns()
+        val baseColumns = tableService.getBaseColumns()
         dataModel["baseColumns"] = baseColumns
 
         for (template in templates) {
@@ -253,9 +253,9 @@ class GeneratorServiceImpl : GeneratorService {
      * 获取文件实际路径
      */
     private fun getAbsoluteFilePath(relativePath: String): String {
-
-        val directory = File(GeneratorProperties.paths?.out)
-        return directory.absolutePath + SystemUtils.SYSTEM_SLASH + relativePath
+        val directory = File(GeneratorProperties.paths!!.out)
+        return directory.absolutePath + SystemUtils.SYSTEM_SLASH +
+                (if (relativePath.endsWith(".ftl")) relativePath.substring(0, relativePath.length - 4) else relativePath)
     }
 
     private fun getAbsoluteDirectory(absolutePath: String): String {
@@ -274,13 +274,13 @@ class GeneratorServiceImpl : GeneratorService {
 
         return Regex("""\$\{[^\}]*\}""").replace(path) {
 
-            var group = it.value
-            var tmp = group.substring(2, group.length - 1)
-            var index = tmp.indexOf('_')
-            var key = if (index > -1) tmp.substring(0, index) else tmp
+            val group = it.value
+            val tmp = group.substring(2, group.length - 1)
+            val index = tmp.indexOf('_')
+            val key = if (index > -1) tmp.substring(0, index) else tmp
 
             val value = properties[key]
-            var s = if (value != null) value as String else group
+            val s = if (value != null) value as String else group
 
             when {
                 tmp.endsWith("_dir") -> s.replace("""\.""".toRegex(), SystemUtils.REGEX_SYSTEM_SLASH)
