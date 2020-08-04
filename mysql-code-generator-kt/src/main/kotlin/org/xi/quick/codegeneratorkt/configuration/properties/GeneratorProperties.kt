@@ -33,7 +33,7 @@ object GeneratorProperties {
      * 文件配置
      */
     @NestedConfigurationProperty
-    var files: FileProperties? = null
+    var files: FileProperties = FileProperties()
 
     /**
      * 表的配置
@@ -44,7 +44,7 @@ object GeneratorProperties {
      * 字段配置
      */
     @NestedConfigurationProperty
-    var columns: ColumnProperties? = null
+    var columns: ColumnProperties = ColumnProperties()
 
     /**
      * 其他公共属性，用于生成到页面和路径

@@ -25,9 +25,9 @@ class FreeMarkerServiceImpl : FreeMarkerService {
 
         return getMatchingTemplates { templateRelativePath ->
             isTableFile(templateRelativePath)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files?.ignore)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files?.aggregate)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files?.copy)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files.ignore)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files.aggregate)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files.copy)
         }
     }
 
@@ -42,9 +42,9 @@ class FreeMarkerServiceImpl : FreeMarkerService {
 
         return getMatchingTemplates { templateRelativePath ->
             !isTableFile(templateRelativePath)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files?.ignore)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files?.aggregate)
-                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files?.copy)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files.ignore)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files.aggregate)
+                    && !isMatchingFile(templateRelativePath, GeneratorProperties.files.copy)
         }
     }
 
@@ -58,7 +58,7 @@ class FreeMarkerServiceImpl : FreeMarkerService {
     override fun getAggrTemplates(): List<FreemarkerModel> {
 
         return getMatchingTemplates { templateRelativePath ->
-            isMatchingFile(templateRelativePath, GeneratorProperties.files?.aggregate)
+            isMatchingFile(templateRelativePath, GeneratorProperties.files.aggregate)
         }
     }
 
@@ -72,7 +72,7 @@ class FreeMarkerServiceImpl : FreeMarkerService {
     override fun getCopyTemplates(): List<FreemarkerModel> {
 
         return getMatchingTemplates(true) { templateRelativePath ->
-            isMatchingFile(templateRelativePath, GeneratorProperties.files?.copy)
+            isMatchingFile(templateRelativePath, GeneratorProperties.files.copy)
         }
     }
 
@@ -116,7 +116,7 @@ class FreeMarkerServiceImpl : FreeMarkerService {
 
     @Throws(IOException::class)
     private fun getConfiguration(): freemarker.template.Configuration {
-        val directory = File(GeneratorProperties.paths?.template)
+        val directory = File(GeneratorProperties.paths!!.template)
         val cfg = freemarker.template.Configuration(freemarker.template.Configuration.VERSION_2_3_28)
         cfg.setDirectoryForTemplateLoading(directory)
         cfg.defaultEncoding = GeneratorProperties.encoding

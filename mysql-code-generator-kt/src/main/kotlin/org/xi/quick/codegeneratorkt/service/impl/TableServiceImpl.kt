@@ -39,8 +39,8 @@ class TableServiceImpl : TableService {
      */
     override fun getBaseColumns(): List<ColumnModel> {
 
-        val baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
-        val baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
+        val baseTableName = GeneratorProperties.columns.base.tableName
+        val baseColumns = GeneratorProperties.columns.base.columnNameSet
         if (baseTableName.isBlank() || baseColumns.isEmpty()) return listOf()
 
         val columnList = columnsMapper.getColumnsWithIndex(getDatabaseName(), baseTableName)

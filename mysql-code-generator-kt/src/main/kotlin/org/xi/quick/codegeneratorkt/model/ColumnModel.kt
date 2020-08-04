@@ -165,7 +165,7 @@ class ColumnModel(column: Column) {
         pk = columnKey == "PRI"
 
 
-        var columnProperties = GeneratorProperties.columns
+        val columnProperties = GeneratorProperties.columns
 
         if (columnProperties != null) {
 

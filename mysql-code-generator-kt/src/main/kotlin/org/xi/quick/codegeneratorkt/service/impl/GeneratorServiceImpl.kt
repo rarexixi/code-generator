@@ -22,6 +22,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.file.Files
+import java.nio.file.Path
 import java.util.HashMap
 
 @Service("generatorService")
@@ -169,7 +170,7 @@ class GeneratorServiceImpl : GeneratorService {
             logger.info("正在复制$relativePath")
 
             val targetPath = getAbsoluteFilePath(relativePath)
-            val sourcePath = GeneratorProperties.paths?.template + outModel.relativePath
+            val sourcePath = GeneratorProperties.paths!!.template + outModel.relativePath
 
             try {
                 //创建文件路径
@@ -232,8 +233,7 @@ class GeneratorServiceImpl : GeneratorService {
         putAllCommonProperties(dataModel)
 
         val relativePath = getActualPath(outModel.relativePath, dataModel)
-        logger.info("正在生成$relativePath")
-
+        logger.info("正在删除${relativePath}")
         val absolutePath = getAbsoluteFilePath(relativePath)
         File(absolutePath).delete()
     }

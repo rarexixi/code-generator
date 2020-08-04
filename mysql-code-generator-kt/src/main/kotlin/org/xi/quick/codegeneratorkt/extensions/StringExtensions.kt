@@ -102,8 +102,8 @@ fun String.getPropertyName(): String {
 fun String.isBaseColumn(): Boolean {
     val columnName = this
 
-    val baseTableName = GeneratorProperties.columns?.base?.tableName ?: ""
-    val baseColumns = GeneratorProperties.columns?.base?.columnNameSet ?: setOf()
+    val baseTableName = GeneratorProperties.columns.base.tableName
+    val baseColumns = GeneratorProperties.columns.base.columnNameSet
 
     if (baseTableName.isNullOrBlank() || baseColumns.isEmpty()) return false
     return baseColumns.contains(columnName)
