@@ -97,16 +97,11 @@ class FreeMarkerServiceImpl : FreeMarkerService {
         val result = ArrayList<FreemarkerModel>()
 
         for (file in files) {
-
-            if (file.isHidden) continue
-
             val templateRelativePath = file.absolutePath.substring(dirAbsolutePath.length + 1)
             if (!predicate(templateRelativePath)) continue
 
             val template = if (isCopy) null else freeMarkerConfiguration.getTemplate(templateRelativePath, GeneratorProperties.encoding)
-
             val outModel = FreemarkerModel(templateRelativePath, template)
-
             result.add(outModel)
         }
 
