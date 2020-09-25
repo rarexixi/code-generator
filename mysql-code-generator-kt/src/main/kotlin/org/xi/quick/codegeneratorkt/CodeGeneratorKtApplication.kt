@@ -10,12 +10,13 @@ import org.xi.quick.codegeneratorkt.service.TableService
 import java.util.*
 import kotlin.system.exitProcess
 
+
+fun main(args: Array<String>) {
+    runApplication<CodeGeneratorKtApplication>(*args)
+}
+
 @SpringBootApplication
 class CodeGeneratorKtApplication: CommandLineRunner {
-
-    fun main(args: Array<String>) {
-        runApplication<CodeGeneratorKtApplication>(*args)
-    }
 
     internal var logger = LoggerFactory.getLogger(CodeGeneratorKtApplication::class.java)
 
@@ -43,7 +44,7 @@ class CodeGeneratorKtApplication: CommandLineRunner {
     }
 
     private fun printUsages() {
-        var introduction = """
+        val introduction = """
 操作说明:
     ga/da:                        生成/删除所有文件
     gb/db:                        生成/删除基本类型的相关文件
