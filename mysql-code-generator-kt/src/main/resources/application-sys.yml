@@ -1,0 +1,98 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/dmp?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&rewriteBatchedStatements=true&useServerPrepStmts=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+generator:
+  encoding: UTF-8
+  table-name-match-regex: '(?<=dmp_).*'
+  paths:
+    template: /Users/xi/Projects/github.com/java/code-generator/templates/template3/                   # 模版路径
+    out: /Users/xi/Projects/                          # 输出路径
+  files:
+    ignore: include/, .DS_Store
+    aggregate: src/router/index.js, views/Home.vue
+    copy: public/favicon.ico, public/index.html, src/assets/, src/components/, src/mixin/, src/store/, src/utils/, src/App.vue, src/base_config.js, src/main.js, babel.config.js, .gitignore
+
+  columns:
+    base:
+      column-name-set: deleted, create_user, create_username, update_user, update_username, create_time, update_time
+      table-name: dmp_sys_config
+    not-required:
+      - column-name-set: create_time, update_time, ext_info
+#    img-url:
+#    video-url:
+#    doc-url:
+#    page-url:
+#    other-url:
+    content:
+      - column-name-set: remark, ext_info
+      - column-name-set: value
+        table-name: dmp_sys_config
+
+    valid-status:
+      - column-name-set: deleted
+        status:
+          valid: 0
+          invalid: 1
+
+    fk-select:
+      - column-name-set: module_id
+        table-name: dmp_data_privileges
+        fk:
+          foreign-table-name: dmp_sys_module
+          value-column-name: module_id
+          text-column-name: module_name
+      - column-name-set: module_id
+        table-name: dmp_sys_menu
+        fk:
+          foreign-table-name: dmp_sys_module
+          value-column-name: module_id
+          text-column-name: module_name
+      - column-name-set: env_id
+        table-name: dmp_sys_config
+        fk:
+          foreign-table-name: dmp_sys_env
+          value-column-name: env_id
+          text-column-name: env_name
+      - column-name-set: env_id
+        table-name: dmp_sys_option
+        fk:
+          foreign-table-name: dmp_sys_env
+          value-column-name: env_id
+          text-column-name: env_name
+
+  # 公共自定义属性
+  common-properties:
+    projectName: dmp
+    module: sys
+    serviceApplicatioName: DmpSysApplication
+    servicePort: 10927
+    modulePackage: org.xi.dmp.sys
+    commonPackage: org.xi.dmp.common
+
+    author: 郗世豪（rarexixi@sina.com）
+    javaSrc: src/main/java
+    javaTestSrc: src/test/java
+    resourcesSrc: src/main/resources
+
+  # 获取数据映射关系
+  data-type-map:
+    tinyint: Integer
+    smallint: Integer
+    int: Integer
+    bigint: Long
+    float: Float
+    double: Double
+    decimal: BigDecimal
+    numeric: BigDecimal
+    bit: Boolean
+    character: Character
+    varchar: String
+    char: String
+    text: String
+    date: LocalDate
+    datetime: LocalDateTime
+    timestamp: LocalDateTime

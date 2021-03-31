@@ -1,0 +1,10 @@
+<#assign tableFullComment = table.comment>
+<#assign tableComment = (tableFullComment?split("[（ ,，(]", "r"))[0]>
+<#assign tableName = table.tableName>
+<#assign targetTableName = table.targetTableName>
+<#assign tablePath = targetTableName?replace("_", "-")>
+<#assign className = table.className>
+<#assign classNameFirstLower = className?uncap_first>
+<#assign classNameLower = className?lower_case>
+<#assign pks = table.pks>
+<#assign classNameLength = className?length>

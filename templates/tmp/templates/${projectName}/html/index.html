@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>x</title>
+    <style>
+        table {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+        table th,
+        table td {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <#assign menuIndex = 0>
+    <#list tableModels as table>
+    <#include "/include/table/properties.ftl">
+    <#assign menuIndex = menuIndex + 1>
+    <br/>
+    <br/>
+    <h2>表名称：${tableName}</h2>
+    <h2>表描述：${tableComment}</h2>
+    <h2>表存储方式：</h2>
+    <h2>表字段说明：</h2>
+    <table>
+        <tr>
+            <th>字段名</th>
+            <th>类型</th>
+            <th>长度</th>
+            <th>实例</th>
+            <th>描述</th>
+            <th>备注</th>
+        </tr>
+        <#list table.columns as column>
+        <tr>
+            <th>${column.columnName}</th>
+            <th><#if column.charLength gt 0>${column.dataType}<#else>${column.columnType}</#if></th>
+            <th><#if column.charLength gt 0>${column.charLength}</#if></th>
+            <th></th>
+            <th>${column.columnComment}</th>
+            <th></th>
+        </tr>
+        </#list>
+    </table>
+    </#list>
+</div>
+</body>
+</html>
