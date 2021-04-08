@@ -116,15 +116,22 @@ export default defineComponent({
         const title = ref<string>('')
         const formRef = ref()
         const detail = reactive<any>({
-            <#list table.columns as column>
+            <#list table.columnsExceptBase as column>
             <#include "/include/column/properties.ftl">
-            <#if (column.validStatus)>
-            <#else>
+            <#if !column.notRequired>
             ${fieldName}: <#if (isInteger || isDecimal)>undefined<#else>''</#if>,
             </#if>
             </#list>
         })
-        const resetForm = () => formRef.value.resetFields()
+        const resetForm = () => {
+            formRef.value.resetFields()
+            <#list table.columnsExceptBase as column>
+            <#include "/include/column/properties.ftl">
+            <#if column.autoIncrement>
+            detail.${fieldName} = <#if (isInteger || isDecimal)>undefined<#else>''</#if>
+            </#if>
+            </#list>
+        }
         const closeAddOrEditDrawer = inject<(newVal: boolean) => void>('closeAddOrEditDrawer')
         const closeDrawer = () => {
             resetForm()
@@ -143,7 +150,7 @@ export default defineComponent({
                     title.value = '编辑${tableComment}'
 
                 request({ url: '/${tablePath}/detail', method: 'GET', params: { <#list pks as column><#include "/include/column/properties.ftl">${fieldName}: ${fieldName}.value<#if column?has_next>, </#if></#list> } }).then(response => {
-                    <#list table.columns as column>
+                    <#list table.columnsExceptBase as column>
                     <#include "/include/column/properties.ftl">
                     <#if column.notRequired>
                     <#elseif column.autoIncrement>
@@ -167,7 +174,7 @@ export default defineComponent({
             <#include "/include/column/properties.ftl">
             <#if ((column.pk && !column.autoIncrement) && (!column.notRequired && !column.nullable && !(column.columnDefault??)))>
             ${fieldName}: [
-                { required: true, message: '${columnComment}不能为空', trigger: '<#if (column.select || column.fkSelect)>change<#else>blur</#if>' }
+                { <#if (isInteger)>type: 'integer', <#elseif (isDecimal)>type: 'float', </#if>required: true, message: '${columnComment}不能为空', trigger: '<#if (column.select || column.fkSelect)>change<#else>blur</#if>' }
             ],
             </#if>
             </#list>
