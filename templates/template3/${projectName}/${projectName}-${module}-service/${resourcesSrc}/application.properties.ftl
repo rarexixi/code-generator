@@ -6,9 +6,9 @@ spring.jackson.date-format=java.text.SimpleDateFormat
 spring.servlet.multipart.max-file-size=200MB
 spring.servlet.multipart.max-request-size=256MB
 
-spring.http.encoding.charset=UTF-8
-spring.http.encoding.enabled=true
-spring.http.encoding.force=true
+server.servlet.encoding.charset=UTF-8
+server.servlet.encoding.enabled=true
+server.servlet.encoding.force=true
 
 # region datasoruce
 spring.datasource.url=${dbUrl}

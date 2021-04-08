@@ -19,14 +19,10 @@
         </#list>
     </resultMap>
 
-    <parameterMap id="BaseParameterMap" type="${modulePackage}.presentation.entity.${className}Entity"></parameterMap>
-    <parameterMap id="SelectConditionMap" type="${modulePackage}.presentation.condition.${className}SelectCondition"></parameterMap>
-    <parameterMap id="UpdateConditionMap" type="${modulePackage}.presentation.condition.${className}UpdateCondition"></parameterMap>
-
     <sql id="tableName">`${table.tableName}`</sql>
 
     <!--插入${tableComment}-->
-    <insert id="insert" parameterMap="BaseParameterMap"<#if table.hasAutoIncUniPk> useGeneratedKeys="true" keyProperty="entity.${table.uniPk.targetName?uncap_first}"</#if>>
+    <insert id="insert"<#if table.hasAutoIncUniPk> useGeneratedKeys="true" keyProperty="entity.${table.uniPk.targetName?uncap_first}"</#if>>
         insert into <include refid="tableName"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
         <#list table.columns as column>
@@ -44,7 +40,7 @@
 
     <!--todo 插入具体的列-->
     <!--批量插入${tableComment}-->
-    <insert id="batchInsert" parameterMap="BaseParameterMap"<#if table.hasAutoIncUniPk> useGeneratedKeys="true" keyProperty="${table.uniPk.targetName?uncap_first}"</#if>>
+    <insert id="batchInsert"<#if table.hasAutoIncUniPk> useGeneratedKeys="true" keyProperty="${table.uniPk.targetName?uncap_first}"</#if>>
         insert into <include refid="tableName"/>
         (
         <#list table.columns as column>
@@ -64,7 +60,7 @@
     </insert>
 
     <!--根据主键条件删除${tableComment}-->
-    <delete id="delete" parameterMap="UpdateConditionMap">
+    <delete id="delete">
         DELETE FROM <include refid="tableName"/>
         <where>
         <#if (table.hasUniPk)>
@@ -72,8 +68,8 @@
                 <when test="condition.${uniPkFieldName} != null">
                     `${uniPk.columnName}` = <@mapperEl 'condition.' + uniPkFieldName/>
                 </when>
-                <when test="condition.${uniPkFieldName}List != null">
-                    `${uniPk.columnName}` in <foreach collection="condition.${uniPkFieldName}List" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
+                <when test="condition.${uniPkFieldName}s != null">
+                    `${uniPk.columnName}` in <foreach collection="condition.${uniPkFieldName}s" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
                 </when>
                 <otherwise>
                     1!=1
@@ -108,8 +104,8 @@
                 <when test="condition.${uniPkFieldName} != null">
                     `${uniPk.columnName}` = <@mapperEl 'condition.' + uniPkFieldName/>
                 </when>
-                <when test="condition.${uniPkFieldName}List != null">
-                    `${uniPk.columnName}` in <foreach collection="condition.${uniPkFieldName}List" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
+                <when test="condition.${uniPkFieldName}s != null">
+                    `${uniPk.columnName}` in <foreach collection="condition.${uniPkFieldName}s" item="it" open="(" close=")" separator=","><@mapperEl 'it'/></foreach>
                 </when>
                 <otherwise>
                     1!=1
@@ -220,7 +216,7 @@
             </if>
         </where>
     </sql>
-    <select id="select" parameterMap="SelectConditionMap" resultMap="ExtResultMap">
+    <select id="select" resultMap="ExtResultMap">
         SELECT
         <if test="condition.columns != null">
             <foreach collection="condition.columns" item="it" separator=",">MT.`<@mapperEl$ 'it'/>`</foreach>
@@ -237,7 +233,7 @@
         </if>
     </select>
 
-    <select id="count" parameterMap="SelectConditionMap" resultType="java.lang.Integer">
+    <select id="count" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM <include refid="tableName"/> MT
         <include refid="where"/>

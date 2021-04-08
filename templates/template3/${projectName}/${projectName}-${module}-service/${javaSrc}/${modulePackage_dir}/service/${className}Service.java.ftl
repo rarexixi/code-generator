@@ -3,6 +3,7 @@ package ${modulePackage}.service;
 
 import ${commonPackage}.models.PageList;
 import ${modulePackage}.model.request.${className}AddRequest;
+import ${modulePackage}.model.request.${className}PatchRequest;
 import ${modulePackage}.model.request.${className}QueryRequest;
 import ${modulePackage}.model.request.${className}SaveRequest;
 import ${modulePackage}.model.response.${className}DetailResponse;
@@ -38,26 +39,32 @@ public interface ${className}Service {
 
     <#-- region 删除/启用/禁用 -->
     /**
-     * 根据<#include "/include/table/pk_fun_comment.ftl">删除${tableComment}
+     * 删除${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName} ${columnFullComment}
-     </#list>
+     * @param patchRequest 更新条件请求
      * @return 受影响的行数
      * @author ${author}
      */
-    int deleteBy<#include "/include/table/pk_fun_names.ftl">(<#include "/include/table/pk_params.ftl">);
-    <#if (table.hasUniPk)>
+    int delete(${className}PatchRequest patchRequest);
+    <#if table.validStatusColumn??>
 
     /**
-     * 根据${uniPkComment}列表删除${tableComment}
+     * 禁用${tableComment}
      *
-     * @param ${uniPkFieldName}List ${uniPkComment}列表
+     * @param patchRequest 更新条件请求
      * @return 受影响的行数
      * @author ${author}
      */
-    int deleteBy${uniPkPropertyName}List(Collection<${uniPk.targetDataType}> ${uniPkFieldName}List);
+    int disable(${className}PatchRequest patchRequest);
+
+    /**
+     * 启用${tableComment}
+     *
+     * @param patchRequest 更新条件请求
+     * @return 受影响的行数
+     * @author ${author}
+     */
+    int enable(${className}PatchRequest patchRequest);
     </#if>
     <#-- endregion 删除/启用/禁用 -->
 

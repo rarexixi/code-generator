@@ -3,7 +3,6 @@ package ${modulePackage}.presentation.condition;
 
 import ${commonPackage}.models.UpdateCondition;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 
 import lombok.Getter;
@@ -32,6 +31,6 @@ public class ${className}UpdateCondition extends UpdateCondition {
     /**
      * ${columnFullComment}列表
      */
-    private Collection<${fieldType}> ${fieldName}List;
+    private Collection<${fieldType}> ${fieldName}s;
     </#if>
 }

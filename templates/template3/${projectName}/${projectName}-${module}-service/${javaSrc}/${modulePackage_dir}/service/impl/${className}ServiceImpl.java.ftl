@@ -11,6 +11,7 @@ import ${modulePackage}.presentation.entity.${className}Entity;
 import ${modulePackage}.presentation.entity.${className}EntityExt;
 import ${modulePackage}.presentation.mapper.${className}Mapper;
 import ${modulePackage}.model.request.${className}AddRequest;
+import ${modulePackage}.model.request.${className}PatchRequest;
 import ${modulePackage}.model.request.${className}QueryRequest;
 import ${modulePackage}.model.request.${className}SaveRequest;
 import ${modulePackage}.model.response.${className}DetailResponse;
@@ -70,38 +71,47 @@ public class ${className}ServiceImpl implements ${className}Service {
 
     <#-- region 删除/启用/禁用 -->
     /**
-     * 根据<#include "/include/table/pk_fun_comment.ftl">删除${tableComment}
+     * 删除${tableComment}
      *
-     <#list pks as column>
-     <#include "/include/column/properties.ftl">
-     * @param ${fieldName} ${columnFullComment}
-     </#list>
+     * @param patchRequest 更新条件请求
      * @return 受影响的行数
      * @author ${author}
      */
     @Override
-    public int deleteBy<#include "/include/table/pk_fun_names.ftl">(<#include "/include/table/pk_params.ftl">) {
-        ${className}UpdateCondition condition = new ${className}UpdateCondition();
-        <#list pks as column>
-        <#include "/include/column/properties.ftl">
-        condition.set${propertyName}(${fieldName});
-        </#list>
+    public int delete(${className}PatchRequest patchRequest) {
+        ${className}UpdateCondition condition = ObjectUtils.copy(patchRequest, ${className}UpdateCondition.class);
         return ${classNameFirstLower}Mapper.delete(condition);
     }
-    <#if (table.hasUniPk)>
+    <#if table.validStatusColumn??>
 
     /**
-     * 根据${uniPkComment}列表删除${tableComment}
+     * 禁用${tableComment}
      *
-     * @param ${uniPkFieldName}List ${uniPkComment}列表
+     * @param patchRequest 更新条件请求
      * @return 受影响的行数
      * @author ${author}
      */
     @Override
-    public int deleteBy${uniPkPropertyName}List(Collection<${uniPk.targetDataType}> ${uniPkFieldName}List) {
-        ${className}UpdateCondition condition = new ${className}UpdateCondition();
-        condition.set${uniPkPropertyName}List(${uniPkFieldName}List);
-        return ${classNameFirstLower}Mapper.delete(condition);
+    public int disable(${className}PatchRequest patchRequest) {
+        ${className}UpdateCondition condition = ObjectUtils.copy(patchRequest, ${className}UpdateCondition.class);
+        ${className}Entity entity = ObjectUtils.copy(patchRequest, ${className}Entity.class<#list pks as column><#include "/include/column/properties.ftl">, "${fieldName}"</#list>);
+        entity.setDeleted(DeletedConstant.INVALID);
+        return ${classNameFirstLower}Mapper.update(entity, condition);
+    }
+
+    /**
+     * 启用${tableComment}
+     *
+     * @param patchRequest 更新条件请求
+     * @return 受影响的行数
+     * @author ${author}
+     */
+    @Override
+    public int enable(${className}PatchRequest patchRequest) {
+        ${className}UpdateCondition condition = ObjectUtils.copy(patchRequest, ${className}UpdateCondition.class);
+        ${className}Entity entity = ObjectUtils.copy(patchRequest, ${className}Entity.class<#list pks as column><#include "/include/column/properties.ftl">, "${fieldName}"</#list>);
+        entity.setDeleted(DeletedConstant.VALID);
+        return ${classNameFirstLower}Mapper.update(entity, condition);
     }
     </#if>
     <#-- endregion 删除/启用/禁用 -->

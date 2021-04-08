@@ -5,6 +5,7 @@ import ${commonPackage}.annotation.SetFieldTypes;
 import ${commonPackage}.models.PageList;
 import ${commonPackage}.utils.ExcelUtils;
 import ${modulePackage}.model.request.${className}AddRequest;
+import ${modulePackage}.model.request.${className}PatchRequest;
 import ${modulePackage}.model.request.${className}QueryRequest;
 import ${modulePackage}.model.request.${className}SaveRequest;
 import ${modulePackage}.model.response.${className}DetailResponse;
@@ -52,34 +53,31 @@ public class ${className}Controller extends BaseController {
     <#-- region 删除/启用/禁用 -->
     <#if (table.hasUniPk)>
 
-    @ApiOperation(value = "根据${uniPkComment}删除${tableComment}", notes = "根据${uniPkComment}删除${tableComment}")
-    @ApiImplicitParam(name = "${uniPkFieldName}s", value = "${uniPkComment}，多个用英文逗号分开", required = true, dataType = "${uniPkFieldBasicType}", paramType = "query")
+    @ApiOperation(value = "删除${tableComment}", notes = "删除${tableComment}")
     @DeleteMapping("/delete")
     @RequiresPermissions("${module}:${tableShortPath}:del")
-    public ResponseEntity<Integer> deleteBy${uniPkPropertyName}s(@RequestParam("${uniPkFieldName}s") @NotNull(message = "${uniPkComment}不能为空") Collection<${uniPkFieldType}> ${uniPkFieldName}s) {
-        Integer count = ${classNameFirstLower}Service.deleteBy${uniPkPropertyName}List(${uniPkFieldName}s);
+    public ResponseEntity<Integer> delete(@Validated @SetFieldTypes(types = {"update"}) ${className}PatchRequest patchRequest) {
+        Integer count = ${classNameFirstLower}Service.delete(patchRequest);
         return ResponseEntity.ok(count);
     }
-    <#else>
 
-    @ApiOperation(value = "根据<#include "/include/table/pk_fun_comment.ftl">删除${tableComment}", notes = "根据<#include "/include/table/pk_fun_comment.ftl">删除${tableComment}")
-    @ApiImplicitParams({
-            <#list pks as column>
-            <#include "/include/column/properties.ftl">
-            @ApiImplicitParam(name = "${fieldName}", value = "${columnFullComment}", required = true, dataType = "${fieldBasicType}", paramType = "query")<#if (column?has_next)>,</#if>
-            </#list>
-    })
-    @DeleteMapping("/delete")
-    @RequiresPermissions("${module}:${tableShortPath}:del")
-    public ResponseEntity<Integer> deleteBy<#include "/include/table/pk_fun_names.ftl">(
-            <#list pks as column>
-            <#include "/include/column/properties.ftl">
-            @RequestParam("${fieldName}") @${isString ? string('NotBlank','NotNull')}(message = "${fieldName}(${columnComment})不能为空") ${fieldType} ${fieldName}<#if (column?has_next)>,</#if>
-            </#list>
-    ) {
-        Integer count = ${classNameFirstLower}Service.deleteBy<#include "/include/table/pk_fun_names.ftl">(<#include "/include/table/pk_values.ftl">);
+    <#if table.validStatusColumn??>
+    @ApiOperation(value = "禁用${tableComment}", notes = "禁用${tableComment}")
+    @PatchMapping("/disable")
+    @RequiresPermissions("${module}:${tableShortPath}:disable")
+    public ResponseEntity<Integer> disable(@Validated @SetFieldTypes(types = {"update"}) ${className}PatchRequest patchRequest) {
+        Integer count = ${classNameFirstLower}Service.disable(patchRequest);
         return ResponseEntity.ok(count);
     }
+
+    @ApiOperation(value = "启用${tableComment}", notes = "启用${tableComment}")
+    @PatchMapping("/enable")
+    @RequiresPermissions("${module}:${tableShortPath}:enable")
+    public ResponseEntity<Integer> enable(@Validated @SetFieldTypes(types = {"update"}) ${className}PatchRequest patchRequest) {
+        Integer count = ${classNameFirstLower}Service.enable(patchRequest);
+        return ResponseEntity.ok(count);
+    }
+    </#if>
     </#if>
     <#-- endregion 删除/启用/禁用 -->
 

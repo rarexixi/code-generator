@@ -69,7 +69,7 @@ generator:
     projectName: dmp
     module: sys
     serviceApplicatioName: DmpSysApplication
-    servicePort: 10927
+    servicePort: 8080
     modulePackage: org.xi.dmp.sys
     commonPackage: org.xi.dmp.common
 
