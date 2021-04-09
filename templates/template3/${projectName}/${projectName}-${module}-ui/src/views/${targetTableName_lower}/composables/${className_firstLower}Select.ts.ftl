@@ -1,4 +1,5 @@
 <#include "/include/table/properties.ftl">
+<#if (table.hasUniPk)>
 import { ColumnProps } from "ant-design-vue/lib/table/interface"
 import { computed, ref, unref, UnwrapRef } from "vue"
 import { PageInfo } from "@/composables/models";
@@ -17,7 +18,6 @@ export function getSelection(dataPageList: UnwrapRef<PageInfo>) {
         selectedRowKeys.value = []
         selectedRows.value = []
     }
-    <#if (table.hasUniPk)>
 
     const rowSelection = computed(() => {
         return {
@@ -44,14 +44,12 @@ export function getSelection(dataPageList: UnwrapRef<PageInfo>) {
             ],
         }
     })
-    </#if>
 
     return {
-        <#if (table.hasUniPk)>
         rowSelection,
-        </#if>
         selectedRowKeys,
         selectedRows,
         emptySelected
     }
 }
+</#if>

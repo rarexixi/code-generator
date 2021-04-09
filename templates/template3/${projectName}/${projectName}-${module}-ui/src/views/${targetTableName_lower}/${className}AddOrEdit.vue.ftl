@@ -86,22 +86,11 @@ import { request } from '@/utils/request-utils'
 
 export default defineComponent({
     props: {
-        <#list pks as column>
-        <#include "/include/column/properties.ftl">
-        <#if (isInteger || isDecimal)>
-        ${fieldName}: {
-            type: Number,
+        pk: {
+            type: [Object, Map],
             required: false,
             default: () => undefined
         },
-        <#else>
-        ${fieldName}: {
-            type: String,
-            required: false,
-            default: () => ''
-        },
-        </#if>
-        </#list>
         operateType: {
             type: Number,
             default: () => common.DataOperationType.default
@@ -111,8 +100,8 @@ export default defineComponent({
             default: () => false
         }
     },
-    setup(props, { attrs, slots, emit }) {
-        const { <#list pks as column><#include "/include/column/properties.ftl">${fieldName}, </#list>operateType, visible } = toRefs(props)
+    setup(props, { emit }) {
+        const { pk, operateType, visible } = toRefs(props)
         const title = ref<string>('')
         const formRef = ref()
         const detail = reactive<any>({
@@ -149,7 +138,7 @@ export default defineComponent({
                 else if (operateType.value === common.DataOperationType.update)
                     title.value = '编辑${tableComment}'
 
-                request({ url: '/${tablePath}/detail', method: 'GET', params: { <#list pks as column><#include "/include/column/properties.ftl">${fieldName}: ${fieldName}.value<#if column?has_next>, </#if></#list> } }).then(response => {
+                request({ url: '/${tablePath}/detail', method: 'GET', params: pk.value }).then(response => {
                     <#list table.columnsExceptBase as column>
                     <#include "/include/column/properties.ftl">
                     <#if column.notRequired>
@@ -182,7 +171,7 @@ export default defineComponent({
         const save = () => {
             formRef.value.validate().then(() => {
                 const requestConfig: AxiosRequestConfig = operateType.value === common.DataOperationType.update
-                    ? { url: '/${tablePath}/update', method: "PATCH", data: toRaw(detail), params: { <#list pks as column><#include "/include/column/properties.ftl">${fieldName}: ${fieldName}.value<#if column?has_next>, </#if></#list> } }
+                    ? { url: '/${tablePath}/update', method: "PATCH", data: toRaw(detail), params: pk.value }
                     : { url: '/${tablePath}/add', method: "POST", data: toRaw(detail) }
                 request(requestConfig).then(response => {
                     notification.success({
@@ -192,6 +181,7 @@ export default defineComponent({
                     emit("save", response)
                 })
             }).catch((error: ValidateErrorEntity<any>) => {
+                console.log(error)
                 notification.error({
                     message: "参数验证失败"
                 })
@@ -210,5 +200,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 </style>

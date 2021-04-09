@@ -73,6 +73,7 @@
                 <plus-outlined />
             </template>添加
         </a-button>
+        <#if (table.hasUniPk)>
         <template v-if="selectedRowKeys.length > 0">
             <a-button @click="enableSelected" type="default">
                 <template #icon>
@@ -90,6 +91,7 @@
                 </template>删除
             </a-button>
         </template>
+        </#if>
     </div>
     <a-table :columns="columns" :data-source="dataPageList.list" :row-selection="rowSelection" class="list-table" :scroll="{ x: 1300 }" :pagination="false" :rowClassName="(record, index) => (index % 2 === 1 ? 'table-striped' : null)"<#if (table.hasUniPk)><#list pks as column><#include "/include/column/properties.ftl"> row-key="${fieldName}"</#list></#if> size="small">
         <template #action="{record, index}">
@@ -123,7 +125,7 @@
         </template>
     </a-table>
     <a-pagination v-model:current="pageNum" v-model:pageSize="pageSize" :total="dataPageList.total" :page-size-options="pageSizeOptions" show-size-changer show-quick-jumper></a-pagination>
-    <${tablePath}-add-or-edit<#list pks as column><#include "/include/column/properties.ftl"> :${columnPath}="editPk.${fieldName}"</#list> :visible="addOrEditDrawerVisible" :operateType="operateType" @save="save" />
+    <${tablePath}-add-or-edit :pk="editPk" :visible="addOrEditDrawerVisible" :operateType="operateType" @save="save" />
 </template>
 
 <script lang="ts">
@@ -131,7 +133,9 @@ import { defineComponent, reactive, provide, onMounted } from 'vue'
 import common from '@/composables/common'
 import { pageListSearch, execSelected } from '@/composables/requests'
 import ${className}AddOrEdit from './${className}AddOrEdit.vue'
+<#if (table.hasUniPk)>
 import { getSelection } from './composables/${classNameFirstLower}Select'
+</#if>
 import { getOperations } from './composables/${classNameFirstLower}Operate'
 
 const columns = [
@@ -171,7 +175,9 @@ export default defineComponent({
         })
 
         const { pageNum, pageSize, dataPageList, search } = pageListSearch({ url: '/${tablePath}/page-list', method: 'GET' }, searchParams<#if !(table.hasUniPk)>, (list: any[]) => list.map(item => ({ ...item, key: <#list pks as column><#include "/include/column/properties.ftl">item.${fieldName}<#if column?has_next> + ':' + </#if></#list> }))</#if>)
-        const { <#if (table.hasUniPk)>rowSelection, </#if>selectedRowKeys, selectedRows, emptySelected } = getSelection(dataPageList)
+        <#if (table.hasUniPk)>
+        const { rowSelection, selectedRowKeys, selectedRows, emptySelected } = getSelection(dataPageList)
+        </#if>
 
         const { editPk, addOrEditDrawerVisible, operateType, add, del, edit<#if table.validStatusColumn??>, switchDeleted</#if>, save } = getOperations(dataPageList, search)
         provide('closeAddOrEditDrawer', () => addOrEditDrawerVisible.value = false)
@@ -184,9 +190,9 @@ export default defineComponent({
             columns,
             <#if (table.hasUniPk)>
             rowSelection,
-            </#if>
             selectedRowKeys,
             selectedRows,
+            </#if>
             pageSizeOptions: common.PageSizeOptions,
             searchParams, pageNum, pageSize,
             search,
@@ -201,18 +207,20 @@ export default defineComponent({
             switchDeleted,
             </#if>
             del,
+            <#if (table.hasUniPk)>
             disableSelected: execSelected({ url: '/${tablePath}/disable', method: 'PATCH' }, selectedRowKeys, pksField, '禁用', () => {
-                selectedRows.value.forEach(item => item.deleted = 1)
+                selectedRows.value.forEach((item: any) => item.deleted = 1)
                 emptySelected()
             }),
             enableSelected: execSelected({ url: '/${tablePath}/enable', method: 'PATCH' }, selectedRowKeys, pksField, '启用', () => {
-                selectedRows.value.forEach(item => item.deleted = 0)
+                selectedRows.value.forEach((item: any) => item.deleted = 0)
                 emptySelected()
             }),
             deleteSelected: execSelected({ url: '/${tablePath}/delete', method: 'DELETE' }, selectedRowKeys, pksField, '删除', () => {
                 search()
                 emptySelected()
             })
+            </#if>
         }
     }
 })
