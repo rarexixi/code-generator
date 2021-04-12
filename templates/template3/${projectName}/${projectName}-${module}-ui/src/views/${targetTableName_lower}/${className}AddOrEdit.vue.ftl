@@ -161,7 +161,7 @@ export default defineComponent({
         const rules = {
             <#list table.columnsExceptBase as column>
             <#include "/include/column/properties.ftl">
-            <#if ((column.pk && !column.autoIncrement) && (!column.notRequired && !column.nullable && !(column.columnDefault??)))>
+            <#if ((column.pk && !column.autoIncrement) || (!column.notRequired && !column.nullable && !(column.columnDefault??)))>
             ${fieldName}: [
                 { <#if (isInteger)>type: 'integer', <#elseif (isDecimal)>type: 'float', </#if>required: true, message: '${columnComment}不能为空', trigger: '<#if (column.select || column.fkSelect)>change<#else>blur</#if>' }
             ],
