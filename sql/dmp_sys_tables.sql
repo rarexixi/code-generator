@@ -185,7 +185,7 @@ create table `dmp_sys_menu_permission`
     comment ='菜单-权限';
 
 -- 操作者-模块
-create table `dmp_sys_role_module`
+create table `dmp_sys_operator_module`
 (
     `operator_id`   int unsigned     not null comment '操作者ID',
     `operator_type` tinyint unsigned not null comment '操作者类型(1用户 2部门 3角色)',
@@ -199,7 +199,7 @@ create table `dmp_sys_role_module`
     comment ='操作者-模块';
 
 -- 操作者-菜单
-create table `dmp_sys_role_menu`
+create table `dmp_sys_operator_menu`
 (
     `operator_id`   int unsigned     not null comment '操作者ID',
     `operator_type` tinyint unsigned not null comment '操作者类型(1用户 2部门 3角色)',
@@ -213,7 +213,7 @@ create table `dmp_sys_role_menu`
     comment ='操作者-菜单';
 
 -- 操作者-权限
-create table `dmp_sys_role_permission`
+create table `dmp_sys_operator_permission`
 (
     `operator_id`   int unsigned     not null comment '操作者ID',
     `operator_type` tinyint unsigned not null comment '操作者类型(1用户 2部门 3角色)',
