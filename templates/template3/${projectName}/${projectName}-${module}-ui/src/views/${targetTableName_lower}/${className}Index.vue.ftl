@@ -5,126 +5,136 @@
         <a-breadcrumb-item>${tableComment}管理</a-breadcrumb-item>
         <a-breadcrumb-item>${tableComment}列表</a-breadcrumb-item>
     </a-breadcrumb>
-    <a-form ref="searchForm" :model="searchParams" @finish="search" layout="inline" class="search-form">
-    <#list table.indexes as column>
-        <#include "/include/column/properties.ftl">
-        <#if column.validStatus>
-        <#elseif column.select>
-        <a-form-item label="${columnComment}">
-            <a-select v-model:value="searchParams.${fieldName}" allow-clear placeholder="全部">
-                <template v-for="(item, index) in ${fieldNameExceptKey}SelectList">
-                    <a-select-option :value="item.value">{{item.text}}</a-select-option>
-                </template>
-            </a-select>
-        </a-form-item>
-        <#elseif column.fkSelect>
-        <a-form-item label="${columnComment}">
-            <a-select v-model:value="searchParams.${fieldName}" allow-clear placeholder="全部">
-                <template v-for="(v, k) in ${fieldNameExceptKey}SelectMap">
-                    <a-select-option :value="k">{{v.${column.fkSelectColumn.textName?uncap_first}}}</a-select-option>
-                </template>
-            </a-select>
-        </a-form-item>
-        <#elseif column.pk>
-        <a-form-item label="${columnComment}">
-            <a-input v-model:value.trim="searchParams.${fieldName}" type="text" allow-clear />
-        </a-form-item>
-        <#elseif (isInteger || isDecimal)>
-        <a-form-item label="${columnComment}">
-            <div style="display: flex">
-                <a-input-number v-model:value="searchParams.${fieldName}Min" style="flex: 1" />
-                <span>-</span>
-                <a-input-number v-model:value="searchParams.${fieldName}Max" style="flex: 1" />
-            </div>
-        </a-form-item>
-        <#elseif (isString)>
-        <a-form-item label="${columnComment}">
-            <a-input v-model:value.trim="searchParams.${fieldName}Contains" allow-clear />
-        </a-form-item>
-        <#elseif (isDate || isDateTime)>
-        <a-form-item label="${columnComment}">
-            <a-range-picker
-                    v-model:value="searchParams.${fieldName}Range"
-                    :show-time="{ hideDisabledOptions: true, defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')] }"
-                    range-separator="至"
-                    :placeholder="['开始日期', '结束日期']"
-                    format="YYYY-MM-DD HH:mm:ss"
-                    value-format="YYYY-MM-DD HH:mm:ss">
-            </a-range-picker>
-        </a-form-item>
-        </#if>
-        </#list>
-        <a-form-item>
-            <a-button type="primary" html-type="submit">
-                <template #icon>
-                    <search-outlined />
-                </template>搜索
-            </a-button>
-        </a-form-item>
-    </a-form>
+    <div class="search-form">
+        <a-form ref="searchForm" :model="searchParams" @finish="search" layout="inline">
+        <#list table.indexes as column>
+            <#include "/include/column/properties.ftl">
+            <#if column.validStatus>
+            <#elseif column.select>
+            <a-form-item label="${columnComment}">
+                <a-select v-model:value="searchParams.${fieldName}" allow-clear placeholder="全部">
+                    <template v-for="(item, index) in ${fieldNameExceptKey}SelectList">
+                        <a-select-option :value="item.value">{{item.text}}</a-select-option>
+                    </template>
+                </a-select>
+            </a-form-item>
+            <#elseif column.fkSelect>
+            <a-form-item label="${columnComment}">
+                <a-select v-model:value="searchParams.${fieldName}" allow-clear placeholder="全部">
+                    <template v-for="(v, k) in ${fieldNameExceptKey}SelectMap">
+                        <a-select-option :value="k">{{v.${column.fkSelectColumn.textName?uncap_first}}}</a-select-option>
+                    </template>
+                </a-select>
+            </a-form-item>
+            <#elseif column.pk>
+            <a-form-item label="${columnComment}">
+                <a-input<#if isInteger>-number</#if> v-model:value<#if isString>.trim</#if>="searchParams.${fieldName}" allow-clear />
+            </a-form-item>
+            <#elseif (isInteger || isDecimal)>
+            <a-form-item label="${columnComment}">
+                <div style="display: flex">
+                    <a-input-number v-model:value="searchParams.${fieldName}Min" style="flex: 1" />
+                    <span>-</span>
+                    <a-input-number v-model:value="searchParams.${fieldName}Max" style="flex: 1" />
+                </div>
+            </a-form-item>
+            <#elseif (isString)>
+            <a-form-item label="${columnComment}">
+                <a-input v-model:value.trim="searchParams.${fieldName}Contains" allow-clear />
+            </a-form-item>
+            <#elseif (isDate)>
+            <a-form-item label="${columnComment}">
+                <a-range-picker
+                        v-model:value="searchParams.${fieldName}Range"
+                        :placeholder="['开始日期', '结束日期']"
+                        format="YYYY-MM-DD"
+                        value-format="YYYY-MM-DD" />
+            </a-form-item>
+            <#elseif (isDateTime)>
+            <a-form-item label="${columnComment}">
+                <a-range-picker
+                        v-model:value="searchParams.${fieldName}Range"
+                        :placeholder="['开始时间', '结束时间']"
+                        show-time
+                        format="YYYY-MM-DD HH:mm:ss"
+                        value-format="YYYY-MM-DD HH:mm:ss" />
+            </a-form-item>
+            </#if>
+            </#list>
+            <a-form-item>
+                <a-button type="primary" html-type="submit">
+                    <template #icon>
+                        <search-outlined />
+                    </template>搜索
+                </a-button>
+            </a-form-item>
+        </a-form>
+    </div>
 <#--    <#if table.validStatusColumn??>-->
 <#--    <deleted-tabs v-model="${table.validStatusColumn.targetName?uncap_first}" @change="changeValidSearch"></deleted-tabs>-->
 <#--    <#else>-->
 <#--    <a-divider></a-divider>-->
 <#--    </#if>-->
-    <div class="operate-btn-group">
-        <a-button @click="add" type="primary">
-            <template #icon>
-                <plus-outlined />
-            </template>添加
-        </a-button>
-        <#if (table.hasUniPk)>
-        <template v-if="selectedRowKeys.length > 0">
-            <a-button @click="enableSelected" type="default">
+    <div class="list-table">
+        <div class="operation-btns">
+            <a-button @click="add" type="primary">
                 <template #icon>
-                    <check-outlined />
-                </template>启用
+                    <plus-outlined />
+                </template>添加
             </a-button>
-            <a-button @click="disableSelected" type="default">
-                <template #icon>
-                    <stop-outlined />
-                </template>禁用
-            </a-button>
-            <a-button @click="deleteSelected" type="danger">
-                <template #icon>
-                    <delete-outlined />
-                </template>删除
-            </a-button>
-        </template>
-        </#if>
-    </div>
-    <a-table :columns="columns" :data-source="dataPageList.list" :row-selection="rowSelection" class="list-table" :scroll="{ x: 1300 }" :pagination="false" :rowClassName="(record, index) => (index % 2 === 1 ? 'table-striped' : null)"<#if (table.hasUniPk)><#list pks as column><#include "/include/column/properties.ftl"> row-key="${fieldName}"</#list></#if> size="small">
-        <template #action="{record, index}">
-            <div class="table-operations">
-                <#if table.validStatusColumn??>
-                <#assign column = table.validStatusColumn>
-                <#include "/include/column/properties.ftl">
-                <a-popconfirm :title="`确定<@mapperEl$ "record.${fieldName} === 1 ? '启用' : '禁用'"/>吗？`" ok-text="确定" cancel-text="取消" @confirm="switchDeleted(record)">
-                    <a v-if="record.deleted" class="enable">
+            <#if (table.hasUniPk)>
+            <template v-if="selectedRowKeys.length > 0">
+                <a-button @click="enableSelected" type="success">
+                    <template #icon>
                         <check-outlined />
+                    </template>启用
+                </a-button>
+                <a-button @click="disableSelected" type="warning">
+                    <template #icon>
                         <stop-outlined />
-                    </a>
-                    <a v-else class="disable">
-                        <check-outlined />
-                        <stop-outlined />
-                    </a>
-                </a-popconfirm>
-                </#if>
-                <a @click="edit(record, index)" class="text-primary">
-                    <edit-outlined />
-                </a>
-                <a @click="edit(record, index, true)" class="text-primary">
-                    <copy-outlined />
-                </a>
-                <a-popconfirm title="确定删除吗？" ok-text="确定" cancel-text="取消" @confirm="del(record)">
-                    <a class="text-danger">
+                    </template>禁用
+                </a-button>
+                <a-button @click="deleteSelected" type="danger">
+                    <template #icon>
                         <delete-outlined />
+                    </template>删除
+                </a-button>
+            </template>
+            </#if>
+        </div>
+        <a-table :columns="columns" :data-source="dataPageList.list" :row-selection="rowSelection" :scroll="{ x: 1300 }" :pagination="false" :rowClassName="(record, index) => (index % 2 === 1 ? 'table-striped' : null)"<#if (table.hasUniPk)><#list pks as column><#include "/include/column/properties.ftl"> row-key="${fieldName}"</#list></#if> size="small">
+            <template #action="{record, index}">
+                <div class="table-operations">
+                    <#if table.validStatusColumn??>
+                    <#assign column = table.validStatusColumn>
+                    <#include "/include/column/properties.ftl">
+                    <a-popconfirm :title="`确定<@mapperEl$ "record.${fieldName} === 1 ? '启用' : '禁用'"/>吗？`" ok-text="确定" cancel-text="取消" @confirm="switchDeleted(record)">
+                        <a v-if="record.deleted" class="enable">
+                            <check-outlined />
+                            <stop-outlined />
+                        </a>
+                        <a v-else class="disable">
+                            <check-outlined />
+                            <stop-outlined />
+                        </a>
+                    </a-popconfirm>
+                    </#if>
+                    <a @click="edit(record, index)" class="text-primary">
+                        <edit-outlined />
                     </a>
-                </a-popconfirm>
-            </div>
-        </template>
-    </a-table>
-    <a-pagination v-model:current="pageNum" v-model:pageSize="pageSize" :total="dataPageList.total" :page-size-options="pageSizeOptions" show-size-changer show-quick-jumper></a-pagination>
+                    <a @click="edit(record, index, true)" class="text-primary">
+                        <copy-outlined />
+                    </a>
+                    <a-popconfirm title="确定删除吗？" ok-text="确定" cancel-text="取消" @confirm="del(record)">
+                        <a class="text-danger">
+                            <delete-outlined />
+                        </a>
+                    </a-popconfirm>
+                </div>
+            </template>
+        </a-table>
+        <a-pagination v-model:current="pageNum" v-model:pageSize="pageSize" :total="dataPageList.total" :page-size-options="pageSizeOptions" show-size-changer show-quick-jumper></a-pagination>
+    </div>
     <${tablePath}-add-or-edit :pk="editPk" :visible="addOrEditDrawerVisible" :operateType="operateType" @save="save" />
 </template>
 
@@ -160,16 +170,14 @@ export default defineComponent({
         <#include "/include/column/properties.ftl">
         <#if (column.validStatus)>
         <#elseif (column.select || column.fkSelect || column.pk)>
-            ${fieldName}: '',
+            ${fieldName}: <#if isString>''<#else>undefined</#if>,
         <#elseif (isInteger || isDecimal)>
             ${fieldName}Min: '',
             ${fieldName}Max: '',
-        <#elseif (isDate || isTime || isDateTime)>
-            ${fieldName}Range: [],
-        <#elseif (isContent)>
         <#elseif (isString)>
             ${fieldName}Contains: '',
-        <#else>
+        <#elseif (isDate || isDateTime)>
+            ${fieldName}Range: [],
         </#if>
         </#list>
         })

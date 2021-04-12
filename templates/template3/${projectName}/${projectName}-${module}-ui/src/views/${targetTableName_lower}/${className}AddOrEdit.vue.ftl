@@ -31,13 +31,13 @@
                 <#elseif (isInteger)>
                 <a-col :span="24">
                     <a-form-item ref="${fieldName}" label="${columnComment}" name="${fieldName}">
-                        <a-input-number v-model:value.trim="detail.${fieldName}" />
+                        <a-input-number v-model:value="detail.${fieldName}" />
                     </a-form-item>
                 </a-col>
                 <#elseif (isDecimal)>
                 <a-col :span="24">
                     <a-form-item ref="${fieldName}" label="${columnComment}" name="${fieldName}">
-                        <a-input-number v-model:value.trim="detail.${fieldName}" />
+                        <a-input-number v-model:value="detail.${fieldName}" />
                     </a-form-item>
                 </a-col>
                 <#elseif (isDate)>
