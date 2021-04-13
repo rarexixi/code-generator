@@ -11,7 +11,7 @@
                 <a-col :span="24">
                     <a-form-item ref="${fieldName}" label="${columnComment}" name="${fieldName}">
                         <a-select v-model:value="detail.${fieldName}" allow-clear placeholder="请选择">
-                            <template v-for="(item, index) in ${fieldNameExceptKey}SelectList">
+                            <template v-for="(item, index) in ${fieldNameExceptKey}SelectList" :key="index">
                                 <a-select-option :value="item.value">{{item.text}}</a-select-option>
                             </template>
                         </a-select>
@@ -21,8 +21,8 @@
                 <a-col :span="24">
                     <a-form-item ref="${fieldName}" label="${columnComment}" name="${fieldName}">
                         <a-select v-model:value="detail.${fieldName}" allow-clear placeholder="请选择">
-                            <template v-for="(v, k) in ${fieldNameExceptKey}SelectMap">
-                                <a-select-option :value="k">{{v.${column.fkSelectColumn.textName?uncap_first}}}</a-select-option>
+                            <template v-for="(item, index) in ${fieldNameExceptKey}SelectList" :key="index">
+                                <a-select-option :value="item.${column.fkSelectColumn.valueName?uncap_first}">{{item.${column.fkSelectColumn.textName?uncap_first}}}</a-select-option>
                             </template>
                         </a-select>
                     </a-form-item>
@@ -84,6 +84,26 @@ import { defineComponent, inject, reactive, ref, toRaw, toRefs, watch } from 'vu
 import common from '@/composables/common'
 import { request } from '@/utils/request-utils'
 
+const rules = {
+    <#list table.columnsExceptBase as column>
+    <#include "/include/column/properties.ftl">
+    <#if ((column.pk && !column.autoIncrement) || (!column.notRequired && !column.nullable && !(column.columnDefault??)))>
+    ${fieldName}: [
+        { <#if (isInteger)>type: 'integer', <#elseif (isDecimal)>type: 'float', </#if>required: true, message: '${columnComment}不能为空', trigger: '<#if (column.select || column.fkSelect)>change<#else>blur</#if>' }
+    ],
+    </#if>
+    </#list>
+}
+
+<#list table.selectColumns as column>
+<#include "/include/column/properties.ftl">
+const ${fieldNameExceptKey}SelectList = [
+    <#list column.selectOptions as option>
+    { <#if (isInteger)>value: ${option.value}, text: '${option.text}'<#else>value: '${option.value}', text: '${option.text}'</#if> }<#if option?has_next>, </#if>
+    </#list>
+]
+</#list>
+
 export default defineComponent({
     props: {
         pk: {
@@ -98,7 +118,14 @@ export default defineComponent({
         visible: {
             type: Boolean,
             default: () => false
+        },
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        ${fieldNameExceptKey}SelectList: {
+            type: Array,
+            default: () => []
         }
+        </#list>
     },
     setup(props, { emit }) {
         const { pk, operateType, visible } = toRefs(props)
@@ -158,16 +185,6 @@ export default defineComponent({
 
         watch(visible, getDetail)
 
-        const rules = {
-            <#list table.columnsExceptBase as column>
-            <#include "/include/column/properties.ftl">
-            <#if ((column.pk && !column.autoIncrement) || (!column.notRequired && !column.nullable && !(column.columnDefault??)))>
-            ${fieldName}: [
-                { <#if (isInteger)>type: 'integer', <#elseif (isDecimal)>type: 'float', </#if>required: true, message: '${columnComment}不能为空', trigger: '<#if (column.select || column.fkSelect)>change<#else>blur</#if>' }
-            ],
-            </#if>
-            </#list>
-        }
         const save = () => {
             formRef.value.validate().then(() => {
                 const requestConfig: AxiosRequestConfig = operateType.value === common.DataOperationType.update
@@ -189,6 +206,10 @@ export default defineComponent({
         }
 
         return {
+            <#list table.selectColumns as column>
+            <#include "/include/column/properties.ftl">
+            ${fieldNameExceptKey}SelectList,
+            </#list>
             title, detail,
             formRef,
             rules,

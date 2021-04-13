@@ -13,8 +13,8 @@ generator:
     out: /Users/xi/Projects/                          # 输出路径
   files:
     ignore: include/, .DS_Store
-    aggregate: src/router/index.js, views/Home.vue
-    copy: public/favicon.ico, public/index.html, src/assets/, src/components/, src/mixin/, src/store/, src/utils/, src/App.vue, src/base_config.js, src/main.js, babel.config.js, .gitignore
+    aggregate: src/router/index.ts.ftl, views/Home.vue
+    copy: public/favicon.ico, public/index.html, src/assets/, src/components/, src/composables/, src/mixin/, src/store/, src/utils/, src/App.vue, src/base_config.js, src/main.js, .browserslistrc, .eslintrc.js, .gitignore, babel.config.js, package.json, tsconfig.json, vue.config.js
 
   columns:
     base:
@@ -38,31 +38,73 @@ generator:
           valid: 0
           invalid: 1
 
+    select:
+      - column-name-set: type
+        table-name: dmp_sys_role
+        options:
+          - value: 1
+            text: 系统角色
+          - value: 2
+            text: 数据角色
+      - column-name-set: type
+        table-name: dmp_sys_permission
+        options:
+          - value: 0
+            text: 权限分组
+          - value: 1
+            text: 权限
+      - column-name-set: path_type
+        table-name: dmp_sys_menu
+        options:
+          - value: 0
+            text: vue路由
+          - value: 1
+            text: 相对路径
+          - value: 2
+            text: 绝对路径
+      - column-name-set: type
+        table-name: dmp_sys_menu
+        options:
+          - value: 0
+            text: 目录
+          - value: 1
+            text: 菜单
+      - column-name-set: type
+        table-name: dmp_sys_option
+        options:
+          - value: 0
+            text: 目录
+          - value: 1
+            text: 菜单
+      - column-name-set: type
+        table-name: dmp_sys_config
+        options:
+          - value: 0
+            text: 后台配置
+          - value: 1
+            text: 页面配置
+      - column-name-set: operator_type
+        options:
+          - value: 1
+            text: 用户
+          - value: 2
+            text: 部门
+          - value: 3
+            text: 角色
+
     fk-select:
-      - column-name-set: module_id
-        table-name: dmp_data_privileges
-        fk:
-          foreign-table-name: dmp_sys_module
-          value-column-name: module_id
-          text-column-name: module_name
       - column-name-set: module_id
         table-name: dmp_sys_menu
         fk:
           foreign-table-name: dmp_sys_module
           value-column-name: module_id
           text-column-name: module_name
-      - column-name-set: env_id
-        table-name: dmp_sys_config
+      - column-name-set: dept_id
+        table-name: dmp_sys_user
         fk:
-          foreign-table-name: dmp_sys_env
-          value-column-name: env_id
-          text-column-name: env_name
-      - column-name-set: env_id
-        table-name: dmp_sys_option
-        fk:
-          foreign-table-name: dmp_sys_env
-          value-column-name: env_id
-          text-column-name: env_name
+          foreign-table-name: dmp_sys_dept
+          value-column-name: id
+          text-column-name: dept_name
 
   # 公共自定义属性
   common-properties:

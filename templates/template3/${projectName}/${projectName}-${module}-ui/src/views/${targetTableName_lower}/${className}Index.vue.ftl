@@ -13,7 +13,7 @@
             <#elseif column.select>
             <a-form-item label="${columnComment}">
                 <a-select v-model:value="searchParams.${fieldName}" allow-clear placeholder="全部">
-                    <template v-for="(item, index) in ${fieldNameExceptKey}SelectList">
+                    <template v-for="(item, index) in ${fieldNameExceptKey}SelectList" :key="index">
                         <a-select-option :value="item.value">{{item.text}}</a-select-option>
                     </template>
                 </a-select>
@@ -21,8 +21,8 @@
             <#elseif column.fkSelect>
             <a-form-item label="${columnComment}">
                 <a-select v-model:value="searchParams.${fieldName}" allow-clear placeholder="全部">
-                    <template v-for="(v, k) in ${fieldNameExceptKey}SelectMap">
-                        <a-select-option :value="k">{{v.${column.fkSelectColumn.textName?uncap_first}}}</a-select-option>
+                    <template v-for="(item, index) in ${fieldNameExceptKey}SelectList" :key="index">
+                        <a-select-option :value="item.${column.fkSelectColumn.valueName?uncap_first}">{{item.${column.fkSelectColumn.textName?uncap_first}}}</a-select-option>
                     </template>
                 </a-select>
             </a-form-item>
@@ -32,11 +32,9 @@
             </a-form-item>
             <#elseif (isInteger || isDecimal)>
             <a-form-item label="${columnComment}">
-                <div style="display: flex">
-                    <a-input-number v-model:value="searchParams.${fieldName}Min" style="flex: 1" />
-                    <span>-</span>
-                    <a-input-number v-model:value="searchParams.${fieldName}Max" style="flex: 1" />
-                </div>
+                <a-input-number v-model:value="searchParams.${fieldName}Min" />
+                <span>-</span>
+                <a-input-number v-model:value="searchParams.${fieldName}Max" />
             </a-form-item>
             <#elseif (isString)>
             <a-form-item label="${columnComment}">
@@ -135,13 +133,13 @@
         </a-table>
         <a-pagination v-model:current="pageNum" v-model:pageSize="pageSize" :total="dataPageList.total" :page-size-options="pageSizeOptions" show-size-changer show-quick-jumper></a-pagination>
     </div>
-    <${tablePath}-add-or-edit :pk="editPk" :visible="addOrEditDrawerVisible" :operateType="operateType" @save="save" />
+    <${tablePath}-add-or-edit :pk="editPk" :visible="addOrEditDrawerVisible" :operateType="operateType" @save="save"<#list table.fkSelectColumns as column><#include "/include/column/properties.ftl"> :${columnExceptKey}-select-list="${fieldNameExceptKey}SelectList"</#list> />
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, provide, onMounted } from 'vue'
 import common from '@/composables/common'
-import { pageListSearch, execSelected } from '@/composables/requests'
+import { <#if (table.fkSelectColumns?size > 0)>listSearch, </#if>pageListSearch, execSelected } from '@/composables/requests'
 import ${className}AddOrEdit from './${className}AddOrEdit.vue'
 <#if (table.hasUniPk)>
 import { getSelection } from './composables/${classNameFirstLower}Select'
@@ -160,6 +158,15 @@ const columns = [
 ]
 
 const pksField = 'ids'
+
+<#list table.selectColumns as column>
+<#include "/include/column/properties.ftl">
+const ${fieldNameExceptKey}SelectList = [
+    <#list column.selectOptions as option>
+    { <#if (isInteger)>value: ${option.value}, text: '${option.text}'<#else>value: '${option.value}', text: '${option.text}'</#if> }<#if option?has_next>, </#if>
+    </#list>
+]
+</#list>
 
 export default defineComponent({
     components: { ${className}AddOrEdit },
@@ -187,11 +194,25 @@ export default defineComponent({
         const { rowSelection, selectedRowKeys, selectedRows, emptySelected } = getSelection(dataPageList)
         </#if>
 
+        <#list table.fkSelectColumns as column>
+        <#include "/include/column/properties.ftl">
+        const ${fieldNameExceptKey}SerarchParams = reactive<any>({
+            <#list column.fkSelectColumn.conditions as condition>
+            ${condition.fieldTargetName?uncap_first}: '${condition.value}'<#if condition?has_next>,</#if>
+            </#list>
+        })
+        const get${propertyExceptKey}SelectList = listSearch({ url: '/${column.fkSelectColumn.foreignTargetTableName?replace("_", "-")}/list', method: 'GET' }, ${fieldNameExceptKey}SerarchParams)
+        </#list>
+
         const { editPk, addOrEditDrawerVisible, operateType, add, del, edit<#if table.validStatusColumn??>, switchDeleted</#if>, save } = getOperations(dataPageList, search)
         provide('closeAddOrEditDrawer', () => addOrEditDrawerVisible.value = false)
 
         onMounted(() => {
             search()
+            <#list table.fkSelectColumns as column>
+            <#include "/include/column/properties.ftl">
+            get${propertyExceptKey}SelectList.search()
+            </#list>
         })
 
         return {
@@ -202,6 +223,14 @@ export default defineComponent({
             selectedRows,
             </#if>
             pageSizeOptions: common.PageSizeOptions,
+            <#list table.selectColumns as column>
+            <#include "/include/column/properties.ftl">
+            ${fieldNameExceptKey}SelectList,
+            </#list>
+            <#list table.fkSelectColumns as column>
+            <#include "/include/column/properties.ftl">
+            ${fieldNameExceptKey}SelectList: get${propertyExceptKey}SelectList.dataList,
+            </#list>
             searchParams, pageNum, pageSize,
             search,
             dataPageList,
