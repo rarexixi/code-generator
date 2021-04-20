@@ -22,15 +22,4 @@ public class ${className}DetailResponse extends ${className}ListItemResponse {
     @ApiModelProperty(value = "${columnComment}")
     private String ${fieldNameExceptKey}Text;
     </#list>
-    <#list table.fkSelectColumns as column>
-    <#include "/include/column/properties.ftl">
-
-    private void set${propertyExceptKey}Text (String ${fieldNameExceptKey}Text) {
-        this.${fieldNameExceptKey}Text = ${fieldNameExceptKey}Text;
-    }
-
-    private String get${propertyExceptKey}Text() {
-        return ${fieldNameExceptKey}Text;
-    }
-    </#list>
 }

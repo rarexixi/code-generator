@@ -42,15 +42,4 @@ public class ${className}ListItemResponse implements Serializable {
     <#assign columnIndex = columnIndex+1>
     private ${fieldType} ${fieldName};
     </#list>
-    <#list table.columns as column>
-    <#include "/include/column/properties.ftl">
-
-    public ${fieldType} get${propertyName}() {
-        return ${fieldName};
-    }
-
-    public void set${propertyName}(${fieldType} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
-    </#list>
 }
