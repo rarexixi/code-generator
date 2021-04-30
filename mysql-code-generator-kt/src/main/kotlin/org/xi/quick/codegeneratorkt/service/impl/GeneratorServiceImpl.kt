@@ -233,7 +233,7 @@ class GeneratorServiceImpl : GeneratorService {
         putAllCommonProperties(dataModel)
 
         val relativePath = getActualPath(outModel.relativePath, dataModel)
-        logger.info("正在删除${relativePath}")
+        logger.info("正在删除$relativePath")
         val absolutePath = getAbsoluteFilePath(relativePath)
         File(absolutePath).delete()
     }
@@ -254,8 +254,7 @@ class GeneratorServiceImpl : GeneratorService {
      */
     private fun getAbsoluteFilePath(relativePath: String): String {
         val directory = File(GeneratorProperties.paths!!.out)
-        return directory.absolutePath + SystemUtils.SYSTEM_SLASH +
-                (if (relativePath.endsWith(".ftl")) relativePath.substring(0, relativePath.length - 4) else relativePath)
+        return directory.absolutePath + SystemUtils.SYSTEM_SLASH + relativePath
     }
 
     private fun getAbsoluteDirectory(absolutePath: String): String {
@@ -271,8 +270,8 @@ class GeneratorServiceImpl : GeneratorService {
      * @return
      */
     private fun getActualPath(path: String, properties: Map<Any, Any>): String {
-
-        return Regex("""\$\{[^\}]*\}""").replace(path) {
+        val targetPath = if (path.endsWith(".ftl")) path.substring(0, path.length - 4) else path
+        return Regex("""\$\{[^\}]*\}""").replace(targetPath) {
 
             val group = it.value
             val tmp = group.substring(2, group.length - 1)
