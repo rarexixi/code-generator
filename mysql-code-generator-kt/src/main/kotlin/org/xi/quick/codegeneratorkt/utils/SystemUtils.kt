@@ -10,7 +10,7 @@ object SystemUtils {
         if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
             SYSTEM_SLASH = """\"""
             REGEX_SYSTEM_SLASH = """\\"""
-            NEW_LINE = "\r\n"
+            NEW_LINE = "\n"
         } else {
             SYSTEM_SLASH = "/"
             REGEX_SYSTEM_SLASH = "/"
