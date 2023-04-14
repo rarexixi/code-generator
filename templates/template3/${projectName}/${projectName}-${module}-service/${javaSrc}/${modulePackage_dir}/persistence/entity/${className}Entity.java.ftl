@@ -1,5 +1,5 @@
 <#include "/include/table/properties.ftl">
-package ${modulePackage}.presentation.entity;
+package ${modulePackage}.persistence.entity;
 
 import ${modulePackage}.model.BaseEntity;
 

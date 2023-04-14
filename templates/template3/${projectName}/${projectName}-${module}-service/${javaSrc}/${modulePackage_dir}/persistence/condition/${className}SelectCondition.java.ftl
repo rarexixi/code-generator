@@ -1,5 +1,5 @@
 <#include "/include/table/properties.ftl">
-package ${modulePackage}.presentation.condition;
+package ${modulePackage}.persistence.condition;
 
 import ${commonPackage}.models.SelectCondition;
 

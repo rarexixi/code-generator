@@ -1,4 +1,4 @@
-package ${modulePackage}.presentation.mapper;
+package ${modulePackage}.persistence.mapper;
 
 import ${commonPackage}.models.SelectCondition;
 import ${commonPackage}.models.UpdateCondition;

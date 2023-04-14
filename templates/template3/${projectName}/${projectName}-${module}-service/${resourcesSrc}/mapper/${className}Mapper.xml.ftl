@@ -4,15 +4,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="${modulePackage}.presentation.mapper.${className}Mapper">
+<mapper namespace="${modulePackage}.persistence.mapper.${className}Mapper">
 
-    <resultMap id="BaseResultMap" type="${modulePackage}.presentation.entity.${className}Entity">
+    <resultMap id="BaseResultMap" type="${modulePackage}.persistence.entity.${className}Entity">
         <#list table.columns as column>
         <#include "/include/column/properties.ftl">
         <result property="${fieldName}" column="${column.columnName}"/>
         </#list>
     </resultMap>
-    <resultMap id="ExtResultMap" extends="BaseResultMap" type="${modulePackage}.presentation.entity.${className}EntityExt">
+    <resultMap id="ExtResultMap" extends="BaseResultMap" type="${modulePackage}.persistence.entity.${className}EntityExt">
         <#list table.fkSelectColumns as column>
         <#include "/include/column/properties.ftl">
         <result property="${fieldNameExceptKey}Text" column="${columnExceptKey}_text"/>

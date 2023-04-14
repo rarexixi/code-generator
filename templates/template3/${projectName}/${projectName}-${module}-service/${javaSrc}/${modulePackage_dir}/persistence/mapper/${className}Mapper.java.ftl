@@ -1,10 +1,10 @@
 <#include "/include/table/properties.ftl">
-package ${modulePackage}.presentation.mapper;
+package ${modulePackage}.persistence.mapper;
 
-import ${modulePackage}.presentation.condition.${className}SelectCondition;
-import ${modulePackage}.presentation.condition.${className}UpdateCondition;
-import ${modulePackage}.presentation.entity.${className}Entity;
-import ${modulePackage}.presentation.entity.${className}EntityExt;
+import ${modulePackage}.persistence.condition.${className}SelectCondition;
+import ${modulePackage}.persistence.condition.${className}UpdateCondition;
+import ${modulePackage}.persistence.entity.${className}Entity;
+import ${modulePackage}.persistence.entity.${className}EntityExt;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

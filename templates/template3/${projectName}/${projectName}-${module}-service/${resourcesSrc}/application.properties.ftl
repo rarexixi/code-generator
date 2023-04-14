@@ -18,7 +18,7 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 # endregion
 #
 # region mybatis
-mybatis.type-aliases-package=${modulePackage}.presentation.mapper
+mybatis.type-aliases-package=${modulePackage}.persistence.mapper
 mybatis.mapper-locations=classpath:mapper/*.xml
 mybatis.configuration.cache-enabled=false
 mybatis.configuration.lazy-loading-enabled=false

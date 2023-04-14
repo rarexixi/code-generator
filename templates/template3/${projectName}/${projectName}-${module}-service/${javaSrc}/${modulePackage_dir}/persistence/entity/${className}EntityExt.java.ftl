@@ -1,5 +1,5 @@
 <#include "/include/table/properties.ftl">
-package ${modulePackage}.presentation.entity;
+package ${modulePackage}.persistence.entity;
 
 import java.math.BigDecimal;
 import java.util.Collection;
