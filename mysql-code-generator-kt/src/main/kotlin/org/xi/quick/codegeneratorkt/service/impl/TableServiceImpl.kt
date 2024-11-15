@@ -70,8 +70,8 @@ class TableServiceImpl : TableService {
                 val columnList = columnsMapper.getColumnsWithIndex(getDatabaseName(), table.tableName!!)
                 val statisticsList = indexesMapper.getIndexes(getDatabaseName(), table.tableName!!)
 
-                val columnModels = columnList.map { it -> ColumnModel(it) }
-                val statisticModels = statisticsList.map { it -> IndexModel(it) }
+                val columnModels = columnList.map { ColumnModel(it) }
+                val statisticModels = statisticsList.map { IndexModel(it) }
 
                 TableModel(table, columnModels, statisticModels)
             }

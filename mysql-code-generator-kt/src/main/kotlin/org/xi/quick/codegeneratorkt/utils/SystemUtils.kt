@@ -7,7 +7,7 @@ object SystemUtils {
     var NEW_LINE: String
 
     init {
-        if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
+        if (System.getProperty("os.name").lowercase().startsWith("win")) {
             SYSTEM_SLASH = """\"""
             REGEX_SYSTEM_SLASH = """\\"""
             NEW_LINE = "\n"

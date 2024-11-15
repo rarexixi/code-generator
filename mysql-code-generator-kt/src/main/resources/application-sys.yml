@@ -110,7 +110,7 @@ generator:
   common-properties:
     projectName: dmp
     module: sys
-    serviceApplicatioName: DmpSysApplication
+    serviceApplicationName: DmpSysApplication
     servicePort: 8080
     modulePackage: org.xi.dmp.sys
     commonPackage: org.xi.dmp.common

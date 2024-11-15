@@ -1,6 +1,7 @@
 package org.xi.quick.codegeneratorkt.model
 
 import org.xi.quick.codegeneratorkt.extensions.getClassName
+import org.xi.quick.codegeneratorkt.extensions.getPluralTableName
 import org.xi.quick.codegeneratorkt.extensions.getPropertyName
 import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
 
@@ -39,6 +40,7 @@ class TableProperty {
 
     var tableName: String = ""
     var targetTableName: String = ""
+    var pluralTableName: String = ""
 }
 
 class ColumnProperties {
@@ -167,6 +169,13 @@ class FkSelectColumn {
      */
     val foreignTargetTableName: String
         get() = foreignTableName.getTargetTableName()
+
+    /**
+     * 外键目标表名
+     */
+    val foreignPluralTableName: String
+        get() = foreignTableName.getPluralTableName()
+
     /**
      * 外键类名
      */

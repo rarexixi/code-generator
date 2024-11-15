@@ -1,8 +1,8 @@
 package org.xi.quick.codegeneratorkt.model
 
-import org.xi.quick.codegeneratorkt.configuration.properties.GeneratorProperties
 import org.xi.quick.codegeneratorkt.entity.Table
 import org.xi.quick.codegeneratorkt.extensions.getClassName
+import org.xi.quick.codegeneratorkt.extensions.getPluralTableName
 import org.xi.quick.codegeneratorkt.extensions.getTargetTableName
 import org.xi.quick.codegeneratorkt.extensions.isBaseColumn
 
@@ -20,6 +20,9 @@ class TableModel(table: Table,
         private set
     // 获取目标表名
     var targetTableName: String
+        private set
+    // 获取目标表名的复数形式
+    var pluralTableName: String
         private set
     // 表对应的类名
     var className: String
@@ -81,6 +84,7 @@ class TableModel(table: Table,
         databaseName = table.tableSchema ?: ""
         tableName = table.tableName ?: ""
         targetTableName = tableName.getTargetTableName()
+        pluralTableName = tableName.getPluralTableName()
         className = tableName.getClassName()
         comment = table.tableComment ?: className
 

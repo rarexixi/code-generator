@@ -161,40 +161,37 @@ class ColumnModel(column: Column) {
 
         targetName = columnName.getCamelCaseName()
         targetDataType = this.dataType.getTargetDataType()
-        autoIncrement = extra.toLowerCase() == "auto_increment"
+        autoIncrement = extra.lowercase() == "auto_increment"
         pk = columnKey == "PRI"
 
 
         val columnProperties = GeneratorProperties.columns
 
-        if (columnProperties != null) {
-
-            // 判断是否是有效性列
-            validStatus = matchColumn(columnProperties.validStatus) {
-                validStatusOption = it.status
-            }
-            // 判断是否是逻辑外键选择项
-            fkSelect = matchColumn(columnProperties.fkSelect) {
-                fkSelectColumn = it.fk
-            }
-            // 判断是否是选择字段
-            select = matchColumn(columnProperties.select) {
-                selectOptions = it.options
-            }
-
-            notRequired = matchColumn(columnProperties.notRequired)
-
-            imgUrl = matchColumn(columnProperties.imgUrl)
-            videoUrl = matchColumn(columnProperties.videoUrl)
-            docUrl = matchColumn(columnProperties.docUrl)
-            pageUrl = matchColumn(columnProperties.pageUrl)
-            otherUrl = matchColumn(columnProperties.otherUrl)
-
-            url = imgUrl || videoUrl || docUrl || pageUrl || otherUrl
-
-            content = matchColumn(columnProperties.content)
-            ignoreSearch = url || content || dataType.contains("text")
+        // 判断是否是有效性列
+        validStatus = matchColumn(columnProperties.validStatus) {
+            validStatusOption = it.status
         }
+        // 判断是否是逻辑外键选择项
+        fkSelect = matchColumn(columnProperties.fkSelect) {
+            fkSelectColumn = it.fk
+        }
+        // 判断是否是选择字段
+        select = matchColumn(columnProperties.select) {
+            selectOptions = it.options
+        }
+
+        notRequired = matchColumn(columnProperties.notRequired)
+
+        imgUrl = matchColumn(columnProperties.imgUrl)
+        videoUrl = matchColumn(columnProperties.videoUrl)
+        docUrl = matchColumn(columnProperties.docUrl)
+        pageUrl = matchColumn(columnProperties.pageUrl)
+        otherUrl = matchColumn(columnProperties.otherUrl)
+
+        url = imgUrl || videoUrl || docUrl || pageUrl || otherUrl
+
+        content = matchColumn(columnProperties.content)
+        ignoreSearch = url || content || dataType.contains("text")
 
 
         // endregion

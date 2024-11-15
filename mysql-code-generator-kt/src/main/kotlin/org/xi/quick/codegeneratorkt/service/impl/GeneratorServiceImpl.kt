@@ -283,8 +283,8 @@ class GeneratorServiceImpl : GeneratorService {
 
             when {
                 tmp.endsWith("_dir") -> s.replace("""\.""".toRegex(), SystemUtils.REGEX_SYSTEM_SLASH)
-                tmp.endsWith("_lower") -> s.toLowerCase()
-                tmp.endsWith("_upper") -> s.toUpperCase()
+                tmp.endsWith("_lower") -> s.lowercase()
+                tmp.endsWith("_upper") -> s.uppercase()
                 tmp.endsWith("_firstLower") -> s.getFirstLower()
                 tmp.endsWith("_firstUpper") -> s.getFirstUpper()
                 else -> s

@@ -59,7 +59,7 @@ class CodeGeneratorKtApplication: CommandLineRunner {
 
     private fun processLine(sc: Scanner) {
         val tableNameSet = tableService.getAllTableNameList()
-        val cmd = sc.next().toLowerCase()
+        val cmd = sc.next().lowercase()
         val args = getArgs(sc)
         when (cmd) {
             "ga" -> {
@@ -116,7 +116,7 @@ class CodeGeneratorKtApplication: CommandLineRunner {
 
         if (tables.isEmpty()) return
 
-        invoke(tableNameSet, tables, true) { tablesToInvoke, tablesNotExist ->
+        invoke(tableNameSet, tables, true) { tablesToInvoke, _ ->
             apply {
                 generatorService.del(*tablesToInvoke)
             }
@@ -150,7 +150,7 @@ class CodeGeneratorKtApplication: CommandLineRunner {
     }
 
     private fun showTables(tableNameSet: Set<String>) {
-        val maxLength = tableNameSet.map { it.length }.max()?.plus(4)
+        val maxLength = tableNameSet.maxOfOrNull { it.length }?.plus(4)
         val formatString = "%-" + maxLength + "s"
         var index = 0
         tableNameSet.forEach {

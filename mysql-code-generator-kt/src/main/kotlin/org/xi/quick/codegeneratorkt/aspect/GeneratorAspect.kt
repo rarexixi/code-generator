@@ -88,7 +88,7 @@ class GeneratorAspect {
     fun delAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         val args = proceedingJoinPoint.args
-        val tables = (args[0] as Array<Any>).joinToString(",")
+        val tables = (args[0] as Array<*>).joinToString(",")
 
         logger.info("正在删除" + tables + "相关的类...")
         val result = proceedingJoinPoint.proceed()
@@ -108,7 +108,7 @@ class GeneratorAspect {
     fun genAround(proceedingJoinPoint: ProceedingJoinPoint): Any? {
 
         val args = proceedingJoinPoint.args
-        val tables = (args[0] as Array<Any>).joinToString(",")
+        val tables = (args[0] as Array<*>).joinToString(",")
 
         logger.info("正在生成" + tables + "相关的类...")
         val result = proceedingJoinPoint.proceed()

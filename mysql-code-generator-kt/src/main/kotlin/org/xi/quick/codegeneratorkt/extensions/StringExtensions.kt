@@ -1,6 +1,7 @@
 package org.xi.quick.codegeneratorkt.extensions
 
 import org.xi.quick.codegeneratorkt.configuration.properties.GeneratorProperties
+import org.xi.quick.codegeneratorkt.utils.WordUtils
 import java.util.regex.Pattern
 
 /**
@@ -10,7 +11,7 @@ import java.util.regex.Pattern
  */
 fun String.getFirstLower(): String {
 
-    return this.substring(0, 1).toLowerCase() + this.substring(1)
+    return this.substring(0, 1).lowercase() + this.substring(1)
 }
 
 /**
@@ -20,7 +21,7 @@ fun String.getFirstLower(): String {
  */
 fun String.getFirstUpper(): String {
 
-    return this.substring(0, 1).toUpperCase() + this.substring(1)
+    return this.substring(0, 1).uppercase() + this.substring(1)
 }
 
 /**
@@ -44,7 +45,7 @@ fun String.getCamelCaseNameBy(delimiter: String): String {
     if (this.isBlank()) return this
 
     return this.replace("$delimiter+[a-z]".toRegex()) {
-        it.value[1].toUpperCase() + ""
+        it.value[1].uppercase() + ""
     }
 }
 
@@ -71,7 +72,7 @@ fun String.getTargetTableName(): String {
     if (tableName.isBlank()) return tableName
 
     val tablePropertyList = GeneratorProperties.tables.filter { it.tableName == tableName }
-    if (tablePropertyList.isNotEmpty()) {
+    if (tablePropertyList.isNotEmpty() && tablePropertyList[0].targetTableName.isNotBlank()) {
         return tablePropertyList[0].targetTableName
     }
 
@@ -81,6 +82,26 @@ fun String.getTargetTableName(): String {
         return matcher.group()
     }
     return tableName
+}
+
+/**
+ * 获取目标表名的复数形式
+ */
+fun String.getPluralTableName(): String {
+    val tableName = this
+    if (tableName.isBlank()) return tableName
+
+    val tablePropertyList = GeneratorProperties.tables.filter { it.tableName == tableName }
+    if (tablePropertyList.isNotEmpty() && tablePropertyList[0].pluralTableName.isNotBlank()) {
+        return tablePropertyList[0].pluralTableName
+    }
+
+    val pattern = Pattern.compile(GeneratorProperties.tableNameMatchRegex)
+    val matcher = pattern.matcher(tableName)
+    if (matcher.find()) {
+        return WordUtils.pluralize(matcher.group())
+    }
+    return WordUtils.pluralize(tableName)
 }
 
 /**

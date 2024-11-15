@@ -42,7 +42,7 @@ generator:
   common-properties:
     projectName: dmp
     module: gateway
-    serviceApplicatioName: DmpGatewayApplication
+    serviceApplicationName: DmpGatewayApplication
     servicePort: 8080
     modulePackage: org.ix.gateway.route
     commonPackage: org.ix.common
