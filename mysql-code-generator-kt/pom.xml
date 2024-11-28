@@ -24,7 +24,7 @@
         <java.version>1.8</java.version>
         <kotlin.version>1.2.41</kotlin.version>
 
-        <mysql.version>8.0.13</mysql.version>
+        <mysql.version>8.0.28</mysql.version>
         <mybatis-spring-boot.version>1.3.2</mybatis-spring-boot.version>
         <freemarker.version>2.3.28</freemarker.version>
     </properties>
